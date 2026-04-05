@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hylograph — The Hylographic Fold</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #000000;
+      --near-black: #0a0a0a;
+      --charcoal: #1a1a1a;
+      --dark-panel: #111;
+      --gold: #C9A962;
+      --gold-dim: #8B7355;
+      --gold-bright: #E8D5A3;
+      --cream: #FAF8F5;
+      --warm-white: #FFFEF9;
+      --text-dark: #2a2a2a;
+      --text-light: #e8e8e8;
+      --text-muted: #888;
+      --font-deco: 'Josefin Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+    }
+
+    body {
+      font-family: var(--font-deco);
+      color: var(--text-light);
+      background: var(--black);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ================================================================
+       Chapter Layout — Full-screen pages
+       ================================================================ */
+    .chapter {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      padding: 3rem 4rem;
+      position: relative;
+      border-bottom: 1px solid var(--gold-dim);
+    }
+
+    /* Gold dot terminals on chapter borders */
+    .chapter::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 7px;
+      height: 7px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .logo {
+      height: 128px;
+      width: auto;
+      opacity: 0.9;
+    }
+
+    .chapter-number {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.25rem;
+    }
+
+    .chapter h1 {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+      line-height: 1.15;
+    }
+
+    .chapter-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 48em;
+      margin-bottom: 1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+    }
+
+    .two-col-text {
+      columns: 2;
+      column-gap: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .two-col-text .chapter-subtitle {
+      max-width: none;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ================================================================
+       Visualization Panels
+       ================================================================ */
+    .viz-row {
+      display: flex;
+      gap: 2rem;
+      flex: 1;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    .viz-panel {
+      flex: 1;
+      background: var(--cream);
+      border: 1px solid var(--gold-dim);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .viz-panel.narrow { flex: 0 0 220px; }
+
+    .viz-panel.dark {
+      background: var(--dark-panel);
+    }
+
+    .viz-panel-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      padding: 0.75rem 1rem 0;
+    }
+
+    .viz-panel.dark .viz-panel-label {
+      color: var(--gold-dim);
+    }
+
+    .viz-panel-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .viz-panel-content svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* ================================================================
+       Diagram sections (Chapter 0)
+       ================================================================ */
+    .diagram-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .diagram-label {
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.25rem;
+    }
+
+    .diagram-sublabel {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .diagram-box {
+      background: var(--dark-panel);
+      border: 1px solid #222;
+      padding: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .diagram-row {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .diagram-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .diagram-cell-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--gold-dim);
+      margin-bottom: 0.5rem;
+      font-family: var(--font-mono);
+    }
+
+    /* ================================================================
+       Side-by-side layout (Chapter 2)
+       ================================================================ */
+    .side-by-side {
+      display: flex;
+      gap: 3rem;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .side-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-label {
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.2rem;
+    }
+
+    .side-sublabel {
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-bottom: 1rem;
+    }
+
+    .side-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 0;
+    }
+
+    .board-box {
+      background: var(--dark-panel);
+      border: 1px solid #222;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .meta-box {
+      background: var(--dark-panel);
+      border: 1px solid #222;
+      padding: 0.75rem;
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .meta-box svg,
+    .board-box svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* ================================================================
+       Hover CTA
+       ================================================================ */
+    .hover-cta {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-align: center;
+      padding: 0.75rem 0;
+      margin-bottom: 0.5rem;
+      opacity: 0.7;
+    }
+
+    /* ================================================================
+       Tabs
+       ================================================================ */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab {
+      padding: 8px 20px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: var(--gold-dim);
+      font-family: var(--font-deco);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab:hover { color: var(--gold); }
+    .tab.selected {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* ================================================================
+       Equation Layout: data + tree = output
+       ================================================================ */
+    .equation-row {
+      display: flex;
+      gap: 0;
+      flex: 1;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    .eq-panel {
+      flex: 1;
+      background: var(--dark-panel);
+      border: 1px solid #222;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .eq-panel.eq-wide { flex: 2; }
+
+    .eq-label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      padding: 0.6rem 1rem 0;
+    }
+
+    .eq-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem;
+      overflow: hidden;
+    }
+
+    .eq-content svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .eq-output {
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .eq-op {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 40px;
+      font-size: 1.4rem;
+      color: var(--gold-dim);
+      user-select: none;
+      font-weight: 300;
+    }
+
+    /* ================================================================
+       Output <pre>
+       ================================================================ */
+    .output-pre {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--gold-bright);
+      background: transparent;
+      white-space: pre;
+      margin: 0;
+      width: 100%;
+    }
+
+    /* ================================================================
+       Navigation dots
+       ================================================================ */
+    nav.chapter-nav {
+      position: fixed;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    nav.chapter-nav a {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      display: block;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+
+    nav.chapter-nav a:hover,
+    nav.chapter-nav a.active {
+      background: var(--gold);
+      transform: scale(1.4);
+    }
+
+    /* ================================================================
+       Coordinated Highlighting — Inverted (black on gold)
+       ================================================================ */
+    .highlight-primary {
+      opacity: 1 !important;
+    }
+
+    .highlight-primary > rect,
+    .highlight-primary rect {
+      fill: var(--gold) !important;
+    }
+
+    .highlight-primary > text,
+    .highlight-primary text {
+      fill: var(--black) !important;
+    }
+
+    .highlight-related {
+      opacity: 0.85 !important;
+    }
+
+    .highlight-dimmed {
+      opacity: 0.15 !important;
+      transition: opacity 0.15s;
+    }
+
+    /* ================================================================
+       Code + Output layout (Chapter 4)
+       ================================================================ */
+    .code-output-row {
+      display: flex;
+      gap: 2rem;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .code-panel {
+      flex: 1;
+      background: var(--dark-panel);
+      border: 1px solid #222;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .output-panel {
+      flex: 1;
+      background: var(--dark-panel);
+      border: 1px solid #222;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .output-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .hats-code {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.1;
+      color: var(--gold);
+      background: transparent;
+      padding: 0.75rem 1rem;
+      margin: 0;
+      overflow-x: auto;
+      flex: 1;
+      white-space: pre;
+    }
+
+    .code-line {
+      white-space: pre;
+      min-height: 1.4em;
+    }
+
+    .code-text {
+      color: var(--gold-bright);
+    }
+
+    .code-comment {
+      color: var(--gold-dim);
+      opacity: 0.7;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      color: var(--gold);
+      background: rgba(201, 169, 98, 0.1);
+      padding: 0.15em 0.35em;
+      border-radius: 2px;
+    }
+
+    .example-caption {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    /* ================================================================
+       English interpreter output
+       ================================================================ */
+    .english-output {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      line-height: 1.6;
+      color: var(--gold-dim);
+      background: transparent;
+      padding: 0.75rem 1rem;
+      margin: 0;
+      white-space: pre-wrap;
+      overflow: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ================================================================
+       Quadrant layout (Chapter 6)
+       ================================================================ */
+    .quadrant {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      grid-template-rows: 1fr 30px 1fr;
+      gap: 0;
+      flex: 1;
+      min-height: 0;
+      max-height: calc(100vh - 380px);
+    }
+
+    .quad-cell {
+      background: var(--dark-panel);
+      border: 1px solid #222;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .quad-cell .hats-code,
+    .quad-cell .english-output {
+      overflow: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .quad-tl { grid-column: 1; grid-row: 1; }
+    .quad-tr { grid-column: 3; grid-row: 1; }
+    .quad-bl { grid-column: 1; grid-row: 3; }
+    .quad-br { grid-column: 3; grid-row: 3; }
+
+    .quad-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      overflow: auto;
+    }
+
+    .quad-content svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .quad-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--gold-dim);
+      user-select: none;
+    }
+
+    .quad-right {
+      grid-row: span 1;
+    }
+
+    .quad-down-left {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .quad-spacer {
+      grid-column: 2 / 4;
+      grid-row: 2;
+    }
+
+    /* ================================================================
+       Scroll hint
+       ================================================================ */
+    .scroll-hint {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    /* ================================================================
+       Responsive
+       ================================================================ */
+    @media (max-width: 1200px) {
+      .chapter { padding: 2rem; }
+      .chapter h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-hint">Scroll to continue</div>
+  <script type="module" src="bundle.js"></script>
+</body>
+</html>

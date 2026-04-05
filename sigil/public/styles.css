@@ -1,0 +1,139 @@
+/* =============================================================================
+   Demo Page Layout
+   ============================================================================= */
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Fira Code', 'SF Mono', 'Consolas', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #faf9f7;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e8e6e0;
+  padding-bottom: 16px;
+}
+
+header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* ── Tab navigation (pure CSS) ── */
+
+.tabs { position: relative; }
+.tabs input[type="radio"] { display: none; }
+.tabs label {
+  display: inline-block;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  margin-right: 4px;
+}
+.tabs input[type="radio"]:checked + label {
+  color: #1a1a1a;
+  border-bottom-color: #1a1a1a;
+}
+.tab-panel { display: none; padding: 24px 0; }
+
+/* Show active panel via sibling selectors */
+#tab-readme:checked ~ #panel-readme,
+#tab-sigils:checked ~ #panel-sigils,
+#tab-siglets:checked ~ #panel-siglets,
+#tab-signets:checked ~ #panel-signets,
+#tab-datatypes:checked ~ #panel-datatypes,
+#tab-classes:checked ~ #panel-classes,
+#tab-typesyns:checked ~ #panel-typesyns,
+#tab-foreign:checked ~ #panel-foreign {
+  display: block;
+}
+
+/* ── Readme tab ── */
+
+#panel-readme h2 { font-size: 18px; margin-bottom: 12px; }
+#panel-readme h3 { font-size: 15px; margin: 16px 0 8px; }
+#panel-readme p { margin-bottom: 12px; max-width: 640px; }
+#panel-readme pre {
+  background: #f5f5f0;
+  border: 1px solid #e8e6e0;
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  overflow-x: auto;
+  max-width: 640px;
+}
+.mapping-list { margin: 8px 0 16px 20px; }
+.mapping-list dt { font-weight: 600; float: left; width: 100px; clear: left; }
+.mapping-list dd { margin-left: 110px; margin-bottom: 4px; }
+
+/* ── Signature table ── */
+
+.sig-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.sig-table th {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 2px solid #d0ccc4;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+}
+.sig-row { border-bottom: 1px solid #f0f0f0; }
+.sig-row-error { background: #fff5f5; }
+.sig-idx {
+  width: 40px;
+  text-align: right;
+  padding: 8px 12px;
+  color: #aaa;
+  font-variant-numeric: tabular-nums;
+}
+.sig-meta {
+  width: 280px;
+  padding: 8px 12px;
+  vertical-align: top;
+}
+.sig-meta-name { font-weight: 700; color: #333; }
+.sig-meta-cat {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.sig-meta-raw {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+  word-break: break-all;
+}
+.sig-render-cell {
+  padding: 8px 12px;
+  vertical-align: middle;
+}

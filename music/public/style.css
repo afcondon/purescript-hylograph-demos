@@ -1,0 +1,214 @@
+/* Anscombe's Quartet - Tufte-inspired Design
+ * Clean, minimal, letting the data speak
+ */
+
+/* ==========================================================================
+   Typography & Base
+   ========================================================================== */
+
+:root {
+  /* Tufte palette - warm off-white and deep black */
+  --bg: #fffff8;
+  --text: #111;
+  --text-light: #555;
+  --axis: #333;
+  --point: #111;
+  --highlight: #c23b22;  /* Vermillion for the playing note */
+
+  /* Typography - Palatino/serif stack */
+  --font-serif: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --font-small-caps: small-caps normal 1rem var(--font-serif);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  font-family: var(--font-serif);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+.anscombe-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  font-variant: small-caps;
+}
+
+.header .subtitle {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-light);
+  margin-bottom: 0.75rem;
+}
+
+.header .stats {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  font-family: var(--font-serif);
+}
+
+/* ==========================================================================
+   Quartet Grid - 2x2 layout
+   ========================================================================== */
+
+.quartet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 600px) {
+  .quartet-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Dataset Card
+   ========================================================================== */
+
+.dataset-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   Scatter Plot - Tufte minimal style
+   ========================================================================== */
+
+.scatter-plot {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+}
+
+/* Axes - thin, black, L-shaped */
+.axis line {
+  stroke: var(--axis);
+  stroke-width: 1;
+}
+
+/* Tick labels */
+.tick-label {
+  font-size: 10px;
+  fill: var(--text-light);
+  font-family: var(--font-serif);
+  text-anchor: middle;
+}
+
+.tick-label.y-label {
+  text-anchor: end;
+}
+
+/* Roman numeral labels */
+.numeral {
+  font-size: 16px;
+  font-weight: 400;
+  fill: var(--text);
+  font-family: var(--font-serif);
+}
+
+/* Data points */
+.point {
+  fill: var(--point);
+  transition: r 0.1s ease, fill 0.1s ease;
+}
+
+.point.highlight {
+  fill: var(--highlight);
+  r: 6;
+}
+
+/* ==========================================================================
+   Controls
+   ========================================================================== */
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+
+.play-btn,
+.stop-btn {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid var(--axis);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  letter-spacing: 0.05em;
+}
+
+.play-btn:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.stop-btn {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.stop-btn:hover {
+  background: var(--highlight);
+  border-color: var(--highlight);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.footer {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #ddd;
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.footer p {
+  margin-bottom: 0.5rem;
+}
+
+.footer .tech {
+  font-size: 0.75rem;
+  color: #888;
+}
