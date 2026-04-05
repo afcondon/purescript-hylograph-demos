@@ -15,7 +15,7 @@ import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Properties as HP
 
-import DataViz.Layout.Sankey.Types (LinkCSVRow, NodeValueStrategy(..), sankeyNodeValue, maxNodeValue)
+import DataViz.Layout.Sankey.Types (LinkCSVRow)
 import Gallery.FlowData (SankeyData, loadSankeyData)
 import Gallery.RenderHATS as HATS
 
@@ -88,7 +88,7 @@ render _state =
         [ HP.class_ (H.ClassName "ribbon-grid") ]
         [ renderAcyclicCard
         , renderEndCyclicCard
-        , renderStrategiesCard
+        , renderGeneralizedNote
         ]
     , renderFooter
     ]
@@ -155,87 +155,19 @@ renderEndCyclicCard =
         []
     ]
 
--- | Small multiples: same supply chain, three record fields, each with its natural fold
-renderStrategiesCard :: forall m. H.ComponentHTML Action () m
-renderStrategiesCard =
+-- | Note about the generalized flow diagram capability
+renderGeneralizedNote :: forall m. H.ComponentHTML Action () m
+renderGeneralizedNote =
   HH.div
-    [ HP.class_ (H.ClassName "ribbon-card") ]
-    [ HH.div
-        [ HP.class_ (H.ClassName "ribbon-card-header") ]
-        [ HH.h3_ [ HH.text "One Record, Three Folds" ] ]
-    , HH.p
-        [ HP.class_ (H.ClassName "ribbon-card-description") ]
-        [ HH.text "Same supply chain topology. Each panel folds a different field of the edge record \x2014 volume, cost, or lead time \x2014 with the fold that fits the domain." ]
-    , HH.div
-        [ HP.class_ (H.ClassName "strategy-grid") ]
-        [ strategyPanel "strategy-units" ".units" "sum" "Volume flow \x2014 Supplier A and B ship equal quantities"
-        , strategyPanel "strategy-cost" ".cost" "sum" "Money flow \x2014 Supplier B ships expensive precision components"
-        , strategyPanel "strategy-time" ".leadTime" "max" "Bottleneck \x2014 Factory waits for the slowest supplier"
+    [ HP.class_ (H.ClassName "ribbon-note") ]
+    [ HH.p_
+        [ HH.text "The layout engine behind these diagrams is generalized beyond Sankey. The node sizing function is a parameter \x2014 any fold over incident flows \x2014 not hardcoded to conservation-of-flow. We're looking for a compelling real-world dataset that naturally calls for different flow semantics. "
+        , HH.a
+            [ HP.href "https://github.com/afcondon/purescript-hylograph-layout/issues" ]
+            [ HH.text "Get in touch" ]
+        , HH.text " if you have one."
         ]
     ]
-
-strategyPanel :: forall m. String -> String -> String -> String -> H.ComponentHTML Action () m
-strategyPanel containerId field fold desc =
-  HH.div
-    [ HP.class_ (H.ClassName "strategy-panel") ]
-    [ HH.div
-        [ HP.class_ (H.ClassName "strategy-label") ]
-        [ HH.h4_ [ HH.code_ [ HH.text field ], HH.text (" \x2192 " <> fold) ]
-        , HH.p_ [ HH.text desc ]
-        ]
-    , HH.div
-        [ HP.class_ (H.ClassName "ribbon-viewport")
-        , HP.id containerId
-        ]
-        []
-    ]
-
--- =============================================================================
--- Supply chain datasets: same topology, different record fields
--- =============================================================================
-
--- | Topology: Supplier A (bulk raw) and Supplier B (precision components) both feed Factory.
--- | Factory → QC → Distributor → Retail/Online, with scrap and rework side-flows.
-
--- | .units: volume in thousands of items. A and B contribute equally.
-supplyUnits :: Array LinkCSVRow
-supplyUnits =
-  [ { s: "Supplier A", t: "Factory", v: 500.0 }
-  , { s: "Supplier B", t: "Factory", v: 500.0 }
-  , { s: "Factory", t: "QC", v: 900.0 }
-  , { s: "Factory", t: "Scrap", v: 100.0 }
-  , { s: "QC", t: "Distributor", v: 800.0 }
-  , { s: "QC", t: "Rework", v: 100.0 }
-  , { s: "Distributor", t: "Retail", v: 500.0 }
-  , { s: "Distributor", t: "Online", v: 300.0 }
-  ]
-
--- | .cost: value in $thousands. Supplier B's components are 10x more expensive per unit.
-supplyCost :: Array LinkCSVRow
-supplyCost =
-  [ { s: "Supplier A", t: "Factory", v: 50.0 }
-  , { s: "Supplier B", t: "Factory", v: 500.0 }
-  , { s: "Factory", t: "QC", v: 520.0 }
-  , { s: "Factory", t: "Scrap", v: 30.0 }
-  , { s: "QC", t: "Distributor", v: 490.0 }
-  , { s: "QC", t: "Rework", v: 30.0 }
-  , { s: "Distributor", t: "Retail", v: 300.0 }
-  , { s: "Distributor", t: "Online", v: 190.0 }
-  ]
-
--- | .leadTime: days from order to delivery. Long lead on Supplier A (overseas bulk),
--- | short on B (local precision). Factory waits for the slowest input.
-supplyTime :: Array LinkCSVRow
-supplyTime =
-  [ { s: "Supplier A", t: "Factory", v: 45.0 }
-  , { s: "Supplier B", t: "Factory", v: 5.0 }
-  , { s: "Factory", t: "QC", v: 3.0 }
-  , { s: "Factory", t: "Scrap", v: 1.0 }
-  , { s: "QC", t: "Distributor", v: 2.0 }
-  , { s: "QC", t: "Rework", v: 7.0 }
-  , { s: "Distributor", t: "Retail", v: 4.0 }
-  , { s: "Distributor", t: "Online", v: 1.0 }
-  ]
 
 renderFooter :: forall m. H.ComponentHTML Action () m
 renderFooter =
@@ -275,11 +207,7 @@ renderFlowLayouts :: State -> Effect Unit
 renderFlowLayouts state = do
   case state.sankeyData of
     Nothing -> pure unit
-    Just sankeyData -> do
+    Just sankeyData ->
       HATS.renderSankeyWide "#flow-acyclic" sankeyData.links 900.0 350.0
-      -- Small multiples: same supply chain topology, different record fields
-      HATS.renderSankeyWithStrategy "#strategy-units" supplyUnits 380.0 250.0 sankeyNodeValue
-      HATS.renderSankeyWithStrategy "#strategy-cost" supplyCost 380.0 250.0 sankeyNodeValue
-      HATS.renderSankeyWithStrategy "#strategy-time" supplyTime 380.0 250.0 maxNodeValue
 
   HATS.renderSankeyWide "#flow-end-cyclic" endCycleData 900.0 350.0
