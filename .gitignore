@@ -3,4 +3,13 @@ output/
 node_modules/
 *.lock
 .DS_Store
-**/public/bundle.js
+
+# Ignore bundle.js in source dirs (build artifacts) but not in docs/ (deployed site)
+graph/public/bundle.js
+graph-decomposition/public/bundle.js
+layout/public/bundle.js
+music/public/bundle.js
+selection/public/bundle.js
+simulation/public/bundle.js
+sigil/public/bundle.js
+sigil-hats/public/bundle.js

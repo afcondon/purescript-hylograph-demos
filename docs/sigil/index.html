@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>purescript-sigil</title>
+  <link rel="stylesheet" href="../../sigil.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>purescript-sigil</h1>
+    <p class="subtitle">Typographic HTML rendering for PureScript type signatures</p>
+  </header>
+
+  <!-- Tab navigation: pure CSS radio buttons -->
+  <nav class="tabs">
+    <input type="radio" name="tab" id="tab-readme" checked>
+    <label for="tab-readme">Readme</label>
+    <input type="radio" name="tab" id="tab-sigils">
+    <label for="tab-sigils">Sigils</label>
+    <input type="radio" name="tab" id="tab-siglets">
+    <label for="tab-siglets">Siglets</label>
+    <input type="radio" name="tab" id="tab-signets">
+    <label for="tab-signets">Signets</label>
+    <input type="radio" name="tab" id="tab-datatypes">
+    <label for="tab-datatypes">Data Types</label>
+    <input type="radio" name="tab" id="tab-classes">
+    <label for="tab-classes">Classes</label>
+    <input type="radio" name="tab" id="tab-typesyns">
+    <label for="tab-typesyns">Type Aliases</label>
+    <input type="radio" name="tab" id="tab-foreign">
+    <label for="tab-foreign">Foreign</label>
+
+    <!-- Tab panels -->
+    <section class="tab-panel" id="panel-readme">
+      <h2>About</h2>
+      <p>
+        <strong>sigil</strong> renders PureScript type signatures as semantic HTML
+        with a more "typeset" or "designed" styling. It parses type strings via
+        <code>language-cst-parser</code>, assigns colors to type variables, and
+        produces HTML that maps type concepts to semantic elements.
+      </p>
+      <p>
+        Records are shown as tables, nested-records are supported as are open rows (table with dotted-line
+        border). 
+      </p>
+      <p>For functions it provides two flavors of rendering, an information-preserving one called "sigil" 
+        and an ultra-compact "siglet" which only shows the rough form (arity, type variables etc).
+        This latter is inspired by Edward Tufte's "sparklines" idea.
+      </p>
+      <p>
+        For other definitions such as type-classes, data / ADT, type-aliases etc there are similarly styled,
+        information-preserving, renderings too.
+      </p>
+      <p>
+        The additional tabs on this page show many examples of each form.
+      </p>
+      <h3>Element mapping</h3>
+      <dl class="mapping-list">
+        <dt><code>&lt;var&gt;</code></dt><dd>Type variables (colored via <code>--vc</code> custom property)</dd>
+        <dt><code>&lt;code&gt;</code></dt><dd>Type constructors, applications</dd>
+        <dt><code>&lt;dfn&gt;</code></dt><dd>Declaration name</dd>
+        <dt><code>&lt;ol&gt;</code></dt><dd>Arrow chains (CSS-generated <code>&rarr;</code>)</dd>
+        <dt><code>&lt;dl&gt;</code></dt><dd>Records (3-column grid: name &bull; :: &bull; type)</dd>
+        <dt><code>&lt;em&gt;</code></dt><dd>Constraints</dd>
+        <dt><code>&lt;small&gt;</code></dt><dd>Punctuation (<code>::</code>, parens, operators)</dd>
+      </dl>
+      <h3>Usage</h3>
+      <pre><code>import Sigil.Parse (parseToRenderType)
+import Sigil.Html as Sigil
+
+case parseToRenderType "forall a. Ord a => Array a -> Array a" of
+  Just ast -> Sigil.renderSignatureInto "#container"
+    { name: "sort", ast, typeParams: [], className: Nothing }
+  Nothing -> log "parse failed"</code></pre>
+    </section>
+
+    <section class="tab-panel" id="panel-sigils">
+      <table class="sig-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Signature</th>
+            <th>Rendered</th>
+          </tr>
+        </thead>
+        <tbody id="sigil-table"></tbody>
+      </table>
+    </section>
+
+    <section class="tab-panel" id="panel-siglets">
+      <table class="sig-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Signature</th>
+            <th>Rendered</th>
+          </tr>
+        </thead>
+        <tbody id="siglet-table"></tbody>
+      </table>
+    </section>
+
+    <section class="tab-panel" id="panel-signets">
+      <table class="sig-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Signature</th>
+            <th>Rendered</th>
+          </tr>
+        </thead>
+        <tbody id="signet-table"></tbody>
+      </table>
+    </section>
+
+    <section class="tab-panel" id="panel-datatypes">
+      <table class="sig-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Declaration</th>
+            <th>Rendered</th>
+          </tr>
+        </thead>
+        <tbody id="datatype-table"></tbody>
+      </table>
+    </section>
+
+    <section class="tab-panel" id="panel-classes">
+      <table class="sig-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Declaration</th>
+            <th>Rendered</th>
+          </tr>
+        </thead>
+        <tbody id="class-table"></tbody>
+      </table>
+    </section>
+
+    <section class="tab-panel" id="panel-typesyns">
+      <table class="sig-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Declaration</th>
+            <th>Rendered</th>
+          </tr>
+        </thead>
+        <tbody id="typesyn-table"></tbody>
+      </table>
+    </section>
+
+    <section class="tab-panel" id="panel-foreign">
+      <table class="sig-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Declaration</th>
+            <th>Rendered</th>
+          </tr>
+        </thead>
+        <tbody id="foreign-table"></tbody>
+      </table>
+    </section>
+  </nav>
+
+  <script src="bundle.js"></script>
+</body>
+</html>
