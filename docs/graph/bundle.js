@@ -7638,223 +7638,18 @@
     return [C.value, G.value, D.value, A.value, E.value, B.value, FSharp.value, CSharp.value];
   })();
 
-  // output/Honeycomb.Generator/index.js
-  var pure10 = /* @__PURE__ */ pure(applicativeEffect);
-  var notEq3 = /* @__PURE__ */ notEq(eqNodeId);
-  var elem3 = /* @__PURE__ */ elem2(eqNodeId);
-  var toUnfoldable5 = /* @__PURE__ */ toUnfoldable4(unfoldableArray);
-  var foldM3 = /* @__PURE__ */ foldM(monadEffect);
-  var append6 = /* @__PURE__ */ append(semigroupArray);
-  var ordRecord2 = /* @__PURE__ */ ordRecord()(/* @__PURE__ */ ordRecordCons(/* @__PURE__ */ ordRecordCons(ordRecordNil)()({
-    reflectSymbol: function() {
-      return "b";
-    }
-  })(ordNodeId))()({
-    reflectSymbol: function() {
-      return "a";
-    }
-  })(ordNodeId));
-  var fromFoldable5 = /* @__PURE__ */ fromFoldable4(foldableArray)(ordRecord2);
-  var union4 = /* @__PURE__ */ union3(ordRecord2);
-  var pickRandomNodes = function(n) {
-    return function(exclude) {
-      var pickN = function(v) {
-        return function(v1) {
-          return function(v2) {
-            if (v === 0) {
-              return pure10(v2);
-            }
-            ;
-            if ($$null2(v1)) {
-              return pure10(v2);
-            }
-            ;
-            if (otherwise) {
-              return function __do4() {
-                var idx = randomInt(0)(length3(v1) - 1 | 0)();
-                var v3 = index2(v1)(idx);
-                if (v3 instanceof Nothing) {
-                  return v2;
-                }
-                ;
-                if (v3 instanceof Just) {
-                  var newAvail = filter(function(v4) {
-                    return notEq3(v4)(v3.value0);
-                  })(v1);
-                  return pickN(v - 1 | 0)(newAvail)(snoc(v2)(v3.value0))();
-                }
-                ;
-                throw new Error("Failed pattern match at Honeycomb.Generator (line 74, column 9 - line 78, column 65): " + [v3.constructor.name]);
-              };
-            }
-            ;
-            throw new Error("Failed pattern match at Honeycomb.Generator (line 69, column 3 - line 69, column 27): " + [v.constructor.name, v1.constructor.name, v2.constructor.name]);
-          };
-        };
-      };
-      var available = filter(function(node) {
-        return !elem3(node)(exclude);
-      })(allNodes);
-      return pickN(n)(available)([]);
-    };
-  };
-  var pickRandomFromArray = function(n) {
-    return function(arr) {
-      var pickN = function(v) {
-        return function(v1) {
-          return function(v2) {
-            if (v === 0) {
-              return pure10(v2);
-            }
-            ;
-            if ($$null2(v1)) {
-              return pure10(v2);
-            }
-            ;
-            if (otherwise) {
-              return function __do4() {
-                var idx = randomInt(0)(length3(v1) - 1 | 0)();
-                var v3 = index2(v1)(idx);
-                if (v3 instanceof Nothing) {
-                  return v2;
-                }
-                ;
-                if (v3 instanceof Just) {
-                  var newAvail = fromMaybe(v1)(deleteAt(idx)(v1));
-                  return pickN(v - 1 | 0)(newAvail)(snoc(v2)(v3.value0))();
-                }
-                ;
-                throw new Error("Failed pattern match at Honeycomb.Generator (line 140, column 9 - line 144, column 65): " + [v3.constructor.name]);
-              };
-            }
-            ;
-            throw new Error("Failed pattern match at Honeycomb.Generator (line 135, column 3 - line 135, column 27): " + [v.constructor.name, v1.constructor.name, v2.constructor.name]);
-          };
-        };
-      };
-      return pickN(n)(arr)([]);
-    };
-  };
-  var generateScrambleEdges = function(n) {
-    var addEdge = function(acc) {
-      return function(v) {
-        return function __do4() {
-          var idx1 = randomInt(0)(length3(allNodes) - 1 | 0)();
-          var idx2 = randomInt(0)(length3(allNodes) - 1 | 0)();
-          var v1 = new Tuple(index2(allNodes)(idx1), index2(allNodes)(idx2));
-          if (v1.value0 instanceof Just && (v1.value1 instanceof Just && notEq3(v1.value0.value0)(v1.value1.value0))) {
-            return snoc(acc)(mkEdgeKey(v1.value0.value0)(v1.value1.value0));
-          }
-          ;
-          return acc;
-        };
-      };
-    };
-    return foldM3(addEdge)([])(range2(0)(n - 1 | 0));
-  };
-  var scrambleGraphs = function(graphs) {
-    return function(v) {
-      var pickFromGraph = function(acc) {
-        return function(graph) {
-          var edges = toUnfoldable5(graph.baseEdges);
-          return function __do4() {
-            var numToPick = randomInt(1)(2)();
-            var picked = pickRandomFromArray(numToPick)(edges)();
-            return append6(acc)(picked);
-          };
-        };
-      };
-      return function __do4() {
-        var graphToggles = foldM3(pickFromGraph)([])(graphs)();
-        var randomEdges = generateScrambleEdges(3)();
-        var allToggles = append6(graphToggles)(randomEdges);
-        return {
-          toggles: fromFoldable5(allToggles),
-          history: allToggles
-        };
-      };
-    };
-  };
-  var generateRandomEdges = function(n) {
-    var addRandomEdge = function(acc) {
-      return function(v) {
-        return function __do4() {
-          var idx1 = randomInt(0)(length3(allNodes) - 1 | 0)();
-          var idx2 = randomInt(0)(length3(allNodes) - 1 | 0)();
-          var v1 = new Tuple(index2(allNodes)(idx1), index2(allNodes)(idx2));
-          if (v1.value0 instanceof Just && (v1.value1 instanceof Just && notEq3(v1.value0.value0)(v1.value1.value0))) {
-            return snoc(acc)(mkEdgeKey(v1.value0.value0)(v1.value1.value0));
-          }
-          ;
-          return acc;
-        };
-      };
-    };
-    return function __do4() {
-      var edges = foldM3(addRandomEdge)([])(range2(0)(n - 1 | 0))();
-      return fromFoldable5(edges);
-    };
-  };
-  var generatePath = function(start2) {
-    return function(end) {
-      return function __do4() {
-        var numIntermediates = randomInt(1)(3)();
-        var intermediates = pickRandomNodes(numIntermediates)([start2, end])();
-        var pathNodes = append6([start2])(append6(intermediates)([end]));
-        var edges = zipWith(mkEdgeKey)(pathNodes)(drop(1)(pathNodes));
-        return fromFoldable5(edges);
-      };
-    };
-  };
-  var generateGraphEdges = function(idx) {
-    var endpoints = graphEndpoints(idx);
-    return function __do4() {
-      var pathEdges = generatePath(endpoints.start)(endpoints.end)();
-      var extraEdges = generateRandomEdges(5)();
-      return union4(pathEdges)(extraEdges);
-    };
-  };
-  var generateAllGraphs = /* @__PURE__ */ (function() {
-    var generateOne = function(acc) {
-      return function(idx) {
-        return function __do4() {
-          var edges = generateGraphEdges(idx)();
-          return snoc(acc)({
-            index: idx,
-            baseEdges: edges
-          });
-        };
-      };
-    };
-    return function __do4() {
-      var graphs = foldM3(generateOne)([])(range2(0)(5))();
-      return graphs;
-    };
-  })();
-  var generatePuzzle = function(scrambleMoves) {
-    return function __do4() {
-      var graphs = generateAllGraphs();
-      var scrambleResult = scrambleGraphs(graphs)(scrambleMoves)();
-      return {
-        graphs,
-        initialToggles: scrambleResult.toggles,
-        scrambleHistory: scrambleResult.history
-      };
-    };
-  };
-
   // output/Honeycomb.Pathfinding/index.js
   var fromFoldable32 = /* @__PURE__ */ fromFoldable(ordNodeId)(foldableArray);
   var mapFlipped2 = /* @__PURE__ */ mapFlipped(functorArray);
   var update2 = /* @__PURE__ */ update(ordNodeId);
-  var toUnfoldable6 = /* @__PURE__ */ toUnfoldable4(unfoldableArray);
+  var toUnfoldable5 = /* @__PURE__ */ toUnfoldable4(unfoldableArray);
   var eq3 = /* @__PURE__ */ eq(eqNodeId);
   var lookup5 = /* @__PURE__ */ lookup(ordNodeId);
   var member3 = /* @__PURE__ */ member2(ordNodeId);
-  var elem4 = /* @__PURE__ */ elem2(eqNodeId);
+  var elem3 = /* @__PURE__ */ elem2(eqNodeId);
   var insert5 = /* @__PURE__ */ insert(ordNodeId);
   var insert12 = /* @__PURE__ */ insert4(ordNodeId);
-  var append7 = /* @__PURE__ */ append(semigroupArray);
+  var append6 = /* @__PURE__ */ append(semigroupArray);
   var buildAdjacency = function(edges) {
     var emptyAdj = fromFoldable32(mapFlipped2(allNodes)(function(n) {
       return new Tuple(n, []);
@@ -7874,7 +7669,7 @@
         })())(edge.a)(adj));
       };
     };
-    return foldl2(addEdge)(emptyAdj)(toUnfoldable6(edges));
+    return foldl2(addEdge)(emptyAdj)(toUnfoldable5(edges));
   };
   var findPath = function(start2) {
     return function(end) {
@@ -7935,14 +7730,14 @@
                       var unvisited = filter(function(n) {
                         return !member3(n)(visited);
                       })(neighbors);
-                      var foundEnd = elem4(end)(unvisited);
+                      var foundEnd = elem3(end)(unvisited);
                       if (foundEnd) {
                         $tco_done = true;
                         return new Just(reconstructPath(insert5(end)(v.value0.head)(parent2))(end));
                       }
                       ;
                       var newVisited = foldl2(flip(insert12))(visited)(unvisited);
-                      var newQueue = append7(v.value0.tail)(unvisited);
+                      var newQueue = append6(v.value0.tail)(unvisited);
                       var newParent = foldl2(function(p2) {
                         return function(n) {
                           return insert5(n)(v.value0.head)(p2);
@@ -7973,6 +7768,269 @@
         ;
         throw new Error("Failed pattern match at Honeycomb.Pathfinding (line 32, column 1 - line 32, column 68): " + [start2.constructor.name, end.constructor.name, edges.constructor.name]);
       };
+    };
+  };
+  var hasPath = function(start2) {
+    return function(end) {
+      return function(edges) {
+        var v = findPath(start2)(end)(edges);
+        if (v instanceof Nothing) {
+          return false;
+        }
+        ;
+        if (v instanceof Just) {
+          return true;
+        }
+        ;
+        throw new Error("Failed pattern match at Honeycomb.Pathfinding (line 74, column 27 - line 76, column 17): " + [v.constructor.name]);
+      };
+    };
+  };
+
+  // output/Honeycomb.Generator/index.js
+  var pure10 = /* @__PURE__ */ pure(applicativeEffect);
+  var notEq3 = /* @__PURE__ */ notEq(eqNodeId);
+  var elem4 = /* @__PURE__ */ elem2(eqNodeId);
+  var toUnfoldable6 = /* @__PURE__ */ toUnfoldable4(unfoldableArray);
+  var foldM3 = /* @__PURE__ */ foldM(monadEffect);
+  var append7 = /* @__PURE__ */ append(semigroupArray);
+  var ordRecord2 = /* @__PURE__ */ ordRecord()(/* @__PURE__ */ ordRecordCons(/* @__PURE__ */ ordRecordCons(ordRecordNil)()({
+    reflectSymbol: function() {
+      return "b";
+    }
+  })(ordNodeId))()({
+    reflectSymbol: function() {
+      return "a";
+    }
+  })(ordNodeId));
+  var fromFoldable5 = /* @__PURE__ */ fromFoldable4(foldableArray)(ordRecord2);
+  var union4 = /* @__PURE__ */ union3(ordRecord2);
+  var pickRandomNodes = function(n) {
+    return function(exclude) {
+      var pickN = function(v) {
+        return function(v1) {
+          return function(v2) {
+            if (v === 0) {
+              return pure10(v2);
+            }
+            ;
+            if ($$null2(v1)) {
+              return pure10(v2);
+            }
+            ;
+            if (otherwise) {
+              return function __do4() {
+                var idx = randomInt(0)(length3(v1) - 1 | 0)();
+                var v3 = index2(v1)(idx);
+                if (v3 instanceof Nothing) {
+                  return v2;
+                }
+                ;
+                if (v3 instanceof Just) {
+                  var newAvail = filter(function(v4) {
+                    return notEq3(v4)(v3.value0);
+                  })(v1);
+                  return pickN(v - 1 | 0)(newAvail)(snoc(v2)(v3.value0))();
+                }
+                ;
+                throw new Error("Failed pattern match at Honeycomb.Generator (line 75, column 9 - line 79, column 65): " + [v3.constructor.name]);
+              };
+            }
+            ;
+            throw new Error("Failed pattern match at Honeycomb.Generator (line 70, column 3 - line 70, column 27): " + [v.constructor.name, v1.constructor.name, v2.constructor.name]);
+          };
+        };
+      };
+      var available = filter(function(node) {
+        return !elem4(node)(exclude);
+      })(allNodes);
+      return pickN(n)(available)([]);
+    };
+  };
+  var pickRandomFromArray = function(n) {
+    return function(arr) {
+      var pickN = function(v) {
+        return function(v1) {
+          return function(v2) {
+            if (v === 0) {
+              return pure10(v2);
+            }
+            ;
+            if ($$null2(v1)) {
+              return pure10(v2);
+            }
+            ;
+            if (otherwise) {
+              return function __do4() {
+                var idx = randomInt(0)(length3(v1) - 1 | 0)();
+                var v3 = index2(v1)(idx);
+                if (v3 instanceof Nothing) {
+                  return v2;
+                }
+                ;
+                if (v3 instanceof Just) {
+                  var newAvail = fromMaybe(v1)(deleteAt(idx)(v1));
+                  return pickN(v - 1 | 0)(newAvail)(snoc(v2)(v3.value0))();
+                }
+                ;
+                throw new Error("Failed pattern match at Honeycomb.Generator (line 141, column 9 - line 145, column 65): " + [v3.constructor.name]);
+              };
+            }
+            ;
+            throw new Error("Failed pattern match at Honeycomb.Generator (line 136, column 3 - line 136, column 27): " + [v.constructor.name, v1.constructor.name, v2.constructor.name]);
+          };
+        };
+      };
+      return pickN(n)(arr)([]);
+    };
+  };
+  var generateScrambleEdges = function(n) {
+    var addEdge = function(acc) {
+      return function(v) {
+        return function __do4() {
+          var idx1 = randomInt(0)(length3(allNodes) - 1 | 0)();
+          var idx2 = randomInt(0)(length3(allNodes) - 1 | 0)();
+          var v1 = new Tuple(index2(allNodes)(idx1), index2(allNodes)(idx2));
+          if (v1.value0 instanceof Just && (v1.value1 instanceof Just && notEq3(v1.value0.value0)(v1.value1.value0))) {
+            return snoc(acc)(mkEdgeKey(v1.value0.value0)(v1.value1.value0));
+          }
+          ;
+          return acc;
+        };
+      };
+    };
+    return foldM3(addEdge)([])(range2(0)(n - 1 | 0));
+  };
+  var scrambleGraphs = function(graphs) {
+    return function(v) {
+      var pickFromGraph = function(acc) {
+        return function(graph) {
+          var edges = toUnfoldable6(graph.baseEdges);
+          return function __do4() {
+            var numToPick = randomInt(1)(2)();
+            var picked = pickRandomFromArray(numToPick)(edges)();
+            return append7(acc)(picked);
+          };
+        };
+      };
+      return function __do4() {
+        var graphToggles = foldM3(pickFromGraph)([])(graphs)();
+        var randomEdges = generateScrambleEdges(3)();
+        var allToggles = append7(graphToggles)(randomEdges);
+        return {
+          toggles: fromFoldable5(allToggles),
+          history: allToggles
+        };
+      };
+    };
+  };
+  var generateRandomEdges = function(n) {
+    var addRandomEdge = function(acc) {
+      return function(v) {
+        return function __do4() {
+          var idx1 = randomInt(0)(length3(allNodes) - 1 | 0)();
+          var idx2 = randomInt(0)(length3(allNodes) - 1 | 0)();
+          var v1 = new Tuple(index2(allNodes)(idx1), index2(allNodes)(idx2));
+          if (v1.value0 instanceof Just && (v1.value1 instanceof Just && notEq3(v1.value0.value0)(v1.value1.value0))) {
+            return snoc(acc)(mkEdgeKey(v1.value0.value0)(v1.value1.value0));
+          }
+          ;
+          return acc;
+        };
+      };
+    };
+    return function __do4() {
+      var edges = foldM3(addRandomEdge)([])(range2(0)(n - 1 | 0))();
+      return fromFoldable5(edges);
+    };
+  };
+  var generatePath = function(start2) {
+    return function(end) {
+      return function __do4() {
+        var numIntermediates = randomInt(1)(3)();
+        var intermediates = pickRandomNodes(numIntermediates)([start2, end])();
+        var pathNodes = append7([start2])(append7(intermediates)([end]));
+        var edges = zipWith(mkEdgeKey)(pathNodes)(drop(1)(pathNodes));
+        return fromFoldable5(edges);
+      };
+    };
+  };
+  var generateGraphEdges = function(idx) {
+    var endpoints = graphEndpoints(idx);
+    return function __do4() {
+      var pathEdges = generatePath(endpoints.start)(endpoints.end)();
+      var extraEdges = generateRandomEdges(5)();
+      return union4(pathEdges)(extraEdges);
+    };
+  };
+  var generateAllGraphs = /* @__PURE__ */ (function() {
+    var generateOne = function(acc) {
+      return function(idx) {
+        return function __do4() {
+          var edges = generateGraphEdges(idx)();
+          return snoc(acc)({
+            index: idx,
+            baseEdges: edges
+          });
+        };
+      };
+    };
+    return function __do4() {
+      var graphs = foldM3(generateOne)([])(range2(0)(5))();
+      return graphs;
+    };
+  })();
+  var generatePuzzle = function(scrambleMoves) {
+    var xorSets = function(dictOrd) {
+      var union12 = union3(dictOrd);
+      var difference5 = difference2(dictOrd);
+      return function(a2) {
+        return function(b2) {
+          return union12(difference5(a2)(b2))(difference5(b2)(a2));
+        };
+      };
+    };
+    var xorSets1 = xorSets(ordRecord2);
+    var generateValidScramble = function($copy_graphs) {
+      return function($copy_attempt) {
+        return function __do4() {
+          var $tco_var_graphs = $copy_graphs;
+          var $tco_var_attempt = $copy_attempt;
+          var $tco_done = false;
+          var $tco_result;
+          function $tco_loop(graphs, attempt) {
+            var scrambleResult = scrambleGraphs(graphs)(scrambleMoves)();
+            var allConnected = all2(function(g) {
+              var endpoints = graphEndpoints(g.index);
+              var effective = xorSets1(g.baseEdges)(scrambleResult.toggles);
+              return hasPath(endpoints.start)(endpoints.end)(effective);
+            })(graphs);
+            var $65 = allConnected && attempt < 10;
+            if ($65) {
+              $tco_var_graphs = graphs;
+              $tco_var_attempt = attempt + 1 | 0;
+              return;
+            }
+            ;
+            $tco_done = true;
+            return {
+              graphs,
+              initialToggles: scrambleResult.toggles,
+              scrambleHistory: scrambleResult.history
+            };
+          }
+          ;
+          while (!$tco_done) {
+            $tco_result = $tco_loop($tco_var_graphs, $tco_var_attempt);
+          }
+          ;
+          return $tco_result;
+        };
+      };
+    };
+    return function __do4() {
+      var graphs = generateAllGraphs();
+      return generateValidScramble(graphs)(0)();
     };
   };
 
@@ -10136,8 +10194,8 @@
     var insert7 = insert4(dictOrd);
     return function(x3) {
       return function(s) {
-        var $60 = member5(x3)(s);
-        if ($60) {
+        var $62 = member5(x3)(s);
+        if ($62) {
           return $$delete5(x3)(s);
         }
         ;
@@ -10158,7 +10216,7 @@
       ;
       throw new Error("Failed pattern match at Honeycomb.Component (line 262, column 3 - line 262, column 25): " + [v.constructor.name]);
     };
-    var allConnected = all2(isJust2)(state3.paths);
+    var allConnected = state3.moveCount > 0 && all2(isJust2)(state3.paths);
     return div2([class_("win-overlay" + (function() {
       if (allConnected) {
         return " active";
@@ -10189,7 +10247,7 @@
         };
         var mPath = join3(index2(state3.paths)(idx));
         var renderConfig = mkRenderConfigWithPositions(idx)(graph.baseEdges)(state3.globalToggles)(mPath)(positions);
-        var hasPath = (function() {
+        var hasPath2 = (function() {
           if (mPath instanceof Just) {
             return true;
           }
@@ -10201,14 +10259,14 @@
           throw new Error("Failed pattern match at Honeycomb.Component (line 156, column 13 - line 158, column 21): " + [mPath.constructor.name]);
         })();
         var statusClass = (function() {
-          if (hasPath) {
+          if (hasPath2) {
             return "connected";
           }
           ;
           return "disconnected";
         })();
         var statusText = (function() {
-          if (hasPath) {
+          if (hasPath2) {
             return "connected";
           }
           ;
@@ -10235,8 +10293,8 @@
     };
     var connectedCount = length3(filter(isJust2)(state3.paths));
     return div2([class_("honeycomb-header")])([h1_([text5("The Honeycomb")]), p([class_("subtitle")])([text5("Toggle an edge in one graph, and it toggles in all six.")]), renderLegend, div2([class_("status-bar")])([span_([text5("Paths connected: ")]), span3([class_((function() {
-      var $72 = connectedCount === 6;
-      if ($72) {
+      var $74 = connectedCount === 6;
+      if ($74) {
         return "count complete";
       }
       ;
@@ -10300,36 +10358,36 @@
                   return SimTick.value;
                 }))))(function() {
                   return discard5(modify_3(function(v1) {
-                    var $75 = {};
-                    for (var $76 in v1) {
-                      if ({}.hasOwnProperty.call(v1, $76)) {
-                        $75[$76] = v1[$76];
+                    var $77 = {};
+                    for (var $78 in v1) {
+                      if ({}.hasOwnProperty.call(v1, $78)) {
+                        $77[$78] = v1[$78];
                       }
                       ;
                     }
                     ;
-                    $75.simGroup = new Just(simGroup);
-                    return $75;
+                    $77.simGroup = new Just(simGroup);
+                    return $77;
                   }))(function() {
                     return bind7(liftEffect7(generatePuzzle(6)))(function(puzzle) {
                       return discard5(modify_3(function(v1) {
-                        var $78 = {};
-                        for (var $79 in v1) {
-                          if ({}.hasOwnProperty.call(v1, $79)) {
-                            $78[$79] = v1[$79];
+                        var $80 = {};
+                        for (var $81 in v1) {
+                          if ({}.hasOwnProperty.call(v1, $81)) {
+                            $80[$81] = v1[$81];
                           }
                           ;
                         }
                         ;
-                        $78.graphs = mapFlipped1(puzzle.graphs)(function(g) {
+                        $80.graphs = mapFlipped1(puzzle.graphs)(function(g) {
                           return {
                             index: g.index,
                             baseEdges: g.baseEdges
                           };
                         });
-                        $78.globalToggles = puzzle.initialToggles;
-                        $78.scrambleHistory = puzzle.scrambleHistory;
-                        return $78;
+                        $80.globalToggles = puzzle.initialToggles;
+                        $80.scrambleHistory = puzzle.scrambleHistory;
+                        return $80;
                       }))(function() {
                         return bind7(get2)(function(state3) {
                           return discard5(liftEffect7(updateAllLinks(state3)(simGroup)))(function() {
@@ -10350,17 +10408,17 @@
       ;
       if (v instanceof ToggleEdge) {
         return discard5(modify_3(function(s) {
-          var $81 = {};
-          for (var $82 in s) {
-            if ({}.hasOwnProperty.call(s, $82)) {
-              $81[$82] = s[$82];
+          var $83 = {};
+          for (var $84 in s) {
+            if ({}.hasOwnProperty.call(s, $84)) {
+              $83[$84] = s[$84];
             }
             ;
           }
           ;
-          $81.globalToggles = toggleInSet1(v.value0)(s.globalToggles);
-          $81.moveCount = s.moveCount + 1 | 0;
-          return $81;
+          $83.globalToggles = toggleInSet1(v.value0)(s.globalToggles);
+          $83.moveCount = s.moveCount + 1 | 0;
+          return $83;
         }))(function() {
           return bind7(get2)(function(state3) {
             return discard5((function() {
@@ -10387,24 +10445,24 @@
       if (v instanceof NewPuzzle) {
         return bind7(liftEffect7(generatePuzzle(6)))(function(puzzle) {
           return discard5(modify_3(function(v1) {
-            var $87 = {};
-            for (var $88 in v1) {
-              if ({}.hasOwnProperty.call(v1, $88)) {
-                $87[$88] = v1[$88];
+            var $89 = {};
+            for (var $90 in v1) {
+              if ({}.hasOwnProperty.call(v1, $90)) {
+                $89[$90] = v1[$90];
               }
               ;
             }
             ;
-            $87.graphs = mapFlipped1(puzzle.graphs)(function(g) {
+            $89.graphs = mapFlipped1(puzzle.graphs)(function(g) {
               return {
                 index: g.index,
                 baseEdges: g.baseEdges
               };
             });
-            $87.globalToggles = puzzle.initialToggles;
-            $87.scrambleHistory = puzzle.scrambleHistory;
-            $87.moveCount = 0;
-            return $87;
+            $89.globalToggles = puzzle.initialToggles;
+            $89.scrambleHistory = puzzle.scrambleHistory;
+            $89.moveCount = 0;
+            return $89;
           }))(function() {
             return bind7(get2)(function(state3) {
               return discard5((function() {
@@ -10433,17 +10491,17 @@
         return bind7(get2)(function(state3) {
           var toggles = foldl2(flip(toggleInSet1))(empty7)(state3.scrambleHistory);
           return discard5(modify_3(function(v1) {
-            var $92 = {};
-            for (var $93 in v1) {
-              if ({}.hasOwnProperty.call(v1, $93)) {
-                $92[$93] = v1[$93];
+            var $94 = {};
+            for (var $95 in v1) {
+              if ({}.hasOwnProperty.call(v1, $95)) {
+                $94[$95] = v1[$95];
               }
               ;
             }
             ;
-            $92.globalToggles = toggles;
-            $92.moveCount = 0;
-            return $92;
+            $94.globalToggles = toggles;
+            $94.moveCount = 0;
+            return $94;
           }))(function() {
             return discard5((function() {
               if (state3.simGroup instanceof Nothing) {
@@ -10452,16 +10510,16 @@
               ;
               if (state3.simGroup instanceof Just) {
                 return discard5(liftEffect7(updateAllLinks((function() {
-                  var $96 = {};
-                  for (var $97 in state3) {
-                    if ({}.hasOwnProperty.call(state3, $97)) {
-                      $96[$97] = state3[$97];
+                  var $98 = {};
+                  for (var $99 in state3) {
+                    if ({}.hasOwnProperty.call(state3, $99)) {
+                      $98[$99] = state3[$99];
                     }
                     ;
                   }
                   ;
-                  $96.globalToggles = toggles;
-                  return $96;
+                  $98.globalToggles = toggles;
+                  return $98;
                 })())(state3.simGroup.value0)))(function() {
                   return discard5(liftEffect7(applyHoneycombSetup(state3.simGroup.value0)))(function() {
                     return liftEffect7(reheatAll(state3.simGroup.value0));
@@ -10479,16 +10537,16 @@
       ;
       if (v instanceof SolvePuzzle) {
         return discard5(modify_3(function(v1) {
-          var $100 = {};
-          for (var $101 in v1) {
-            if ({}.hasOwnProperty.call(v1, $101)) {
-              $100[$101] = v1[$101];
+          var $102 = {};
+          for (var $103 in v1) {
+            if ({}.hasOwnProperty.call(v1, $103)) {
+              $102[$103] = v1[$103];
             }
             ;
           }
           ;
-          $100.globalToggles = empty7;
-          return $100;
+          $102.globalToggles = empty7;
+          return $102;
         }))(function() {
           return bind7(get2)(function(state3) {
             return discard5((function() {
@@ -10498,16 +10556,16 @@
               ;
               if (state3.simGroup instanceof Just) {
                 return discard5(liftEffect7(updateAllLinks((function() {
-                  var $104 = {};
-                  for (var $105 in state3) {
-                    if ({}.hasOwnProperty.call(state3, $105)) {
-                      $104[$105] = state3[$105];
+                  var $106 = {};
+                  for (var $107 in state3) {
+                    if ({}.hasOwnProperty.call(state3, $107)) {
+                      $106[$107] = state3[$107];
                     }
                     ;
                   }
                   ;
-                  $104.globalToggles = empty7;
-                  return $104;
+                  $106.globalToggles = empty7;
+                  return $106;
                 })())(state3.simGroup.value0)))(function() {
                   return discard5(liftEffect7(applyHoneycombSetup(state3.simGroup.value0)))(function() {
                     return liftEffect7(reheatAll(state3.simGroup.value0));
@@ -10532,16 +10590,16 @@
           if (state3.simGroup instanceof Just) {
             return bind7(liftEffect7(getAllPositions(state3.simGroup.value0)))(function(positions) {
               return modify_3(function(v1) {
-                var $109 = {};
-                for (var $110 in v1) {
-                  if ({}.hasOwnProperty.call(v1, $110)) {
-                    $109[$110] = v1[$110];
+                var $111 = {};
+                for (var $112 in v1) {
+                  if ({}.hasOwnProperty.call(v1, $112)) {
+                    $111[$112] = v1[$112];
                   }
                   ;
                 }
                 ;
-                $109.nodePositions = positions;
-                return $109;
+                $111.nodePositions = positions;
+                return $111;
               });
             });
           }
@@ -10556,16 +10614,16 @@
             return computePath(g)(state3.globalToggles);
           });
           return modify_3(function(v1) {
-            var $113 = {};
-            for (var $114 in v1) {
-              if ({}.hasOwnProperty.call(v1, $114)) {
-                $113[$114] = v1[$114];
+            var $115 = {};
+            for (var $116 in v1) {
+              if ({}.hasOwnProperty.call(v1, $116)) {
+                $115[$116] = v1[$116];
               }
               ;
             }
             ;
-            $113.paths = computedPaths;
-            return $113;
+            $115.paths = computedPaths;
+            return $115;
           });
         });
       }

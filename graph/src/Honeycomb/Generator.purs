@@ -15,6 +15,7 @@ import Effect (Effect)
 import Effect.Random (randomInt)
 
 import Honeycomb.Types (NodeId(..), EdgeKey, mkEdgeKey, allNodes, graphEndpoints)
+import Honeycomb.Pathfinding (hasPath)
 
 -- =============================================================================
 -- Graph Generation
@@ -166,13 +167,28 @@ type Puzzle =
   , scrambleHistory :: Array EdgeKey
   }
 
--- | Generate a complete puzzle
+-- | Generate a complete puzzle, retrying if scramble leaves it already solved
 generatePuzzle :: Int -> Effect Puzzle
 generatePuzzle scrambleMoves = do
   graphs <- generateAllGraphs
-  scrambleResult <- scrambleGraphs graphs scrambleMoves
-  pure
-    { graphs
-    , initialToggles: scrambleResult.toggles
-    , scrambleHistory: scrambleResult.history
-    }
+  generateValidScramble graphs 0
+  where
+  generateValidScramble graphs attempt = do
+    scrambleResult <- scrambleGraphs graphs scrambleMoves
+    let toggles = scrambleResult.toggles
+    -- Check if puzzle is still solved (all paths connected)
+    let allConnected = Array.all (\g ->
+          let effective = xorSets g.baseEdges toggles
+              endpoints = graphEndpoints g.index
+          in hasPath endpoints.start endpoints.end effective
+        ) graphs
+    if allConnected && attempt < 10
+      then generateValidScramble graphs (attempt + 1)
+      else pure
+        { graphs
+        , initialToggles: toggles
+        , scrambleHistory: scrambleResult.history
+        }
+
+  xorSets :: forall a. Ord a => Set a -> Set a -> Set a
+  xorSets a b = Set.union (Set.difference a b) (Set.difference b a)

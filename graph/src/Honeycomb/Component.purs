@@ -258,7 +258,7 @@ renderWinOverlay state =
         [ HH.text "Play Again" ]
     ]
   where
-  allConnected = Array.all isJust state.paths
+  allConnected = state.moveCount > 0 && Array.all isJust state.paths
   isJust (Just _) = true
   isJust Nothing = false
 
