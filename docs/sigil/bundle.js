@@ -1085,7 +1085,7 @@
   var thaw = /* @__PURE__ */ runSTFn1(thawImpl);
   var withArray = function(f) {
     return function(xs) {
-      return function __do2() {
+      return function __do3() {
         var result = thaw(xs)();
         f(result)();
         return unsafeFreeze(result)();
@@ -1490,10 +1490,10 @@
       }
       ;
       if (v instanceof Just) {
-        return map1(snd)(sortWith1(fst)((function __do2() {
+        return map1(snd)(sortWith1(fst)((function __do3() {
           var result = unsafeThaw(singleton2(v.value0))();
           foreach(indexedAndSorted)(function(v1) {
-            return function __do3() {
+            return function __do4() {
               var lst = map22(/* @__PURE__ */ (function() {
                 var $183 = function($185) {
                   return fromJust4(last($185));
@@ -6292,14 +6292,14 @@
   };
   var many = function(v) {
     return function(str) {
-      return (function __do2() {
+      return (function __do3() {
         var valuesRef = newSTArray();
         var strRef = str;
         var contRef = true;
         var resRef = new LexSucc([], str);
         (function() {
           while (contRef) {
-            (function __do3() {
+            (function __do4() {
               var str$prime = strRef;
               var v1 = v(str$prime);
               if (v1 instanceof LexFail) {
@@ -8398,7 +8398,7 @@
   var foldM2 = /* @__PURE__ */ foldM(monadEffect);
   var renderTypeSyn = function(t) {
     var containerId = "typesyn-" + show2(t.idx);
-    return function __do2() {
+    return function __do3() {
       createDeclRow("typesyn-table")(t.idx)(t.name)(containerId)();
       var v = parseToRenderType(t.body);
       if (v instanceof Just) {
@@ -8413,14 +8413,14 @@
         return log("[SigilDemo] Type synonym parse failed: " + t.name)();
       }
       ;
-      throw new Error("Failed pattern match at Demo.Main (line 115, column 3 - line 120, column 64): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Demo.Main (line 177, column 3 - line 182, column 64): " + [v.constructor.name]);
     };
   };
   var renderSignet2 = function(s) {
     var containerId = "signet-" + show2(s.idx);
     var v = parseToRenderType(s.sig);
     if (v instanceof Just) {
-      return function __do2() {
+      return function __do3() {
         createRow("signet-table")(s.idx)(s.name)(s.category)(s.sig)(containerId)(true)();
         return renderSignetInto("#" + containerId)({
           ast: elideAST(v.value0)
@@ -8429,19 +8429,19 @@
     }
     ;
     if (v instanceof Nothing) {
-      return function __do2() {
+      return function __do3() {
         createRow("signet-table")(s.idx)(s.name)(s.category)(s.sig)(containerId)(false)();
         return log("[SigilDemo] Parse failed: #" + (show2(s.idx) + (" " + s.name)))();
       };
     }
     ;
-    throw new Error("Failed pattern match at Demo.Main (line 70, column 3 - line 77, column 73): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Demo.Main (line 132, column 3 - line 139, column 73): " + [v.constructor.name]);
   };
   var renderSiglet2 = function(s) {
     var containerId = "siglet-" + show2(s.idx);
     var v = parseToRenderType(s.sig);
     if (v instanceof Just) {
-      return function __do2() {
+      return function __do3() {
         createRow("siglet-table")(s.idx)(s.name)(s.category)(s.sig)(containerId)(true)();
         return renderSigletInto("#" + containerId)({
           ast: elideAST(v.value0)
@@ -8450,19 +8450,19 @@
     }
     ;
     if (v instanceof Nothing) {
-      return function __do2() {
+      return function __do3() {
         createRow("siglet-table")(s.idx)(s.name)(s.category)(s.sig)(containerId)(false)();
         return log("[SigilDemo] Parse failed: #" + (show2(s.idx) + (" " + s.name)))();
       };
     }
     ;
-    throw new Error("Failed pattern match at Demo.Main (line 58, column 3 - line 65, column 73): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Demo.Main (line 120, column 3 - line 127, column 73): " + [v.constructor.name]);
   };
   var renderSigil = function(s) {
     var containerId = "sigil-" + show2(s.idx);
     var v = parseToRenderType(s.sig);
     if (v instanceof Just) {
-      return function __do2() {
+      return function __do3() {
         createRow("sigil-table")(s.idx)(s.name)(s.category)(s.sig)(containerId)(true)();
         return renderSignatureInto("#" + containerId)({
           name: s.name,
@@ -8474,17 +8474,121 @@
     }
     ;
     if (v instanceof Nothing) {
-      return function __do2() {
+      return function __do3() {
         createRow("sigil-table")(s.idx)(s.name)(s.category)(s.sig)(containerId)(false)();
         return log("[SigilDemo] Parse failed: #" + (show2(s.idx) + (" " + s.name)))();
       };
     }
     ;
-    throw new Error("Failed pattern match at Demo.Main (line 46, column 3 - line 53, column 73): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Demo.Main (line 108, column 3 - line 115, column 73): " + [v.constructor.name]);
+  };
+  var renderHeroSig = function(sel) {
+    return function(name) {
+      return function(sig) {
+        var v = parseToRenderType(sig);
+        if (v instanceof Just) {
+          return renderSignatureInto(sel)({
+            name,
+            ast: v.value0,
+            typeParams: [],
+            className: Nothing.value
+          });
+        }
+        ;
+        if (v instanceof Nothing) {
+          return log("[Hero] " + (name + " parse failed"));
+        }
+        ;
+        throw new Error("Failed pattern match at Demo.Main (line 100, column 30 - line 103, column 56): " + [v.constructor.name]);
+      };
+    };
+  };
+  var renderHero = function __do() {
+    (function() {
+      var v = parseToRenderType("forall m a b c d. MonadRec m => (a -> b -> c -> m (Step (Record ( a :: a, b :: b, c :: c )) d)) -> a -> b -> c -> m d");
+      if (v instanceof Just) {
+        renderSignatureInto("#hero-tailrec-sigil")({
+          name: "tailRecM3",
+          ast: v.value0,
+          typeParams: [],
+          className: Nothing.value
+        })();
+        renderSignetInto("#hero-tailrec-signet")({
+          ast: elideAST(v.value0)
+        })();
+        return renderSigletInto("#hero-tailrec-siglet")({
+          ast: elideAST(v.value0)
+        })();
+      }
+      ;
+      if (v instanceof Nothing) {
+        return log("[Hero] tailRecM3 parse failed")();
+      }
+      ;
+      throw new Error("Failed pattern match at Demo.Main (line 53, column 3 - line 59, column 51): " + [v.constructor.name]);
+    })();
+    var parseArg = function(s) {
+      var v = parseToRenderType(s);
+      if (v instanceof Just) {
+        return [v.value0];
+      }
+      ;
+      if (v instanceof Nothing) {
+        return [];
+      }
+      ;
+      throw new Error("Failed pattern match at Demo.Main (line 62, column 20 - line 64, column 22): " + [v.constructor.name]);
+    };
+    renderDataDeclInto("#hero-decl-data")({
+      name: "Step",
+      typeParams: ["a", "b"],
+      constructors: [{
+        name: "Loop",
+        args: parseArg("a")
+      }, {
+        name: "Done",
+        args: parseArg("b")
+      }],
+      keyword: Nothing.value
+    })();
+    (function() {
+      var v = parseToRenderType("forall f. Functor f => (a -> f a) -> s -> f s");
+      if (v instanceof Just) {
+        return renderTypeSynonymInto("#hero-decl-typesyn")({
+          name: "Lens'",
+          typeParams: ["s", "a"],
+          body: v.value0
+        })();
+      }
+      ;
+      if (v instanceof Nothing) {
+        return log("[Hero] Lens' parse failed")();
+      }
+      ;
+      throw new Error("Failed pattern match at Demo.Main (line 76, column 3 - line 80, column 47): " + [v.constructor.name]);
+    })();
+    renderClassDeclInto("#hero-decl-class")({
+      name: "Ord",
+      typeParams: ["a"],
+      superclasses: [{
+        name: "Eq",
+        methods: [{
+          name: "eq",
+          ast: parseToRenderType("a -> a -> Boolean")
+        }]
+      }],
+      methods: [{
+        name: "compare",
+        ast: parseToRenderType("a -> a -> Ordering")
+      }]
+    })();
+    renderHeroSig("#hero-sig-map")("map")("forall f a b. Functor f => (a -> b) -> f a -> f b")();
+    renderHeroSig("#hero-sig-apply")("apply")("forall f a b. Apply f => f (a -> b) -> f a -> f b")();
+    return renderHeroSig("#hero-sig-bind")("bind")("forall m a b. Bind m => m a -> (a -> m b) -> m b")();
   };
   var renderForeignImp = function(f) {
     var containerId = "foreign-" + show2(f.idx);
-    return function __do2() {
+    return function __do3() {
       createDeclRow("foreign-table")(f.idx)(f.name)(containerId)();
       var v = parseToRenderType(f.sig);
       if (v instanceof Just) {
@@ -8498,12 +8602,12 @@
         return log("[SigilDemo] Foreign import parse failed: " + f.name)();
       }
       ;
-      throw new Error("Failed pattern match at Demo.Main (line 126, column 3 - line 131, column 66): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Demo.Main (line 188, column 3 - line 193, column 66): " + [v.constructor.name]);
     };
   };
   var renderDataDecl2 = function(d) {
     var containerId = "datatype-" + show2(d.idx);
-    return function __do2() {
+    return function __do3() {
       createDeclRow("datatype-table")(d.idx)(d.name)(containerId)();
       var ctors = map10(function(c) {
         return {
@@ -8518,7 +8622,7 @@
               return [];
             }
             ;
-            throw new Error("Failed pattern match at Demo.Main (line 85, column 40 - line 87, column 26): " + [v.constructor.name]);
+            throw new Error("Failed pattern match at Demo.Main (line 147, column 40 - line 149, column 26): " + [v.constructor.name]);
           })(c.argSigs)
         };
       })(d.constructors);
@@ -8532,7 +8636,7 @@
   };
   var renderClassDecl2 = function(c) {
     var containerId = "class-" + show2(c.idx);
-    return function __do2() {
+    return function __do3() {
       createDeclRow("class-table")(c.idx)(c.name)(containerId)();
       var supers = map10(function(sc) {
         return {
@@ -8559,8 +8663,9 @@
       })();
     };
   };
-  var main = function __do() {
+  var main = function __do2() {
     log("[SigilDemo] Rendering signature gallery")();
+    renderHero();
     foldM2(function(v) {
       return function(s) {
         return renderSigil(s);

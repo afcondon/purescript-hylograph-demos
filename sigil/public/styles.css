@@ -72,6 +72,72 @@ header h1 {
 
 /* ── Readme tab ── */
 
+/* Readme panel layout.
+     Top:    About (prose)      | Progressive disclosure (tailRecM3)
+     Middle: full-width hero    — map/apply/bind, then data/type/class
+     Bottom: Element mapping    | Usage (both prose) */
+.readme-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 48px;
+  padding: 28px 0 32px;
+}
+.readme-row + .readme-row,
+.sigil-hero + .readme-row {
+  border-top: 1px solid #e8e6e0;
+}
+.readme-text p,
+.readme-text pre { max-width: none; }
+.readme-diagram { min-width: 0; }
+
+@media (max-width: 820px) {
+  .readme-row {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+}
+
+.sigil-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+  padding: 24px 0 40px;
+  margin-top: 8px;
+  border-top: 1px solid #e8e6e0;
+}
+/* Panel-scoped h3 rule would win on specificity; be explicit. */
+#panel-readme .hero-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  margin: 0 0 18px;
+}
+.hero-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 40px;
+}
+.hero-row-vertical {
+  grid-template-columns: 1fr;
+  row-gap: 12px;
+  justify-items: center;
+}
+.hero-row-vertical .hero-cell {
+  width: 100%;
+  max-width: 760px;
+  min-height: 0;
+}
+.hero-cell { min-height: 48px; overflow: hidden; }
+.hero-cell > * { max-width: 100%; }
+
+@media (max-width: 820px) {
+  .hero-row:not(.hero-row-vertical) {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+}
+
 #panel-readme h2 { font-size: 18px; margin-bottom: 12px; }
 #panel-readme h3 { font-size: 15px; margin: 16px 0 8px; }
 #panel-readme p { margin-bottom: 12px; max-width: 640px; }

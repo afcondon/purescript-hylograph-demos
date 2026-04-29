@@ -24,6 +24,7 @@ foreign import createDeclRow :: String -> Int -> String -> String -> Effect Unit
 main :: Effect Unit
 main = do
   log "[SigilDemo] Rendering signature gallery"
+  renderHero
   -- Pass 1: Sigils
   Array.foldM (\_ s -> renderSigil s) unit signatures
   -- Pass 2: Siglets
@@ -39,6 +40,67 @@ main = do
   -- Pass 7: Foreign imports
   Array.foldM (\_ f -> renderForeignImp f) unit foreignImports
   log "[SigilDemo] Done"
+
+-- | Hero display case: 3×3 grid shown at the top of the Readme panel.
+-- |
+-- |   Row 1 — same signature three ways:  tailRecM3 (Sigil / Signet / Siglet)
+-- |   Row 2 — declaration kinds (axis breaks here): data / type synonym / class
+-- |   Row 3 — three canonical FP methods rendered Sigil-style: map / apply / bind
+renderHero :: Effect Unit
+renderHero = do
+  -- Row 1: tailRecM3 in three levels of compression
+  let tailRecSig = "forall m a b c d. MonadRec m => (a -> b -> c -> m (Step (Record ( a :: a, b :: b, c :: c )) d)) -> a -> b -> c -> m d"
+  case parseToRenderType tailRecSig of
+    Just ast -> do
+      Sigil.renderSignatureInto "#hero-tailrec-sigil"
+        { name: "tailRecM3", ast, typeParams: [], className: Nothing }
+      Sigil.renderSignetInto "#hero-tailrec-signet" { ast: elideAST ast }
+      Sigil.renderSigletInto "#hero-tailrec-siglet" { ast: elideAST ast }
+    Nothing -> log "[Hero] tailRecM3 parse failed"
+
+  -- Row 2, col 1: data Step a b = Loop a | Done b
+  let parseArg s = case parseToRenderType s of
+        Just rt -> [rt]
+        Nothing -> []
+  Sigil.renderDataDeclInto "#hero-decl-data"
+    { name: "Step"
+    , typeParams: ["a", "b"]
+    , constructors:
+        [ { name: "Loop", args: parseArg "a" }
+        , { name: "Done", args: parseArg "b" }
+        ]
+    , keyword: Nothing
+    }
+
+  -- Row 2, col 2: type Lens' s a = forall f. Functor f => (a -> f a) -> s -> f s
+  case parseToRenderType "forall f. Functor f => (a -> f a) -> s -> f s" of
+    Just body ->
+      Sigil.renderTypeSynonymInto "#hero-decl-typesyn"
+        { name: "Lens'", typeParams: ["s", "a"], body }
+    Nothing -> log "[Hero] Lens' parse failed"
+
+  -- Row 2, col 3: class Eq a <= Ord a where compare :: a -> a -> Ordering
+  Sigil.renderClassDeclInto "#hero-decl-class"
+    { name: "Ord"
+    , typeParams: ["a"]
+    , superclasses:
+        [ { name: "Eq"
+          , methods: [ { name: "eq", ast: parseToRenderType "a -> a -> Boolean" } ]
+          }
+        ]
+    , methods: [ { name: "compare", ast: parseToRenderType "a -> a -> Ordering" } ]
+    }
+
+  -- Row 3: three canonical FP methods, each rendered as a full Sigil
+  renderHeroSig "#hero-sig-map"   "map"   "forall f a b. Functor f => (a -> b) -> f a -> f b"
+  renderHeroSig "#hero-sig-apply" "apply" "forall f a b. Apply f => f (a -> b) -> f a -> f b"
+  renderHeroSig "#hero-sig-bind"  "bind"  "forall m a b. Bind m => m a -> (a -> m b) -> m b"
+
+renderHeroSig :: String -> String -> String -> Effect Unit
+renderHeroSig sel name sig = case parseToRenderType sig of
+  Just ast -> Sigil.renderSignatureInto sel
+    { name, ast, typeParams: [], className: Nothing }
+  Nothing -> log $ "[Hero] " <> name <> " parse failed"
 
 renderSigil :: { idx :: Int, category :: String, name :: String, sig :: String } -> Effect Unit
 renderSigil s = do
