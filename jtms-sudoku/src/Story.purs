@@ -10,6 +10,7 @@ module Story
   , placementFor
   , factTitle
   , proofSummary
+  , globalDagTree
   , skylineTree
   , stats
   ) where
@@ -128,61 +129,60 @@ gridTree notify selected =
     Just (Digit d) -> show d
     Nothing -> ""
 
--- | The smallest proof that needed the algorithmic tier, laid out by
--- | hylograph-graph's Sugiyama.
--- |
--- | View-level compaction: elimination facts (`Not`) sharing a cell AND a
--- | proof depth collapse into one node — "r2c5 \x2260 {1,2,3,4,6,7,8}" — the
--- | proof keeps its individual facts, only the picture groups them. The
--- | (cell, depth) key is what makes contraction safe: same-depth nodes
--- | can have no path between them, so no cycle can be created.
--- | The whole proof, no elision: semantic grouping compresses the
--- | picture, pan/zoom explores it. (`frontier` is retained in the shape
--- | for possible future partial views; it is empty here.)
-fullProof
-  :: SudokuFact
-  -> { nodes :: Array SudokuFact
-     , edges :: Array { from :: FactId, to :: FactId }
-     , frontier :: Set FactId
-     , total :: Int
-     }
-fullProof root =
-  let
-    dag = explainFact reginKB root
-  in
-    { nodes: dag.nodes
-    , edges: dag.edges
-    , frontier: Set.empty
-    , total: Array.length dag.nodes
-    }
+-- | Every premise edge of the whole solution — the one global DAG all
+-- | per-cell proofs are projections of.
+allEdges :: Array { from :: FactId, to :: FactId }
+allEdges = facts reginKB # Array.concatMap \f -> case f.why of
+  Axiom _ -> []
+  ByRule d -> d.premises <#> \p -> { from: p, to: f.id }
 
--- | The size line under the proof heading.
-proofSummary :: SudokuFact -> { shown :: Int, total :: Int }
+-- | The ancestor cone of a fact: which of the solution's facts its proof
+-- | rests on.
+coneOf :: SudokuFact -> Set FactId
+coneOf f = Set.fromFoldable (map _.id (explainFact reginKB f).nodes)
+
+-- | Sizes for the caption: this cone, and the whole solution.
+proofSummary :: SudokuFact -> { cone :: Int, total :: Int }
 proofSummary f =
-  let full = fullProof f
-  in { shown: Array.length full.nodes, total: full.total }
+  { cone: Set.size (coneOf f)
+  , total: Array.length (facts reginKB)
+  }
 
-dagTreeFor :: SudokuFact -> Tree
-dagTreeFor root =
+-- | A laid-out proof scene: semantic groups, positions from Sugiyama,
+-- | group-level edges, and bounds. Built once per node/edge set — the
+-- | global scene is a top-level value, computed a single time.
+type Scene =
+  { groups :: Array (GKey /\ Array SudokuFact)
+  , pos :: Map GKey { x :: Number, y :: Number }
+  , gEdges :: Array (GKey /\ GKey)
+  , minX :: Number
+  , minY :: Number
+  , spanW :: Number
+  , spanH :: Number
+  }
+
+buildScene :: Maybe FactId -> Array SudokuFact -> Array { from :: FactId, to :: FactId } -> Scene
+buildScene rootId sceneFacts sceneEdges =
   let
-    dag = fullProof root
     depths = depthOf reginKB
     depthFor f = fromMaybe 0 (Map.lookup f.id depths)
 
     byId :: Map FactId SudokuFact
-    byId = Map.fromFoldable (dag.nodes <#> \f -> f.id /\ f)
+    byId = Map.fromFoldable (sceneFacts <#> \f -> f.id /\ f)
 
-    -- semantic pass: a hidden single's kept premises, when they are all
-    -- eliminations of one digit at one depth inside one house, become a
-    -- single "no other d in <house>" node. Same-depth membership keeps
-    -- the contraction cycle-safe; first claim wins.
+    localOut :: Map FactId (Array FactId)
+    localOut = foldl (\m e -> Map.insertWith (<>) e.from [ e.to ] m) Map.empty sceneEdges
+
+    -- semantic pass: a hidden single's premises, when they are all
+    -- eliminations of one digit inside one house with no path between
+    -- them, become one "no other d in <house>" node
     semantic :: Map FactId GKey
-    semantic = foldl claimFor Map.empty dag.nodes
+    semantic = foldl claimFor Map.empty sceneFacts
       where
       claimFor acc f = case f.why of
         ByRule d | d.rule == HiddenSingle ->
           let
-            ps = d.premises # Array.mapMaybe lookupKept
+            ps = d.premises # Array.mapMaybe (\id -> Map.lookup id byId)
             digits = ps # Array.mapMaybe \pf -> case pf.claim of
               Not _ dd -> Just dd
               Is _ _ -> Nothing
@@ -211,8 +211,13 @@ dagTreeFor root =
               _ -> acc
         _ -> acc
 
+      cellOfClaim = case _ of
+        Is c _ -> c
+        Not c _ -> c
+
       -- contraction is safe iff no member reaches another through the
-      -- local subgraph — checked directly, which admits mixed depths
+      -- scene's edges (direct member-member edges reduce to dropped
+      -- self-loops and are harmless)
       interPath ps =
         let
           memberIds = Set.fromFoldable (ps <#> _.id)
@@ -227,46 +232,36 @@ dagTreeFor root =
               else if Array.any (\id -> Set.member id memberIds) nextIds then true
               else step nextIds (foldl (flip Set.insert) visited nextIds)
         in
-          ps # Array.any \p ->
-            step (fromMaybe [] (Map.lookup p.id localOut)) (Set.singleton p.id)
-            -- direct edges member->member count as paths too
-
-      localOut :: Map FactId (Array FactId)
-      localOut = foldl (\m e -> Map.insertWith (<>) e.from [ e.to ] m) Map.empty dag.edges
-
-      lookupKept id = Map.lookup id byId
-
-      cellOfClaim = case _ of
-        Is c _ -> c
-        Not c _ -> c
+          ps # Array.any \pf ->
+            step (fromMaybe [] (Map.lookup pf.id localOut)) (Set.singleton pf.id)
 
     key :: SudokuFact -> GKey
     key f = case Map.lookup f.id semantic of
-      Just k | f.id /= root.id -> k
+      Just k | Just f.id /= rootId -> k
       _ -> case f.claim of
-        Not c _ | f.id /= root.id -> GGroup c (depthFor f)
+        Not c _ | Just f.id /= rootId -> GGroup c (depthFor f)
         _ -> GSingle f.id
 
     groups :: Map GKey (Array SudokuFact)
-    groups = foldl (\m f -> Map.insertWith (flip (<>)) (key f) [ f ] m) Map.empty dag.nodes
+    groups = foldl (\m f -> Map.insertWith (flip (<>)) (key f) [ f ] m) Map.empty sceneFacts
 
     keyOfId id = fromMaybe (GSingle id) (key <$> Map.lookup id byId)
 
-    gEdges :: Set (GKey /\ GKey)
-    gEdges = Set.fromFoldable
-      ( dag.edges
+    gEdgeSet :: Set (GKey /\ GKey)
+    gEdgeSet = Set.fromFoldable
+      ( sceneEdges
           # map (\e -> keyOfId e.from /\ keyOfId e.to)
           # Array.filter (\(a /\ b) -> a /= b)
       )
+
+    gKeys :: Array GKey
+    gKeys = Set.toUnfoldable (Map.keys groups)
 
     adjacency :: Map GKey (Set GKey)
     adjacency = foldl
       (\m (a /\ b) -> Map.insertWith Set.union a (Set.singleton b) m)
       (Map.fromFoldable (gKeys <#> \k -> k /\ Set.empty))
-      (Set.toUnfoldable gEdges :: Array (GKey /\ GKey))
-
-    gKeys :: Array GKey
-    gKeys = Set.toUnfoldable (Map.keys groups)
+      (Set.toUnfoldable gEdgeSet :: Array (GKey /\ GKey))
 
     layout = sugiyamaLayout
       { nodeWidth: 40.0, nodeHeight: 200.0, orientation: Horizontal, reversed: false }
@@ -276,66 +271,108 @@ dagTreeFor root =
     pos :: Map GKey { x :: Number, y :: Number }
     pos = Map.fromFoldable (layout <#> \n -> n.id /\ { x: n.x, y: n.y })
 
-    posFor k = fromMaybe { x: 0.0, y: 0.0 } (Map.lookup k pos)
-
     maxX = fromMaybe 0.0 (maximum (map _.x layout))
     maxY = fromMaybe 0.0 (maximum (map _.y layout))
     minX = fromMaybe 0.0 (minimum (map _.x layout))
     minY = fromMaybe 0.0 (minimum (map _.y layout))
-    nodeW = 150.0
-    spanW = (maxX - minX) + nodeW + 80.0
-    spanH = (maxY - minY) + 100.0
+  in
+    { groups: Map.toUnfoldable groups
+    , pos
+    , gEdges: Set.toUnfoldable gEdgeSet
+    , minX
+    , minY
+    , spanW: (maxX - minX) + nodeW + 80.0
+    , spanH: (maxY - minY) + 100.0
+    }
 
-    edges = (Set.toUnfoldable gEdges :: Array (GKey /\ GKey)) # map \(a /\ b) ->
+nodeW :: Number
+nodeW = 150.0
+
+-- | Draw a scene: everything lit, or a cone lit and the rest ghosted.
+renderScene :: { emphasis :: Maybe (Set FactId), rootId :: Maybe FactId } -> Scene -> Tree
+renderScene opts scene =
+  let
+    litGroup members = case opts.emphasis of
+      Nothing -> true
+      Just cone -> members # Array.any \f -> Set.member f.id cone
+
+    litByKey :: Map GKey Boolean
+    litByKey = Map.fromFoldable (scene.groups <#> \(k /\ members) -> k /\ litGroup members)
+
+    isLit k = fromMaybe false (Map.lookup k litByKey)
+
+    posFor k = fromMaybe { x: 0.0, y: 0.0 } (Map.lookup k scene.pos)
+
+    edges = scene.gEdges <#> \(a /\ b) ->
       let
         from = posFor a
         to = posFor b
+        bothLit = isLit a && isLit b
       in
         elem Line
           [ F.x1 (from.x + nodeW), F.y1 (from.y + 11.0)
           , F.x2 to.x, F.y2 (to.y + 11.0)
           , F.stroke "#c9c9c9", F.strokeWidth 1.0
+          , staticStr "opacity" (if bothLit then "1" else "0.08")
           ]
           []
 
-    nodes = (Map.toUnfoldable groups :: Array (GKey /\ Array SudokuFact))
-      # Array.concatMap \(k /\ members) ->
-          let
-            p = posFor k
-            isRoot = case k of
-              GSingle id -> id == root.id
-              GGroup _ _ -> false
-              GHouse _ _ _ -> false
-            onFrontier = members # Array.any (\f -> Set.member f.id dag.frontier)
-            style = groupStyle members
-          in
+    nodes = scene.groups # Array.concatMap \(k /\ members) ->
+      let
+        p = posFor k
+        isRoot = case k of
+          GSingle id -> Just id == opts.rootId
+          GGroup _ _ -> false
+          GHouse _ _ _ -> false
+        style = groupStyle members
+      in
+        [ elem Group
+            [ staticStr "opacity" (if isLit k then "1" else "0.13") ]
             [ elem Rect
-                ( [ F.x p.x, F.y p.y, F.width nodeW, F.height 22.0
-                  , staticStr "rx" "3"
-                  , F.fill style.fill, F.stroke style.stroke
-                  , F.strokeWidth (if isRoot then 2.5 else 1.0)
-                  ] <> (if onFrontier then [ staticStr "stroke-dasharray" "5,3" ] else [])
-                )
+                [ F.x p.x, F.y p.y, F.width nodeW, F.height 22.0
+                , staticStr "rx" "3"
+                , F.fill style.fill, F.stroke style.stroke
+                , F.strokeWidth (if isRoot then 2.5 else 1.0)
+                ]
                 []
             , elem Text
                 [ F.x (p.x + 8.0), F.y (p.y + 15.0)
                 , F.fontSize "11"
                 , F.fontFamily "'Helvetica Neue', Helvetica, sans-serif"
                 , F.fill "#111111"
-                , staticStr "textContent"
-                    (groupLabel k members <> (if onFrontier then " \x22ef" else ""))
+                , staticStr "textContent" (groupLabel k members)
                 ]
                 []
             ]
+        ]
   in
     elem SVG
-      [ F.viewBox (minX - 40.0) (minY - 50.0) spanW spanH
+      [ F.viewBox (scene.minX - 40.0) (scene.minY - 50.0) scene.spanW scene.spanH
       , F.width 1100.0
-      , F.height 620.0
+      , F.height 640.0
       , staticStr "preserveAspectRatio" "xMidYMid meet"
       , staticStr "style" "border:1px solid #eeeeee"
       ]
       (edges <> nodes)
+
+-- | The one global scene: the entire solution, laid out once.
+globalScene :: Scene
+globalScene = buildScene Nothing (facts reginKB) allEdges
+
+-- | The whole solution with one cell's cone lit in place.
+globalDagTree :: Maybe SudokuFact -> Tree
+globalDagTree sel = renderScene
+  { emphasis: coneOf <$> sel, rootId: _.id <$> sel }
+  globalScene
+
+-- | Pruned to one proof: the cone re-laid-out on its own.
+dagTreeFor :: SudokuFact -> Tree
+dagTreeFor root =
+  let
+    dag = explainFact reginKB root
+  in
+    renderScene { emphasis: Nothing, rootId: Just root.id }
+      (buildScene (Just root.id) dag.nodes dag.edges)
 
 -- | A rendered node: one fact, one cell's eliminations at one depth, or
 -- | a semantic unit — a whole house's same-digit eliminations serving one
