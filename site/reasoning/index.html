@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Reasoning Wing — The Library of Hylograph</title>
+  <link rel="stylesheet" href="../archipelago.css">
+  <style>
+    body { --accent: #444444; }
+    .r-graph  { width: 14vmin; height: 14vmin; top: 50%; left: 20%; }
+    .r-decomp { width: 11vmin; height: 11vmin; top: 73%; left: 31%; }
+    .r-jtms   { width: 15vmin; height: 15vmin; top: 54%; right: 20%; }
+    .p-gateway     { --portal-accent: #999999; width: 9vmin; height: 9vmin; top: 82%; left: 12%; }
+    .p-hylograph   { --portal-accent: #5b7fa6; width: 9vmin; height: 9vmin; top: 82%; right: 22%; }
+    .p-scriptorium { --portal-accent: #b5822f; width: 9vmin; height: 9vmin; top: 86%; right: 10%; }
+  </style>
+</head>
+<body>
+
+  <div class="scene">
+
+    <div class="title">
+      <h1><span class="over">The Library of Hylograph</span>The Reasoning Wing</h1>
+      <p class="sub">Libraries that Hylograph draws but that stand on their own —
+        graph algorithms and justification-based proofs, rendered as pictures.</p>
+      <ul class="index">
+        <li><a href="../graph/">The Honeycomb</a> <span style="color:#ccc">graphs-extra</span></li>
+        <li><a href="../graph-decomposition/">Decomposition Explorer</a> <span style="color:#ccc">graphs-extra</span></li>
+        <li><a href="../jtms-sudoku/">Explainable Sudoku</a> <span style="color:#ccc">purescript-jtms</span></li>
+      </ul>
+    </div>
+
+    <div class="ground"></div>
+
+    <div class="hero plate"><img src="../heroes/reasoning.jpg" alt="A tree whose fruits are platonic solids"></div>
+
+    <a class="room r-graph" href="../graph/">
+      <img src="../thumbnails/graph.jpg" alt="The Honeycomb">
+      <div class="label">The Honeycomb <span>graph pathfinding</span></div>
+    </a>
+
+    <a class="room r-decomp" href="../graph-decomposition/">
+      <img src="../thumbnails/decomposition.jpg" alt="Decomposition Explorer">
+      <div class="label">Decomposition <span>structural analysis</span></div>
+    </a>
+
+    <a class="room r-jtms" href="../jtms-sudoku/">
+      <img src="../thumbnails/jtms-sudoku.jpg" alt="Explainable Sudoku">
+      <div class="label">Explainable Sudoku <span>proofs as one graph</span></div>
+    </a>
+
+    <a class="room portal p-gateway" href="../">
+      <img src="../tree-hero.jpg" alt="Back to the Library">
+      <div class="label">The Library <span>gateway</span></div>
+    </a>
+
+    <a class="room portal p-hylograph" href="../hylograph/">
+      <img src="../heroes/hylograph.jpg" alt="The Hylograph Wing">
+      <div class="label">The Hylograph Wing</div>
+    </a>
+
+    <a class="room portal p-scriptorium" href="../scriptorium/">
+      <img src="../heroes/scriptorium.jpg" alt="The Scriptorium">
+      <div class="label">The Scriptorium</div>
+    </a>
+
+    <div class="foot-r">
+      <a href="https://github.com/afcondon/purescript-hylograph-demos">Source</a> &middot; <a href="https://hylograph.net">Hylograph.net</a>
+    </div>
+
+  </div>
+
+</body>
+</html>

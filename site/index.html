@@ -4,176 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Library of Hylograph</title>
+  <link rel="stylesheet" href="archipelago.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body { height: 100%; overflow: hidden; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #fff;
-      color: #1a1a1a;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .scene {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ---- Title ---- */
-    .title {
-      position: absolute;
-      top: 3vh;
-      left: 3vw;
-      z-index: 10;
-    }
-    .title h1 {
-      font-size: clamp(1.4rem, 2.8vw, 3rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.9;
-    }
-    .title h1 .the {
-      display: block;
-      font-size: 0.35em;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #aaa;
-      margin-bottom: 0.3em;
-    }
-    .title .sub {
-      margin-top: 0.6vh;
-      font-size: clamp(0.4rem, 0.5vw, 0.6rem);
-      color: #aaa;
-      line-height: 1.5;
-    }
-    .title .sub a { color: #888; }
-
-    .title .index {
-      margin-top: 1.5vh;
-      list-style: none;
-      font-size: clamp(0.38rem, 0.48vw, 0.58rem);
-      line-height: 2;
-      color: #bbb;
-    }
-    .title .index a {
-      color: #aaa;
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .title .index a:hover { color: #1a1a1a; }
-
-    /* ---- Tree (centred, upright) ---- */
-    .tree {
-      position: absolute;
-      width: 38vmin;
-      height: 38vmin;
-      z-index: 5;
-      transform: translateY(-8vmin);
-      pointer-events: none;
-    }
-    .tree img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      opacity: 0.82;
-    }
-
-    /* ---- Isometric transform ---- */
-    :root {
-      --iso: perspective(1200px) rotateX(55deg) rotateZ(-40deg);
-    }
-
-    /* ---- Room ---- */
-    .room {
-      position: absolute;
-      text-decoration: none;
-      color: inherit;
-      z-index: 3;
-      transform: var(--iso);
-    }
-    .room img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .room:hover img {
-      transform: scale(1.06);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    .room .label {
-      position: absolute;
-      bottom: -2.2em;
-      left: 0;
-      font-size: clamp(0.35rem, 0.45vw, 0.55rem);
-      font-weight: 700;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .room:hover .label { opacity: 1; }
-    .room .label span {
-      font-weight: 400;
-      color: #aaa;
-      margin-left: 0.3em;
-    }
-
-    /* ---- Placements ---- */
-
-    .r-sigil  { width: 11vmin; height: 11vmin; top: 30%; left: 25%; }
-    .r-hats   { width: 13vmin; height: 13vmin; top: 48%; left: 19%; }
-    .r-music  { width: 10vmin; height: 10vmin; top: 66%; left: 27%; }
-
-    .r-graph  { width: 14vmin; height: 14vmin; top: 66%; left: 38%; }
-    .r-decomp { width: 10vmin; height: 10vmin; top: 72%; left: 53%; }
-
-    .r-forces { width: 12vmin; height: 12vmin; top: 33%; right: 21%; }
-    .r-layout { width: 13vmin; height: 13vmin; top: 52%; right: 17%; }
-    .r-types  { width: 10vmin; height: 10vmin; top: 68%; right: 24%; }
-    .r-jtms   { width: 14vmin; height: 14vmin; top: 80%; left: 42%; }
-
-    /* ---- Footer ---- */
-    .showcases {
-      position: absolute;
-      bottom: 2.5vh;
-      left: 3vw;
-      z-index: 10;
-    }
-    .showcases h2 {
-      font-size: clamp(0.36rem, 0.45vw, 0.55rem);
-      font-weight: 700;
-      display: inline;
-    }
-    .showcases span {
-      font-size: clamp(0.32rem, 0.4vw, 0.48rem);
-      color: #aaa;
-    }
-    .showcases a { color: #888; text-decoration: none; }
-    .showcases a:hover { color: #1a1a1a; }
-
-    .colophon {
-      position: absolute;
-      bottom: 2.5vh;
-      right: 3vw;
-      z-index: 10;
-      text-align: right;
-      font-size: clamp(0.3rem, 0.4vw, 0.48rem);
-      color: #ccc;
-    }
-    .colophon a { color: #aaa; text-decoration: none; }
-    .colophon a:hover { color: #666; }
+    /* Gateway: the Holy Tree lithograph above, three island portals on the plaza. */
+    .p-hylograph   { --portal-accent: #5b7fa6; width: 19vmin; height: 19vmin; top: 56%; left: 24%; }
+    .p-reasoning   { --portal-accent: #444444; width: 19vmin; height: 19vmin; top: 73%; left: 44%; }
+    .p-scriptorium { --portal-accent: #b5822f; width: 19vmin; height: 19vmin; top: 54%; right: 22%; }
   </style>
 </head>
 <body>
@@ -181,74 +17,52 @@
   <div class="scene">
 
     <div class="title">
-      <h1><span class="the">The Library of</span>Hylograph</h1>
-      <p class="sub">Interactive examples for the <a href="https://hylograph.net">Hylograph</a> visualization libraries.</p>
+      <h1><span class="over">The Library of</span>Hylograph</h1>
+      <p class="sub">Interactive examples for the <a href="https://hylograph.net">Hylograph</a>
+        visualization libraries and their neighbours. Three wings; step through a portal.</p>
       <ul class="index">
-        <li><a href="sigil/">Sigil</a></li>
+        <li class="islandhead" style="--accent:#5b7fa6"><a href="hylograph/">The Hylograph Wing</a></li>
         <li><a href="selection/">The Hylographic Fold</a></li>
-        <li><a href="music/">Anscombe's String Quartet</a></li>
         <li><a href="simulation/">Force Playground</a></li>
+        <li><a href="layout/">Layout Gallery</a></li>
+        <li><a href="music/">Anscombe's String Quartet</a></li>
+        <li class="islandhead" style="--accent:#b5822f"><a href="scriptorium/">The Scriptorium</a></li>
+        <li><a href="sigil/">Sigil</a></li>
+        <li><a href="sigil-hats/">Type Classes</a></li>
+        <li><a href="https://afcondon.github.io/elements-of-purescript-style/" class="out">Elements of PureScript Style</a></li>
+        <li><a href="https://github.com/afcondon/the-prelude" class="out">The Prelude</a></li>
+        <li class="islandhead" style="--accent:#444444"><a href="reasoning/">The Reasoning Wing</a></li>
         <li><a href="graph/">The Honeycomb</a></li>
         <li><a href="graph-decomposition/">Decomposition Explorer</a></li>
-        <li><a href="layout/">Layout Gallery</a></li>
-        <li><a href="sigil-hats/">Type Classes</a></li>
         <li><a href="jtms-sudoku/">Explainable Sudoku</a></li>
       </ul>
     </div>
 
-    <div class="tree"><img src="tree-hero.jpg" alt=""></div>
+    <div class="ground"></div>
 
-    <a class="room r-sigil" href="sigil/">
-      <img src="thumbnails/sigils.jpg" alt="Sigil">
-      <div class="label">Sigil <span>type signatures</span></div>
+    <div class="hero"><img src="tree-hero.jpg" alt="The Holy Tree of Data Visualization"></div>
+
+    <a class="room portal p-hylograph" href="hylograph/">
+      <img src="heroes/hylograph.jpg" alt="The Hylograph Wing">
+      <div class="label">The Hylograph Wing <span>fold &middot; forces &middot; layouts &middot; sound</span></div>
     </a>
 
-    <a class="room r-hats" href="selection/">
-      <img src="thumbnails/HATS.jpg" alt="The Hylographic Fold">
-      <div class="label">The Hylographic Fold <span>HATS &amp; interpreters</span></div>
+    <a class="room portal p-reasoning" href="reasoning/">
+      <img src="heroes/reasoning.jpg" alt="The Reasoning Wing">
+      <div class="label">The Reasoning Wing <span>graphs &middot; proofs</span></div>
     </a>
 
-    <a class="room r-music" href="music/">
-      <img src="thumbnails/music.jpg" alt="Anscombe's Quartet">
-      <div class="label">Anscombe's Quartet <span>data sonification</span></div>
+    <a class="room portal p-scriptorium" href="scriptorium/">
+      <img src="heroes/scriptorium.jpg" alt="The Scriptorium">
+      <div class="label">The Scriptorium <span>code as typeset artifact</span></div>
     </a>
 
-    <a class="room r-graph" href="graph/">
-      <img src="thumbnails/graph.jpg" alt="The Honeycomb">
-      <div class="label">The Honeycomb <span>graph pathfinding</span></div>
-    </a>
-
-    <a class="room r-decomp" href="graph-decomposition/">
-      <img src="thumbnails/decomposition.jpg" alt="Decomposition Explorer">
-      <div class="label">Decomposition <span>structural analysis</span></div>
-    </a>
-
-    <a class="room r-forces" href="simulation/">
-      <img src="thumbnails/forces.jpg" alt="Force Playground">
-      <div class="label">Force Playground <span>simulation</span></div>
-    </a>
-
-    <a class="room r-layout" href="layout/">
-      <img src="thumbnails/layout.jpg" alt="Layout Gallery">
-      <div class="label">Layout Gallery <span>sankey, treemap, more</span></div>
-    </a>
-
-    <a class="room r-types" href="sigil-hats/">
-      <img src="thumbnails/typeclasses.jpg" alt="Type Classes">
-      <div class="label">Type Classes <span>sigil-hats</span></div>
-    </a>
-
-    <a class="room r-jtms" href="jtms-sudoku/">
-      <img src="thumbnails/jtms-sudoku.jpg" alt="Explainable Sudoku">
-      <div class="label">Explainable Sudoku <span>proofs as one graph</span></div>
-    </a>
-
-    <div class="showcases">
-      <h2>Showcases</h2>
+    <div class="foot-l">
+      <b>Showcases</b>
       <span>&mdash; <a href="https://github.com/afcondon/purescript-hylograph-showcases">Tidal Radio</a>, <a href="https://github.com/afcondon/purescript-hylograph-showcases">Lorenz</a>, <a href="https://github.com/afcondon/purescript-hylograph-showcases">Sankey Editor</a>, <a href="https://github.com/afcondon/purescript-hylograph-showcases">more</a></span>
     </div>
 
-    <div class="colophon">
+    <div class="foot-r">
       <a href="https://github.com/afcondon/purescript-hylograph-demos">Source</a> &middot; <a href="https://hylograph.net">Hylograph.net</a>
     </div>
 
