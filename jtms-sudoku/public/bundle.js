@@ -78,10 +78,10 @@
     return dict.map;
   };
   var mapFlipped = function(dictFunctor) {
-    var map113 = map(dictFunctor);
+    var map114 = map(dictFunctor);
     return function(fa) {
       return function(f) {
-        return map113(f)(fa);
+        return map114(f)(fa);
       };
     };
   };
@@ -89,10 +89,10 @@
     return map(dictFunctor)($$const(unit));
   };
   var voidLeft = function(dictFunctor) {
-    var map113 = map(dictFunctor);
+    var map114 = map(dictFunctor);
     return function(f) {
       return function(x3) {
-        return map113($$const(x3))(f);
+        return map114($$const(x3))(f);
       };
     };
   };
@@ -2450,7 +2450,7 @@
     },
     foldMap: function(dictMonoid) {
       var mempty2 = mempty(dictMonoid);
-      var append15 = append(dictMonoid.Semigroup0());
+      var append16 = append(dictMonoid.Semigroup0());
       return function(f) {
         var go2 = function(v) {
           if (v instanceof Leaf) {
@@ -2458,7 +2458,7 @@
           }
           ;
           if (v instanceof Node) {
-            return append15(go2(v.value4))(append15(f(v.value3))(go2(v.value5)));
+            return append16(go2(v.value4))(append16(f(v.value3))(go2(v.value5)));
           }
           ;
           throw new Error("Failed pattern match at Data.Map.Internal (line 181, column 10 - line 184, column 28): " + [v.constructor.name]);
@@ -2512,7 +2512,7 @@
     },
     foldMapWithIndex: function(dictMonoid) {
       var mempty2 = mempty(dictMonoid);
-      var append15 = append(dictMonoid.Semigroup0());
+      var append16 = append(dictMonoid.Semigroup0());
       return function(f) {
         var go2 = function(v) {
           if (v instanceof Leaf) {
@@ -2520,7 +2520,7 @@
           }
           ;
           if (v instanceof Node) {
-            return append15(go2(v.value4))(append15(f(v.value2)(v.value3))(go2(v.value5)));
+            return append16(go2(v.value4))(append16(f(v.value2)(v.value3))(go2(v.value5)));
           }
           ;
           throw new Error("Failed pattern match at Data.Map.Internal (line 201, column 10 - line 204, column 30): " + [v.constructor.name]);
@@ -5188,18 +5188,18 @@
   };
   var foldFree = function(dictMonadRec) {
     var Monad0 = dictMonadRec.Monad0();
-    var map113 = map(Monad0.Bind1().Apply0().Functor0());
+    var map114 = map(Monad0.Bind1().Apply0().Functor0());
     var pure15 = pure(Monad0.Applicative0());
     var tailRecM4 = tailRecM(dictMonadRec);
     return function(k) {
       var go2 = function(f) {
         var v = toView(f);
         if (v instanceof Return) {
-          return map113(Done.create)(pure15(v.value0));
+          return map114(Done.create)(pure15(v.value0));
         }
         ;
         if (v instanceof Bind) {
-          return map113(function($199) {
+          return map114(function($199) {
             return Loop.create(v.value1($199));
           })(k(v.value0));
         }
@@ -12785,7 +12785,7 @@
       };
     }
     ;
-    throw new Error("Failed pattern match at Story (line 594, column 14 - line 597, column 83): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 591, column 14 - line 594, column 83): " + [v.constructor.name]);
   };
   var tierFill = function(v) {
     if (v instanceof TGiven) {
@@ -12828,10 +12828,10 @@
         return "#e08b2d";
       }
       ;
-      throw new Error("Failed pattern match at Story (line 494, column 15 - line 499, column 30): " + [f.why.value0.rule.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 491, column 15 - line 496, column 30): " + [f.why.value0.rule.constructor.name]);
     }
     ;
-    throw new Error("Failed pattern match at Story (line 492, column 15 - line 499, column 30): " + [f.why.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 489, column 15 - line 496, column 30): " + [f.why.constructor.name]);
   };
   var singlesKB = /* @__PURE__ */ solveWith(engine)(gapPuzzle);
   var reginKB = /* @__PURE__ */ solveWith(alldifferentEngine)(gapPuzzle);
@@ -12852,7 +12852,7 @@
         return false;
       }
       ;
-      throw new Error("Failed pattern match at Story (line 455, column 51 - line 457, column 19): " + [f.claim.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 452, column 51 - line 454, column 19): " + [f.claim.constructor.name]);
     })(facts(reginKB));
   };
   var proofSizes = /* @__PURE__ */ fromFoldable(ordCell)(foldableArray)(/* @__PURE__ */ mapMaybe(function(c) {
@@ -12874,7 +12874,7 @@
       return "box " + show4(i2 - 17 | 0);
     }
     ;
-    throw new Error("Failed pattern match at Story (line 391, column 1 - line 391, column 27): " + [i2.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 388, column 1 - line 388, column 27): " + [i2.constructor.name]);
   };
   var givenCells = /* @__PURE__ */ fromFoldable7(ordCell)(/* @__PURE__ */ map21(function(v) {
     return v.cell;
@@ -13028,10 +13028,10 @@
         return "#fff4e5";
       }
       ;
-      throw new Error("Failed pattern match at Story (line 484, column 15 - line 489, column 30): " + [f.why.value0.rule.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 481, column 15 - line 486, column 30): " + [f.why.value0.rule.constructor.name]);
     }
     ;
-    throw new Error("Failed pattern match at Story (line 482, column 13 - line 489, column 30): " + [f.why.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 479, column 13 - line 486, column 30): " + [f.why.constructor.name]);
   };
   var groupStyle = function(members) {
     var ruleTag = function(f) {
@@ -13043,7 +13043,7 @@
         return new Just(f.why.value0.rule);
       }
       ;
-      throw new Error("Failed pattern match at Story (line 426, column 15 - line 428, column 28): " + [f.why.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 423, column 15 - line 425, column 28): " + [f.why.constructor.name]);
     };
     var v = head(members);
     if (v instanceof Nothing) {
@@ -13070,60 +13070,11 @@
       };
     }
     ;
-    throw new Error("Failed pattern match at Story (line 418, column 22 - line 424, column 45): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 415, column 22 - line 421, column 45): " + [v.constructor.name]);
   };
   var digitLabelOf = function(v) {
     return show4(v);
   };
-  var defaultDagFact = /* @__PURE__ */ (function() {
-    var isAmber = function(f) {
-      if (f.why instanceof ByRule) {
-        return eq6(f.why.value0.rule)(Alldifferent.value);
-      }
-      ;
-      if (f.why instanceof Axiom) {
-        return false;
-      }
-      ;
-      throw new Error("Failed pattern match at Story (line 448, column 15 - line 450, column 21): " + [f.why.constructor.name]);
-    };
-    var deduced = filter(function(f) {
-      if (f.claim instanceof Is && f.why instanceof ByRule) {
-        return true;
-      }
-      ;
-      return false;
-    })(facts(reginKB));
-    var withAmber = filter(function(f) {
-      return any2(isAmber)(explainFact(reginKB)(f).nodes);
-    })(deduced);
-    var v = minimumBy(foldableArray)(comparing2(function(f) {
-      return length(explainFact(reginKB)(f).nodes);
-    }))(withAmber);
-    if (v instanceof Just) {
-      return v.value0;
-    }
-    ;
-    if (v instanceof Nothing) {
-      var v1 = head(facts(reginKB));
-      if (v1 instanceof Just) {
-        return v1.value0;
-      }
-      ;
-      if (v1 instanceof Nothing) {
-        return {
-          id: 0,
-          claim: new Is(0, 1),
-          why: new Axiom(Given.value),
-          alsoWhy: []
-        };
-      }
-      ;
-      throw new Error("Failed pattern match at Story (line 444, column 18 - line 446, column 97): " + [v1.constructor.name]);
-    }
-    ;
-    throw new Error("Failed pattern match at Story (line 441, column 5 - line 446, column 97): " + [v.constructor.name]);
-  })();
   var coneOf = function(f) {
     return fromFoldable23(map21(function(v) {
       return v.id;
@@ -13151,7 +13102,7 @@
         return cellName(v.value0) + (" \u2260 " + digitLabel(v.value1));
       }
       ;
-      throw new Error("Failed pattern match at Story (line 474, column 14 - line 476, column 54): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 471, column 14 - line 473, column 54): " + [v.constructor.name]);
     };
   })();
   var factTitle = function(f) {
@@ -13176,7 +13127,7 @@
         return "alldifferent (R\xE9gin)";
       }
       ;
-      throw new Error("Failed pattern match at Story (line 466, column 16 - line 471, column 46): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 463, column 16 - line 468, column 46): " + [v.constructor.name]);
     };
     var byline = (function() {
       if (f.why instanceof Axiom) {
@@ -13187,7 +13138,7 @@
         return ", by " + ruleNameOf(f.why.value0.rule);
       }
       ;
-      throw new Error("Failed pattern match at Story (line 463, column 12 - line 465, column 45): " + [f.why.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 460, column 12 - line 462, column 45): " + [f.why.constructor.name]);
     })();
     return claimLabel(f.claim) + byline;
   };
@@ -13205,7 +13156,7 @@
           return Nothing.value;
         }
         ;
-        throw new Error("Failed pattern match at Story (line 406, column 15 - line 408, column 22): " + [f.claim.constructor.name]);
+        throw new Error("Failed pattern match at Story (line 403, column 15 - line 405, column 22): " + [f.claim.constructor.name]);
       };
       var cellNameOf = function(c) {
         return "r" + (show4(rowOf(c) + 1 | 0) + ("c" + show4(colOf(c) + 1 | 0)));
@@ -13231,7 +13182,7 @@
         return "?";
       }
       ;
-      throw new Error("Failed pattern match at Story (line 398, column 24 - line 404, column 22): " + [k.constructor.name, members.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 395, column 24 - line 401, column 22): " + [k.constructor.name, members.constructor.name]);
     };
   };
   var renderScene = function(opts) {
@@ -13285,7 +13236,7 @@
             return "1";
           }
           ;
-          return "0.13";
+          return "0.45";
         })())])([elem3(Rect.value)([x(p2.x), y(p2.y), width8(nodeW), height8(22), staticStr("rx")("3"), fill(style3.fill), stroke(style3.stroke), strokeWidth((function() {
           if (isRoot) {
             return 2.5;
@@ -13303,10 +13254,10 @@
             return "1";
           }
           ;
-          return "0.08";
+          return "0.22";
         })())])([]);
       });
-      return elem3(SVG.value)([viewBox(scene.minX - 40)(scene.minY - 50)(scene.spanW)(scene.spanH), width8(1100), height8(640), staticStr("preserveAspectRatio")("xMidYMid meet"), staticStr("style")("border:1px solid #eeeeee")])(append14(edges)(nodes));
+      return elem3(SVG.value)([viewBox(scene.minX - 40)(scene.minY - 50)(scene.spanW)(scene.spanH), staticStr("preserveAspectRatio")("xMidYMid meet")])(append14(edges)(nodes));
     };
   };
   var buildScene = function(rootId) {
@@ -13547,12 +13498,14 @@
   // output/App/index.js
   var show5 = /* @__PURE__ */ show(showInt);
   var discard3 = /* @__PURE__ */ discard(discardUnit);
+  var map24 = /* @__PURE__ */ map(functorMaybe);
   var bind13 = /* @__PURE__ */ bind(bindHalogenM);
   var get2 = /* @__PURE__ */ get(monadStateHalogenM);
   var pure12 = /* @__PURE__ */ pure(applicativeHalogenM);
+  var append15 = /* @__PURE__ */ append(semigroupArray);
   var discard23 = /* @__PURE__ */ discard3(bindHalogenM);
   var $$void7 = /* @__PURE__ */ $$void(functorHalogenM);
-  var map24 = /* @__PURE__ */ map(functorEmitter);
+  var map112 = /* @__PURE__ */ map(functorEmitter);
   var modify_3 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Initialize2 = /* @__PURE__ */ (function() {
     function Initialize3() {
@@ -13580,15 +13533,22 @@
   })();
   var proofLine = function(pruned) {
     return function(v) {
-      if (pruned) {
-        return "pruned to this proof: " + (show5(v.cone) + " facts \u2014 scroll to zoom, drag to pan");
+      if (v instanceof Nothing) {
+        return "the whole solution, fully lit \u2014 scroll to zoom, drag to pan";
       }
       ;
-      if (otherwise) {
-        return "the whole solution: " + (show5(v.total) + (" facts, this proof's " + (show5(v.cone) + " lit \u2014 scroll to zoom, drag to pan")));
+      if (v instanceof Just) {
+        if (pruned) {
+          return "pruned to this proof: " + (show5(v.value0.cone) + " facts");
+        }
+        ;
+        if (otherwise) {
+          return "this proof's " + (show5(v.value0.cone) + (" of " + (show5(v.value0.total) + " facts lit \u2014 scroll to zoom, drag to pan")));
+        }
+        ;
       }
       ;
-      throw new Error("Failed pattern match at App (line 132, column 1 - line 132, column 64): " + [pruned.constructor.name, v.constructor.name]);
+      throw new Error("Failed pattern match at App (line 143, column 20 - line 149, column 61): " + [v.constructor.name]);
     };
   };
   var cellOfFact = function(f) {
@@ -13600,25 +13560,34 @@
       return f.claim.value0;
     }
     ;
-    throw new Error("Failed pattern match at App (line 143, column 16 - line 145, column 15): " + [f.claim.constructor.name]);
+    throw new Error("Failed pattern match at App (line 152, column 16 - line 154, column 15): " + [f.claim.constructor.name]);
   };
   var component = function(dictMonadAff) {
     var liftEffect7 = liftEffect(monadEffectHalogenM(dictMonadAff.MonadEffect0()));
     var redrawWith = function(pruned) {
       return function(notify2) {
-        return function(fact) {
+        return function(chosen) {
           return function __do2() {
             clearContainer("#grid-view")();
             clearContainer("#skyline-view")();
             clearContainer("#dag-view")();
-            rerender("#grid-view")(gridTree(notify2)(new Just(cellOfFact(fact))))();
-            rerender("#skyline-view")(skylineTree(notify2)(new Just(cellOfFact(fact))))();
+            var selectedCell = map24(cellOfFact)(chosen);
+            rerender("#grid-view")(gridTree(notify2)(selectedCell))();
+            rerender("#skyline-view")(skylineTree(notify2)(selectedCell))();
             rerender("#dag-view")((function() {
-              if (pruned) {
-                return dagTreeFor(fact);
+              if (chosen instanceof Nothing) {
+                return globalDagTree(Nothing.value);
               }
               ;
-              return globalDagTree(new Just(fact));
+              if (chosen instanceof Just) {
+                if (pruned) {
+                  return dagTreeFor(chosen.value0);
+                }
+                ;
+                return globalDagTree(new Just(chosen.value0));
+              }
+              ;
+              throw new Error("Failed pattern match at App (line 136, column 31 - line 138, column 81): " + [chosen.constructor.name]);
             })())();
             attachPanZoom("#dag-view svg")();
             return unit;
@@ -13635,7 +13604,7 @@
         return liftEffect7(redrawWith(state3.pruned)(state3.notify.value0)(state3.chosen));
       }
       ;
-      throw new Error("Failed pattern match at App (line 115, column 5 - line 117, column 78): " + [state3.notify.constructor.name]);
+      throw new Error("Failed pattern match at App (line 123, column 5 - line 125, column 78): " + [state3.notify.constructor.name]);
     });
     var legend2 = function(fill2) {
       return function(stroke2) {
@@ -13645,36 +13614,51 @@
       };
     };
     var render = function(state3) {
-      return div_([h1_([text("Explainable Sudoku")]), p([class_("sub")])([text("purescript-jtms proofs rendered by hylograph. The oracle-discovered gap puzzle: " + (show5(stats.givens) + (" givens, the singles tier earns " + (show5(stats.singles) + (" more cells and stalls, and R\xE9gin's alldifferent earns the remaining " + (show5(stats.regin) + " \u2014 every one with a derivation. Click any cell for its proof."))))))]), div2([class_("row")])([div2([class_("panel")])([h2_([text("The grid, by tier")]), div2([id2("grid-view")])([]), div2([class_("legend")])([legend2("#f2f2f2")("#999999")("given"), legend2("#e8f0f6")("#7aa6c2")("singles tier"), legend2("#fff4e5")("#e08b2d")("needs alldifferent (the gap)")])]), div2([class_("panel")])([h2_([text("The derivation skyline")]), div2([id2("skyline-view")])([]), div2([class_("legend")])([text("column height \u221D \u221A proof size \u2014 givens stub, singles low-rise, the gap towers")])])]), h2_([text("The solution graph \u2014 lit: " + factTitle(state3.chosen))]), p([class_("legend")])([text(proofLine(state3.pruned)(proofSummary(state3.chosen))), text("  "), button([onClick(function(v) {
-        return TogglePruned.value;
-      })])([text((function() {
-        if (state3.pruned) {
-          return "show the whole solution";
+      return div_([div2([id2("dag-view"), class_("canvas")])([]), div2([class_("overlay title-card")])([h1_([text("Explainable Sudoku")]), p([class_("sub")])([text("purescript-jtms proofs rendered by hylograph. Behind these cards: the whole solution, one graph. " + (show5(stats.givens) + (" givens; the singles tier earns " + (show5(stats.singles) + (" cells and stalls; R\xE9gin's alldifferent earns the remaining " + (show5(stats.regin) + ". Click any cell to light its proof."))))))])]), div2([class_("overlay grid-card")])([h2_([text("The grid, by tier")]), div2([id2("grid-view")])([]), div2([class_("legend")])([legend2("#f2f2f2")("#999999")("given"), legend2("#e8f0f6")("#7aa6c2")("singles"), legend2("#fff4e5")("#e08b2d")("the gap")])]), div2([class_("overlay city-card")])([h2_([text("The derivation city")]), div2([id2("skyline-view")])([]), div2([class_("legend")])([text("height \u221D \u221A proof size")])]), div2([class_("overlay proof-card")])([h2_([text((function() {
+        if (state3.chosen instanceof Nothing) {
+          return "The solution graph";
         }
         ;
-        return "prune to this proof";
-      })())])]), div2([id2("dag-view")])([]), div2([class_("legend")])([legend2("#f2f2f2")("#999999")("given"), legend2("#e8f0f6")("#7aa6c2")("sole digit"), legend2("#eef3ee")("#7fa87f")("peer elimination"), legend2("#fdeeed")("#d64541")("naked single"), legend2("#ececf4")("#5b5ba6")("hidden single"), legend2("#fff4e5")("#e08b2d")("alldifferent (R\xE9gin)"), legend2("#f7f7f7")("#666666")("mixed provenance")])]);
+        if (state3.chosen instanceof Just) {
+          return "Lit: " + factTitle(state3.chosen.value0);
+        }
+        ;
+        throw new Error("Failed pattern match at App (line 71, column 25 - line 73, column 51): " + [state3.chosen.constructor.name]);
+      })())]), p([class_("legend")])(append15([text(proofLine(state3.pruned)(map24(proofSummary)(state3.chosen)))])((function() {
+        var $45 = isJust(state3.chosen);
+        if ($45) {
+          return [button([onClick(function(v) {
+            return TogglePruned.value;
+          })])([text((function() {
+            if (state3.pruned) {
+              return "show the whole solution";
+            }
+            ;
+            return "prune to this proof";
+          })())])];
+        }
+        ;
+        return [];
+      })())), div2([class_("legend")])([legend2("#f2f2f2")("#999999")("given"), legend2("#e8f0f6")("#7aa6c2")("sole digit"), legend2("#eef3ee")("#7fa87f")("peer elim"), legend2("#fdeeed")("#d64541")("naked single"), legend2("#ececf4")("#5b5ba6")("hidden single"), legend2("#fff4e5")("#e08b2d")("alldifferent"), legend2("#f7f7f7")("#666666")("mixed")])])]);
     };
     var handleAction = function(v) {
       if (v instanceof Initialize2) {
         return bind13(liftEffect7(create))(function(v12) {
-          return discard23($$void7(subscribe2(map24(CellClicked.create)(v12.emitter))))(function() {
+          return discard23($$void7(subscribe2(map112(CellClicked.create)(v12.emitter))))(function() {
             var notify2 = notify(v12.listener);
             return discard23(modify_3(function(v2) {
-              var $42 = {};
-              for (var $43 in v2) {
-                if ({}.hasOwnProperty.call(v2, $43)) {
-                  $42[$43] = v2[$43];
+              var $49 = {};
+              for (var $50 in v2) {
+                if ({}.hasOwnProperty.call(v2, $50)) {
+                  $49[$50] = v2[$50];
                 }
                 ;
               }
               ;
-              $42.notify = new Just(notify2);
-              return $42;
+              $49.notify = new Just(notify2);
+              return $49;
             }))(function() {
-              return bind13(get2)(function(state3) {
-                return liftEffect7(redrawWith(state3.pruned)(notify2)(state3.chosen));
-              });
+              return redrawFromState;
             });
           });
         });
@@ -13688,46 +13672,46 @@
         ;
         if (v1 instanceof Just) {
           return discard23(modify_3(function(v2) {
-            var $48 = {};
-            for (var $49 in v2) {
-              if ({}.hasOwnProperty.call(v2, $49)) {
-                $48[$49] = v2[$49];
+            var $55 = {};
+            for (var $56 in v2) {
+              if ({}.hasOwnProperty.call(v2, $56)) {
+                $55[$56] = v2[$56];
               }
               ;
             }
             ;
-            $48.chosen = v1.value0;
-            return $48;
+            $55.chosen = new Just(v1.value0);
+            return $55;
           }))(function() {
             return redrawFromState;
           });
         }
         ;
-        throw new Error("Failed pattern match at App (line 104, column 25 - line 108, column 24): " + [v1.constructor.name]);
+        throw new Error("Failed pattern match at App (line 112, column 25 - line 116, column 24): " + [v1.constructor.name]);
       }
       ;
       if (v instanceof TogglePruned) {
         return discard23(modify_3(function(st) {
-          var $53 = {};
-          for (var $54 in st) {
-            if ({}.hasOwnProperty.call(st, $54)) {
-              $53[$54] = st[$54];
+          var $60 = {};
+          for (var $61 in st) {
+            if ({}.hasOwnProperty.call(st, $61)) {
+              $60[$61] = st[$61];
             }
             ;
           }
           ;
-          $53.pruned = !st.pruned;
-          return $53;
+          $60.pruned = !st.pruned;
+          return $60;
         }))(function() {
           return redrawFromState;
         });
       }
       ;
-      throw new Error("Failed pattern match at App (line 96, column 18 - line 111, column 22): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at App (line 105, column 18 - line 119, column 22): " + [v.constructor.name]);
     };
     return mkComponent({
       initialState: $$const({
-        chosen: defaultDagFact,
+        chosen: Nothing.value,
         pruned: false,
         notify: Nothing.value
       }),
@@ -13890,7 +13874,7 @@
   var pure9 = /* @__PURE__ */ pure(applicativeAff);
   var map27 = /* @__PURE__ */ map(functorCoyoneda);
   var parallel3 = /* @__PURE__ */ parallel(parallelAff);
-  var map112 = /* @__PURE__ */ map(functorAff);
+  var map113 = /* @__PURE__ */ map(functorAff);
   var sequential2 = /* @__PURE__ */ sequential(parallelAff);
   var map28 = /* @__PURE__ */ map(functorMaybe);
   var insert9 = /* @__PURE__ */ insert(ordSubscriptionId);
@@ -13981,7 +13965,7 @@
                     })(dsx);
                   }));
                 };
-                return map112(v2.value2)(sequential2(v2.value0(applicativeParAff)(evalChild)(v1.children)));
+                return map113(v2.value2)(sequential2(v2.value0(applicativeParAff)(evalChild)(v1.children)));
               })(cqb);
             });
           };

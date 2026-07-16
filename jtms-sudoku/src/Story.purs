@@ -313,7 +313,7 @@ renderScene opts scene =
           [ F.x1 (from.x + nodeW), F.y1 (from.y + 11.0)
           , F.x2 to.x, F.y2 (to.y + 11.0)
           , F.stroke "#c9c9c9", F.strokeWidth 1.0
-          , staticStr "opacity" (if bothLit then "1" else "0.08")
+          , staticStr "opacity" (if bothLit then "1" else "0.22")
           ]
           []
 
@@ -327,7 +327,7 @@ renderScene opts scene =
         style = groupStyle members
       in
         [ elem Group
-            [ staticStr "opacity" (if isLit k then "1" else "0.13") ]
+            [ staticStr "opacity" (if isLit k then "1" else "0.45") ]
             [ elem Rect
                 [ F.x p.x, F.y p.y, F.width nodeW, F.height 22.0
                 , staticStr "rx" "3"
@@ -348,10 +348,7 @@ renderScene opts scene =
   in
     elem SVG
       [ F.viewBox (scene.minX - 40.0) (scene.minY - 50.0) scene.spanW scene.spanH
-      , F.width 1100.0
-      , F.height 640.0
       , staticStr "preserveAspectRatio" "xMidYMid meet"
-      , staticStr "style" "border:1px solid #eeeeee"
       ]
       (edges <> nodes)
 
