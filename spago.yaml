@@ -1,2 +1,10 @@
 workspace:
-  extraPackages: {}
+  extraPackages:
+    hylograph-components:
+      path: ../purescript-hylograph-components
+    jtms-core:
+      path: ../../purescript-jtms/core
+    jtms-sudoku:
+      path: ../../purescript-jtms/sudoku
+    jtms-testkit:
+      path: ../../purescript-jtms/testkit
