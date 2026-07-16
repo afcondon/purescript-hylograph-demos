@@ -4137,7 +4137,6 @@
     }
   }
   var cos = Math.cos;
-  var log = Math.log;
   var pow = function(n) {
     return function(p2) {
       return Math.pow(n, p2);
@@ -10894,7 +10893,7 @@
       svg.addEventListener("wheel", (e) => {
         e.preventDefault();
         const b2 = vb();
-        const f = e.deltaY > 0 ? 1.15 : 1 / 1.15;
+        const f = Math.exp(e.deltaY * 12e-4);
         const rect = svg.getBoundingClientRect();
         const mx = b2.x + (e.clientX - rect.left) / rect.width * b2.width;
         const my = b2.y + (e.clientY - rect.top) / rect.height * b2.height;
@@ -12940,7 +12939,7 @@
       var maxN = fromMaybe(1)(maximum3(fromFoldable12(values(proofSizes))));
       var maxH = 4 + 44;
       var heightFor = function(n) {
-        return 4 + 44 * log(toNumber(n)) / log(toNumber(maxN));
+        return 4 + 62 * sqrt(toNumber(n) / toNumber(maxN));
       };
       var prism = function(c) {
         var shades = tierShades(tierOf(c));
@@ -13529,7 +13528,7 @@
       };
     };
     var render = function(state3) {
-      return div_([h1_([text("Explainable Sudoku")]), p([class_("sub")])([text("purescript-jtms proofs rendered by hylograph. The oracle-discovered gap puzzle: " + (show5(stats.givens) + (" givens, the singles tier earns " + (show5(stats.singles) + (" more cells and stalls, and R\xE9gin's alldifferent earns the remaining " + (show5(stats.regin) + " \u2014 every one with a derivation. Click any cell for its proof."))))))]), div2([class_("row")])([div_([h2_([text("The grid, by tier")]), div2([id2("grid-view")])([]), div2([class_("legend")])([legend2("#f2f2f2")("#999999")("given"), legend2("#e8f0f6")("#7aa6c2")("singles tier"), legend2("#fff4e5")("#e08b2d")("needs alldifferent (the gap)")])]), div_([h2_([text("The derivation skyline")]), div2([id2("skyline-view")])([]), div2([class_("legend")])([text("column height \u221D log proof size \u2014 givens stub, singles low-rise, the gap towers")])])]), h2_([text("The proof: " + factTitle(state3.chosen))]), p([class_("legend")])([text(proofLine(proofSummary(state3.chosen)))]), div2([id2("dag-view")])([]), div2([class_("legend")])([legend2("#f2f2f2")("#999999")("given"), legend2("#e8f0f6")("#7aa6c2")("sole digit"), legend2("#eef3ee")("#7fa87f")("peer elimination"), legend2("#fdeeed")("#d64541")("naked single"), legend2("#ececf4")("#5b5ba6")("hidden single"), legend2("#fff4e5")("#e08b2d")("alldifferent (R\xE9gin)"), legend2("#f7f7f7")("#666666")("mixed provenance")])]);
+      return div_([h1_([text("Explainable Sudoku")]), p([class_("sub")])([text("purescript-jtms proofs rendered by hylograph. The oracle-discovered gap puzzle: " + (show5(stats.givens) + (" givens, the singles tier earns " + (show5(stats.singles) + (" more cells and stalls, and R\xE9gin's alldifferent earns the remaining " + (show5(stats.regin) + " \u2014 every one with a derivation. Click any cell for its proof."))))))]), div2([class_("row")])([div_([h2_([text("The grid, by tier")]), div2([id2("grid-view")])([]), div2([class_("legend")])([legend2("#f2f2f2")("#999999")("given"), legend2("#e8f0f6")("#7aa6c2")("singles tier"), legend2("#fff4e5")("#e08b2d")("needs alldifferent (the gap)")])]), div_([h2_([text("The derivation skyline")]), div2([id2("skyline-view")])([]), div2([class_("legend")])([text("column height \u221D \u221A proof size \u2014 givens stub, singles low-rise, the gap towers")])])]), h2_([text("The proof: " + factTitle(state3.chosen))]), p([class_("legend")])([text(proofLine(proofSummary(state3.chosen)))]), div2([id2("dag-view")])([]), div2([class_("legend")])([legend2("#f2f2f2")("#999999")("given"), legend2("#e8f0f6")("#7aa6c2")("sole digit"), legend2("#eef3ee")("#7fa87f")("peer elimination"), legend2("#fdeeed")("#d64541")("naked single"), legend2("#ececf4")("#5b5ba6")("hidden single"), legend2("#fff4e5")("#e08b2d")("alldifferent (R\xE9gin)"), legend2("#f7f7f7")("#666666")("mixed provenance")])]);
     };
     var handleAction = function(v) {
       if (v instanceof Initialize2) {

@@ -24,7 +24,7 @@ import Effect (Effect)
 import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, isJust)
-import Data.Number (log) as Number
+import Data.Number (sqrt) as Number
 import Data.Set (Set)
 import Data.Set as Set
 import Hylograph.HATS (Tree, elem, onClick, staticStr, withBehaviors)
@@ -480,7 +480,7 @@ skylineTree notify selected =
     uy = u * 0.5
     maxN = fromMaybe 1 (maximum (Array.fromFoldable (Map.values proofSizes)))
     heightFor n =
-      4.0 + 44.0 * Number.log (Int.toNumber n) / Number.log (Int.toNumber maxN)
+      4.0 + 62.0 * Number.sqrt (Int.toNumber n / Int.toNumber maxN)
 
     projX r c = (Int.toNumber c - Int.toNumber r) * ux
     projY r c = (Int.toNumber c + Int.toNumber r) * uy

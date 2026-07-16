@@ -7,7 +7,7 @@ export function attachPanZoomImpl(selector) {
     svg.addEventListener('wheel', (e) => {
       e.preventDefault();
       const b = vb();
-      const f = e.deltaY > 0 ? 1.15 : 1 / 1.15;
+      const f = Math.exp(e.deltaY * 0.0012);
       const rect = svg.getBoundingClientRect();
       const mx = b.x + (e.clientX - rect.left) / rect.width * b.width;
       const my = b.y + (e.clientY - rect.top) / rect.height * b.height;

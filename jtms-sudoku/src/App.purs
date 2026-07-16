@@ -60,7 +60,7 @@ component = H.mkComponent
               [ HH.h2_ [ HH.text "The derivation skyline" ]
               , HH.div [ HP.id "skyline-view" ] []
               , HH.div [ HP.class_ (HH.ClassName "legend") ]
-                  [ HH.text "column height \x221d log proof size \x2014 givens stub, singles low-rise, the gap towers" ]
+                  [ HH.text "column height \x221d \x221a proof size \x2014 givens stub, singles low-rise, the gap towers" ]
               ]
           ]
       , HH.h2_ [ HH.text ("The proof: " <> factTitle state.chosen) ]
