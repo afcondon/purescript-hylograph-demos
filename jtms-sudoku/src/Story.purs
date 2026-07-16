@@ -10,6 +10,7 @@ module Story
   , placementFor
   , factTitle
   , proofSummary
+  , skylineTree
   , stats
   ) where
 
@@ -23,6 +24,7 @@ import Effect (Effect)
 import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, isJust)
+import Data.Number (log) as Number
 import Data.Set (Set)
 import Data.Set as Set
 import Hylograph.HATS (Tree, elem, onClick, staticStr, withBehaviors)
@@ -31,7 +33,7 @@ import Hylograph.Internal.Element.Types (ElementType(..))
 import Data.Tuple.Nested (type (/\), (/\))
 import Jtms.Explain (DerivationDag, depthOf, explainFact)
 import Jtms.Kernel (Fact, FactId(..), Why(..), facts)
-import Sudoku.Board (Cell(..), Digit(..), allCells, colOf, rowOf)
+import Sudoku.Board (Cell(..), Digit(..), allCells, colOf, rowOf, units)
 import Sudoku.Fixtures (gapPuzzle)
 import Sudoku.Rules (Given(..), SudokuClaim(..), SudokuKB, SudokuRule(..), alldifferentEngine, engine)
 import Sudoku.Solve (solveWith, solvedCount, valueAt)
@@ -201,13 +203,83 @@ dagTreeFor root =
     depths = depthOf reginKB
     depthFor f = fromMaybe 0 (Map.lookup f.id depths)
 
-    key :: SudokuFact -> GKey
-    key f = case f.claim of
-      Not c _ | f.id /= root.id -> GGroup c (depthFor f)
-      _ -> GSingle f.id
-
     byId :: Map FactId SudokuFact
     byId = Map.fromFoldable (dag.nodes <#> \f -> f.id /\ f)
+
+    -- semantic pass: a hidden single's kept premises, when they are all
+    -- eliminations of one digit at one depth inside one house, become a
+    -- single "no other d in <house>" node. Same-depth membership keeps
+    -- the contraction cycle-safe; first claim wins.
+    semantic :: Map FactId GKey
+    semantic = foldl claimFor Map.empty dag.nodes
+      where
+      claimFor acc f = case f.why of
+        ByRule d | d.rule == HiddenSingle ->
+          let
+            ps = d.premises # Array.mapMaybe lookupKept
+            digits = ps # Array.mapMaybe \pf -> case pf.claim of
+              Not _ dd -> Just dd
+              Is _ _ -> Nothing
+            cells = ps <#> \pf -> cellOfClaim pf.claim
+            dep = fromMaybe 0 (maximum (ps <#> depthFor))
+          in
+            case Array.head digits of
+              Just dd
+                | Array.length digits == Array.length ps
+                    && Array.all (_ == dd) digits
+                    && Array.length ps >= 3
+                    && not (interPath ps) ->
+                    case unitIndexContaining (Array.cons (cellOfClaim f.claim) cells) of
+                      Just h -> foldl
+                        ( \a pf -> Map.alter
+                            ( case _ of
+                                Just k -> Just k
+                                Nothing -> Just (GHouse h dd dep)
+                            )
+                            pf.id
+                            a
+                        )
+                        acc
+                        ps
+                      Nothing -> acc
+              _ -> acc
+        _ -> acc
+
+      -- contraction is safe iff no member reaches another through the
+      -- local subgraph — checked directly, which admits mixed depths
+      interPath ps =
+        let
+          memberIds = Set.fromFoldable (ps <#> _.id)
+          step frontierIds visited =
+            let
+              nextIds = frontierIds
+                # Array.concatMap (\id -> fromMaybe [] (Map.lookup id localOut))
+                # Array.filter (\id -> not (Set.member id visited))
+                # Array.nub
+            in
+              if Array.null nextIds then false
+              else if Array.any (\id -> Set.member id memberIds) nextIds then true
+              else step nextIds (foldl (flip Set.insert) visited nextIds)
+        in
+          ps # Array.any \p ->
+            step (fromMaybe [] (Map.lookup p.id localOut)) (Set.singleton p.id)
+            -- direct edges member->member count as paths too
+
+      localOut :: Map FactId (Array FactId)
+      localOut = foldl (\m e -> Map.insertWith (<>) e.from [ e.to ] m) Map.empty dag.edges
+
+      lookupKept id = Map.lookup id byId
+
+      cellOfClaim = case _ of
+        Is c _ -> c
+        Not c _ -> c
+
+    key :: SudokuFact -> GKey
+    key f = case Map.lookup f.id semantic of
+      Just k | f.id /= root.id -> k
+      _ -> case f.claim of
+        Not c _ | f.id /= root.id -> GGroup c (depthFor f)
+        _ -> GSingle f.id
 
     groups :: Map GKey (Array SudokuFact)
     groups = foldl (\m f -> Map.insertWith (flip (<>)) (key f) [ f ] m) Map.empty dag.nodes
@@ -267,6 +339,7 @@ dagTreeFor root =
             isRoot = case k of
               GSingle id -> id == root.id
               GGroup _ _ -> false
+              GHouse _ _ _ -> false
             onFrontier = members # Array.any (\f -> Set.member f.id dag.frontier)
             style = groupStyle members
           in
@@ -296,14 +369,29 @@ dagTreeFor root =
       ]
       (edges <> nodes)
 
--- | A rendered node: one fact, or one cell's eliminations at one depth.
-data GKey = GSingle FactId | GGroup Cell Int
+-- | A rendered node: one fact, one cell's eliminations at one depth, or
+-- | a semantic unit — a whole house's same-digit eliminations serving one
+-- | hidden single, read as "no other 5 in box 5".
+data GKey = GSingle FactId | GGroup Cell Int | GHouse Int Digit Int
 
 derive instance Eq GKey
 derive instance Ord GKey
 
+-- | The first house (row, column, box — in that order) containing every
+-- | listed cell, if any.
+unitIndexContaining :: Array Cell -> Maybe Int
+unitIndexContaining cells =
+  units # Array.findIndex \house -> cells # Array.all \c -> Array.elem c house
+
+houseName :: Int -> String
+houseName i
+  | i < 9 = "row " <> show (i + 1)
+  | i < 18 = "column " <> show (i - 8)
+  | otherwise = "box " <> show (i - 17)
+
 groupLabel :: GKey -> Array SudokuFact -> String
 groupLabel k members = case k, members of
+  GHouse h d _, _ -> "no other " <> digitLabelOf d <> " in " <> houseName h
   GSingle _, [ f ] -> claimLabel f.claim
   GGroup c _, _ -> case members # Array.mapMaybe digitOf of
     [ d ] -> cellNameOf c <> " \x2260 " <> show d
@@ -315,6 +403,9 @@ groupLabel k members = case k, members of
     Is _ _ -> Nothing
   joinDigits ds = Array.intercalate "," (map show (Array.sort ds))
   cellNameOf c = "r" <> show (rowOf c + 1) <> "c" <> show (colOf c + 1)
+
+digitLabelOf :: Digit -> String
+digitLabelOf (Digit d) = show d
 
 -- | Uniform-rule groups keep their rule's colours; mixed provenance reads
 -- | as neutral.
@@ -401,3 +492,72 @@ strokeFor f = case f.why of
     NakedSingle -> "#d64541"
     HiddenSingle -> "#5b5ba6"
     Alldifferent -> "#e08b2d"
+
+-- | Proof size per cell: how many facts the full derivation of that
+-- | placement rests on. The demo's other landscape.
+proofSizes :: Map Cell Int
+proofSizes = Map.fromFoldable
+  ( allCells # Array.mapMaybe \c ->
+      placementFor c <#> \f -> c /\ Array.length (explainFact reginKB f).nodes
+  )
+
+-- | The derivation skyline: the same 9x9 grid, each cell a column whose
+-- | height is log-scaled proof size — givens are stubs, the singles tier
+-- | is low-rise, and the alldifferent tier towers. Clickable, like the
+-- | grid it mirrors.
+skylineTree :: (Cell -> Effect Unit) -> Maybe Cell -> Tree
+skylineTree notify selected =
+  let
+    px = 40.0
+    size = 9.0 * px + 2.0
+    maxN = fromMaybe 1 (maximum (Array.fromFoldable (Map.values proofSizes)))
+    heightFor n =
+      4.0 + 30.0 * Number.log (Int.toNumber n) / Number.log (Int.toNumber maxN)
+    columns = allCells # map \c ->
+      let
+        x = Int.toNumber (colOf c) * px + 1.0
+        y = Int.toNumber (rowOf c) * px + 1.0
+        n = fromMaybe 1 (Map.lookup c proofSizes)
+        h = heightFor n
+        isSelected = selected == Just c
+      in
+        withBehaviors [ onClick (notify c) ] $ elem Group
+          [ staticStr "cursor" "pointer" ]
+          [ elem Rect
+              [ F.x x, F.y y, F.width px, F.height px
+              , F.fill "#ffffff"
+              , F.stroke (if isSelected then "#111111" else "#eeeeee")
+              , F.strokeWidth (if isSelected then 2.5 else 0.5)
+              ]
+              []
+          , elem Rect
+              [ F.x (x + 8.0), F.y (y + px - 3.0 - h)
+              , F.width (px - 16.0), F.height h
+              , F.fill (barFill (tierOf c))
+              ]
+              []
+          ]
+    boxLines = [ 0, 3, 6, 9 ] # Array.concatMap \i ->
+      let
+        q = Int.toNumber i * px + 1.0
+      in
+        [ elem Line
+            [ F.x1 q, F.y1 1.0, F.x2 q, F.y2 (size - 1.0)
+            , F.stroke "#999999", F.strokeWidth 1.5
+            ]
+            []
+        , elem Line
+            [ F.x1 1.0, F.y1 q, F.x2 (size - 1.0), F.y2 q
+            , F.stroke "#999999", F.strokeWidth 1.5
+            ]
+            []
+        ]
+  in
+    elem SVG
+      [ F.viewBox 0.0 0.0 size size, F.width size, F.height size ]
+      (columns <> boxLines)
+  where
+  barFill = case _ of
+    TGiven -> "#bbbbbb"
+    TSingles -> "#7aa6c2"
+    TRegin -> "#e08b2d"
