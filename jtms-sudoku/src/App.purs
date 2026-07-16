@@ -1,28 +1,38 @@
--- | The Halogen shell: headings and two containers HATS owns the insides
--- | of. All the substance is in `Story`.
+-- | The Halogen shell: headings, two containers HATS owns the insides of,
+-- | and the click bridge — HATS behaviors notify a Halogen subscription,
+-- | Halogen re-renders the DAG panel for the chosen cell.
 module App (component) where
 
 import Prelude
 
 import Data.Maybe (Maybe(..))
+import Effect (Effect)
 import Effect.Aff.Class (class MonadAff)
 import Effect.Class (liftEffect)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Properties as HP
-import Hylograph.HATS.InterpreterTick (rerender)
-import Story (dagTree, gridTree, stats)
+import Halogen.Subscription as HS
+import Hylograph.HATS.InterpreterTick (clearContainer, rerender)
+import Story (SudokuFact, dagTreeFor, defaultDagFact, factTitle, gridTree, placementFor, proofSummary, stats)
+import Sudoku.Board (Cell)
+import Sudoku.Rules (SudokuClaim(..))
 
-data Action = Initialize
+data Action = Initialize | CellClicked Cell
+
+type State =
+  { chosen :: SudokuFact
+  , notify :: Maybe (Cell -> Effect Unit)
+  }
 
 component :: forall q i o m. MonadAff m => H.Component q i o m
 component = H.mkComponent
-  { initialState: const unit
+  { initialState: const { chosen: defaultDagFact, notify: Nothing }
   , render
   , eval: H.mkEval (H.defaultEval { handleAction = handleAction, initialize = Just Initialize })
   }
   where
-  render _ =
+  render state =
     HH.div_
       [ HH.h1_ [ HH.text "Explainable Sudoku" ]
       , HH.p [ HP.class_ (HH.ClassName "sub") ]
@@ -31,9 +41,9 @@ component = H.mkComponent
                 <> show stats.givens
                 <> " givens, the singles tier earns "
                 <> show stats.singles
-                <> " more cells and stalls, and Régin's alldifferent earns the remaining "
+                <> " more cells and stalls, and R\xe9gin's alldifferent earns the remaining "
                 <> show stats.regin
-                <> " — every one with a derivation."
+                <> " \x2014 every one with a derivation. Click any cell for its proof."
           ]
       , HH.h2_ [ HH.text "The grid, by tier" ]
       , HH.div [ HP.id "grid-view" ] []
@@ -42,7 +52,9 @@ component = H.mkComponent
           , legend "#e8f0f6" "#7aa6c2" "singles tier"
           , legend "#fff4e5" "#e08b2d" "needs alldifferent (the gap)"
           ]
-      , HH.h2_ [ HH.text "The smallest proof that needed the algorithm (Sugiyama layout)" ]
+      , HH.h2_ [ HH.text ("The proof: " <> factTitle state.chosen) ]
+      , HH.p [ HP.class_ (HH.ClassName "legend") ]
+          [ HH.text (proofLine (proofSummary state.chosen)) ]
       , HH.div [ HP.id "dag-view" ] []
       , HH.div [ HP.class_ (HH.ClassName "legend") ]
           [ legend "#f2f2f2" "#999999" "given"
@@ -50,7 +62,8 @@ component = H.mkComponent
           , legend "#eef3ee" "#7fa87f" "peer elimination"
           , legend "#fdeeed" "#d64541" "naked single"
           , legend "#ececf4" "#5b5ba6" "hidden single"
-          , legend "#fff4e5" "#e08b2d" "alldifferent (Régin)"
+          , legend "#fff4e5" "#e08b2d" "alldifferent (R\xe9gin)"
+          , legend "#f7f7f7" "#666666" "mixed provenance"
           ]
       ]
 
@@ -63,7 +76,39 @@ component = H.mkComponent
       ]
 
   handleAction = case _ of
-    Initialize -> liftEffect do
-      _ <- rerender "#grid-view" gridTree
-      _ <- rerender "#dag-view" dagTree
-      pure unit
+    Initialize -> do
+      { emitter, listener } <- liftEffect HS.create
+      void (H.subscribe (map CellClicked emitter))
+      let notify = HS.notify listener
+      H.modify_ _ { notify = Just notify }
+      chosen <- H.gets _.chosen
+      liftEffect (redraw notify chosen)
+    CellClicked cell -> case placementFor cell of
+      Nothing -> pure unit
+      Just fact -> do
+        H.modify_ _ { chosen = fact }
+        state <- H.get
+        case state.notify of
+          Nothing -> pure unit
+          Just notify -> liftEffect (redraw notify fact)
+
+  -- static trees carry no join keys, so clear before rerender — the
+  -- diff would otherwise merge stale nodes from the previous proof
+  redraw notify fact = do
+    clearContainer "#grid-view"
+    clearContainer "#dag-view"
+    _ <- rerender "#grid-view" (gridTree notify (Just (cellOfFact fact)))
+    _ <- rerender "#dag-view" (dagTreeFor fact)
+    pure unit
+
+proofLine :: { shown :: Int, total :: Int } -> String
+proofLine { shown, total }
+  | shown == total = "the complete proof: " <> show total <> " facts"
+  | otherwise =
+      "the proximate proof: " <> show shown <> " of " <> show total
+        <> " facts \x2014 dashed nodes rest on further support not shown"
+
+cellOfFact :: SudokuFact -> Cell
+cellOfFact f = case f.claim of
+  Is c _ -> c
+  Not c _ -> c
