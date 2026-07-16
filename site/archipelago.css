@@ -44,6 +44,7 @@ body {
   letter-spacing: -0.04em;
   line-height: 0.9;
 }
+.title h1 .g { color: var(--accent); }
 .title .sub {
   margin-top: 0.8vh;
   font-size: clamp(0.42rem, 0.55vw, 0.66rem);
