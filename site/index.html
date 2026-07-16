@@ -23,7 +23,6 @@
     }
     .plan .roomlabel { font-size: 11.5px; font-weight: 600; letter-spacing: 0.12em; }
     .plan .wingname  { font-size: 15px;  font-weight: 700; letter-spacing: 0.22em; }
-    .plan .wingname .g { fill: #1a1a1a; font-weight: 900; }
     .plan .annot     { font-size: 10px;  font-weight: 500; letter-spacing: 0.14em; fill: #a8aebc; }
     .plan .blocktext { font-size: 11px;  font-weight: 600; letter-spacing: 0.18em; fill: #4a5468; }
     .plan a { cursor: pointer; }
@@ -95,11 +94,12 @@
         <path stroke-width="4" d="M 900 445 H 1030 M 900 495 H 1030"/>
 
         <!-- south wing: the Reasoning Wing -->
-        <rect x="640" y="690" width="320" height="200" stroke-width="7"/>
-        <path stroke-width="3" d="M 746 690 V 765 M 746 815 V 890
-                                  M 853 690 V 765 M 853 815 V 890"/>
-        <path stroke-width="1.1" d="M 746 765 a 50 50 0 0 1 50 50
-                                    M 853 765 a 50 50 0 0 1 50 50"/>
+        <rect x="587" y="690" width="426" height="200" stroke-width="7"/>
+        <path stroke-width="3" d="M 693.5 690 V 765 M 693.5 815 V 890
+                                  M 906.5 690 V 765 M 906.5 815 V 890
+                                  M 800 830 V 890"/>
+        <path stroke-width="1.1" d="M 693.5 765 a 50 50 0 0 1 50 50
+                                    M 906.5 765 a 50 50 0 0 1 50 50"/>
         <path stroke-width="4" d="M 775 570 V 690 M 825 570 V 690"/>
       </g>
 
@@ -153,16 +153,20 @@
 
       <!-- south wing -->
       <a class="s" href="graph/">
-        <rect class="hit" x="640" y="690" width="106" height="200"/>
-        <text class="roomlabel" x="693" y="782"><tspan x="693">THE</tspan><tspan x="693" dy="16">HONEYCOMB</tspan></text>
+        <rect class="hit" x="587" y="690" width="106.5" height="200"/>
+        <text class="roomlabel" x="640" y="782"><tspan x="640">THE</tspan><tspan x="640" dy="16">HONEYCOMB</tspan></text>
       </a>
       <a class="s" href="graph-decomposition/">
-        <rect class="hit" x="746" y="690" width="107" height="200"/>
-        <text class="roomlabel" x="799" y="782"><tspan x="799">DECOMPO-</tspan><tspan x="799" dy="16">SITION</tspan></text>
+        <rect class="hit" x="693.5" y="690" width="106.5" height="200"/>
+        <text class="roomlabel" x="746" y="782"><tspan x="746">DECOMPO-</tspan><tspan x="746" dy="16">SITION</tspan></text>
+      </a>
+      <a class="s" href="https://kibitzer.hylograph.net">
+        <rect class="hit" x="800" y="690" width="106.5" height="200"/>
+        <text class="roomlabel" x="853" y="782"><tspan x="853">KIBITZER</tspan><tspan x="853" dy="16">CLUEDO &#8599;</tspan></text>
       </a>
       <a class="s" href="jtms-sudoku/">
-        <rect class="hit" x="853" y="690" width="107" height="200"/>
-        <text class="roomlabel" x="906" y="782"><tspan x="906">EXPLAINABLE</tspan><tspan x="906" dy="16">SUDOKU</tspan></text>
+        <rect class="hit" x="906.5" y="690" width="106.5" height="200"/>
+        <text class="roomlabel" x="959" y="782"><tspan x="959">EXPLAINABLE</tspan><tspan x="959" dy="16">SUDOKU</tspan></text>
       </a>
 
       <!-- rotunda label -->
@@ -171,7 +175,7 @@
       <!-- ══ The woodcut plates, one over each wing ══ -->
 
       <a href="hylograph/">
-        <text class="wingname" x="340" y="140" fill="#5b7fa6">DATA VISUALISATION &amp; <tspan class="g">GRAPH</tspan>ICS</text>
+        <text class="wingname" x="340" y="140" fill="#5b7fa6">DATA VISUALISATION &amp; GRAPHICS</text>
         <line x1="340" y1="318" x2="340" y2="358" stroke="#b8bfcc" stroke-width="1.5" stroke-dasharray="4 4"/>
         <g filter="url(#plateshadow)">
           <rect class="frame" x="261" y="157" width="158" height="158" fill="#ffffff" stroke="#5b7fa6" stroke-width="2"/>
@@ -180,7 +184,7 @@
       </a>
 
       <a href="scriptorium/">
-        <text class="wingname" x="1260" y="140" fill="#b5822f">CODE TYPO<tspan class="g">GRAPH</tspan>Y AND STYLE</text>
+        <text class="wingname" x="1260" y="140" fill="#b5822f">CODE TYPOGRAPHY AND STYLE</text>
         <line x1="1260" y1="318" x2="1260" y2="358" stroke="#b8bfcc" stroke-width="1.5" stroke-dasharray="4 4"/>
         <g filter="url(#plateshadow)">
           <rect class="frame" x="1181" y="157" width="158" height="158" fill="#ffffff" stroke="#b5822f" stroke-width="2"/>
@@ -189,8 +193,8 @@
       </a>
 
       <a href="reasoning/">
-        <text class="wingname" x="1165" y="700" fill="#444444"><tspan class="g">GRAPH</tspan>S AND CHAINS OF REASON</text>
-        <line x1="1085" y1="790" x2="962" y2="790" stroke="#b8bfcc" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text class="wingname" x="1165" y="700" fill="#444444">GRAPHS AND CHAINS OF REASON</text>
+        <line x1="1085" y1="790" x2="1017" y2="790" stroke="#b8bfcc" stroke-width="1.5" stroke-dasharray="4 4"/>
         <g filter="url(#plateshadow)">
           <rect class="frame" x="1086" y="711" width="158" height="158" fill="#ffffff" stroke="#444444" stroke-width="2"/>
           <image href="heroes/reasoning.jpg" x="1090" y="715" width="150" height="150"/>
