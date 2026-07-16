@@ -31,7 +31,7 @@ import Hylograph.HATS (Tree, elem, onClick, staticStr, withBehaviors)
 import Hylograph.HATS.Friendly as F
 import Hylograph.Internal.Element.Types (ElementType(..))
 import Data.Tuple.Nested (type (/\), (/\))
-import Jtms.Explain (DerivationDag, depthOf, explainFact)
+import Jtms.Explain (depthOf, explainFact)
 import Jtms.Kernel (Fact, FactId(..), Why(..), facts)
 import Sudoku.Board (Cell(..), Digit(..), allCells, colOf, rowOf, units)
 import Sudoku.Fixtures (gapPuzzle)
@@ -136,70 +136,36 @@ gridTree notify selected =
 -- | proof keeps its individual facts, only the picture groups them. The
 -- | (cell, depth) key is what makes contraction safe: same-depth nodes
 -- | can have no path between them, so no cycle can be created.
--- | Premises of a fact (empty for axioms).
-premisesOf :: SudokuFact -> Array FactId
-premisesOf f = case f.why of
-  Axiom _ -> []
-  ByRule d -> d.premises
-
--- | The proximate proof: the conclusion and its support out to a hop
--- | budget, chosen adaptively so the picture stays legible. Facts at the
--- | cut whose support continues beyond it are marked (dashed, with an
--- | ellipsis) rather than silently pretending to be leaves.
-localProof
+-- | The whole proof, no elision: semantic grouping compresses the
+-- | picture, pan/zoom explores it. (`frontier` is retained in the shape
+-- | for possible future partial views; it is empty here.)
+fullProof
   :: SudokuFact
   -> { nodes :: Array SudokuFact
      , edges :: Array { from :: FactId, to :: FactId }
      , frontier :: Set FactId
      , total :: Int
      }
-localProof root =
+fullProof root =
   let
     dag = explainFact reginKB root
-    byId = Map.fromFoldable (dag.nodes <#> \f -> f.id /\ f)
-    lookupF id = Map.lookup id byId
-
-    grow kept current 0 = { kept, next: current }
-    grow kept current n =
-      let
-        next = current
-          # Array.concatMap premisesOf
-          # Array.filter (\id -> not (Set.member id (Set.fromFoldable (map _.id kept))))
-          # Array.nub
-          # Array.mapMaybe lookupF
-      in
-        if Array.null next then { kept, next: [] }
-        else grow (kept <> next) next (n - 1)
-
-    keptFor hops = (grow [ root ] [ root ] hops).kept
-
-    pick hops
-      | hops <= 1 = keptFor 1
-      | otherwise =
-          let attempt = keptFor hops
-          in if Array.length attempt <= 60 then attempt else pick (hops - 1)
-
-    kept = pick 4
-    keptIds = Set.fromFoldable (map _.id kept)
-    edges = dag.edges # Array.filter \e ->
-      Set.member e.from keptIds && Set.member e.to keptIds
-    frontier = kept
-      # Array.filter (\f -> premisesOf f # Array.any (\p -> not (Set.member p keptIds)))
-      # map _.id
-      # Set.fromFoldable
   in
-    { nodes: kept, edges, frontier, total: Array.length dag.nodes }
+    { nodes: dag.nodes
+    , edges: dag.edges
+    , frontier: Set.empty
+    , total: Array.length dag.nodes
+    }
 
--- | "34 of 214 facts" — the App's honesty line under the proof heading.
+-- | The size line under the proof heading.
 proofSummary :: SudokuFact -> { shown :: Int, total :: Int }
 proofSummary f =
-  let local = localProof f
-  in { shown: Array.length local.nodes, total: local.total }
+  let full = fullProof f
+  in { shown: Array.length full.nodes, total: full.total }
 
 dagTreeFor :: SudokuFact -> Tree
 dagTreeFor root =
   let
-    dag = localProof root
+    dag = fullProof root
     depths = depthOf reginKB
     depthFor f = fromMaybe 0 (Map.lookup f.id depths)
 
@@ -364,8 +330,10 @@ dagTreeFor root =
   in
     elem SVG
       [ F.viewBox (minX - 40.0) (minY - 50.0) spanW spanH
-      , F.width spanW
-      , F.height spanH
+      , F.width 1100.0
+      , F.height 620.0
+      , staticStr "preserveAspectRatio" "xMidYMid meet"
+      , staticStr "style" "border:1px solid #eeeeee"
       ]
       (edges <> nodes)
 
@@ -501,63 +469,92 @@ proofSizes = Map.fromFoldable
       placementFor c <#> \f -> c /\ Array.length (explainFact reginKB f).nodes
   )
 
--- | The derivation skyline: the same 9x9 grid, each cell a column whose
--- | height is log-scaled proof size — givens are stubs, the singles tier
--- | is low-rise, and the alldifferent tier towers. Clickable, like the
--- | grid it mirrors.
+-- | The derivation city: an isometric transform of the board, each cell
+-- | a prism whose height is log-scaled proof size. Gratuitous, and
+-- | wonderful. Painter's order: back-to-front along the anti-diagonals.
 skylineTree :: (Cell -> Effect Unit) -> Maybe Cell -> Tree
 skylineTree notify selected =
   let
-    px = 40.0
-    size = 9.0 * px + 2.0
+    u = 30.0
+    ux = u * 0.866
+    uy = u * 0.5
     maxN = fromMaybe 1 (maximum (Array.fromFoldable (Map.values proofSizes)))
     heightFor n =
-      4.0 + 30.0 * Number.log (Int.toNumber n) / Number.log (Int.toNumber maxN)
-    columns = allCells # map \c ->
+      4.0 + 44.0 * Number.log (Int.toNumber n) / Number.log (Int.toNumber maxN)
+
+    projX r c = (Int.toNumber c - Int.toNumber r) * ux
+    projY r c = (Int.toNumber c + Int.toNumber r) * uy
+
+    pt x y = show x <> "," <> show y
+
+    prism c =
       let
-        x = Int.toNumber (colOf c) * px + 1.0
-        y = Int.toNumber (rowOf c) * px + 1.0
+        r = rowOf c
+        k = colOf c
         n = fromMaybe 1 (Map.lookup c proofSizes)
         h = heightFor n
         isSelected = selected == Just c
+        shades = tierShades (tierOf c)
+        -- projected corners of the cell footprint
+        x00 = projX r k
+        y00 = projY r k
+        x01 = projX r (k + 1)
+        y01 = projY r (k + 1)
+        x11 = projX (r + 1) (k + 1)
+        y11 = projY (r + 1) (k + 1)
+        x10 = projX (r + 1) k
+        y10 = projY (r + 1) k
+        face points fill =
+          elem Polygon
+            [ staticStr "points" points
+            , F.fill fill
+            , F.stroke (if isSelected then "#111111" else shades.line)
+            , F.strokeWidth (if isSelected then 1.5 else 0.4)
+            ]
+            []
+        tooltip = "r" <> show (rowOf c + 1) <> "c" <> show (colOf c + 1)
+          <> " \x2014 proof of " <> show n <> " facts"
       in
         withBehaviors [ onClick (notify c) ] $ elem Group
           [ staticStr "cursor" "pointer" ]
-          [ elem Rect
-              [ F.x x, F.y y, F.width px, F.height px
-              , F.fill "#ffffff"
-              , F.stroke (if isSelected then "#111111" else "#eeeeee")
-              , F.strokeWidth (if isSelected then 2.5 else 0.5)
-              ]
-              []
-          , elem Rect
-              [ F.x (x + 8.0), F.y (y + px - 3.0 - h)
-              , F.width (px - 16.0), F.height h
-              , F.fill (barFill (tierOf c))
-              ]
-              []
+          [ elem Title [ staticStr "textContent" tooltip ] []
+          -- front face (row r+1 edge)
+          , face
+              ( pt x10 (y10 - h) <> " " <> pt x11 (y11 - h) <> " "
+                  <> pt x11 y11 <> " " <> pt x10 y10
+              )
+              shades.front
+          -- right face (column k+1 edge)
+          , face
+              ( pt x01 (y01 - h) <> " " <> pt x11 (y11 - h) <> " "
+                  <> pt x11 y11 <> " " <> pt x01 y01
+              )
+              shades.side
+          -- top face
+          , face
+              ( pt x00 (y00 - h) <> " " <> pt x01 (y01 - h) <> " "
+                  <> pt x11 (y11 - h) <> " " <> pt x10 (y10 - h)
+              )
+              shades.top
           ]
-    boxLines = [ 0, 3, 6, 9 ] # Array.concatMap \i ->
-      let
-        q = Int.toNumber i * px + 1.0
-      in
-        [ elem Line
-            [ F.x1 q, F.y1 1.0, F.x2 q, F.y2 (size - 1.0)
-            , F.stroke "#999999", F.strokeWidth 1.5
-            ]
-            []
-        , elem Line
-            [ F.x1 1.0, F.y1 q, F.x2 (size - 1.0), F.y2 q
-            , F.stroke "#999999", F.strokeWidth 1.5
-            ]
-            []
-        ]
+
+    -- back-to-front: anti-diagonal order, so nearer prisms overpaint
+    ordered = allCells # Array.sortBy (comparing \c -> rowOf c + colOf c)
+
+    minX = -8.0 * ux - 20.0
+    width = 17.0 * ux + 40.0
+    maxH = 4.0 + 44.0
+    height = 16.0 * uy + uy * 2.0 + maxH + 40.0
   in
     elem SVG
-      [ F.viewBox 0.0 0.0 size size, F.width size, F.height size ]
-      (columns <> boxLines)
-  where
-  barFill = case _ of
-    TGiven -> "#bbbbbb"
-    TSingles -> "#7aa6c2"
-    TRegin -> "#e08b2d"
+      [ F.viewBox minX (-maxH - 20.0) width height
+      , F.width width
+      , F.height height
+      ]
+      (map prism ordered)
+
+tierShades :: Tier -> { top :: String, front :: String, side :: String, line :: String }
+tierShades = case _ of
+  TGiven -> { top: "#e0e0e0", front: "#c4c4c4", side: "#adadad", line: "#909090" }
+  TSingles -> { top: "#7aa6c2", front: "#6590ac", side: "#527d99", line: "#3f637c" }
+  TRegin -> { top: "#e89a44", front: "#cd8232", side: "#b26e26", line: "#8f5717" }

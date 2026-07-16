@@ -1095,7 +1095,7 @@
   var intercalate = function(dictFoldable) {
     var foldl22 = foldl(dictFoldable);
     return function(dictMonoid) {
-      var append14 = append(dictMonoid.Semigroup0());
+      var append11 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(sep) {
         return function(xs) {
@@ -1110,7 +1110,7 @@
               ;
               return {
                 init: false,
-                acc: append14(v.acc)(append14(sep)(v1))
+                acc: append11(v.acc)(append11(sep)(v1))
               };
             };
           };
@@ -1237,12 +1237,12 @@
   var foldMapDefaultR = function(dictFoldable) {
     var foldr22 = foldr(dictFoldable);
     return function(dictMonoid) {
-      var append14 = append(dictMonoid.Semigroup0());
+      var append11 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(f) {
         return foldr22(function(x3) {
           return function(acc) {
-            return append14(f(x3))(acc);
+            return append11(f(x3))(acc);
           };
         })(mempty2);
       };
@@ -1411,13 +1411,13 @@
   var foldMapWithIndexDefaultR = function(dictFoldableWithIndex) {
     var foldrWithIndex1 = foldrWithIndex(dictFoldableWithIndex);
     return function(dictMonoid) {
-      var append14 = append(dictMonoid.Semigroup0());
+      var append11 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(f) {
         return foldrWithIndex1(function(i2) {
           return function(x3) {
             return function(acc) {
-              return append14(f(i2)(x3))(acc);
+              return append11(f(i2)(x3))(acc);
             };
           };
         })(mempty2);
@@ -2458,7 +2458,7 @@
     },
     foldMap: function(dictMonoid) {
       var mempty2 = mempty(dictMonoid);
-      var append14 = append(dictMonoid.Semigroup0());
+      var append15 = append(dictMonoid.Semigroup0());
       return function(f) {
         var go2 = function(v) {
           if (v instanceof Leaf) {
@@ -2466,7 +2466,7 @@
           }
           ;
           if (v instanceof Node) {
-            return append14(go2(v.value4))(append14(f(v.value3))(go2(v.value5)));
+            return append15(go2(v.value4))(append15(f(v.value3))(go2(v.value5)));
           }
           ;
           throw new Error("Failed pattern match at Data.Map.Internal (line 181, column 10 - line 184, column 28): " + [v.constructor.name]);
@@ -2520,7 +2520,7 @@
     },
     foldMapWithIndex: function(dictMonoid) {
       var mempty2 = mempty(dictMonoid);
-      var append14 = append(dictMonoid.Semigroup0());
+      var append15 = append(dictMonoid.Semigroup0());
       return function(f) {
         var go2 = function(v) {
           if (v instanceof Leaf) {
@@ -2528,7 +2528,7 @@
           }
           ;
           if (v instanceof Node) {
-            return append14(go2(v.value4))(append14(f(v.value2)(v.value3))(go2(v.value5)));
+            return append15(go2(v.value4))(append15(f(v.value2)(v.value3))(go2(v.value5)));
           }
           ;
           throw new Error("Failed pattern match at Data.Map.Internal (line 201, column 10 - line 204, column 30): " + [v.constructor.name]);
@@ -3163,9 +3163,9 @@
     });
   };
   var sortWith = function(dictOrd) {
-    var comparing2 = comparing(dictOrd);
+    var comparing3 = comparing(dictOrd);
     return function(f) {
-      return sortBy(comparing2(f));
+      return sortBy(comparing3(f));
     };
   };
   var sortWith1 = /* @__PURE__ */ sortWith(ordInt);
@@ -10884,6 +10884,52 @@
     };
   };
 
+  // output/PanZoom/foreign.js
+  function attachPanZoomImpl(selector) {
+    return () => {
+      const svg = document.querySelector(selector);
+      if (!svg || svg.dataset.panzoom) return;
+      svg.dataset.panzoom = "1";
+      const vb = () => svg.viewBox.baseVal;
+      svg.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const b2 = vb();
+        const f = e.deltaY > 0 ? 1.15 : 1 / 1.15;
+        const rect = svg.getBoundingClientRect();
+        const mx = b2.x + (e.clientX - rect.left) / rect.width * b2.width;
+        const my = b2.y + (e.clientY - rect.top) / rect.height * b2.height;
+        b2.x = mx - (mx - b2.x) * f;
+        b2.y = my - (my - b2.y) * f;
+        b2.width *= f;
+        b2.height *= f;
+      }, { passive: false });
+      let drag = null;
+      svg.addEventListener("pointerdown", (e) => {
+        drag = { x: e.clientX, y: e.clientY };
+        svg.setPointerCapture(e.pointerId);
+      });
+      svg.addEventListener("pointermove", (e) => {
+        if (!drag) return;
+        const b2 = vb();
+        const rect = svg.getBoundingClientRect();
+        b2.x -= (e.clientX - drag.x) * b2.width / rect.width;
+        b2.y -= (e.clientY - drag.y) * b2.height / rect.height;
+        drag = { x: e.clientX, y: e.clientY };
+      });
+      svg.addEventListener("pointerup", () => {
+        drag = null;
+      });
+      svg.addEventListener("pointerleave", () => {
+        drag = null;
+      });
+    };
+  }
+
+  // output/PanZoom/index.js
+  var attachPanZoom = function(selector) {
+    return attachPanZoomImpl(selector);
+  };
+
   // output/Data.Graph.Layout/index.js
   var foldl4 = /* @__PURE__ */ foldl(foldableArray);
   var alter2 = /* @__PURE__ */ alter(ordInt);
@@ -12502,27 +12548,29 @@
   var compare32 = /* @__PURE__ */ compare(ordDigit);
   var elem4 = /* @__PURE__ */ elem2(eqCell);
   var mapFlipped5 = /* @__PURE__ */ mapFlipped(functorMaybe);
-  var fromFoldable7 = /* @__PURE__ */ fromFoldable(ordFactId)(foldableArray);
-  var mapFlipped12 = /* @__PURE__ */ mapFlipped(functorArray);
-  var lookup7 = /* @__PURE__ */ lookup(ordFactId);
-  var nub4 = /* @__PURE__ */ nub(ordFactId);
-  var member6 = /* @__PURE__ */ member2(ordFactId);
-  var fromFoldable12 = /* @__PURE__ */ fromFoldable4(foldableArray);
-  var fromFoldable23 = /* @__PURE__ */ fromFoldable12(ordFactId);
-  var map21 = /* @__PURE__ */ map(functorArray);
-  var append11 = /* @__PURE__ */ append(semigroupArray);
   var show4 = /* @__PURE__ */ show(showInt);
-  var member1 = /* @__PURE__ */ member2(ordCell);
+  var fromFoldable7 = /* @__PURE__ */ fromFoldable4(foldableArray);
+  var map21 = /* @__PURE__ */ map(functorArray);
+  var member6 = /* @__PURE__ */ member2(ordCell);
   var eq42 = /* @__PURE__ */ eq(/* @__PURE__ */ eqMaybe(eqCell));
+  var append14 = /* @__PURE__ */ append(semigroupArray);
+  var show1 = /* @__PURE__ */ show(showNumber);
+  var comparing2 = /* @__PURE__ */ comparing(ordInt);
   var maximum3 = /* @__PURE__ */ maximum(ordInt)(foldableArray);
-  var fromFoldable33 = /* @__PURE__ */ fromFoldable2(foldableList);
-  var lookup12 = /* @__PURE__ */ lookup(ordCell);
+  var fromFoldable12 = /* @__PURE__ */ fromFoldable2(foldableList);
+  var lookup7 = /* @__PURE__ */ lookup(ordCell);
   var eq5 = /* @__PURE__ */ eq(/* @__PURE__ */ eqMaybe(eqSudokuRule));
   var eq6 = /* @__PURE__ */ eq(eqSudokuRule);
   var intercalate4 = /* @__PURE__ */ intercalate2(monoidString);
   var sort2 = /* @__PURE__ */ sort(ordInt);
+  var lookup12 = /* @__PURE__ */ lookup(ordFactId);
+  var fromFoldable23 = /* @__PURE__ */ fromFoldable(ordFactId)(foldableArray);
+  var mapFlipped12 = /* @__PURE__ */ mapFlipped(functorArray);
   var foldl10 = /* @__PURE__ */ foldl(foldableArray);
   var insertWith3 = /* @__PURE__ */ insertWith(ordFactId);
+  var fromFoldable33 = /* @__PURE__ */ fromFoldable7(ordFactId);
+  var nub4 = /* @__PURE__ */ nub(ordFactId);
+  var member1 = /* @__PURE__ */ member2(ordFactId);
   var insert8 = /* @__PURE__ */ insert3(ordFactId);
   var alter3 = /* @__PURE__ */ alter(ordFactId);
   var notEq4 = /* @__PURE__ */ notEq(eqFactId);
@@ -12677,7 +12725,7 @@
     }
   };
   var insertWith1 = /* @__PURE__ */ insertWith(ordGKey);
-  var fromFoldable42 = /* @__PURE__ */ fromFoldable12(/* @__PURE__ */ ordTuple(ordGKey)(ordGKey));
+  var fromFoldable42 = /* @__PURE__ */ fromFoldable7(/* @__PURE__ */ ordTuple(ordGKey)(ordGKey));
   var union6 = /* @__PURE__ */ union3(ordGKey);
   var fromFoldable52 = /* @__PURE__ */ fromFoldable(ordGKey)(foldableArray);
   var sugiyamaLayout2 = /* @__PURE__ */ sugiyamaLayout(ordGKey);
@@ -12688,6 +12736,36 @@
         return elem4(c)(house);
       })(cells2);
     })(units);
+  };
+  var tierShades = function(v) {
+    if (v instanceof TGiven) {
+      return {
+        top: "#e0e0e0",
+        front: "#c4c4c4",
+        side: "#adadad",
+        line: "#909090"
+      };
+    }
+    ;
+    if (v instanceof TSingles) {
+      return {
+        top: "#7aa6c2",
+        front: "#6590ac",
+        side: "#527d99",
+        line: "#3f637c"
+      };
+    }
+    ;
+    if (v instanceof TRegin) {
+      return {
+        top: "#e89a44",
+        front: "#cd8232",
+        side: "#b26e26",
+        line: "#8f5717"
+      };
+    }
+    ;
+    throw new Error("Failed pattern match at Story (line 557, column 14 - line 560, column 83): " + [v.constructor.name]);
   };
   var tierFill = function(v) {
     if (v instanceof TGiven) {
@@ -12730,10 +12808,10 @@
         return "#e08b2d";
       }
       ;
-      throw new Error("Failed pattern match at Story (line 489, column 15 - line 494, column 30): " + [f.why.value0.rule.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 457, column 15 - line 462, column 30): " + [f.why.value0.rule.constructor.name]);
     }
     ;
-    throw new Error("Failed pattern match at Story (line 487, column 15 - line 494, column 30): " + [f.why.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 455, column 15 - line 462, column 30): " + [f.why.constructor.name]);
   };
   var singlesKB = /* @__PURE__ */ solveWith(engine)(gapPuzzle);
   var reginKB = /* @__PURE__ */ solveWith(alldifferentEngine)(gapPuzzle);
@@ -12744,17 +12822,6 @@
       regin: solvedCount(reginKB) - solvedCount(singlesKB) | 0
     };
   })();
-  var premisesOf2 = function(f) {
-    if (f.why instanceof Axiom) {
-      return [];
-    }
-    ;
-    if (f.why instanceof ByRule) {
-      return f.why.value0.premises;
-    }
-    ;
-    throw new Error("Failed pattern match at Story (line 141, column 16 - line 143, column 25): " + [f.why.constructor.name]);
-  };
   var placementFor = function(c) {
     return find2(function(f) {
       if (f.claim instanceof Is) {
@@ -12765,7 +12832,7 @@
         return false;
       }
       ;
-      throw new Error("Failed pattern match at Story (line 450, column 51 - line 452, column 19): " + [f.claim.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 418, column 51 - line 420, column 19): " + [f.claim.constructor.name]);
     })(facts(reginKB));
   };
   var proofSizes = /* @__PURE__ */ fromFoldable(ordCell)(foldableArray)(/* @__PURE__ */ mapMaybe(function(c) {
@@ -12773,119 +12840,6 @@
       return new Tuple(c, length(explainFact(reginKB)(f).nodes));
     });
   })(allCells));
-  var localProof = function(root) {
-    var dag = explainFact(reginKB)(root);
-    var byId = fromFoldable7(mapFlipped12(dag.nodes)(function(f) {
-      return new Tuple(f.id, f);
-    }));
-    var lookupF = function(id3) {
-      return lookup7(id3)(byId);
-    };
-    var grow = function($copy_v) {
-      return function($copy_v1) {
-        return function($copy_v2) {
-          var $tco_var_v = $copy_v;
-          var $tco_var_v1 = $copy_v1;
-          var $tco_done = false;
-          var $tco_result;
-          function $tco_loop(v, v1, v2) {
-            if (v2 === 0) {
-              $tco_done = true;
-              return {
-                kept: v,
-                next: v1
-              };
-            }
-            ;
-            var next = mapMaybe(lookupF)(nub4(filter(function(id3) {
-              return !member6(id3)(fromFoldable23(map21(function(v3) {
-                return v3.id;
-              })(v)));
-            })(concatMap(premisesOf2)(v1))));
-            var $191 = $$null(next);
-            if ($191) {
-              $tco_done = true;
-              return {
-                kept: v,
-                next: []
-              };
-            }
-            ;
-            $tco_var_v = append11(v)(next);
-            $tco_var_v1 = next;
-            $copy_v2 = v2 - 1 | 0;
-            return;
-          }
-          ;
-          while (!$tco_done) {
-            $tco_result = $tco_loop($tco_var_v, $tco_var_v1, $copy_v2);
-          }
-          ;
-          return $tco_result;
-        };
-      };
-    };
-    var keptFor = function(hops) {
-      return grow([root])([root])(hops).kept;
-    };
-    var pick = function($copy_hops) {
-      var $tco_done1 = false;
-      var $tco_result;
-      function $tco_loop(hops) {
-        if (hops <= 1) {
-          $tco_done1 = true;
-          return keptFor(1);
-        }
-        ;
-        if (otherwise) {
-          var attempt = keptFor(hops);
-          var $193 = length(attempt) <= 60;
-          if ($193) {
-            $tco_done1 = true;
-            return attempt;
-          }
-          ;
-          $copy_hops = hops - 1 | 0;
-          return;
-        }
-        ;
-        throw new Error("Failed pattern match at Story (line 176, column 5 - line 180, column 77): " + [hops.constructor.name]);
-      }
-      ;
-      while (!$tco_done1) {
-        $tco_result = $tco_loop($copy_hops);
-      }
-      ;
-      return $tco_result;
-    };
-    var kept = pick(4);
-    var keptIds = fromFoldable23(map21(function(v) {
-      return v.id;
-    })(kept));
-    var edges = filter(function(e) {
-      return member6(e.from)(keptIds) && member6(e.to)(keptIds);
-    })(dag.edges);
-    var frontier = fromFoldable23(map21(function(v) {
-      return v.id;
-    })(filter(function(f) {
-      return any2(function(p2) {
-        return !member6(p2)(keptIds);
-      })(premisesOf2(f));
-    })(kept)));
-    return {
-      nodes: kept,
-      edges,
-      frontier,
-      total: length(dag.nodes)
-    };
-  };
-  var proofSummary = function(f) {
-    var local2 = localProof(f);
-    return {
-      shown: length(local2.nodes),
-      total: local2.total
-    };
-  };
   var houseName = function(i2) {
     if (i2 < 9) {
       return "row " + show4(i2 + 1 | 0);
@@ -12899,13 +12853,13 @@
       return "box " + show4(i2 - 17 | 0);
     }
     ;
-    throw new Error("Failed pattern match at Story (line 386, column 1 - line 386, column 27): " + [i2.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 354, column 1 - line 354, column 27): " + [i2.constructor.name]);
   };
-  var givenCells = /* @__PURE__ */ fromFoldable12(ordCell)(/* @__PURE__ */ map21(function(v) {
+  var givenCells = /* @__PURE__ */ fromFoldable7(ordCell)(/* @__PURE__ */ map21(function(v) {
     return v.cell;
   })(gapPuzzle));
   var tierOf = function(c) {
-    if (member1(c)(givenCells)) {
+    if (member6(c)(givenCells)) {
       return TGiven.value;
     }
     ;
@@ -12956,56 +12910,91 @@
         var p2 = toNumber(i2) * 40 + 1;
         return [elem3(Line.value)([x1(p2), y1(1), x2(p2), y2(size6 - 1), stroke("#999999"), strokeWidth(1.5)])([]), elem3(Line.value)([x1(1), y1(p2), x2(size6 - 1), y2(p2), stroke("#999999"), strokeWidth(1.5)])([])];
       })([0, 3, 6, 9]);
-      return elem3(SVG.value)([viewBox(0)(0)(size6)(size6), width8(size6), height8(size6)])(append11(squares)(boxLines));
+      return elem3(SVG.value)([viewBox(0)(0)(size6)(size6), width8(size6), height8(size6)])(append14(squares)(boxLines));
     };
   };
   var skylineTree = function(notify2) {
     return function(selected2) {
-      var barFill = function(v) {
-        if (v instanceof TGiven) {
-          return "#bbbbbb";
-        }
-        ;
-        if (v instanceof TSingles) {
-          return "#7aa6c2";
-        }
-        ;
-        if (v instanceof TRegin) {
-          return "#e08b2d";
-        }
-        ;
-        throw new Error("Failed pattern match at Story (line 560, column 13 - line 563, column 24): " + [v.constructor.name]);
+      var ux = 30 * 0.866;
+      var width9 = 17 * ux + 40;
+      var uy = 30 * 0.5;
+      var pt = function(x3) {
+        return function(y3) {
+          return show1(x3) + ("," + show1(y3));
+        };
       };
-      var size6 = 9 * 40 + 2;
-      var maxN = fromMaybe(1)(maximum3(fromFoldable33(values(proofSizes))));
+      var projY = function(r) {
+        return function(c) {
+          return (toNumber(c) + toNumber(r)) * uy;
+        };
+      };
+      var projX = function(r) {
+        return function(c) {
+          return (toNumber(c) - toNumber(r)) * ux;
+        };
+      };
+      var ordered = sortBy(comparing2(function(c) {
+        return rowOf(c) + colOf(c) | 0;
+      }))(allCells);
+      var minX = -8 * ux - 20;
+      var maxN = fromMaybe(1)(maximum3(fromFoldable12(values(proofSizes))));
+      var maxH = 4 + 44;
       var heightFor = function(n) {
-        return 4 + 30 * log(toNumber(n)) / log(toNumber(maxN));
+        return 4 + 44 * log(toNumber(n)) / log(toNumber(maxN));
       };
-      var columns = map21(function(c) {
-        var y3 = toNumber(rowOf(c)) * 40 + 1;
-        var x3 = toNumber(colOf(c)) * 40 + 1;
-        var n = fromMaybe(1)(lookup12(c)(proofSizes));
+      var prism = function(c) {
+        var shades = tierShades(tierOf(c));
+        var r = rowOf(c);
+        var n = fromMaybe(1)(lookup7(c)(proofSizes));
+        var tooltip = "r" + (show4(rowOf(c) + 1 | 0) + ("c" + (show4(colOf(c) + 1 | 0) + (" \u2014 proof of " + (show4(n) + " facts")))));
+        var k = colOf(c);
+        var x00 = projX(r)(k);
+        var x01 = projX(r)(k + 1 | 0);
+        var x10 = projX(r + 1 | 0)(k);
+        var x11 = projX(r + 1 | 0)(k + 1 | 0);
+        var y00 = projY(r)(k);
+        var y01 = projY(r)(k + 1 | 0);
+        var y10 = projY(r + 1 | 0)(k);
+        var y11 = projY(r + 1 | 0)(k + 1 | 0);
         var isSelected = eq42(selected2)(new Just(c));
         var h = heightFor(n);
-        return withBehaviors([onClick(notify2(c))])(elem3(Group.value)([staticStr("cursor")("pointer")])([elem3(Rect.value)([x(x3), y(y3), width8(40), height8(40), fill("#ffffff"), stroke((function() {
-          if (isSelected) {
-            return "#111111";
-          }
-          ;
-          return "#eeeeee";
-        })()), strokeWidth((function() {
-          if (isSelected) {
-            return 2.5;
-          }
-          ;
-          return 0.5;
-        })())])([]), elem3(Rect.value)([x(x3 + 8), y(y3 + 40 - 3 - h), width8(40 - 16), height8(h), fill(barFill(tierOf(c)))])([])]));
-      })(allCells);
-      var boxLines = concatMap(function(i2) {
-        var q2 = toNumber(i2) * 40 + 1;
-        return [elem3(Line.value)([x1(q2), y1(1), x2(q2), y2(size6 - 1), stroke("#999999"), strokeWidth(1.5)])([]), elem3(Line.value)([x1(1), y1(q2), x2(size6 - 1), y2(q2), stroke("#999999"), strokeWidth(1.5)])([])];
-      })([0, 3, 6, 9]);
-      return elem3(SVG.value)([viewBox(0)(0)(size6)(size6), width8(size6), height8(size6)])(append11(columns)(boxLines));
+        var face = function(points) {
+          return function(fill2) {
+            return elem3(Polygon.value)([staticStr("points")(points), fill(fill2), stroke((function() {
+              if (isSelected) {
+                return "#111111";
+              }
+              ;
+              return shades.line;
+            })()), strokeWidth((function() {
+              if (isSelected) {
+                return 1.5;
+              }
+              ;
+              return 0.4;
+            })())])([]);
+          };
+        };
+        return withBehaviors([onClick(notify2(c))])(elem3(Group.value)([staticStr("cursor")("pointer")])([elem3(Title.value)([staticStr("textContent")(tooltip)])([]), face(pt(x10)(y10 - h) + (" " + (pt(x11)(y11 - h) + (" " + (pt(x11)(y11) + (" " + pt(x10)(y10)))))))(shades.front), face(pt(x01)(y01 - h) + (" " + (pt(x11)(y11 - h) + (" " + (pt(x11)(y11) + (" " + pt(x01)(y01)))))))(shades.side), face(pt(x00)(y00 - h) + (" " + (pt(x01)(y01 - h) + (" " + (pt(x11)(y11 - h) + (" " + pt(x10)(y10 - h)))))))(shades.top)]));
+      };
+      var height9 = 16 * uy + uy * 2 + maxH + 40;
+      return elem3(SVG.value)([viewBox(minX)(-maxH - 20)(width9)(height9), width8(width9), height8(height9)])(map21(prism)(ordered));
+    };
+  };
+  var fullProof = function(root) {
+    var dag = explainFact(reginKB)(root);
+    return {
+      nodes: dag.nodes,
+      edges: dag.edges,
+      frontier: empty7,
+      total: length(dag.nodes)
+    };
+  };
+  var proofSummary = function(f) {
+    var full = fullProof(f);
+    return {
+      shown: length(full.nodes),
+      total: full.total
     };
   };
   var fillFor = function(f) {
@@ -13034,10 +13023,10 @@
         return "#fff4e5";
       }
       ;
-      throw new Error("Failed pattern match at Story (line 479, column 15 - line 484, column 30): " + [f.why.value0.rule.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 447, column 15 - line 452, column 30): " + [f.why.value0.rule.constructor.name]);
     }
     ;
-    throw new Error("Failed pattern match at Story (line 477, column 13 - line 484, column 30): " + [f.why.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 445, column 13 - line 452, column 30): " + [f.why.constructor.name]);
   };
   var groupStyle = function(members) {
     var ruleTag = function(f) {
@@ -13049,7 +13038,7 @@
         return new Just(f.why.value0.rule);
       }
       ;
-      throw new Error("Failed pattern match at Story (line 421, column 15 - line 423, column 28): " + [f.why.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 389, column 15 - line 391, column 28): " + [f.why.constructor.name]);
     };
     var v = head(members);
     if (v instanceof Nothing) {
@@ -13060,10 +13049,10 @@
     }
     ;
     if (v instanceof Just) {
-      var $211 = all2(function(f) {
+      var $197 = all2(function(f) {
         return eq5(ruleTag(f))(ruleTag(v.value0));
       })(members);
-      if ($211) {
+      if ($197) {
         return {
           fill: fillFor(v.value0),
           stroke: strokeFor(v.value0)
@@ -13076,7 +13065,7 @@
       };
     }
     ;
-    throw new Error("Failed pattern match at Story (line 413, column 22 - line 419, column 45): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 381, column 22 - line 387, column 45): " + [v.constructor.name]);
   };
   var digitLabelOf = function(v) {
     return show4(v);
@@ -13091,7 +13080,7 @@
         return false;
       }
       ;
-      throw new Error("Failed pattern match at Story (line 443, column 15 - line 445, column 21): " + [f.why.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 411, column 15 - line 413, column 21): " + [f.why.constructor.name]);
     };
     var deduced = filter(function(f) {
       if (f.claim instanceof Is && f.why instanceof ByRule) {
@@ -13103,7 +13092,7 @@
     var withAmber = filter(function(f) {
       return any2(isAmber)(explainFact(reginKB)(f).nodes);
     })(deduced);
-    var v = minimumBy(foldableArray)(comparing(ordInt)(function(f) {
+    var v = minimumBy(foldableArray)(comparing2(function(f) {
       return length(explainFact(reginKB)(f).nodes);
     }))(withAmber);
     if (v instanceof Just) {
@@ -13125,10 +13114,10 @@
         };
       }
       ;
-      throw new Error("Failed pattern match at Story (line 439, column 18 - line 441, column 97): " + [v1.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 407, column 18 - line 409, column 97): " + [v1.constructor.name]);
     }
     ;
-    throw new Error("Failed pattern match at Story (line 436, column 5 - line 441, column 97): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Story (line 404, column 5 - line 409, column 97): " + [v.constructor.name]);
   })();
   var claimLabel = /* @__PURE__ */ (function() {
     var digitLabel = function(v) {
@@ -13146,7 +13135,7 @@
         return cellName(v.value0) + (" \u2260 " + digitLabel(v.value1));
       }
       ;
-      throw new Error("Failed pattern match at Story (line 469, column 14 - line 471, column 54): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 437, column 14 - line 439, column 54): " + [v.constructor.name]);
     };
   })();
   var factTitle = function(f) {
@@ -13171,7 +13160,7 @@
         return "alldifferent (R\xE9gin)";
       }
       ;
-      throw new Error("Failed pattern match at Story (line 461, column 16 - line 466, column 46): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 429, column 16 - line 434, column 46): " + [v.constructor.name]);
     };
     var byline = (function() {
       if (f.why instanceof Axiom) {
@@ -13182,7 +13171,7 @@
         return ", by " + ruleNameOf(f.why.value0.rule);
       }
       ;
-      throw new Error("Failed pattern match at Story (line 458, column 12 - line 460, column 45): " + [f.why.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 426, column 12 - line 428, column 45): " + [f.why.constructor.name]);
     })();
     return claimLabel(f.claim) + byline;
   };
@@ -13200,7 +13189,7 @@
           return Nothing.value;
         }
         ;
-        throw new Error("Failed pattern match at Story (line 401, column 15 - line 403, column 22): " + [f.claim.constructor.name]);
+        throw new Error("Failed pattern match at Story (line 369, column 15 - line 371, column 22): " + [f.claim.constructor.name]);
       };
       var cellNameOf = function(c) {
         return "r" + (show4(rowOf(c) + 1 | 0) + ("c" + show4(colOf(c) + 1 | 0)));
@@ -13226,29 +13215,29 @@
         return "?";
       }
       ;
-      throw new Error("Failed pattern match at Story (line 393, column 24 - line 399, column 22): " + [k.constructor.name, members.constructor.name]);
+      throw new Error("Failed pattern match at Story (line 361, column 24 - line 367, column 22): " + [k.constructor.name, members.constructor.name]);
     };
   };
   var dagTreeFor = function(root) {
     var depths = depthOf(reginKB);
     var depthFor = function(f) {
-      return fromMaybe(0)(lookup7(f.id)(depths));
+      return fromMaybe(0)(lookup12(f.id)(depths));
     };
-    var dag = localProof(root);
-    var byId = fromFoldable7(mapFlipped12(dag.nodes)(function(f) {
+    var dag = fullProof(root);
+    var byId = fromFoldable23(mapFlipped12(dag.nodes)(function(f) {
       return new Tuple(f.id, f);
     }));
     var semantic = (function() {
       var lookupKept = function(id3) {
-        return lookup7(id3)(byId);
+        return lookup12(id3)(byId);
       };
       var localOut = foldl10(function(m) {
         return function(e) {
-          return insertWith3(append11)(e.from)([e.to])(m);
+          return insertWith3(append14)(e.from)([e.to])(m);
         };
       })(empty2)(dag.edges);
       var interPath = function(ps) {
-        var memberIds = fromFoldable23(mapFlipped12(ps)(function(v) {
+        var memberIds = fromFoldable33(mapFlipped12(ps)(function(v) {
           return v.id;
         }));
         var step3 = function($copy_frontierIds) {
@@ -13258,20 +13247,20 @@
             var $tco_result;
             function $tco_loop(frontierIds, visited) {
               var nextIds = nub4(filter(function(id3) {
-                return !member6(id3)(visited);
+                return !member1(id3)(visited);
               })(concatMap(function(id3) {
-                return fromMaybe([])(lookup7(id3)(localOut));
+                return fromMaybe([])(lookup12(id3)(localOut));
               })(frontierIds)));
-              var $253 = $$null(nextIds);
-              if ($253) {
+              var $239 = $$null(nextIds);
+              if ($239) {
                 $tco_done = true;
                 return false;
               }
               ;
-              var $254 = any2(function(id3) {
-                return member6(id3)(memberIds);
+              var $240 = any2(function(id3) {
+                return member1(id3)(memberIds);
               })(nextIds);
-              if ($254) {
+              if ($240) {
                 $tco_done = true;
                 return true;
               }
@@ -13289,7 +13278,7 @@
           };
         };
         return any2(function(p2) {
-          return step3(fromMaybe([])(lookup7(p2.id)(localOut)))(singleton7(p2.id));
+          return step3(fromMaybe([])(lookup12(p2.id)(localOut)))(singleton7(p2.id));
         })(ps);
       };
       var cellOfClaim = function(v) {
@@ -13301,7 +13290,7 @@
           return v.value0;
         }
         ;
-        throw new Error("Failed pattern match at Story (line 273, column 21 - line 275, column 21): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Story (line 239, column 21 - line 241, column 21): " + [v.constructor.name]);
       };
       var claimFor = function(acc) {
         return function(f) {
@@ -13316,7 +13305,7 @@
                 return Nothing.value;
               }
               ;
-              throw new Error("Failed pattern match at Story (line 220, column 49 - line 222, column 32): " + [pf.claim.constructor.name]);
+              throw new Error("Failed pattern match at Story (line 186, column 49 - line 188, column 32): " + [pf.claim.constructor.name]);
             })(ps);
             var dep = fromMaybe(0)(maximum3(mapFlipped12(ps)(depthFor)));
             var cells2 = mapFlipped12(ps)(function(pf) {
@@ -13339,7 +13328,7 @@
                         return new Just(new GHouse(v1.value0, v.value0, dep));
                       }
                       ;
-                      throw new Error("Failed pattern match at Story (line 235, column 31 - line 237, column 66): " + [v2.constructor.name]);
+                      throw new Error("Failed pattern match at Story (line 201, column 31 - line 203, column 66): " + [v2.constructor.name]);
                     })(pf.id)(a2);
                   };
                 })(acc)(ps);
@@ -13349,7 +13338,7 @@
                 return acc;
               }
               ;
-              throw new Error("Failed pattern match at Story (line 232, column 21 - line 244, column 37): " + [v1.constructor.name]);
+              throw new Error("Failed pattern match at Story (line 198, column 21 - line 210, column 37): " + [v1.constructor.name]);
             }
             ;
             return acc;
@@ -13361,7 +13350,7 @@
       return foldl10(claimFor)(empty2)(dag.nodes);
     })();
     var key = function(f) {
-      var v = lookup7(f.id)(semantic);
+      var v = lookup12(f.id)(semantic);
       if (v instanceof Just && notEq4(f.id)(root.id)) {
         return v.value0;
       }
@@ -13374,12 +13363,12 @@
     };
     var groups = foldl10(function(m) {
       return function(f) {
-        return insertWith1(flip(append11))(key(f))([f])(m);
+        return insertWith1(flip(append14))(key(f))([f])(m);
       };
     })(empty2)(dag.nodes);
     var gKeys = toUnfoldable8(keys3(groups));
     var keyOfId = function(id3) {
-      return fromMaybe(new GSingle(id3))(map111(key)(lookup7(id3)(byId)));
+      return fromMaybe(new GSingle(id3))(map111(key)(lookup12(id3)(byId)));
     };
     var gEdges = fromFoldable42(filter(function(v) {
       return notEq13(v.value0)(v.value1);
@@ -13434,7 +13423,7 @@
       var style3 = groupStyle(v.value1);
       var p2 = posFor(v.value0);
       var onFrontier = any2(function(f) {
-        return member6(f.id)(dag.frontier);
+        return member1(f.id)(dag.frontier);
       })(v.value1);
       var isRoot = (function() {
         if (v.value0 instanceof GSingle) {
@@ -13449,9 +13438,9 @@
           return false;
         }
         ;
-        throw new Error("Failed pattern match at Story (line 339, column 22 - line 342, column 36): " + [v.value0.constructor.name]);
+        throw new Error("Failed pattern match at Story (line 305, column 22 - line 308, column 36): " + [v.value0.constructor.name]);
       })();
-      return [elem3(Rect.value)(append11([x(p2.x), y(p2.y), width8(150), height8(22), staticStr("rx")("3"), fill(style3.fill), stroke(style3.stroke), strokeWidth((function() {
+      return [elem3(Rect.value)(append14([x(p2.x), y(p2.y), width8(150), height8(22), staticStr("rx")("3"), fill(style3.fill), stroke(style3.stroke), strokeWidth((function() {
         if (isRoot) {
           return 2.5;
         }
@@ -13471,7 +13460,7 @@
         return "";
       })())])([])];
     })(toUnfoldable13(groups));
-    return elem3(SVG.value)([viewBox(minX - 40)(minY - 50)(spanW)(spanH), width8(spanW), height8(spanH)])(append11(edges)(nodes));
+    return elem3(SVG.value)([viewBox(minX - 40)(minY - 50)(spanW)(spanH), width8(1100), height8(620), staticStr("preserveAspectRatio")("xMidYMid meet"), staticStr("style")("border:1px solid #eeeeee")])(append14(edges)(nodes));
   };
 
   // output/App/index.js
@@ -13503,15 +13492,7 @@
     return CellClicked2;
   })();
   var proofLine = function(v) {
-    if (v.shown === v.total) {
-      return "the complete proof: " + (show5(v.total) + " facts");
-    }
-    ;
-    if (otherwise) {
-      return "the proximate proof: " + (show5(v.shown) + (" of " + (show5(v.total) + " facts \u2014 dashed nodes rest on further support not shown")));
-    }
-    ;
-    throw new Error("Failed pattern match at App (line 116, column 1 - line 116, column 54): " + [v.constructor.name]);
+    return "the complete proof: " + (show5(v.total) + " facts \u2014 scroll to zoom, drag to pan");
   };
   var cellOfFact = function(f) {
     if (f.claim instanceof Is) {
@@ -13535,6 +13516,7 @@
           rerender("#grid-view")(gridTree(notify2)(new Just(cellOfFact(fact))))();
           rerender("#skyline-view")(skylineTree(notify2)(new Just(cellOfFact(fact))))();
           rerender("#dag-view")(dagTreeFor(fact))();
+          attachPanZoom("#dag-view svg")();
           return unit;
         };
       };
@@ -13555,16 +13537,16 @@
           return discard23($$void7(subscribe2(map24(CellClicked.create)(v12.emitter))))(function() {
             var notify2 = notify(v12.listener);
             return discard23(modify_3(function(v2) {
-              var $37 = {};
-              for (var $38 in v2) {
-                if ({}.hasOwnProperty.call(v2, $38)) {
-                  $37[$38] = v2[$38];
+              var $35 = {};
+              for (var $36 in v2) {
+                if ({}.hasOwnProperty.call(v2, $36)) {
+                  $35[$36] = v2[$36];
                 }
                 ;
               }
               ;
-              $37.notify = new Just(notify2);
-              return $37;
+              $35.notify = new Just(notify2);
+              return $35;
             }))(function() {
               return bind13(gets2(function(v2) {
                 return v2.chosen;
@@ -13584,16 +13566,16 @@
         ;
         if (v1 instanceof Just) {
           return discard23(modify_3(function(v2) {
-            var $43 = {};
-            for (var $44 in v2) {
-              if ({}.hasOwnProperty.call(v2, $44)) {
-                $43[$44] = v2[$44];
+            var $41 = {};
+            for (var $42 in v2) {
+              if ({}.hasOwnProperty.call(v2, $42)) {
+                $41[$42] = v2[$42];
               }
               ;
             }
             ;
-            $43.chosen = v1.value0;
-            return $43;
+            $41.chosen = v1.value0;
+            return $41;
           }))(function() {
             return bind13(get2)(function(state3) {
               if (state3.notify instanceof Nothing) {
@@ -13604,15 +13586,15 @@
                 return liftEffect7(redraw(state3.notify.value0)(v1.value0));
               }
               ;
-              throw new Error("Failed pattern match at App (line 101, column 9 - line 103, column 57): " + [state3.notify.constructor.name]);
+              throw new Error("Failed pattern match at App (line 102, column 9 - line 104, column 57): " + [state3.notify.constructor.name]);
             });
           });
         }
         ;
-        throw new Error("Failed pattern match at App (line 96, column 25 - line 103, column 57): " + [v1.constructor.name]);
+        throw new Error("Failed pattern match at App (line 97, column 25 - line 104, column 57): " + [v1.constructor.name]);
       }
       ;
-      throw new Error("Failed pattern match at App (line 88, column 18 - line 103, column 57): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at App (line 89, column 18 - line 104, column 57): " + [v.constructor.name]);
     };
     return mkComponent({
       initialState: $$const({

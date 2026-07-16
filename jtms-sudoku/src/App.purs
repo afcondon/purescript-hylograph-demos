@@ -14,6 +14,7 @@ import Halogen.HTML as HH
 import Halogen.HTML.Properties as HP
 import Halogen.Subscription as HS
 import Hylograph.HATS.InterpreterTick (clearContainer, rerender)
+import PanZoom (attachPanZoom)
 import Story (SudokuFact, dagTreeFor, defaultDagFact, factTitle, gridTree, placementFor, proofSummary, skylineTree, stats)
 import Sudoku.Board (Cell)
 import Sudoku.Rules (SudokuClaim(..))
@@ -111,14 +112,13 @@ component = H.mkComponent
     _ <- rerender "#grid-view" (gridTree notify (Just (cellOfFact fact)))
     _ <- rerender "#skyline-view" (skylineTree notify (Just (cellOfFact fact)))
     _ <- rerender "#dag-view" (dagTreeFor fact)
+    attachPanZoom "#dag-view svg"
     pure unit
 
 proofLine :: { shown :: Int, total :: Int } -> String
-proofLine { shown, total }
-  | shown == total = "the complete proof: " <> show total <> " facts"
-  | otherwise =
-      "the proximate proof: " <> show shown <> " of " <> show total
-        <> " facts \x2014 dashed nodes rest on further support not shown"
+proofLine { total } =
+  "the complete proof: " <> show total
+    <> " facts \x2014 scroll to zoom, drag to pan"
 
 cellOfFact :: SudokuFact -> Cell
 cellOfFact f = case f.claim of
