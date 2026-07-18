@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>make, deconstructed — jtms × hylograph</title>
+  <link rel="icon" href="data:,">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+           color: #111; margin: 0; overflow: hidden; background: #fff; }
+    .canvas { position: fixed; inset: 0; z-index: 0; }
+    .canvas svg { width: 100%; height: 100%; display: block;
+                  user-select: none; -webkit-user-select: none; }
+    .overlay { position: fixed; z-index: 2;
+               background: rgba(255,255,255,0.93);
+               backdrop-filter: blur(2px);
+               border-radius: 8px; padding: 14px 18px;
+               box-shadow: 0 2px 16px rgba(0,0,0,0.14); }
+    .title-card { top: 16px; left: 16px; max-width: 430px; }
+    .legend-card { left: 16px; bottom: 16px; }
+    .proof-card { right: 16px; top: 16px; max-width: 440px;
+                  max-height: calc(100vh - 32px); overflow-y: auto; }
+    h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+    p.sub { color: #555; font-size: 12.5px; line-height: 1.45; margin: 8px 0 0; }
+    p.headline { color: #333; font-size: 13px; font-weight: 600; margin: 6px 0; }
+    p.ultimately { color: #b06a1a; font-size: 12px; font-style: italic; margin: 8px 0 0; }
+    p.parse-error { color: #d64541; font-size: 12px; margin: 8px 0 0; }
+    h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+         color: #999; margin: 12px 0 6px; }
+    .overlay h2:first-child { margin-top: 0; }
+    ul.proof { margin: 4px 0; padding-left: 18px; font-size: 12px; color: #444;
+               line-height: 1.5; }
+    pre.recipe { font: 11px/1.5 'SF Mono', Menlo, monospace; color: #444;
+                 background: #f6f6f6; border-radius: 4px; padding: 8px 10px;
+                 margin: 4px 0 0; white-space: pre-wrap; }
+    .legend { font-size: 11.5px; color: #666; margin-top: 6px; }
+    .legend span { display: inline-block; margin-right: 12px; }
+    .legend i { display: inline-block; width: 9px; height: 9px;
+                border-radius: 2px; margin-right: 5px; }
+    .buttons { margin-top: 10px; }
+    button { font: 12px 'Helvetica Neue', Helvetica, sans-serif; color: #333;
+             background: #fff; border: 1px solid #ccc; border-radius: 4px;
+             padding: 3px 10px; cursor: pointer; margin-right: 8px; }
+    button:hover { border-color: #888; }
+    button.scenario.active { border-color: #333; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <script type="module" src="bundle.js"></script>
+</body>
+</html>

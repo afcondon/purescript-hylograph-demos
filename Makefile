@@ -1,4 +1,4 @@
-DEMOS = graph graph-decomposition jtms-sudoku layout music selection simulation sigil sigil-hats
+DEMOS = graph graph-decomposition jtms-make jtms-sudoku layout music selection simulation sigil sigil-hats
 
 .PHONY: all clean site $(DEMOS)
 
