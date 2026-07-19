@@ -10923,16 +10923,20 @@
       }, { passive: false });
       let drag2 = null;
       svg.addEventListener("pointerdown", (e) => {
-        drag2 = { x: e.clientX, y: e.clientY };
-        svg.setPointerCapture(e.pointerId);
+        drag2 = { x: e.clientX, y: e.clientY, id: e.pointerId, moved: false };
       });
       svg.addEventListener("pointermove", (e) => {
         if (!drag2) return;
+        if (!drag2.moved) {
+          if (Math.abs(e.clientX - drag2.x) + Math.abs(e.clientY - drag2.y) < 3) return;
+          drag2.moved = true;
+          svg.setPointerCapture(drag2.id);
+        }
         const b2 = vb();
         const rect = svg.getBoundingClientRect();
         b2.x -= (e.clientX - drag2.x) * b2.width / rect.width;
         b2.y -= (e.clientY - drag2.y) * b2.height / rect.height;
-        drag2 = { x: e.clientX, y: e.clientY };
+        drag2 = { x: e.clientX, y: e.clientY, id: drag2.id, moved: true };
       });
       svg.addEventListener("pointerup", () => {
         drag2 = null;
