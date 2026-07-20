@@ -14,3 +14,4 @@ simulation/public/bundle.js
 sigil/public/bundle.js
 sigil-hats/public/bundle.js
 jtms-make/public/bundle.js
+.direnv/
