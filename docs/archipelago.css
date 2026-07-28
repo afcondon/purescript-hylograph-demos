@@ -1,0 +1,214 @@
+/* ── The Archipelago — shared grammar for the gateway and its islands ──
+   One lithograph above (the gateway's Holy Tree); one woodcut per island.
+   Isometric plaza: a diamond-grid ground plane that the tiles actually
+   stand on, always-visible labels, portals at the plaza's edge. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  --iso: perspective(1200px) rotateX(55deg) rotateZ(-40deg);
+  --accent: #1a1a1a;           /* islands override */
+}
+
+.scene {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Title block ── */
+.title { position: absolute; top: 3vh; left: 3vw; z-index: 10; max-width: 26vw; }
+.title .over {
+  display: block;
+  font-size: clamp(0.5rem, 0.98vw, 1.05rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 0.3em;
+}
+.title h1 {
+  font-size: clamp(1.4rem, 2.8vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+.title h1 .g { color: var(--accent); }
+.title .sub {
+  margin-top: 0.8vh;
+  font-size: clamp(0.42rem, 0.55vw, 0.66rem);
+  color: #999;
+  line-height: 1.55;
+}
+.title .sub a { color: #777; }
+
+.title .index {
+  margin-top: 2vh;
+  list-style: none;
+  font-size: clamp(0.4rem, 0.5vw, 0.6rem);
+  line-height: 1.9;
+  color: #bbb;
+}
+.title .index .islandhead {
+  margin-top: 1.1em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.85em;
+  color: #999;
+}
+.title .index .islandhead::before {
+  content: '\25c6\00a0';           /* ◆ */
+  color: var(--accent);
+  font-size: 0.8em;
+}
+.title .index a { color: #aaa; text-decoration: none; transition: color 0.15s; }
+.title .index a:hover { color: #1a1a1a; }
+.title .index a.out::after { content: '\00a0\2197'; color: #ccc; font-size: 0.85em; }
+
+/* ── Hero (lithograph or woodcut, centred, upright) ── */
+.hero {
+  position: absolute;
+  width: 36vmin;
+  height: 36vmin;
+  z-index: 5;
+  transform: translateY(-9vmin);
+  pointer-events: none;
+}
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  opacity: 0.85;
+  /* ground the print into the plaza: soften the plate edge */
+  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 46%, #000 62%, transparent 96%);
+          mask-image: radial-gradient(ellipse 72% 72% at 50% 46%, #000 62%, transparent 96%);
+}
+
+/* Prints whose ground isn't paper-white can't fade into the page —
+   hang them as sharp plates instead. */
+.hero.plate img {
+  -webkit-mask-image: none;
+          mask-image: none;
+  opacity: 1;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.22);
+}
+
+/* ── The ground plane: the plaza the tiles stand on ── */
+.ground {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 220vmin;
+  height: 220vmin;
+  z-index: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%) var(--iso);
+  background:
+    repeating-linear-gradient(0deg,   transparent 0, transparent calc(10vmin - 1px), #e9e9e9 calc(10vmin - 1px), #e9e9e9 10vmin),
+    repeating-linear-gradient(90deg,  transparent 0, transparent calc(10vmin - 1px), #e9e9e9 calc(10vmin - 1px), #e9e9e9 10vmin);
+  -webkit-mask-image: radial-gradient(closest-side, #000 35%, transparent 72%);
+          mask-image: radial-gradient(closest-side, #000 35%, transparent 72%);
+}
+
+/* ── Tiles (demo rooms and portals share the projection) ── */
+.room {
+  position: absolute;
+  text-decoration: none;
+  color: inherit;
+  z-index: 3;
+  transform: var(--iso);
+}
+.room img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  box-shadow: 3px 5px 14px rgba(0,0,0,0.16);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.room:hover img {
+  transform: scale(1.06);
+  box-shadow: 5px 8px 24px rgba(0,0,0,0.24);
+}
+.room .label {
+  position: absolute;
+  top: calc(100% + 0.6em);
+  left: 0;
+  font-size: clamp(0.38rem, 0.5vw, 0.6rem);
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+.room:hover .label { opacity: 1; }
+.room .label span {
+  font-weight: 400;
+  color: #999;
+  margin-left: 0.35em;
+}
+
+/* Outbound / typographic tile: a printed leaf rather than a screenshot.
+   For sibling sites (Elements, the-prelude) that live elsewhere. */
+.room .leaf {
+  width: 100%;
+  height: 100%;
+  background: #fdfdfa;
+  border: 1px solid #ddd;
+  box-shadow: 3px 5px 14px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8% 10%;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.room:hover .leaf {
+  transform: scale(1.06);
+  box-shadow: 5px 8px 24px rgba(0,0,0,0.2);
+}
+.room .leaf .cap {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 4.2vmin;
+  line-height: 1;
+  color: var(--accent);
+}
+.room .leaf .rule { border-top: 1px solid #e5e5e5; padding-top: 6%;
+  font-size: clamp(0.34rem, 0.44vw, 0.52rem); color: #888; line-height: 1.4; }
+
+/* ── Portals: doorways to the neighbouring worlds ── */
+.portal .label::before {
+  content: '\25c6\00a0';           /* ◆ */
+  color: var(--portal-accent, var(--accent));
+}
+.portal img, .portal .leaf { outline: 2px solid var(--portal-accent, var(--accent)); outline-offset: -2px; }
+
+/* ── Footer ── */
+.foot-l {
+  position: absolute; bottom: 2.5vh; left: 3vw; z-index: 10;
+  font-size: clamp(0.34rem, 0.45vw, 0.55rem);
+}
+.foot-l b { font-weight: 700; }
+.foot-l span { color: #aaa; font-weight: 400; }
+.foot-l a { color: #888; text-decoration: none; }
+.foot-l a:hover { color: #1a1a1a; }
+
+.foot-r {
+  position: absolute; bottom: 2.5vh; right: 3vw; z-index: 10;
+  text-align: right;
+  font-size: clamp(0.3rem, 0.4vw, 0.48rem);
+  color: #ccc;
+}
+.foot-r a { color: #aaa; text-decoration: none; }
+.foot-r a:hover { color: #666; }

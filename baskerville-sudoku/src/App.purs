@@ -42,7 +42,7 @@ component = H.mkComponent
           [ HH.h1_ [ HH.text "Explainable Sudoku" ]
           , HH.p [ HP.class_ (HH.ClassName "sub") ]
               [ HH.text $
-                  "purescript-jtms proofs rendered by hylograph. Behind these cards: the whole solution, one graph. "
+                  "purescript-baskerville proofs rendered by hylograph. Behind these cards: the whole solution, one graph. "
                     <> show stats.givens
                     <> " givens; the singles tier earns "
                     <> show stats.singles

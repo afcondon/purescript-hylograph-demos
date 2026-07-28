@@ -1,7 +1,7 @@
 -- | The pure computation behind the demo: solve the oracle-discovered gap
 -- | puzzle with both engines, colour the grid by which tier earned each
 -- | cell, and lay out one Régin-bearing proof DAG with hylograph-graph's
--- | Sugiyama — jtms facts in, hylograph geometry out.
+-- | Sugiyama — baskerville facts in, hylograph geometry out.
 module Story
   ( SudokuFact
   , gridTree

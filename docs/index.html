@@ -4,175 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Library of Hylograph</title>
+  <link rel="stylesheet" href="archipelago.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body { height: 100%; overflow: hidden; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #fff;
-      color: #1a1a1a;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .scene {
+    /* Gateway: the museum in plan. The Holy Tree grows out of the rotunda;
+       three wings radiate; every room is a demo. */
+    .plan {
+      position: absolute;
+      inset: 0;
       width: 100vw;
       height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ---- Title ---- */
-    .title {
-      position: absolute;
-      top: 3vh;
-      left: 3vw;
-      z-index: 10;
-    }
-    .title h1 {
-      font-size: clamp(1.4rem, 2.8vw, 3rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.9;
-    }
-    .title h1 .the {
       display: block;
-      font-size: 0.35em;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #aaa;
-      margin-bottom: 0.3em;
+      z-index: 1;
     }
-    .title .sub {
-      margin-top: 0.6vh;
-      font-size: clamp(0.4rem, 0.5vw, 0.6rem);
-      color: #aaa;
-      line-height: 1.5;
+    .plan text {
+      font-family: 'Inter', sans-serif;
+      text-anchor: middle;
+      fill: #8a93a6;
     }
-    .title .sub a { color: #888; }
-
-    .title .index {
-      margin-top: 1.5vh;
-      list-style: none;
-      font-size: clamp(0.38rem, 0.48vw, 0.58rem);
-      line-height: 2;
-      color: #bbb;
-    }
-    .title .index a {
-      color: #aaa;
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .title .index a:hover { color: #1a1a1a; }
-
-    /* ---- Tree (centred, upright) ---- */
-    .tree {
-      position: absolute;
-      width: 38vmin;
-      height: 38vmin;
-      z-index: 5;
-      transform: translateY(-8vmin);
-      pointer-events: none;
-    }
-    .tree img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      opacity: 0.82;
-    }
-
-    /* ---- Isometric transform ---- */
-    :root {
-      --iso: perspective(1200px) rotateX(55deg) rotateZ(-40deg);
-    }
-
-    /* ---- Room ---- */
-    .room {
-      position: absolute;
-      text-decoration: none;
-      color: inherit;
-      z-index: 3;
-      transform: var(--iso);
-    }
-    .room img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .room:hover img {
-      transform: scale(1.06);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    .room .label {
-      position: absolute;
-      bottom: -2.2em;
-      left: 0;
-      font-size: clamp(0.35rem, 0.45vw, 0.55rem);
-      font-weight: 700;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .room:hover .label { opacity: 1; }
-    .room .label span {
-      font-weight: 400;
-      color: #aaa;
-      margin-left: 0.3em;
-    }
-
-    /* ---- Placements ---- */
-
-    .r-sigil  { width: 11vmin; height: 11vmin; top: 30%; left: 25%; }
-    .r-hats   { width: 13vmin; height: 13vmin; top: 48%; left: 19%; }
-    .r-music  { width: 10vmin; height: 10vmin; top: 66%; left: 27%; }
-
-    .r-graph  { width: 14vmin; height: 14vmin; top: 66%; left: 38%; }
-    .r-decomp { width: 10vmin; height: 10vmin; top: 72%; left: 53%; }
-
-    .r-forces { width: 12vmin; height: 12vmin; top: 33%; right: 21%; }
-    .r-layout { width: 13vmin; height: 13vmin; top: 52%; right: 17%; }
-    .r-types  { width: 10vmin; height: 10vmin; top: 68%; right: 24%; }
-
-    /* ---- Footer ---- */
-    .showcases {
-      position: absolute;
-      bottom: 2.5vh;
-      left: 3vw;
-      z-index: 10;
-    }
-    .showcases h2 {
-      font-size: clamp(0.36rem, 0.45vw, 0.55rem);
-      font-weight: 700;
-      display: inline;
-    }
-    .showcases span {
-      font-size: clamp(0.32rem, 0.4vw, 0.48rem);
-      color: #aaa;
-    }
-    .showcases a { color: #888; text-decoration: none; }
-    .showcases a:hover { color: #1a1a1a; }
-
-    .colophon {
-      position: absolute;
-      bottom: 2.5vh;
-      right: 3vw;
-      z-index: 10;
-      text-align: right;
-      font-size: clamp(0.3rem, 0.4vw, 0.48rem);
-      color: #ccc;
-    }
-    .colophon a { color: #aaa; text-decoration: none; }
-    .colophon a:hover { color: #666; }
+    .plan .roomlabel { font-size: 11.5px; font-weight: 600; letter-spacing: 0.12em; }
+    .plan .wingname  { font-size: 15px;  font-weight: 700; letter-spacing: 0.22em; }
+    .plan .annot     { font-size: 10px;  font-weight: 500; letter-spacing: 0.14em; fill: #a8aebc; }
+    .plan .blocktext { font-size: 11px;  font-weight: 600; letter-spacing: 0.18em; fill: #4a5468; }
+    .plan a { cursor: pointer; }
+    .plan a .hit { fill: #5b7fa6; fill-opacity: 0; transition: fill-opacity 0.2s; }
+    .plan a.e .hit { fill: #b5822f; }
+    .plan a.s .hit { fill: #444444; }
+    .plan a:hover .hit { fill-opacity: 0.09; }
+    .plan a:hover text { fill: #1a1a1a; }
+    .plan a:hover .frame { stroke-width: 3; }
   </style>
 </head>
 <body>
@@ -180,69 +39,207 @@
   <div class="scene">
 
     <div class="title">
-      <h1><span class="the">The Library of</span>Hylograph</h1>
-      <p class="sub">Interactive examples for the <a href="https://hylograph.net">Hylograph</a> visualization libraries.</p>
-      <ul class="index">
-        <li><a href="sigil/">Sigil</a></li>
-        <li><a href="selection/">The Hylographic Fold</a></li>
-        <li><a href="music/">Anscombe's String Quartet</a></li>
-        <li><a href="simulation/">Force Playground</a></li>
-        <li><a href="graph/">The Honeycomb</a></li>
-        <li><a href="graph-decomposition/">Decomposition Explorer</a></li>
-        <li><a href="layout/">Layout Gallery</a></li>
-        <li><a href="sigil-hats/">Type Classes</a></li>
-      </ul>
+      <h1><span class="over">The Library of</span>Hylograph</h1>
+      <p class="sub">Interactive examples for the <a href="https://hylograph.net">Hylograph</a>
+        visualization libraries and their neighbours.<br>Every room on the plan is a demo — step in.</p>
     </div>
 
-    <div class="tree"><img src="tree-hero.jpg" alt=""></div>
+    <svg class="plan" viewBox="0 0 1600 950" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <pattern id="graph" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f2f0" stroke-width="1"/>
+        </pattern>
+        <filter id="plateshadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#000" flood-opacity="0.22"/>
+        </filter>
+        <radialGradient id="treefadeg" cx="50%" cy="46%" r="54%">
+          <stop offset="62%" stop-color="#ffffff"/>
+          <stop offset="100%" stop-color="#000000"/>
+        </radialGradient>
+        <mask id="treefade">
+          <rect x="610" y="50" width="380" height="400" fill="url(#treefadeg)"/>
+        </mask>
+      </defs>
 
-    <a class="room r-sigil" href="sigil/">
-      <img src="thumbnails/sigils.jpg" alt="Sigil">
-      <div class="label">Sigil <span>type signatures</span></div>
-    </a>
+      <!-- drafting paper -->
+      <rect x="0" y="0" width="1600" height="950" fill="url(#graph)"/>
 
-    <a class="room r-hats" href="selection/">
-      <img src="thumbnails/HATS.jpg" alt="The Hylographic Fold">
-      <div class="label">The Hylographic Fold <span>HATS &amp; interpreters</span></div>
-    </a>
+      <!-- ══ Walls (poché ink #2f3d55) ══ -->
+      <g fill="none" stroke="#2f3d55">
 
-    <a class="room r-music" href="music/">
-      <img src="thumbnails/music.jpg" alt="Anscombe's Quartet">
-      <div class="label">Anscombe's Quartet <span>data sonification</span></div>
-    </a>
+        <!-- rotunda -->
+        <circle cx="800" cy="470" r="104" stroke-width="7"/>
 
-    <a class="room r-graph" href="graph/">
-      <img src="thumbnails/graph.jpg" alt="The Honeycomb">
-      <div class="label">The Honeycomb <span>graph pathfinding</span></div>
-    </a>
+        <!-- west wing: the Hylograph Wing -->
+        <rect x="110" y="360" width="460" height="220" stroke-width="7"/>
+        <!-- partitions with enfilade door gaps -->
+        <path stroke-width="3" d="M 225 360 V 445 M 225 495 V 580
+                                  M 340 360 V 445 M 340 495 V 580
+                                  M 455 360 V 445 M 455 495 V 580"/>
+        <!-- door swings -->
+        <path stroke-width="1.1" d="M 225 445 a 50 50 0 0 1 50 50
+                                    M 340 445 a 50 50 0 0 1 50 50
+                                    M 455 445 a 50 50 0 0 1 50 50"/>
+        <!-- corridor to rotunda -->
+        <path stroke-width="4" d="M 570 445 H 700 M 570 495 H 700"/>
 
-    <a class="room r-decomp" href="graph-decomposition/">
-      <img src="thumbnails/decomposition.jpg" alt="Decomposition Explorer">
-      <div class="label">Decomposition <span>structural analysis</span></div>
-    </a>
+        <!-- east wing: the Scriptorium -->
+        <rect x="1030" y="360" width="460" height="220" stroke-width="7"/>
+        <path stroke-width="3" d="M 1145 360 V 445 M 1145 495 V 580
+                                  M 1260 360 V 445 M 1260 495 V 580
+                                  M 1375 360 V 445 M 1375 495 V 580"/>
+        <path stroke-width="1.1" d="M 1145 495 a 50 50 0 0 0 -50 -50
+                                    M 1260 495 a 50 50 0 0 0 -50 -50
+                                    M 1375 495 a 50 50 0 0 0 -50 -50"/>
+        <path stroke-width="4" d="M 900 445 H 1030 M 900 495 H 1030"/>
 
-    <a class="room r-forces" href="simulation/">
-      <img src="thumbnails/forces.jpg" alt="Force Playground">
-      <div class="label">Force Playground <span>simulation</span></div>
-    </a>
+        <!-- south wing: the Reasoning Wing -->
+        <rect x="587" y="690" width="426" height="200" stroke-width="7"/>
+        <path stroke-width="3" d="M 693.5 690 V 765 M 693.5 815 V 890
+                                  M 906.5 690 V 765 M 906.5 815 V 890
+                                  M 800 830 V 890"/>
+        <path stroke-width="1.1" d="M 693.5 765 a 50 50 0 0 1 50 50
+                                    M 906.5 765 a 50 50 0 0 1 50 50"/>
+        <path stroke-width="4" d="M 775 570 V 690 M 825 570 V 690"/>
+      </g>
 
-    <a class="room r-layout" href="layout/">
-      <img src="thumbnails/layout.jpg" alt="Layout Gallery">
-      <div class="label">Layout Gallery <span>sankey, treemap, more</span></div>
-    </a>
+      <!-- door openings: paper over wall segments -->
+      <g fill="#ffffff">
+        <rect x="565" y="444" width="10" height="52"/>   <!-- west wing entry -->
+        <rect x="1025" y="444" width="10" height="52"/>  <!-- east wing entry -->
+        <rect x="774" y="685" width="52" height="10"/>   <!-- south wing entry -->
+        <rect x="693" y="443" width="12" height="54"/>   <!-- rotunda west door -->
+        <rect x="895" y="443" width="12" height="54"/>   <!-- rotunda east door -->
+        <rect x="773" y="566" width="54" height="12"/>   <!-- rotunda south door -->
+      </g>
 
-    <a class="room r-types" href="sigil-hats/">
-      <img src="thumbnails/typeclasses.jpg" alt="Type Classes">
-      <div class="label">Type Classes <span>sigil-hats</span></div>
-    </a>
+      <!-- ══ Rooms: every room is a demo ══ -->
 
-    <div class="showcases">
-      <h2>Showcases</h2>
+      <!-- west wing, enfilade from the rotunda -->
+      <a href="selection/">
+        <rect class="hit" x="455" y="360" width="115" height="220"/>
+        <text class="roomlabel" x="512" y="462"><tspan x="512">HYLOGRAPHIC</tspan><tspan x="512" dy="16">FOLD</tspan></text>
+      </a>
+      <a href="simulation/">
+        <rect class="hit" x="340" y="360" width="115" height="220"/>
+        <text class="roomlabel" x="397" y="462"><tspan x="397">FORCE</tspan><tspan x="397" dy="16">PLAYGROUND</tspan></text>
+      </a>
+      <a href="layout/">
+        <rect class="hit" x="225" y="360" width="115" height="220"/>
+        <text class="roomlabel" x="282" y="462"><tspan x="282">LAYOUT</tspan><tspan x="282" dy="16">GALLERY</tspan></text>
+      </a>
+      <a href="music/">
+        <rect class="hit" x="110" y="360" width="115" height="220"/>
+        <text class="roomlabel" x="167" y="462"><tspan x="167">ANSCOMBE'S</tspan><tspan x="167" dy="16">QUARTET</tspan></text>
+      </a>
+
+      <!-- east wing -->
+      <a class="e" href="sigil/">
+        <rect class="hit" x="1030" y="360" width="115" height="220"/>
+        <text class="roomlabel" x="1087" y="470">SIGIL</text>
+      </a>
+      <a class="e" href="sigil-hats/">
+        <rect class="hit" x="1145" y="360" width="115" height="220"/>
+        <text class="roomlabel" x="1202" y="462"><tspan x="1202">TYPE</tspan><tspan x="1202" dy="16">CLASSES</tspan></text>
+      </a>
+      <a class="e" href="https://afcondon.github.io/elements-of-purescript-style/">
+        <rect class="hit" x="1260" y="360" width="115" height="220"/>
+        <text class="roomlabel" x="1317" y="462"><tspan x="1317">ELEMENTS</tspan><tspan x="1317" dy="16">OF STYLE &#8599;</tspan></text>
+      </a>
+      <a class="e" href="https://afcondon.github.io/the-prelude">
+        <rect class="hit" x="1375" y="360" width="115" height="220"/>
+        <text class="roomlabel" x="1432" y="462"><tspan x="1432">THE</tspan><tspan x="1432" dy="16">PRELUDE &#8599;</tspan></text>
+      </a>
+
+      <!-- south wing -->
+      <a class="s" href="graph/">
+        <rect class="hit" x="587" y="690" width="106.5" height="200"/>
+        <text class="roomlabel" x="640" y="782"><tspan x="640">THE</tspan><tspan x="640" dy="16">HONEYCOMB</tspan></text>
+      </a>
+      <a class="s" href="graph-decomposition/">
+        <rect class="hit" x="693.5" y="690" width="106.5" height="200"/>
+        <text class="roomlabel" x="746" y="782"><tspan x="746">DECOMPO-</tspan><tspan x="746" dy="16">SITION</tspan></text>
+      </a>
+      <a class="s" href="https://kibitzer.hylograph.net">
+        <rect class="hit" x="800" y="690" width="106.5" height="200"/>
+        <text class="roomlabel" x="853" y="782"><tspan x="853">KIBITZER</tspan><tspan x="853" dy="16">CLUEDO &#8599;</tspan></text>
+      </a>
+      <a class="s" href="baskerville-sudoku/">
+        <rect class="hit" x="906.5" y="690" width="106.5" height="200"/>
+        <text class="roomlabel" x="959" y="782"><tspan x="959">EXPLAINABLE</tspan><tspan x="959" dy="16">SUDOKU</tspan></text>
+      </a>
+
+      <!-- rotunda label -->
+      <text class="annot" x="800" y="548">ROTUNDA</text>
+
+      <!-- ══ The woodcut plates, one over each wing ══ -->
+
+      <a href="hylograph/">
+        <text class="wingname" x="340" y="140" fill="#5b7fa6">DATA VISUALISATION &amp; GRAPHICS</text>
+        <line x1="340" y1="318" x2="340" y2="358" stroke="#b8bfcc" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <g filter="url(#plateshadow)">
+          <rect class="frame" x="261" y="157" width="158" height="158" fill="#ffffff" stroke="#5b7fa6" stroke-width="2"/>
+          <image href="heroes/hylograph.jpg" x="265" y="161" width="150" height="150"/>
+        </g>
+      </a>
+
+      <a href="scriptorium/">
+        <text class="wingname" x="1260" y="140" fill="#b5822f">CODE TYPOGRAPHY AND STYLE</text>
+        <line x1="1260" y1="318" x2="1260" y2="358" stroke="#b8bfcc" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <g filter="url(#plateshadow)">
+          <rect class="frame" x="1181" y="157" width="158" height="158" fill="#ffffff" stroke="#b5822f" stroke-width="2"/>
+          <image href="heroes/scriptorium.jpg" x="1185" y="161" width="150" height="150"/>
+        </g>
+      </a>
+
+      <a href="reasoning/">
+        <text class="wingname" x="1165" y="700" fill="#444444">GRAPHS AND CHAINS OF REASON</text>
+        <line x1="1085" y1="790" x2="1017" y2="790" stroke="#b8bfcc" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <g filter="url(#plateshadow)">
+          <rect class="frame" x="1086" y="711" width="158" height="158" fill="#ffffff" stroke="#444444" stroke-width="2"/>
+          <image href="heroes/reasoning.jpg" x="1090" y="715" width="150" height="150"/>
+        </g>
+      </a>
+
+      <!-- ══ The Holy Tree, grown out of the rotunda ══ -->
+      <image href="tree-hero.jpg" x="620" y="60" width="360" height="360" mask="url(#treefade)"/>
+
+      <!-- ══ Drafting furniture ══ -->
+
+      <!-- north arrow -->
+      <g stroke="#8a93a6" fill="none" stroke-width="1.5">
+        <circle cx="1500" cy="110" r="26"/>
+        <line x1="1500" y1="130" x2="1500" y2="96"/>
+        <path d="M 1493 103 L 1500 90 L 1507 103" fill="#8a93a6" stroke="none"/>
+      </g>
+      <text class="annot" x="1500" y="160">N</text>
+
+      <!-- scale bar -->
+      <g>
+        <rect x="120" y="878" width="45" height="7" fill="#2f3d55"/>
+        <rect x="165" y="878" width="45" height="7" fill="none" stroke="#2f3d55" stroke-width="1.2"/>
+        <rect x="210" y="878" width="45" height="7" fill="#2f3d55"/>
+        <text class="annot" x="120" y="868" text-anchor="start">0</text>
+        <text class="annot" x="255" y="868" text-anchor="end">30 M</text>
+      </g>
+
+      <!-- title block -->
+      <g>
+        <rect x="1250" y="806" width="310" height="116" fill="#ffffff" stroke="#2f3d55" stroke-width="2"/>
+        <line x1="1250" y1="838" x2="1560" y2="838" stroke="#2f3d55" stroke-width="1"/>
+        <line x1="1250" y1="868" x2="1560" y2="868" stroke="#2f3d55" stroke-width="1"/>
+        <line x1="1250" y1="895" x2="1560" y2="895" stroke="#2f3d55" stroke-width="1"/>
+        <text class="blocktext" x="1405" y="827">THE LIBRARY OF HYLOGRAPH</text>
+        <text class="annot" x="1405" y="857">PLAN OF THE MUSEUM</text>
+        <text class="annot" x="1405" y="884">DRAWING N&ordm; 1 &middot; SCALE 1:100 &middot; MMXXVI</text>
+        <a href="https://github.com/afcondon/purescript-hylograph-demos"><text class="annot" x="1330" y="911">SOURCE &#8599;</text></a>
+        <a href="https://hylograph.net"><text class="annot" x="1470" y="911">HYLOGRAPH.NET &#8599;</text></a>
+      </g>
+    </svg>
+
+    <div class="foot-l">
+      <b>Showcases</b>
       <span>&mdash; <a href="https://github.com/afcondon/purescript-hylograph-showcases">Tidal Radio</a>, <a href="https://github.com/afcondon/purescript-hylograph-showcases">Lorenz</a>, <a href="https://github.com/afcondon/purescript-hylograph-showcases">Sankey Editor</a>, <a href="https://github.com/afcondon/purescript-hylograph-showcases">more</a></span>
-    </div>
-
-    <div class="colophon">
-      <a href="https://github.com/afcondon/purescript-hylograph-demos">Source</a> &middot; <a href="https://hylograph.net">Hylograph.net</a>
     </div>
 
   </div>

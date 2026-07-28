@@ -1,11 +1,15 @@
-DEMOS = graph graph-decomposition jtms-make jtms-sudoku layout music selection simulation sigil sigil-hats
+DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats
 
 .PHONY: all clean site $(DEMOS)
 
 all: $(DEMOS)
 
+# Bundle from the workspace root, not from inside the demo directory.
+# Relative `path:` dependencies in extraPackages resolve against the current
+# working directory, so `cd $@ && spago bundle` silently misresolves them —
+# it breaks any demo that depends on a sibling checkout.
 $(DEMOS):
-	cd $@ && spago bundle
+	spago bundle -p hylograph-demo-$@
 
 ISLANDS = hylograph scriptorium reasoning
 

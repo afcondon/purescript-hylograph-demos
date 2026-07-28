@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Visualisation &amp; Graphics — The Library of Hylograph</title>
+  <link rel="stylesheet" href="../archipelago.css">
+  <style>
+    body { --accent: #5b7fa6; }
+    .r-hats   { width: 14vmin; height: 14vmin; top: 50%; left: 20%; }
+    .r-forces { width: 12vmin; height: 12vmin; top: 72%; left: 30%; }
+    .r-layout { width: 13vmin; height: 13vmin; top: 52%; right: 20%; }
+    .r-music  { width: 11vmin; height: 11vmin; top: 74%; right: 29%; }
+    /* portals at the plaza's edge */
+    .p-gateway     { --portal-accent: #999999; width: 9vmin; height: 9vmin; top: 82%; left: 12%; }
+    .p-scriptorium { --portal-accent: #b5822f; width: 9vmin; height: 9vmin; top: 82%; right: 22%; }
+    .p-reasoning   { --portal-accent: #444444; width: 9vmin; height: 9vmin; top: 86%; right: 10%; }
+  </style>
+</head>
+<body>
+
+  <div class="scene">
+
+    <div class="title">
+      <h1><span class="over">The Library of Hylograph</span>Data Visualisation &amp; <span class="g">Graph</span>ics</h1>
+      <p class="sub">Demos <em>of</em> the <a href="https://hylograph.net">Hylograph</a> libraries themselves —
+        the HATS fold, force simulation, layout algorithms, and sonification.</p>
+      <ul class="index">
+        <li><a href="../selection/">The Hylographic Fold</a></li>
+        <li><a href="../simulation/">Force Playground</a></li>
+        <li><a href="../layout/">Layout Gallery</a></li>
+        <li><a href="../music/">Anscombe's String Quartet</a></li>
+      </ul>
+    </div>
+
+    <div class="ground"></div>
+
+    <div class="hero"><img src="../heroes/hylograph.jpg" alt="A tree whose fruits are platonic solids"></div>
+
+    <a class="room r-hats" href="../selection/">
+      <img src="../thumbnails/HATS.jpg" alt="The Hylographic Fold">
+      <div class="label">The Hylographic Fold <span>HATS &amp; interpreters</span></div>
+    </a>
+
+    <a class="room r-forces" href="../simulation/">
+      <img src="../thumbnails/forces.jpg" alt="Force Playground">
+      <div class="label">Force Playground <span>simulation</span></div>
+    </a>
+
+    <a class="room r-layout" href="../layout/">
+      <img src="../thumbnails/layout.jpg" alt="Layout Gallery">
+      <div class="label">Layout Gallery <span>sankey, treemap, more</span></div>
+    </a>
+
+    <a class="room r-music" href="../music/">
+      <img src="../thumbnails/music.jpg" alt="Anscombe's String Quartet">
+      <div class="label">Anscombe's Quartet <span>data sonification</span></div>
+    </a>
+
+    <a class="room portal p-gateway" href="../">
+      <img src="../tree-hero.jpg" alt="Back to the Library">
+      <div class="label">The Library <span>gateway</span></div>
+    </a>
+
+    <a class="room portal p-scriptorium" href="../scriptorium/">
+      <img src="../heroes/scriptorium.jpg" alt="The Scriptorium">
+      <div class="label">Code Typography</div>
+    </a>
+
+    <a class="room portal p-reasoning" href="../reasoning/">
+      <img src="../heroes/reasoning.jpg" alt="The Reasoning Wing">
+      <div class="label">Graphs &amp; Reason</div>
+    </a>
+
+    <div class="foot-r">
+      <a href="https://github.com/afcondon/purescript-hylograph-demos">Source</a> &middot; <a href="https://hylograph.net">Hylograph.net</a>
+    </div>
+
+  </div>
+
+</body>
+</html>
