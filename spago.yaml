@@ -2,6 +2,9 @@ workspace:
   packageSet:
     registry: 77.13.1
   extraPackages:
+    # Newer than package set 77.13.1, which pins 0.5.1. Needed for
+    # `Hylograph.Behavior`; drop this when a set carries >= 0.5.3.
+    hylograph-selection: "0.5.3"
     hylograph-components:
       path: ../purescript-hylograph-components
     baskerville-core:

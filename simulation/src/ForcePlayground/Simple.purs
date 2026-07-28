@@ -66,7 +66,7 @@ import Hylograph.HATS (Tree) as HTree
 import Hylograph.HATS.Friendly as F
 import Hylograph.HATS.InterpreterTick (rerender, clearContainer) as HATS
 import Hylograph.Internal.Behavior.Types (DragConfig(..), simulationDragNested)
-import Hylograph.Internal.Behavior.FFI (registerSimulation_, unregisterSimulation_)
+import Hylograph.Behavior as Behavior
 import Hylograph.Internal.Element.Types (ElementType(..))
 -- NOTE: Hylograph.AST and Hylograph.Expr.Friendly removed — replaced by HATS
 
@@ -207,11 +207,11 @@ transitionDelta = 0.03
 -- | Register the simulation for drag behavior
 -- | Takes the reheat function from the handle
 registerSimulation :: Effect Unit -> Effect Unit
-registerSimulation reheatFn = registerSimulation_ simulationId reheatFn
+registerSimulation reheatFn = Behavior.registerSimulation simulationId reheatFn
 
 -- | Unregister the simulation (call on cleanup)
 unregisterSimulation :: Effect Unit
-unregisterSimulation = unregisterSimulation_ simulationId
+unregisterSimulation = Behavior.unregisterSimulation simulationId
 
 -- =============================================================================
 -- Simulation Creation

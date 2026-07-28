@@ -23,7 +23,7 @@ import Halogen.HTML.Properties as HP
 import Hylograph.HATS (Tree, elem, forEach, withBehaviors, onDrag, onZoom) as HATS
 import Hylograph.HATS.Friendly as F
 import Hylograph.HATS.InterpreterTick (rerender) as HATS
-import Hylograph.Internal.Behavior.FFI (registerSimulation_)
+import Hylograph.Behavior as Behavior
 import Hylograph.Internal.Behavior.Types (ScaleExtent(..), ZoomConfig(..), simulationDragNested)
 import Hylograph.Internal.Element.Types (ElementType(..))
 import Hylograph.Simulation (runSimulation, Engine(..), SimulationHandle, SimulationEvent(..))
@@ -88,7 +88,7 @@ handleAction = case _ of
   Initialize -> do
     liftEffect renderContainer
     result <- liftEffect createSimulation
-    liftEffect $ registerSimulation_ simulationId result.handle.reheat
+    liftEffect $ Behavior.registerSimulation simulationId result.handle.reheat
     H.modify_ _ { handle = Just result.handle }
     emitter <- liftEffect $ toHalogenEmitter result.events
     void $ H.subscribe $ emitter <#> OnTick
