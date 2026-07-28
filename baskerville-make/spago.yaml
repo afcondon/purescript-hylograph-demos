@@ -1,5 +1,5 @@
 package:
-  name: hylograph-demo-jtms-make
+  name: hylograph-demo-baskerville-make
   description: >
     make, deconstructed into "why" and "still?": a Makefile's semantics as
     monotone JTMS rules, staleness as derived belief with provenance, and the
@@ -26,7 +26,7 @@ package:
     - strings: ">=6.0.1 <7.0.0"
     - tuples: ">=7.0.0 <8.0.0"
   test:
-    main: Test.JtmsMake.Main
+    main: Test.BaskervilleMake.Main
     dependencies:
       - exceptions
   bundle:

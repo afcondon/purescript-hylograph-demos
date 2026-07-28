@@ -2,7 +2,7 @@
 -- | browser: parser goldens, the fresh-start world, the touch cascade,
 -- | the braid, explain/axiomsBehind, and one pinned primary
 -- | justification (the Engine docstring's "clients pin their feeds").
-module Test.JtmsMake.Main where
+module Test.BaskervilleMake.Main where
 
 import Prelude
 
@@ -27,7 +27,7 @@ assertTrue label ok =
 
 main :: Effect Unit
 main = do
-  log "jtms-make smoke test"
+  log "baskerville-make smoke test"
   buildChain
   ecosystem
   log "all green"

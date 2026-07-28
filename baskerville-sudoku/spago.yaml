@@ -1,5 +1,5 @@
 package:
-  name: hylograph-demo-jtms-sudoku
+  name: hylograph-demo-baskerville-sudoku
   description: >
     Explainable Sudoku: purescript-baskerville proof DAGs laid out by hylograph-graph's
     Sugiyama and rendered with HATS. The completeness gap made visible — and the

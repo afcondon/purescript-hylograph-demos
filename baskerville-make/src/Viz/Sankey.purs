@@ -46,7 +46,7 @@ type SankeyInput =
   , notify :: NodeEvent -> Effect Unit
   }
 
--- | Swiss-restrained state palette (continuity with jtms-sudoku:
+-- | Swiss-restrained state palette (continuity with baskerville-sudoku:
 -- | amber is the same "gap" amber).
 fillFor :: TargetState -> String
 fillFor = case _ of

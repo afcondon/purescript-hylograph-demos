@@ -1,7 +1,7 @@
 -- | The second projection of the same KB: the belief chain. Nodes are
 -- | facts, edges are premise citations, columns are derivation depth
 -- | (axioms at 0, conclusions rightward — `Baskerville.Explain.depthOf`, the
--- | same layering the explain page and jtms-sudoku use).
+-- | same layering the explain page and baskerville-sudoku use).
 -- |
 -- | One principled filter: `Dep` and `SourceLeaf` axioms are hidden —
 -- | no rule ever cites them as premises (they exist for the flow

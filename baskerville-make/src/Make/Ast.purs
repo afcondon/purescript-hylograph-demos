@@ -2,7 +2,7 @@
 -- | Makefile.Types. What survives is exactly what the parser emits.
 -- | What didn't make the cut: source locations (never populated
 -- | upstream), the runtime-status layer, and the Sankey-specific types
--- | (jtms-make derives its diagram from the KB, not the AST).
+-- | (baskerville-make derives its diagram from the KB, not the AST).
 module Make.Ast where
 
 import Prelude
