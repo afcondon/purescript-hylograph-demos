@@ -27,8 +27,8 @@ import Data.Set (Set)
 import Data.Set as Set
 import Data.Tuple (Tuple(..))
 import DataViz.Layout.Sankey.Types (LinkCSVRow)
-import Jtms.Explain (explain)
-import Jtms.Kernel (knownClaims)
+import Baskerville.Explain (explain)
+import Baskerville.Kernel (knownClaims)
 import Make.Model (BuildModel, Path, depsOf, unPath)
 import Make.Rules (BuildClaim(..), BuildKB, governing)
 

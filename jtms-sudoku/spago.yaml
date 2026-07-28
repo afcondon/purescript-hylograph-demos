@@ -1,7 +1,7 @@
 package:
   name: hylograph-demo-jtms-sudoku
   description: >
-    Explainable Sudoku: purescript-jtms proof DAGs laid out by hylograph-graph's
+    Explainable Sudoku: purescript-baskerville proof DAGs laid out by hylograph-graph's
     Sugiyama and rendered with HATS. The completeness gap made visible — and the
     Régin tier closing it.
   dependencies:
@@ -13,8 +13,8 @@ package:
     - hylograph-graph: ">=0.3.0 <0.4.0"
     - hylograph-selection: ">=0.5.1 <0.6.0"
     - integers: ">=6.0.0 <7.0.0"
-    - jtms-core: "*"
-    - jtms-sudoku: "*"
+    - baskerville-core: "*"
+    - baskerville-sudoku: "*"
     - maybe: ">=6.0.0 <7.0.0"
     - numbers: ">=9.0.1 <10.0.0"
     - ordered-collections: ">=3.2.0 <4.0.0"

@@ -13,8 +13,8 @@ import Prelude
 
 import Data.Array as Array
 import Data.Maybe (Maybe(..))
-import Jtms.Explain (axiomsBehind, explain)
-import Jtms.Kernel (Fact, Why(..))
+import Baskerville.Explain (axiomsBehind, explain)
+import Baskerville.Kernel (Fact, Why(..))
 import Make.Model (Path, unPath)
 import Make.Rules (Ax(..), BuildClaim, BuildKB, BuildRule(..), TargetState(..), governing, stateOf)
 

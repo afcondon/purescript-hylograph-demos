@@ -42,10 +42,10 @@ import Data.Map as Map
 import Data.Maybe (Maybe(..), maybe)
 import Data.Set (Set)
 import Data.Set as Set
-import Jtms.Engine (Engine)
-import Jtms.Engine (saturate) as Engine
-import Jtms.Kernel (KB, assertAxiom, emptyKB, isKnown, knownClaims)
-import Jtms.Rule (RuleM, each, matches, require, rule)
+import Baskerville.Engine (Engine)
+import Baskerville.Engine (saturate) as Engine
+import Baskerville.Kernel (KB, assertAxiom, emptyKB, isKnown, knownClaims)
+import Baskerville.Rule (RuleM, each, matches, require, rule)
 import Make.Model (BuildModel, Path, Snapshot, depsOf, filePaths, unPath)
 
 data BuildClaim

@@ -4,9 +4,7 @@ workspace:
   extraPackages:
     hylograph-components:
       path: ../purescript-hylograph-components
-    jtms-core:
-      path: ../../purescript-jtms/core
-    jtms-sudoku:
-      path: ../../purescript-jtms/sudoku
-    jtms-testkit:
-      path: ../../purescript-jtms/testkit
+    baskerville-core:
+      path: ../../purescript-baskerville
+    baskerville-sudoku:
+      path: ../../purescript-baskerville/examples/sudoku

@@ -1,6 +1,6 @@
 -- | The second projection of the same KB: the belief chain. Nodes are
 -- | facts, edges are premise citations, columns are derivation depth
--- | (axioms at 0, conclusions rightward — `Jtms.Explain.depthOf`, the
+-- | (axioms at 0, conclusions rightward — `Baskerville.Explain.depthOf`, the
 -- | same layering the explain page and jtms-sudoku use).
 -- |
 -- | One principled filter: `Dep` and `SourceLeaf` axioms are hidden —
@@ -24,8 +24,8 @@ import Data.Set (Set)
 import Data.Set as Set
 import Data.String as String
 import Data.Tuple (Tuple(..))
-import Jtms.Explain (depthOf, explain, explainFact)
-import Jtms.Kernel (Fact, FactId(..), Why(..), facts)
+import Baskerville.Explain (depthOf, explain, explainFact)
+import Baskerville.Kernel (Fact, FactId(..), Why(..), facts)
 import Hylograph.HATS (HighlightClass(..), Tree, elem, forEach, onClick, onCoordinatedHighlight, staticStr, thunkedStr, withBehaviors) as HATS
 import Hylograph.HATS.Friendly as F
 import Hylograph.Internal.Element.Types as E
