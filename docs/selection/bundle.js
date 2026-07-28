@@ -1553,6 +1553,632 @@
     return fromStringImpl(str, isFiniteImpl, Just.create, Nothing.value);
   };
 
+  // output/Hylograph.Element.Types/index.js
+  var SVGContext = /* @__PURE__ */ (function() {
+    function SVGContext2() {
+    }
+    ;
+    SVGContext2.value = new SVGContext2();
+    return SVGContext2;
+  })();
+  var HTMLContext = /* @__PURE__ */ (function() {
+    function HTMLContext2() {
+    }
+    ;
+    HTMLContext2.value = new HTMLContext2();
+    return HTMLContext2;
+  })();
+  var Circle = /* @__PURE__ */ (function() {
+    function Circle3() {
+    }
+    ;
+    Circle3.value = new Circle3();
+    return Circle3;
+  })();
+  var Rect = /* @__PURE__ */ (function() {
+    function Rect2() {
+    }
+    ;
+    Rect2.value = new Rect2();
+    return Rect2;
+  })();
+  var Path = /* @__PURE__ */ (function() {
+    function Path2() {
+    }
+    ;
+    Path2.value = new Path2();
+    return Path2;
+  })();
+  var Line = /* @__PURE__ */ (function() {
+    function Line2() {
+    }
+    ;
+    Line2.value = new Line2();
+    return Line2;
+  })();
+  var Polygon = /* @__PURE__ */ (function() {
+    function Polygon2() {
+    }
+    ;
+    Polygon2.value = new Polygon2();
+    return Polygon2;
+  })();
+  var Text = /* @__PURE__ */ (function() {
+    function Text3() {
+    }
+    ;
+    Text3.value = new Text3();
+    return Text3;
+  })();
+  var Group = /* @__PURE__ */ (function() {
+    function Group2() {
+    }
+    ;
+    Group2.value = new Group2();
+    return Group2;
+  })();
+  var SVG = /* @__PURE__ */ (function() {
+    function SVG2() {
+    }
+    ;
+    SVG2.value = new SVG2();
+    return SVG2;
+  })();
+  var Defs = /* @__PURE__ */ (function() {
+    function Defs2() {
+    }
+    ;
+    Defs2.value = new Defs2();
+    return Defs2;
+  })();
+  var LinearGradient = /* @__PURE__ */ (function() {
+    function LinearGradient2() {
+    }
+    ;
+    LinearGradient2.value = new LinearGradient2();
+    return LinearGradient2;
+  })();
+  var RadialGradient = /* @__PURE__ */ (function() {
+    function RadialGradient2() {
+    }
+    ;
+    RadialGradient2.value = new RadialGradient2();
+    return RadialGradient2;
+  })();
+  var Stop = /* @__PURE__ */ (function() {
+    function Stop2() {
+    }
+    ;
+    Stop2.value = new Stop2();
+    return Stop2;
+  })();
+  var PatternFill = /* @__PURE__ */ (function() {
+    function PatternFill2() {
+    }
+    ;
+    PatternFill2.value = new PatternFill2();
+    return PatternFill2;
+  })();
+  var Title = /* @__PURE__ */ (function() {
+    function Title2() {
+    }
+    ;
+    Title2.value = new Title2();
+    return Title2;
+  })();
+  var Div = /* @__PURE__ */ (function() {
+    function Div2() {
+    }
+    ;
+    Div2.value = new Div2();
+    return Div2;
+  })();
+  var Span = /* @__PURE__ */ (function() {
+    function Span2() {
+    }
+    ;
+    Span2.value = new Span2();
+    return Span2;
+  })();
+  var Table = /* @__PURE__ */ (function() {
+    function Table2() {
+    }
+    ;
+    Table2.value = new Table2();
+    return Table2;
+  })();
+  var Tr = /* @__PURE__ */ (function() {
+    function Tr2() {
+    }
+    ;
+    Tr2.value = new Tr2();
+    return Tr2;
+  })();
+  var Td = /* @__PURE__ */ (function() {
+    function Td2() {
+    }
+    ;
+    Td2.value = new Td2();
+    return Td2;
+  })();
+  var Th = /* @__PURE__ */ (function() {
+    function Th2() {
+    }
+    ;
+    Th2.value = new Th2();
+    return Th2;
+  })();
+  var Tbody = /* @__PURE__ */ (function() {
+    function Tbody2() {
+    }
+    ;
+    Tbody2.value = new Tbody2();
+    return Tbody2;
+  })();
+  var Thead = /* @__PURE__ */ (function() {
+    function Thead2() {
+    }
+    ;
+    Thead2.value = new Thead2();
+    return Thead2;
+  })();
+  var Code = /* @__PURE__ */ (function() {
+    function Code2() {
+    }
+    ;
+    Code2.value = new Code2();
+    return Code2;
+  })();
+  var Var = /* @__PURE__ */ (function() {
+    function Var2() {
+    }
+    ;
+    Var2.value = new Var2();
+    return Var2;
+  })();
+  var Dfn = /* @__PURE__ */ (function() {
+    function Dfn2() {
+    }
+    ;
+    Dfn2.value = new Dfn2();
+    return Dfn2;
+  })();
+  var Dl = /* @__PURE__ */ (function() {
+    function Dl2() {
+    }
+    ;
+    Dl2.value = new Dl2();
+    return Dl2;
+  })();
+  var Dt = /* @__PURE__ */ (function() {
+    function Dt2() {
+    }
+    ;
+    Dt2.value = new Dt2();
+    return Dt2;
+  })();
+  var Dd = /* @__PURE__ */ (function() {
+    function Dd2() {
+    }
+    ;
+    Dd2.value = new Dd2();
+    return Dd2;
+  })();
+  var Ol = /* @__PURE__ */ (function() {
+    function Ol2() {
+    }
+    ;
+    Ol2.value = new Ol2();
+    return Ol2;
+  })();
+  var Ul = /* @__PURE__ */ (function() {
+    function Ul2() {
+    }
+    ;
+    Ul2.value = new Ul2();
+    return Ul2;
+  })();
+  var Li = /* @__PURE__ */ (function() {
+    function Li2() {
+    }
+    ;
+    Li2.value = new Li2();
+    return Li2;
+  })();
+  var Small = /* @__PURE__ */ (function() {
+    function Small2() {
+    }
+    ;
+    Small2.value = new Small2();
+    return Small2;
+  })();
+  var Em = /* @__PURE__ */ (function() {
+    function Em2() {
+    }
+    ;
+    Em2.value = new Em2();
+    return Em2;
+  })();
+  var Strong = /* @__PURE__ */ (function() {
+    function Strong2() {
+    }
+    ;
+    Strong2.value = new Strong2();
+    return Strong2;
+  })();
+  var Anchor = /* @__PURE__ */ (function() {
+    function Anchor2() {
+    }
+    ;
+    Anchor2.value = new Anchor2();
+    return Anchor2;
+  })();
+  var P = /* @__PURE__ */ (function() {
+    function P2() {
+    }
+    ;
+    P2.value = new P2();
+    return P2;
+  })();
+  var Pre = /* @__PURE__ */ (function() {
+    function Pre2() {
+    }
+    ;
+    Pre2.value = new Pre2();
+    return Pre2;
+  })();
+  var Section = /* @__PURE__ */ (function() {
+    function Section2() {
+    }
+    ;
+    Section2.value = new Section2();
+    return Section2;
+  })();
+  var Mark = /* @__PURE__ */ (function() {
+    function Mark2() {
+    }
+    ;
+    Mark2.value = new Mark2();
+    return Mark2;
+  })();
+  var Abbr = /* @__PURE__ */ (function() {
+    function Abbr2() {
+    }
+    ;
+    Abbr2.value = new Abbr2();
+    return Abbr2;
+  })();
+  var eqElementType = {
+    eq: function(x3) {
+      return function(y3) {
+        if (x3 instanceof Circle && y3 instanceof Circle) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Rect && y3 instanceof Rect) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Path && y3 instanceof Path) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Line && y3 instanceof Line) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Polygon && y3 instanceof Polygon) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Text && y3 instanceof Text) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Group && y3 instanceof Group) {
+          return true;
+        }
+        ;
+        if (x3 instanceof SVG && y3 instanceof SVG) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Defs && y3 instanceof Defs) {
+          return true;
+        }
+        ;
+        if (x3 instanceof LinearGradient && y3 instanceof LinearGradient) {
+          return true;
+        }
+        ;
+        if (x3 instanceof RadialGradient && y3 instanceof RadialGradient) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Stop && y3 instanceof Stop) {
+          return true;
+        }
+        ;
+        if (x3 instanceof PatternFill && y3 instanceof PatternFill) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Title && y3 instanceof Title) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Div && y3 instanceof Div) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Span && y3 instanceof Span) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Table && y3 instanceof Table) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Tr && y3 instanceof Tr) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Td && y3 instanceof Td) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Th && y3 instanceof Th) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Tbody && y3 instanceof Tbody) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Thead && y3 instanceof Thead) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Code && y3 instanceof Code) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Var && y3 instanceof Var) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Dfn && y3 instanceof Dfn) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Dl && y3 instanceof Dl) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Dt && y3 instanceof Dt) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Dd && y3 instanceof Dd) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Ol && y3 instanceof Ol) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Ul && y3 instanceof Ul) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Li && y3 instanceof Li) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Small && y3 instanceof Small) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Em && y3 instanceof Em) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Strong && y3 instanceof Strong) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Anchor && y3 instanceof Anchor) {
+          return true;
+        }
+        ;
+        if (x3 instanceof P && y3 instanceof P) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Pre && y3 instanceof Pre) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Section && y3 instanceof Section) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Mark && y3 instanceof Mark) {
+          return true;
+        }
+        ;
+        if (x3 instanceof Abbr && y3 instanceof Abbr) {
+          return true;
+        }
+        ;
+        return false;
+      };
+    }
+  };
+  var elementContext = function(v) {
+    if (v instanceof Circle) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Rect) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Path) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Line) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Polygon) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Text) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Group) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof SVG) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Defs) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof LinearGradient) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof RadialGradient) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Stop) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof PatternFill) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Title) {
+      return SVGContext.value;
+    }
+    ;
+    if (v instanceof Div) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Span) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Table) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Tr) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Td) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Th) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Tbody) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Thead) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Code) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Var) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Dfn) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Dl) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Dt) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Dd) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Ol) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Ul) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Li) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Small) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Em) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Strong) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Anchor) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof P) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Pre) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Section) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Mark) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Abbr) {
+      return HTMLContext.value;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Element.Types (line 89, column 1 - line 89, column 47): " + [v.constructor.name]);
+  };
+
   // output/Data.FoldableWithIndex/index.js
   var foldr8 = /* @__PURE__ */ foldr(foldableArray);
   var mapWithIndex3 = /* @__PURE__ */ mapWithIndex(functorWithIndexArray);
@@ -2510,7 +3136,7 @@
     return coerce3(difference(dictOrd));
   };
 
-  // output/Hylograph.Internal.Behavior.Types/index.js
+  // output/Hylograph.Behavior.Types/index.js
   var OnHover = /* @__PURE__ */ (function() {
     function OnHover2() {
     }
@@ -2601,617 +3227,6 @@
     };
     return SimulationDragNested2;
   })();
-
-  // output/Hylograph.Internal.Element.Types/index.js
-  var SVGContext = /* @__PURE__ */ (function() {
-    function SVGContext2() {
-    }
-    ;
-    SVGContext2.value = new SVGContext2();
-    return SVGContext2;
-  })();
-  var HTMLContext = /* @__PURE__ */ (function() {
-    function HTMLContext2() {
-    }
-    ;
-    HTMLContext2.value = new HTMLContext2();
-    return HTMLContext2;
-  })();
-  var Circle = /* @__PURE__ */ (function() {
-    function Circle3() {
-    }
-    ;
-    Circle3.value = new Circle3();
-    return Circle3;
-  })();
-  var Rect = /* @__PURE__ */ (function() {
-    function Rect2() {
-    }
-    ;
-    Rect2.value = new Rect2();
-    return Rect2;
-  })();
-  var Path = /* @__PURE__ */ (function() {
-    function Path2() {
-    }
-    ;
-    Path2.value = new Path2();
-    return Path2;
-  })();
-  var Line = /* @__PURE__ */ (function() {
-    function Line2() {
-    }
-    ;
-    Line2.value = new Line2();
-    return Line2;
-  })();
-  var Polygon = /* @__PURE__ */ (function() {
-    function Polygon2() {
-    }
-    ;
-    Polygon2.value = new Polygon2();
-    return Polygon2;
-  })();
-  var Text = /* @__PURE__ */ (function() {
-    function Text3() {
-    }
-    ;
-    Text3.value = new Text3();
-    return Text3;
-  })();
-  var Group = /* @__PURE__ */ (function() {
-    function Group2() {
-    }
-    ;
-    Group2.value = new Group2();
-    return Group2;
-  })();
-  var SVG = /* @__PURE__ */ (function() {
-    function SVG2() {
-    }
-    ;
-    SVG2.value = new SVG2();
-    return SVG2;
-  })();
-  var Defs = /* @__PURE__ */ (function() {
-    function Defs2() {
-    }
-    ;
-    Defs2.value = new Defs2();
-    return Defs2;
-  })();
-  var LinearGradient = /* @__PURE__ */ (function() {
-    function LinearGradient2() {
-    }
-    ;
-    LinearGradient2.value = new LinearGradient2();
-    return LinearGradient2;
-  })();
-  var Stop = /* @__PURE__ */ (function() {
-    function Stop2() {
-    }
-    ;
-    Stop2.value = new Stop2();
-    return Stop2;
-  })();
-  var PatternFill = /* @__PURE__ */ (function() {
-    function PatternFill2() {
-    }
-    ;
-    PatternFill2.value = new PatternFill2();
-    return PatternFill2;
-  })();
-  var Title = /* @__PURE__ */ (function() {
-    function Title2() {
-    }
-    ;
-    Title2.value = new Title2();
-    return Title2;
-  })();
-  var Div = /* @__PURE__ */ (function() {
-    function Div2() {
-    }
-    ;
-    Div2.value = new Div2();
-    return Div2;
-  })();
-  var Span = /* @__PURE__ */ (function() {
-    function Span2() {
-    }
-    ;
-    Span2.value = new Span2();
-    return Span2;
-  })();
-  var Table = /* @__PURE__ */ (function() {
-    function Table2() {
-    }
-    ;
-    Table2.value = new Table2();
-    return Table2;
-  })();
-  var Tr = /* @__PURE__ */ (function() {
-    function Tr2() {
-    }
-    ;
-    Tr2.value = new Tr2();
-    return Tr2;
-  })();
-  var Td = /* @__PURE__ */ (function() {
-    function Td2() {
-    }
-    ;
-    Td2.value = new Td2();
-    return Td2;
-  })();
-  var Th = /* @__PURE__ */ (function() {
-    function Th2() {
-    }
-    ;
-    Th2.value = new Th2();
-    return Th2;
-  })();
-  var Tbody = /* @__PURE__ */ (function() {
-    function Tbody2() {
-    }
-    ;
-    Tbody2.value = new Tbody2();
-    return Tbody2;
-  })();
-  var Thead = /* @__PURE__ */ (function() {
-    function Thead2() {
-    }
-    ;
-    Thead2.value = new Thead2();
-    return Thead2;
-  })();
-  var Code = /* @__PURE__ */ (function() {
-    function Code2() {
-    }
-    ;
-    Code2.value = new Code2();
-    return Code2;
-  })();
-  var Var = /* @__PURE__ */ (function() {
-    function Var2() {
-    }
-    ;
-    Var2.value = new Var2();
-    return Var2;
-  })();
-  var Dfn = /* @__PURE__ */ (function() {
-    function Dfn2() {
-    }
-    ;
-    Dfn2.value = new Dfn2();
-    return Dfn2;
-  })();
-  var Dl = /* @__PURE__ */ (function() {
-    function Dl2() {
-    }
-    ;
-    Dl2.value = new Dl2();
-    return Dl2;
-  })();
-  var Dt = /* @__PURE__ */ (function() {
-    function Dt2() {
-    }
-    ;
-    Dt2.value = new Dt2();
-    return Dt2;
-  })();
-  var Dd = /* @__PURE__ */ (function() {
-    function Dd2() {
-    }
-    ;
-    Dd2.value = new Dd2();
-    return Dd2;
-  })();
-  var Ol = /* @__PURE__ */ (function() {
-    function Ol2() {
-    }
-    ;
-    Ol2.value = new Ol2();
-    return Ol2;
-  })();
-  var Ul = /* @__PURE__ */ (function() {
-    function Ul2() {
-    }
-    ;
-    Ul2.value = new Ul2();
-    return Ul2;
-  })();
-  var Li = /* @__PURE__ */ (function() {
-    function Li2() {
-    }
-    ;
-    Li2.value = new Li2();
-    return Li2;
-  })();
-  var Small = /* @__PURE__ */ (function() {
-    function Small2() {
-    }
-    ;
-    Small2.value = new Small2();
-    return Small2;
-  })();
-  var Em = /* @__PURE__ */ (function() {
-    function Em2() {
-    }
-    ;
-    Em2.value = new Em2();
-    return Em2;
-  })();
-  var Strong = /* @__PURE__ */ (function() {
-    function Strong2() {
-    }
-    ;
-    Strong2.value = new Strong2();
-    return Strong2;
-  })();
-  var Anchor = /* @__PURE__ */ (function() {
-    function Anchor2() {
-    }
-    ;
-    Anchor2.value = new Anchor2();
-    return Anchor2;
-  })();
-  var P = /* @__PURE__ */ (function() {
-    function P2() {
-    }
-    ;
-    P2.value = new P2();
-    return P2;
-  })();
-  var Pre = /* @__PURE__ */ (function() {
-    function Pre2() {
-    }
-    ;
-    Pre2.value = new Pre2();
-    return Pre2;
-  })();
-  var Section = /* @__PURE__ */ (function() {
-    function Section2() {
-    }
-    ;
-    Section2.value = new Section2();
-    return Section2;
-  })();
-  var Mark = /* @__PURE__ */ (function() {
-    function Mark2() {
-    }
-    ;
-    Mark2.value = new Mark2();
-    return Mark2;
-  })();
-  var Abbr = /* @__PURE__ */ (function() {
-    function Abbr2() {
-    }
-    ;
-    Abbr2.value = new Abbr2();
-    return Abbr2;
-  })();
-  var eqElementType = {
-    eq: function(x3) {
-      return function(y3) {
-        if (x3 instanceof Circle && y3 instanceof Circle) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Rect && y3 instanceof Rect) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Path && y3 instanceof Path) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Line && y3 instanceof Line) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Polygon && y3 instanceof Polygon) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Text && y3 instanceof Text) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Group && y3 instanceof Group) {
-          return true;
-        }
-        ;
-        if (x3 instanceof SVG && y3 instanceof SVG) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Defs && y3 instanceof Defs) {
-          return true;
-        }
-        ;
-        if (x3 instanceof LinearGradient && y3 instanceof LinearGradient) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Stop && y3 instanceof Stop) {
-          return true;
-        }
-        ;
-        if (x3 instanceof PatternFill && y3 instanceof PatternFill) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Title && y3 instanceof Title) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Div && y3 instanceof Div) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Span && y3 instanceof Span) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Table && y3 instanceof Table) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Tr && y3 instanceof Tr) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Td && y3 instanceof Td) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Th && y3 instanceof Th) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Tbody && y3 instanceof Tbody) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Thead && y3 instanceof Thead) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Code && y3 instanceof Code) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Var && y3 instanceof Var) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Dfn && y3 instanceof Dfn) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Dl && y3 instanceof Dl) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Dt && y3 instanceof Dt) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Dd && y3 instanceof Dd) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Ol && y3 instanceof Ol) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Ul && y3 instanceof Ul) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Li && y3 instanceof Li) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Small && y3 instanceof Small) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Em && y3 instanceof Em) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Strong && y3 instanceof Strong) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Anchor && y3 instanceof Anchor) {
-          return true;
-        }
-        ;
-        if (x3 instanceof P && y3 instanceof P) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Pre && y3 instanceof Pre) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Section && y3 instanceof Section) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Mark && y3 instanceof Mark) {
-          return true;
-        }
-        ;
-        if (x3 instanceof Abbr && y3 instanceof Abbr) {
-          return true;
-        }
-        ;
-        return false;
-      };
-    }
-  };
-  var elementContext = function(v) {
-    if (v instanceof Circle) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Rect) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Path) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Line) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Polygon) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Text) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Group) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof SVG) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Defs) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof LinearGradient) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Stop) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof PatternFill) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Title) {
-      return SVGContext.value;
-    }
-    ;
-    if (v instanceof Div) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Span) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Table) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Tr) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Td) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Th) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Tbody) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Thead) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Code) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Var) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Dfn) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Dl) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Dt) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Dd) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Ol) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Ul) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Li) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Small) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Em) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Strong) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Anchor) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof P) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Pre) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Section) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Mark) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v instanceof Abbr) {
-      return HTMLContext.value;
-    }
-    ;
-    throw new Error("Failed pattern match at Hylograph.Internal.Element.Types (line 83, column 1 - line 83, column 47): " + [v.constructor.name]);
-  };
 
   // output/Hylograph.HATS/index.js
   var $runtime_lazy3 = function(name15, moduleName, init2) {
@@ -3470,7 +3485,7 @@
             if ($47) {
               var $48 = $$null(t.value0.behaviors);
               if ($48) {
-                return $lazy_flatten(307)(t.value0.children);
+                return $lazy_flatten(310)(t.value0.children);
               }
               ;
               return v2(true);
@@ -3485,7 +3500,7 @@
         return v2(true);
       });
     });
-    var flatten = $lazy_flatten(300);
+    var flatten = $lazy_flatten(303);
     var v = flatten(trees);
     if (v.length === 0) {
       return Empty.value;
@@ -3555,7 +3570,7 @@
         return Empty.value;
       }
       ;
-      throw new Error("Failed pattern match at Hylograph.HATS (line 497, column 20 - line 502, column 17): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Hylograph.HATS (line 500, column 20 - line 505, column 17): " + [v.constructor.name]);
     };
   };
   var forEach = function(name15) {
@@ -4802,7 +4817,7 @@
       return show9(length(v.value0)) + " items with context (depth, index)";
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.Interpreter.English (line 116, column 19 - line 119, column 79): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.Interpreter.English (line 117, column 19 - line 120, column 79): " + [v.constructor.name]);
   };
   var showElemType = function(v) {
     if (v instanceof SVG) {
@@ -4875,6 +4890,10 @@
     ;
     if (v instanceof LinearGradient) {
       return "linear gradient";
+    }
+    ;
+    if (v instanceof RadialGradient) {
+      return "radial gradient";
     }
     ;
     if (v instanceof Stop) {
@@ -4972,7 +4991,7 @@
       return "nested structure";
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.Interpreter.English (line 123, column 16 - line 125, column 31): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.Interpreter.English (line 124, column 16 - line 126, column 31): " + [v.constructor.name]);
   };
   var indent = function(v) {
     if (v === 0) {
@@ -5107,7 +5126,7 @@
       return "Context";
     }
     ;
-    throw new Error("Failed pattern match at Examples.MetaHATS (line 616, column 19 - line 619, column 29): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Examples.MetaHATS (line 617, column 19 - line 620, column 29): " + [v.constructor.name]);
   };
   var showElementType = function(v) {
     if (v instanceof Circle) {
@@ -5148,6 +5167,10 @@
     ;
     if (v instanceof LinearGradient) {
       return "Gradient";
+    }
+    ;
+    if (v instanceof RadialGradient) {
+      return "RadialGradient";
     }
     ;
     if (v instanceof Stop) {
@@ -5266,7 +5289,7 @@
       return "Abbr";
     }
     ;
-    throw new Error("Failed pattern match at Examples.MetaHATS (line 574, column 19 - line 613, column 17): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Examples.MetaHATS (line 574, column 19 - line 614, column 17): " + [v.constructor.name]);
   };
   var showAssembly2 = function(v) {
     if (v instanceof Siblings) {
@@ -5277,7 +5300,7 @@
       return "Nested";
     }
     ;
-    throw new Error("Failed pattern match at Examples.MetaHATS (line 629, column 16 - line 631, column 21): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Examples.MetaHATS (line 630, column 16 - line 632, column 21): " + [v.constructor.name]);
   };
   var renderFoldNode = function(cfg2) {
     return function(x3) {
@@ -5530,7 +5553,7 @@
             return;
           }
           ;
-          throw new Error("Failed pattern match at Examples.MetaHATS (line 639, column 25 - line 644, column 42): " + [v2.constructor.name]);
+          throw new Error("Failed pattern match at Examples.MetaHATS (line 640, column 25 - line 645, column 42): " + [v2.constructor.name]);
         }
         ;
         while (!$tco_done) {
@@ -5549,7 +5572,7 @@
       return findAttr("class")(attrs);
     }
     ;
-    throw new Error("Failed pattern match at Examples.MetaHATS (line 646, column 5 - line 648, column 40): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Examples.MetaHATS (line 647, column 5 - line 649, column 40): " + [v.constructor.name]);
   };
   var enumerationCount = function(v) {
     if (v instanceof FromArray) {
@@ -5564,7 +5587,7 @@
       return new Just(length(v.value0));
     }
     ;
-    throw new Error("Failed pattern match at Examples.MetaHATS (line 623, column 20 - line 626, column 39): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Examples.MetaHATS (line 624, column 20 - line 627, column 39): " + [v.constructor.name]);
   };
   var defaultMetaConfig = {
     nodeWidth: 120,
@@ -5592,7 +5615,7 @@
           };
         }
         ;
-        throw new Error("Failed pattern match at Examples.MetaHATS (line 656, column 3 - line 656, column 60): " + [v.constructor.name, v1.constructor.name]);
+        throw new Error("Failed pattern match at Examples.MetaHATS (line 657, column 3 - line 657, column 60): " + [v.constructor.name, v1.constructor.name]);
       };
     };
     return foldl2(go2)({
@@ -10274,7 +10297,203 @@
     activeBrushes.get(group3).push(handle);
   };
 
-  // output/Hylograph.Internal.Transition.Types/index.js
+  // output/Hylograph.Transition.Tick/index.js
+  var linear = function(t) {
+    return t;
+  };
+  var elasticC5 = /* @__PURE__ */ (function() {
+    return 2 * pi / 4.5;
+  })();
+  var elasticC4 = /* @__PURE__ */ (function() {
+    return 2 * pi / 3;
+  })();
+  var easeOutSin = function(t) {
+    return sin(t * pi / 2);
+  };
+  var easeOutQuad = function(t) {
+    return 1 - (1 - t) * (1 - t);
+  };
+  var easeOutExp = function(t) {
+    var $21 = t === 1;
+    if ($21) {
+      return 1;
+    }
+    ;
+    return 1 - pow(2)(-10 * t);
+  };
+  var easeOutElastic = function(t) {
+    var $22 = t === 0;
+    if ($22) {
+      return 0;
+    }
+    ;
+    var $23 = t === 1;
+    if ($23) {
+      return 1;
+    }
+    ;
+    return pow(2)(-10 * t) * sin((t * 10 - 0.75) * elasticC4) + 1;
+  };
+  var easeOutCubic = function(t) {
+    return 1 - (1 - t) * (1 - t) * (1 - t);
+  };
+  var easeOutCircle = function(t) {
+    return sqrt(1 - (t - 1) * (t - 1));
+  };
+  var easeInSin = function(t) {
+    return 1 - cos(t * pi / 2);
+  };
+  var easeInQuad = function(t) {
+    return t * t;
+  };
+  var easeInOutSin = function(t) {
+    return -(cos(pi * t) - 1) / 2;
+  };
+  var easeInOutQuad = function(t) {
+    var $24 = t < 0.5;
+    if ($24) {
+      return 2 * t * t;
+    }
+    ;
+    return 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
+  };
+  var easeInOutExp = function(t) {
+    var $25 = t === 0;
+    if ($25) {
+      return 0;
+    }
+    ;
+    var $26 = t === 1;
+    if ($26) {
+      return 1;
+    }
+    ;
+    var $27 = t < 0.5;
+    if ($27) {
+      return pow(2)(20 * t - 10) / 2;
+    }
+    ;
+    return (2 - pow(2)(-20 * t + 10)) / 2;
+  };
+  var easeInOutElastic = function(t) {
+    var $28 = t === 0;
+    if ($28) {
+      return 0;
+    }
+    ;
+    var $29 = t === 1;
+    if ($29) {
+      return 1;
+    }
+    ;
+    var $30 = t < 0.5;
+    if ($30) {
+      return -(pow(2)(20 * t - 10) * sin((20 * t - 11.125) * elasticC5)) / 2;
+    }
+    ;
+    return pow(2)(-20 * t + 10) * sin((20 * t - 11.125) * elasticC5) / 2 + 1;
+  };
+  var easeInOutCubic = function(t) {
+    var $31 = t < 0.5;
+    if ($31) {
+      return 4 * t * t * t;
+    }
+    ;
+    return 1 - (-2 * t + 2) * (-2 * t + 2) * (-2 * t + 2) / 2;
+  };
+  var easeInOutCircle = function(t) {
+    var $32 = t < 0.5;
+    if ($32) {
+      return (1 - sqrt(1 - 2 * t * (2 * t))) / 2;
+    }
+    ;
+    return (sqrt(1 - (-2 * t + 2) * (-2 * t + 2)) + 1) / 2;
+  };
+  var easeInExp = function(t) {
+    var $33 = t === 0;
+    if ($33) {
+      return 0;
+    }
+    ;
+    return pow(2)(10 * (t - 1));
+  };
+  var easeInElastic = function(t) {
+    var $34 = t === 0;
+    if ($34) {
+      return 0;
+    }
+    ;
+    var $35 = t === 1;
+    if ($35) {
+      return 1;
+    }
+    ;
+    return -pow(2)(10 * t - 10) * sin((t * 10 - 10.75) * elasticC4);
+  };
+  var easeInCubic = function(t) {
+    return t * t * t;
+  };
+  var easeInCircle = function(t) {
+    return 1 - sqrt(1 - t * t);
+  };
+  var bounceN1 = 7.5625;
+  var bounceD1 = 2.75;
+  var easeOutBounce = function(t) {
+    var $36 = t < 1 / bounceD1;
+    if ($36) {
+      return bounceN1 * t * t;
+    }
+    ;
+    var $37 = t < 2 / bounceD1;
+    if ($37) {
+      var t$prime = t - 1.5 / bounceD1;
+      return bounceN1 * t$prime * t$prime + 0.75;
+    }
+    ;
+    var $38 = t < 2.5 / bounceD1;
+    if ($38) {
+      var t$prime = t - 2.25 / bounceD1;
+      return bounceN1 * t$prime * t$prime + 0.9375;
+    }
+    ;
+    var t$prime = t - 2.625 / bounceD1;
+    return bounceN1 * t$prime * t$prime + 0.984375;
+  };
+  var easeInBounce = function(t) {
+    return 1 - easeOutBounce(1 - t);
+  };
+  var easeInOutBounce = function(t) {
+    var $39 = t < 0.5;
+    if ($39) {
+      return (1 - easeOutBounce(1 - 2 * t)) / 2;
+    }
+    ;
+    return (1 + easeOutBounce(2 * t - 1)) / 2;
+  };
+  var backC1 = 1.70158;
+  var backC2 = /* @__PURE__ */ (function() {
+    return backC1 * 1.525;
+  })();
+  var easeInOutBack = function(t) {
+    var $40 = t < 0.5;
+    if ($40) {
+      return 2 * t * (2 * t) * ((backC2 + 1) * 2 * t - backC2) / 2;
+    }
+    ;
+    return ((2 * t - 2) * (2 * t - 2) * ((backC2 + 1) * (t * 2 - 2) + backC2) + 2) / 2;
+  };
+  var backC3 = /* @__PURE__ */ (function() {
+    return backC1 + 1;
+  })();
+  var easeInBack = function(t) {
+    return backC3 * t * t * t - backC1 * t * t;
+  };
+  var easeOutBack = function(t) {
+    var t$prime = t - 1;
+    return 1 + backC3 * t$prime * t$prime * t$prime + backC1 * t$prime * t$prime;
+  };
+
+  // output/Hylograph.Transition.Types/index.js
   var Linear = /* @__PURE__ */ (function() {
     function Linear2() {
     }
@@ -10506,202 +10725,6 @@
     BounceInOut2.value = new BounceInOut2();
     return BounceInOut2;
   })();
-
-  // output/Hylograph.Transition.Tick/index.js
-  var linear = function(t) {
-    return t;
-  };
-  var elasticC5 = /* @__PURE__ */ (function() {
-    return 2 * pi / 4.5;
-  })();
-  var elasticC4 = /* @__PURE__ */ (function() {
-    return 2 * pi / 3;
-  })();
-  var easeOutSin = function(t) {
-    return sin(t * pi / 2);
-  };
-  var easeOutQuad = function(t) {
-    return 1 - (1 - t) * (1 - t);
-  };
-  var easeOutExp = function(t) {
-    var $21 = t === 1;
-    if ($21) {
-      return 1;
-    }
-    ;
-    return 1 - pow(2)(-10 * t);
-  };
-  var easeOutElastic = function(t) {
-    var $22 = t === 0;
-    if ($22) {
-      return 0;
-    }
-    ;
-    var $23 = t === 1;
-    if ($23) {
-      return 1;
-    }
-    ;
-    return pow(2)(-10 * t) * sin((t * 10 - 0.75) * elasticC4) + 1;
-  };
-  var easeOutCubic = function(t) {
-    return 1 - (1 - t) * (1 - t) * (1 - t);
-  };
-  var easeOutCircle = function(t) {
-    return sqrt(1 - (t - 1) * (t - 1));
-  };
-  var easeInSin = function(t) {
-    return 1 - cos(t * pi / 2);
-  };
-  var easeInQuad = function(t) {
-    return t * t;
-  };
-  var easeInOutSin = function(t) {
-    return -(cos(pi * t) - 1) / 2;
-  };
-  var easeInOutQuad = function(t) {
-    var $24 = t < 0.5;
-    if ($24) {
-      return 2 * t * t;
-    }
-    ;
-    return 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
-  };
-  var easeInOutExp = function(t) {
-    var $25 = t === 0;
-    if ($25) {
-      return 0;
-    }
-    ;
-    var $26 = t === 1;
-    if ($26) {
-      return 1;
-    }
-    ;
-    var $27 = t < 0.5;
-    if ($27) {
-      return pow(2)(20 * t - 10) / 2;
-    }
-    ;
-    return (2 - pow(2)(-20 * t + 10)) / 2;
-  };
-  var easeInOutElastic = function(t) {
-    var $28 = t === 0;
-    if ($28) {
-      return 0;
-    }
-    ;
-    var $29 = t === 1;
-    if ($29) {
-      return 1;
-    }
-    ;
-    var $30 = t < 0.5;
-    if ($30) {
-      return -(pow(2)(20 * t - 10) * sin((20 * t - 11.125) * elasticC5)) / 2;
-    }
-    ;
-    return pow(2)(-20 * t + 10) * sin((20 * t - 11.125) * elasticC5) / 2 + 1;
-  };
-  var easeInOutCubic = function(t) {
-    var $31 = t < 0.5;
-    if ($31) {
-      return 4 * t * t * t;
-    }
-    ;
-    return 1 - (-2 * t + 2) * (-2 * t + 2) * (-2 * t + 2) / 2;
-  };
-  var easeInOutCircle = function(t) {
-    var $32 = t < 0.5;
-    if ($32) {
-      return (1 - sqrt(1 - 2 * t * (2 * t))) / 2;
-    }
-    ;
-    return (sqrt(1 - (-2 * t + 2) * (-2 * t + 2)) + 1) / 2;
-  };
-  var easeInExp = function(t) {
-    var $33 = t === 0;
-    if ($33) {
-      return 0;
-    }
-    ;
-    return pow(2)(10 * (t - 1));
-  };
-  var easeInElastic = function(t) {
-    var $34 = t === 0;
-    if ($34) {
-      return 0;
-    }
-    ;
-    var $35 = t === 1;
-    if ($35) {
-      return 1;
-    }
-    ;
-    return -pow(2)(10 * t - 10) * sin((t * 10 - 10.75) * elasticC4);
-  };
-  var easeInCubic = function(t) {
-    return t * t * t;
-  };
-  var easeInCircle = function(t) {
-    return 1 - sqrt(1 - t * t);
-  };
-  var bounceN1 = 7.5625;
-  var bounceD1 = 2.75;
-  var easeOutBounce = function(t) {
-    var $36 = t < 1 / bounceD1;
-    if ($36) {
-      return bounceN1 * t * t;
-    }
-    ;
-    var $37 = t < 2 / bounceD1;
-    if ($37) {
-      var t$prime = t - 1.5 / bounceD1;
-      return bounceN1 * t$prime * t$prime + 0.75;
-    }
-    ;
-    var $38 = t < 2.5 / bounceD1;
-    if ($38) {
-      var t$prime = t - 2.25 / bounceD1;
-      return bounceN1 * t$prime * t$prime + 0.9375;
-    }
-    ;
-    var t$prime = t - 2.625 / bounceD1;
-    return bounceN1 * t$prime * t$prime + 0.984375;
-  };
-  var easeInBounce = function(t) {
-    return 1 - easeOutBounce(1 - t);
-  };
-  var easeInOutBounce = function(t) {
-    var $39 = t < 0.5;
-    if ($39) {
-      return (1 - easeOutBounce(1 - 2 * t)) / 2;
-    }
-    ;
-    return (1 + easeOutBounce(2 * t - 1)) / 2;
-  };
-  var backC1 = 1.70158;
-  var backC2 = /* @__PURE__ */ (function() {
-    return backC1 * 1.525;
-  })();
-  var easeInOutBack = function(t) {
-    var $40 = t < 0.5;
-    if ($40) {
-      return 2 * t * (2 * t) * ((backC2 + 1) * 2 * t - backC2) / 2;
-    }
-    ;
-    return ((2 * t - 2) * (2 * t - 2) * ((backC2 + 1) * (t * 2 - 2) + backC2) + 2) / 2;
-  };
-  var backC3 = /* @__PURE__ */ (function() {
-    return backC1 + 1;
-  })();
-  var easeInBack = function(t) {
-    return backC3 * t * t * t - backC1 * t * t;
-  };
-  var easeOutBack = function(t) {
-    var t$prime = t - 1;
-    return 1 + backC3 * t$prime * t$prime * t$prime + backC1 * t$prime * t$prime;
-  };
 
   // output/Hylograph.HATS.Transitions/index.js
   var toTickEasing = function(v) {
@@ -10989,6 +11012,10 @@
     ;
     if (v instanceof LinearGradient) {
       return "linearGradient";
+    }
+    ;
+    if (v instanceof RadialGradient) {
+      return "radialGradient";
     }
     ;
     if (v instanceof Stop) {
@@ -11317,7 +11344,7 @@
       return 2;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 717, column 23 - line 720, column 19): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 718, column 23 - line 721, column 19): " + [v.constructor.name]);
   };
   var interactionStateToInt = function(v) {
     if (v instanceof Primary2) {
@@ -11340,7 +11367,7 @@
       return 4;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 724, column 25 - line 729, column 18): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 725, column 25 - line 730, column 18): " + [v.constructor.name]);
   };
   var highlightClassToInt = function(v) {
     if (v instanceof Primary) {
@@ -11367,7 +11394,7 @@
       return 5;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 706, column 23 - line 712, column 21): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 707, column 23 - line 713, column 21): " + [v.constructor.name]);
   };
   var enumerateDFS = function(root) {
     return function(getChildren) {
@@ -11480,6 +11507,10 @@
     ;
     if (v instanceof LinearGradient) {
       return "linearGradient";
+    }
+    ;
+    if (v instanceof RadialGradient) {
+      return "radialGradient";
     }
     ;
     if (v instanceof Stop) {
@@ -11598,7 +11629,7 @@
       return "abbr";
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 593, column 24 - line 632, column 17): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 593, column 24 - line 633, column 17): " + [v.constructor.name]);
   };
   var clearChildren = function(el) {
     return function __do5() {
@@ -11627,7 +11658,7 @@
                 return plainHandler(unit)();
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 690, column 5 - line 699, column 26): " + [v.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 691, column 5 - line 700, column 26): " + [v.constructor.name]);
             };
           })();
           addEventListener2("click")(listener)(false)(toEventTarget(el))();
@@ -12476,6 +12507,10 @@
       return "LinearGradient";
     }
     ;
+    if (v instanceof RadialGradient) {
+      return "RadialGradient";
+    }
+    ;
     if (v instanceof Stop) {
       return "Stop";
     }
@@ -12592,7 +12627,7 @@
       return "Abbr";
     }
     ;
-    throw new Error("Failed pattern match at TreePretty (line 65, column 16 - line 104, column 17): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at TreePretty (line 65, column 16 - line 105, column 17): " + [v.constructor.name]);
   };
   var joinWith2 = function(sep) {
     return function(arr) {
@@ -12612,7 +12647,7 @@
         })(v.value0);
       }
       ;
-      throw new Error("Failed pattern match at TreePretty (line 130, column 3 - line 133, column 54): " + [v1.constructor.name, v.constructor.name]);
+      throw new Error("Failed pattern match at TreePretty (line 131, column 3 - line 134, column 54): " + [v1.constructor.name, v.constructor.name]);
     };
   };
   var joinAttrs = function(sep) {
@@ -12633,7 +12668,7 @@
         })(v.value0);
       }
       ;
-      throw new Error("Failed pattern match at TreePretty (line 116, column 3 - line 119, column 62): " + [v1.constructor.name, v.constructor.name]);
+      throw new Error("Failed pattern match at TreePretty (line 117, column 3 - line 120, column 62): " + [v1.constructor.name, v.constructor.name]);
     };
   };
   var isNumeric = function(s) {
@@ -12766,7 +12801,7 @@
         return 'staticStr "' + (v.value0 + ('" ' + show14(v.value1)));
       }
       ;
-      throw new Error("Failed pattern match at TreePretty (line 137, column 3 - line 141, column 59): " + [v1.constructor.name]);
+      throw new Error("Failed pattern match at TreePretty (line 138, column 3 - line 142, column 59): " + [v1.constructor.name]);
     }
     ;
     if (v instanceof ThunkedAttr) {
@@ -12779,10 +12814,10 @@
         return 'thunked "' + (v.value0 + ('" datum.' + v.value0));
       }
       ;
-      throw new Error("Failed pattern match at TreePretty (line 143, column 3 - line 145, column 59): " + [v1.constructor.name]);
+      throw new Error("Failed pattern match at TreePretty (line 144, column 3 - line 146, column 59): " + [v1.constructor.name]);
     }
     ;
-    throw new Error("Failed pattern match at TreePretty (line 135, column 1 - line 135, column 27): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at TreePretty (line 136, column 1 - line 136, column 27): " + [v.constructor.name]);
   };
   var prettyAttrs = function(attrs) {
     var v = length(attrs);

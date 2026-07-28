@@ -8676,15 +8676,7 @@
     return coerce3($$delete(dictOrd));
   };
 
-  // output/Data.Map/index.js
-  var keys3 = /* @__PURE__ */ (function() {
-    var $38 = $$void(functorMap);
-    return function($39) {
-      return fromMap($38($39));
-    };
-  })();
-
-  // output/Hylograph.Internal.Behavior.Types/index.js
+  // output/Hylograph.Behavior.Types/index.js
   var OnHover = /* @__PURE__ */ (function() {
     function OnHover2() {
     }
@@ -8776,7 +8768,7 @@
     return SimulationDragNested2;
   })();
 
-  // output/Hylograph.Internal.Element.Types/index.js
+  // output/Hylograph.Element.Types/index.js
   var SVGContext = /* @__PURE__ */ (function() {
     function SVGContext2() {
     }
@@ -8860,6 +8852,13 @@
     ;
     LinearGradient2.value = new LinearGradient2();
     return LinearGradient2;
+  })();
+  var RadialGradient = /* @__PURE__ */ (function() {
+    function RadialGradient2() {
+    }
+    ;
+    RadialGradient2.value = new RadialGradient2();
+    return RadialGradient2;
   })();
   var Stop = /* @__PURE__ */ (function() {
     function Stop3() {
@@ -9107,6 +9106,10 @@
           return true;
         }
         ;
+        if (x3 instanceof RadialGradient && y3 instanceof RadialGradient) {
+          return true;
+        }
+        ;
         if (x3 instanceof Stop && y3 instanceof Stop) {
           return true;
         }
@@ -9268,6 +9271,10 @@
       return SVGContext.value;
     }
     ;
+    if (v instanceof RadialGradient) {
+      return SVGContext.value;
+    }
+    ;
     if (v instanceof Stop) {
       return SVGContext.value;
     }
@@ -9384,8 +9391,16 @@
       return HTMLContext.value;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.Internal.Element.Types (line 83, column 1 - line 83, column 47): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.Element.Types (line 89, column 1 - line 89, column 47): " + [v.constructor.name]);
   };
+
+  // output/Data.Map/index.js
+  var keys3 = /* @__PURE__ */ (function() {
+    var $38 = $$void(functorMap);
+    return function($39) {
+      return fromMap($38($39));
+    };
+  })();
 
   // output/Hylograph.HATS/index.js
   var $runtime_lazy9 = function(name15, moduleName, init3) {
@@ -9644,7 +9659,7 @@
             if ($47) {
               var $48 = $$null(t.value0.behaviors);
               if ($48) {
-                return $lazy_flatten(307)(t.value0.children);
+                return $lazy_flatten(310)(t.value0.children);
               }
               ;
               return v2(true);
@@ -9659,7 +9674,7 @@
         return v2(true);
       });
     });
-    var flatten = $lazy_flatten(300);
+    var flatten = $lazy_flatten(303);
     var v = flatten(trees);
     if (v.length === 0) {
       return Empty.value;
@@ -9749,7 +9764,7 @@
         return Empty.value;
       }
       ;
-      throw new Error("Failed pattern match at Hylograph.HATS (line 497, column 20 - line 502, column 17): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Hylograph.HATS (line 500, column 20 - line 505, column 17): " + [v.constructor.name]);
     };
   };
   var forEach = function(name15) {
@@ -9784,7 +9799,203 @@
     };
   };
 
-  // output/Hylograph.Internal.Transition.Types/index.js
+  // output/Hylograph.Transition.Tick/index.js
+  var linear = function(t) {
+    return t;
+  };
+  var elasticC5 = /* @__PURE__ */ (function() {
+    return 2 * pi / 4.5;
+  })();
+  var elasticC4 = /* @__PURE__ */ (function() {
+    return 2 * pi / 3;
+  })();
+  var easeOutSin = function(t) {
+    return sin(t * pi / 2);
+  };
+  var easeOutQuad = function(t) {
+    return 1 - (1 - t) * (1 - t);
+  };
+  var easeOutExp = function(t) {
+    var $21 = t === 1;
+    if ($21) {
+      return 1;
+    }
+    ;
+    return 1 - pow(2)(-10 * t);
+  };
+  var easeOutElastic = function(t) {
+    var $22 = t === 0;
+    if ($22) {
+      return 0;
+    }
+    ;
+    var $23 = t === 1;
+    if ($23) {
+      return 1;
+    }
+    ;
+    return pow(2)(-10 * t) * sin((t * 10 - 0.75) * elasticC4) + 1;
+  };
+  var easeOutCubic = function(t) {
+    return 1 - (1 - t) * (1 - t) * (1 - t);
+  };
+  var easeOutCircle = function(t) {
+    return sqrt(1 - (t - 1) * (t - 1));
+  };
+  var easeInSin = function(t) {
+    return 1 - cos(t * pi / 2);
+  };
+  var easeInQuad = function(t) {
+    return t * t;
+  };
+  var easeInOutSin = function(t) {
+    return -(cos(pi * t) - 1) / 2;
+  };
+  var easeInOutQuad = function(t) {
+    var $24 = t < 0.5;
+    if ($24) {
+      return 2 * t * t;
+    }
+    ;
+    return 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
+  };
+  var easeInOutExp = function(t) {
+    var $25 = t === 0;
+    if ($25) {
+      return 0;
+    }
+    ;
+    var $26 = t === 1;
+    if ($26) {
+      return 1;
+    }
+    ;
+    var $27 = t < 0.5;
+    if ($27) {
+      return pow(2)(20 * t - 10) / 2;
+    }
+    ;
+    return (2 - pow(2)(-20 * t + 10)) / 2;
+  };
+  var easeInOutElastic = function(t) {
+    var $28 = t === 0;
+    if ($28) {
+      return 0;
+    }
+    ;
+    var $29 = t === 1;
+    if ($29) {
+      return 1;
+    }
+    ;
+    var $30 = t < 0.5;
+    if ($30) {
+      return -(pow(2)(20 * t - 10) * sin((20 * t - 11.125) * elasticC5)) / 2;
+    }
+    ;
+    return pow(2)(-20 * t + 10) * sin((20 * t - 11.125) * elasticC5) / 2 + 1;
+  };
+  var easeInOutCubic = function(t) {
+    var $31 = t < 0.5;
+    if ($31) {
+      return 4 * t * t * t;
+    }
+    ;
+    return 1 - (-2 * t + 2) * (-2 * t + 2) * (-2 * t + 2) / 2;
+  };
+  var easeInOutCircle = function(t) {
+    var $32 = t < 0.5;
+    if ($32) {
+      return (1 - sqrt(1 - 2 * t * (2 * t))) / 2;
+    }
+    ;
+    return (sqrt(1 - (-2 * t + 2) * (-2 * t + 2)) + 1) / 2;
+  };
+  var easeInExp = function(t) {
+    var $33 = t === 0;
+    if ($33) {
+      return 0;
+    }
+    ;
+    return pow(2)(10 * (t - 1));
+  };
+  var easeInElastic = function(t) {
+    var $34 = t === 0;
+    if ($34) {
+      return 0;
+    }
+    ;
+    var $35 = t === 1;
+    if ($35) {
+      return 1;
+    }
+    ;
+    return -pow(2)(10 * t - 10) * sin((t * 10 - 10.75) * elasticC4);
+  };
+  var easeInCubic = function(t) {
+    return t * t * t;
+  };
+  var easeInCircle = function(t) {
+    return 1 - sqrt(1 - t * t);
+  };
+  var bounceN1 = 7.5625;
+  var bounceD1 = 2.75;
+  var easeOutBounce = function(t) {
+    var $36 = t < 1 / bounceD1;
+    if ($36) {
+      return bounceN1 * t * t;
+    }
+    ;
+    var $37 = t < 2 / bounceD1;
+    if ($37) {
+      var t$prime = t - 1.5 / bounceD1;
+      return bounceN1 * t$prime * t$prime + 0.75;
+    }
+    ;
+    var $38 = t < 2.5 / bounceD1;
+    if ($38) {
+      var t$prime = t - 2.25 / bounceD1;
+      return bounceN1 * t$prime * t$prime + 0.9375;
+    }
+    ;
+    var t$prime = t - 2.625 / bounceD1;
+    return bounceN1 * t$prime * t$prime + 0.984375;
+  };
+  var easeInBounce = function(t) {
+    return 1 - easeOutBounce(1 - t);
+  };
+  var easeInOutBounce = function(t) {
+    var $39 = t < 0.5;
+    if ($39) {
+      return (1 - easeOutBounce(1 - 2 * t)) / 2;
+    }
+    ;
+    return (1 + easeOutBounce(2 * t - 1)) / 2;
+  };
+  var backC1 = 1.70158;
+  var backC2 = /* @__PURE__ */ (function() {
+    return backC1 * 1.525;
+  })();
+  var easeInOutBack = function(t) {
+    var $40 = t < 0.5;
+    if ($40) {
+      return 2 * t * (2 * t) * ((backC2 + 1) * 2 * t - backC2) / 2;
+    }
+    ;
+    return ((2 * t - 2) * (2 * t - 2) * ((backC2 + 1) * (t * 2 - 2) + backC2) + 2) / 2;
+  };
+  var backC3 = /* @__PURE__ */ (function() {
+    return backC1 + 1;
+  })();
+  var easeInBack = function(t) {
+    return backC3 * t * t * t - backC1 * t * t;
+  };
+  var easeOutBack = function(t) {
+    var t$prime = t - 1;
+    return 1 + backC3 * t$prime * t$prime * t$prime + backC1 * t$prime * t$prime;
+  };
+
+  // output/Hylograph.Transition.Types/index.js
   var Linear = /* @__PURE__ */ (function() {
     function Linear2() {
     }
@@ -10016,202 +10227,6 @@
     BounceInOut2.value = new BounceInOut2();
     return BounceInOut2;
   })();
-
-  // output/Hylograph.Transition.Tick/index.js
-  var linear = function(t) {
-    return t;
-  };
-  var elasticC5 = /* @__PURE__ */ (function() {
-    return 2 * pi / 4.5;
-  })();
-  var elasticC4 = /* @__PURE__ */ (function() {
-    return 2 * pi / 3;
-  })();
-  var easeOutSin = function(t) {
-    return sin(t * pi / 2);
-  };
-  var easeOutQuad = function(t) {
-    return 1 - (1 - t) * (1 - t);
-  };
-  var easeOutExp = function(t) {
-    var $21 = t === 1;
-    if ($21) {
-      return 1;
-    }
-    ;
-    return 1 - pow(2)(-10 * t);
-  };
-  var easeOutElastic = function(t) {
-    var $22 = t === 0;
-    if ($22) {
-      return 0;
-    }
-    ;
-    var $23 = t === 1;
-    if ($23) {
-      return 1;
-    }
-    ;
-    return pow(2)(-10 * t) * sin((t * 10 - 0.75) * elasticC4) + 1;
-  };
-  var easeOutCubic = function(t) {
-    return 1 - (1 - t) * (1 - t) * (1 - t);
-  };
-  var easeOutCircle = function(t) {
-    return sqrt(1 - (t - 1) * (t - 1));
-  };
-  var easeInSin = function(t) {
-    return 1 - cos(t * pi / 2);
-  };
-  var easeInQuad = function(t) {
-    return t * t;
-  };
-  var easeInOutSin = function(t) {
-    return -(cos(pi * t) - 1) / 2;
-  };
-  var easeInOutQuad = function(t) {
-    var $24 = t < 0.5;
-    if ($24) {
-      return 2 * t * t;
-    }
-    ;
-    return 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
-  };
-  var easeInOutExp = function(t) {
-    var $25 = t === 0;
-    if ($25) {
-      return 0;
-    }
-    ;
-    var $26 = t === 1;
-    if ($26) {
-      return 1;
-    }
-    ;
-    var $27 = t < 0.5;
-    if ($27) {
-      return pow(2)(20 * t - 10) / 2;
-    }
-    ;
-    return (2 - pow(2)(-20 * t + 10)) / 2;
-  };
-  var easeInOutElastic = function(t) {
-    var $28 = t === 0;
-    if ($28) {
-      return 0;
-    }
-    ;
-    var $29 = t === 1;
-    if ($29) {
-      return 1;
-    }
-    ;
-    var $30 = t < 0.5;
-    if ($30) {
-      return -(pow(2)(20 * t - 10) * sin((20 * t - 11.125) * elasticC5)) / 2;
-    }
-    ;
-    return pow(2)(-20 * t + 10) * sin((20 * t - 11.125) * elasticC5) / 2 + 1;
-  };
-  var easeInOutCubic = function(t) {
-    var $31 = t < 0.5;
-    if ($31) {
-      return 4 * t * t * t;
-    }
-    ;
-    return 1 - (-2 * t + 2) * (-2 * t + 2) * (-2 * t + 2) / 2;
-  };
-  var easeInOutCircle = function(t) {
-    var $32 = t < 0.5;
-    if ($32) {
-      return (1 - sqrt(1 - 2 * t * (2 * t))) / 2;
-    }
-    ;
-    return (sqrt(1 - (-2 * t + 2) * (-2 * t + 2)) + 1) / 2;
-  };
-  var easeInExp = function(t) {
-    var $33 = t === 0;
-    if ($33) {
-      return 0;
-    }
-    ;
-    return pow(2)(10 * (t - 1));
-  };
-  var easeInElastic = function(t) {
-    var $34 = t === 0;
-    if ($34) {
-      return 0;
-    }
-    ;
-    var $35 = t === 1;
-    if ($35) {
-      return 1;
-    }
-    ;
-    return -pow(2)(10 * t - 10) * sin((t * 10 - 10.75) * elasticC4);
-  };
-  var easeInCubic = function(t) {
-    return t * t * t;
-  };
-  var easeInCircle = function(t) {
-    return 1 - sqrt(1 - t * t);
-  };
-  var bounceN1 = 7.5625;
-  var bounceD1 = 2.75;
-  var easeOutBounce = function(t) {
-    var $36 = t < 1 / bounceD1;
-    if ($36) {
-      return bounceN1 * t * t;
-    }
-    ;
-    var $37 = t < 2 / bounceD1;
-    if ($37) {
-      var t$prime = t - 1.5 / bounceD1;
-      return bounceN1 * t$prime * t$prime + 0.75;
-    }
-    ;
-    var $38 = t < 2.5 / bounceD1;
-    if ($38) {
-      var t$prime = t - 2.25 / bounceD1;
-      return bounceN1 * t$prime * t$prime + 0.9375;
-    }
-    ;
-    var t$prime = t - 2.625 / bounceD1;
-    return bounceN1 * t$prime * t$prime + 0.984375;
-  };
-  var easeInBounce = function(t) {
-    return 1 - easeOutBounce(1 - t);
-  };
-  var easeInOutBounce = function(t) {
-    var $39 = t < 0.5;
-    if ($39) {
-      return (1 - easeOutBounce(1 - 2 * t)) / 2;
-    }
-    ;
-    return (1 + easeOutBounce(2 * t - 1)) / 2;
-  };
-  var backC1 = 1.70158;
-  var backC2 = /* @__PURE__ */ (function() {
-    return backC1 * 1.525;
-  })();
-  var easeInOutBack = function(t) {
-    var $40 = t < 0.5;
-    if ($40) {
-      return 2 * t * (2 * t) * ((backC2 + 1) * 2 * t - backC2) / 2;
-    }
-    ;
-    return ((2 * t - 2) * (2 * t - 2) * ((backC2 + 1) * (t * 2 - 2) + backC2) + 2) / 2;
-  };
-  var backC3 = /* @__PURE__ */ (function() {
-    return backC1 + 1;
-  })();
-  var easeInBack = function(t) {
-    return backC3 * t * t * t - backC1 * t * t;
-  };
-  var easeOutBack = function(t) {
-    var t$prime = t - 1;
-    return 1 + backC3 * t$prime * t$prime * t$prime + backC1 * t$prime * t$prime;
-  };
 
   // output/Hylograph.HATS.Transitions/index.js
   var toTickEasing = function(v) {
@@ -10499,6 +10514,10 @@
     ;
     if (v instanceof LinearGradient) {
       return "linearGradient";
+    }
+    ;
+    if (v instanceof RadialGradient) {
+      return "radialGradient";
     }
     ;
     if (v instanceof Stop) {
@@ -10827,7 +10846,7 @@
       return 2;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 717, column 23 - line 720, column 19): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 718, column 23 - line 721, column 19): " + [v.constructor.name]);
   };
   var interactionStateToInt = function(v) {
     if (v instanceof Primary2) {
@@ -10850,7 +10869,7 @@
       return 4;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 724, column 25 - line 729, column 18): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 725, column 25 - line 730, column 18): " + [v.constructor.name]);
   };
   var highlightClassToInt = function(v) {
     if (v instanceof Primary) {
@@ -10877,7 +10896,7 @@
       return 5;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 706, column 23 - line 712, column 21): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 707, column 23 - line 713, column 21): " + [v.constructor.name]);
   };
   var enumerateDFS = function(root) {
     return function(getChildren) {
@@ -10990,6 +11009,10 @@
     ;
     if (v instanceof LinearGradient) {
       return "linearGradient";
+    }
+    ;
+    if (v instanceof RadialGradient) {
+      return "radialGradient";
     }
     ;
     if (v instanceof Stop) {
@@ -11108,7 +11131,7 @@
       return "abbr";
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 593, column 24 - line 632, column 17): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 593, column 24 - line 633, column 17): " + [v.constructor.name]);
   };
   var clearContainer = clearContainer_;
   var clearChildren = function(el) {
@@ -11138,7 +11161,7 @@
                 return plainHandler(unit)();
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 690, column 5 - line 699, column 26): " + [v.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 691, column 5 - line 700, column 26): " + [v.constructor.name]);
             };
           })();
           addEventListener2("click")(listener)(false)(toEventTarget(el))();

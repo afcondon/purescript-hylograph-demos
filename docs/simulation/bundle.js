@@ -5035,6 +5035,1086 @@
     };
   };
 
+  // output/Hylograph.Behavior.Types/index.js
+  var OnHover = /* @__PURE__ */ (function() {
+    function OnHover2() {
+    }
+    ;
+    OnHover2.value = new OnHover2();
+    return OnHover2;
+  })();
+  var WhenPrimary = /* @__PURE__ */ (function() {
+    function WhenPrimary2() {
+    }
+    ;
+    WhenPrimary2.value = new WhenPrimary2();
+    return WhenPrimary2;
+  })();
+  var WhenRelated = /* @__PURE__ */ (function() {
+    function WhenRelated2() {
+    }
+    ;
+    WhenRelated2.value = new WhenRelated2();
+    return WhenRelated2;
+  })();
+  var Primary = /* @__PURE__ */ (function() {
+    function Primary3() {
+    }
+    ;
+    Primary3.value = new Primary3();
+    return Primary3;
+  })();
+  var Related = /* @__PURE__ */ (function() {
+    function Related3() {
+    }
+    ;
+    Related3.value = new Related3();
+    return Related3;
+  })();
+  var Upstream = /* @__PURE__ */ (function() {
+    function Upstream2() {
+    }
+    ;
+    Upstream2.value = new Upstream2();
+    return Upstream2;
+  })();
+  var Downstream = /* @__PURE__ */ (function() {
+    function Downstream2() {
+    }
+    ;
+    Downstream2.value = new Downstream2();
+    return Downstream2;
+  })();
+  var Dimmed = /* @__PURE__ */ (function() {
+    function Dimmed3() {
+    }
+    ;
+    Dimmed3.value = new Dimmed3();
+    return Dimmed3;
+  })();
+  var Neutral = /* @__PURE__ */ (function() {
+    function Neutral3() {
+    }
+    ;
+    Neutral3.value = new Neutral3();
+    return Neutral3;
+  })();
+  var SimpleDrag = /* @__PURE__ */ (function() {
+    function SimpleDrag2() {
+    }
+    ;
+    SimpleDrag2.value = new SimpleDrag2();
+    return SimpleDrag2;
+  })();
+  var SimulationDrag = /* @__PURE__ */ (function() {
+    function SimulationDrag2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    SimulationDrag2.create = function(value0) {
+      return new SimulationDrag2(value0);
+    };
+    return SimulationDrag2;
+  })();
+  var SimulationDragNested = /* @__PURE__ */ (function() {
+    function SimulationDragNested2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    SimulationDragNested2.create = function(value0) {
+      return new SimulationDragNested2(value0);
+    };
+    return SimulationDragNested2;
+  })();
+  var simulationDragNested = /* @__PURE__ */ (function() {
+    return SimulationDragNested.create;
+  })();
+
+  // output/Hylograph.Interaction.Pointer/foreign.js
+  function attachSimpleDrag_(element4) {
+    return () => () => {
+      let isDragging = false;
+      let transform = { x: 0, y: 0 };
+      function handlePointerDown(event) {
+        if (event.button !== 0) return;
+        isDragging = true;
+        element4.setPointerCapture(event.pointerId);
+        event.preventDefault();
+        event.stopPropagation();
+        if (element4.parentNode) {
+          element4.parentNode.appendChild(element4);
+        }
+        element4.style.cursor = "grabbing";
+      }
+      function handlePointerMove(event) {
+        if (!isDragging) return;
+        const svg2 = element4.ownerSVGElement;
+        if (svg2) {
+          const pt = svg2.createSVGPoint();
+          const ctm = svg2.getScreenCTM();
+          if (ctm) {
+            pt.x = event.movementX;
+            pt.y = event.movementY;
+            const scale = ctm.a;
+            transform.x += event.movementX / scale;
+            transform.y += event.movementY / scale;
+          } else {
+            transform.x += event.movementX;
+            transform.y += event.movementY;
+          }
+        } else {
+          transform.x += event.movementX;
+          transform.y += event.movementY;
+        }
+        element4.setAttribute("transform", `translate(${transform.x},${transform.y})`);
+      }
+      function handlePointerUp(event) {
+        if (!isDragging) return;
+        isDragging = false;
+        element4.releasePointerCapture(event.pointerId);
+        element4.style.cursor = "grab";
+      }
+      function handlePointerCancel(event) {
+        if (!isDragging) return;
+        isDragging = false;
+        element4.releasePointerCapture(event.pointerId);
+        element4.style.cursor = "grab";
+      }
+      function handleDragStart(event) {
+        event.preventDefault();
+      }
+      element4.addEventListener("pointerdown", handlePointerDown);
+      element4.addEventListener("pointermove", handlePointerMove);
+      element4.addEventListener("pointerup", handlePointerUp);
+      element4.addEventListener("pointercancel", handlePointerCancel);
+      element4.addEventListener("dragstart", handleDragStart);
+      element4.style.cursor = "grab";
+      element4.style.touchAction = "none";
+      return element4;
+    };
+  }
+  var simulationRegistry = /* @__PURE__ */ new Map();
+  function registerSimulationForPointer_(simId) {
+    return (reheatFn) => () => {
+      simulationRegistry.set(simId, { reheat: reheatFn });
+    };
+  }
+  function unregisterSimulationForPointer_(simId) {
+    return () => {
+      simulationRegistry.delete(simId);
+    };
+  }
+  function getSimulationReheat(simId) {
+    const sim = simulationRegistry.get(simId);
+    return sim ? sim.reheat : null;
+  }
+  function attachSimulationDragById_(element4) {
+    return (simId) => () => {
+      let isDragging = false;
+      function handlePointerDown(event) {
+        if (event.button !== 0) return;
+        isDragging = true;
+        element4.setPointerCapture(event.pointerId);
+        event.preventDefault();
+        const node = element4.__data__;
+        if (!node) {
+          console.warn("[PointerDrag] No datum on element");
+          return;
+        }
+        const reheat4 = getSimulationReheat(simId);
+        if (reheat4) {
+          reheat4();
+        } else {
+          console.warn(`[PointerDrag] No simulation registered with ID: ${simId}`);
+        }
+        node.fx = node.x;
+        node.fy = node.y;
+        element4.style.cursor = "grabbing";
+      }
+      function handlePointerMove(event) {
+        if (!isDragging) return;
+        const node = element4.__data__;
+        if (!node) return;
+        const svg2 = element4.ownerSVGElement;
+        if (svg2) {
+          const pt = svg2.createSVGPoint();
+          pt.x = event.clientX;
+          pt.y = event.clientY;
+          const parentGroup = element4.parentElement;
+          const ctm = parentGroup?.getScreenCTM?.() || svg2.getScreenCTM();
+          if (ctm) {
+            const svgPt = pt.matrixTransform(ctm.inverse());
+            node.fx = svgPt.x;
+            node.fy = svgPt.y;
+          }
+        } else {
+          node.fx = event.clientX;
+          node.fy = event.clientY;
+        }
+      }
+      function handlePointerUp(event) {
+        if (!isDragging) return;
+        isDragging = false;
+        element4.releasePointerCapture(event.pointerId);
+        const node = element4.__data__;
+        if (node) {
+          node.fx = null;
+          node.fy = null;
+        }
+        element4.style.cursor = "grab";
+      }
+      function handleDragStart(event) {
+        event.preventDefault();
+      }
+      element4.addEventListener("pointerdown", handlePointerDown);
+      element4.addEventListener("pointermove", handlePointerMove);
+      element4.addEventListener("pointerup", handlePointerUp);
+      element4.addEventListener("pointercancel", handlePointerUp);
+      element4.addEventListener("dragstart", handleDragStart);
+      element4.style.cursor = "grab";
+      element4.style.touchAction = "none";
+      return element4;
+    };
+  }
+  function attachSimulationDragNestedById_(element4) {
+    return (simId) => () => {
+      let isDragging = false;
+      function handlePointerDown(event) {
+        if (event.button !== 0) return;
+        isDragging = true;
+        element4.setPointerCapture(event.pointerId);
+        event.preventDefault();
+        const datum = element4.__data__;
+        const node = datum?.node;
+        if (!node) {
+          console.warn("[PointerDragNested] No datum.node on element");
+          return;
+        }
+        const reheat4 = getSimulationReheat(simId);
+        if (reheat4) {
+          reheat4();
+        } else {
+          console.warn(`[PointerDragNested] No simulation registered with ID: ${simId}`);
+        }
+        node.fx = node.x;
+        node.fy = node.y;
+        element4.style.cursor = "grabbing";
+      }
+      function handlePointerMove(event) {
+        if (!isDragging) return;
+        const datum = element4.__data__;
+        const node = datum?.node;
+        if (!node) return;
+        const svg2 = element4.ownerSVGElement;
+        if (svg2) {
+          const pt = svg2.createSVGPoint();
+          pt.x = event.clientX;
+          pt.y = event.clientY;
+          const parentGroup = element4.parentElement;
+          const ctm = parentGroup?.getScreenCTM?.() || svg2.getScreenCTM();
+          if (ctm) {
+            const svgPt = pt.matrixTransform(ctm.inverse());
+            node.fx = svgPt.x;
+            node.fy = svgPt.y;
+          }
+        } else {
+          node.fx = event.clientX;
+          node.fy = event.clientY;
+        }
+      }
+      function handlePointerUp(event) {
+        if (!isDragging) return;
+        isDragging = false;
+        element4.releasePointerCapture(event.pointerId);
+        const datum = element4.__data__;
+        const node = datum?.node;
+        if (node) {
+          node.fx = null;
+          node.fy = null;
+        }
+        element4.style.cursor = "grab";
+      }
+      function handleDragStart(event) {
+        event.preventDefault();
+      }
+      element4.addEventListener("pointerdown", handlePointerDown);
+      element4.addEventListener("pointermove", handlePointerMove);
+      element4.addEventListener("pointerup", handlePointerUp);
+      element4.addEventListener("pointercancel", handlePointerUp);
+      element4.addEventListener("dragstart", handleDragStart);
+      element4.style.cursor = "grab";
+      element4.style.touchAction = "none";
+      return element4;
+    };
+  }
+
+  // output/Hylograph.Interaction.Zoom/foreign.js
+  var ZoomTransform = class _ZoomTransform {
+    constructor(k, x4, y4) {
+      this.k = k;
+      this.x = x4;
+      this.y = y4;
+    }
+    /**
+     * Returns a new transform scaled by k
+     */
+    scale(k) {
+      return k === 1 ? this : new _ZoomTransform(this.k * k, this.x, this.y);
+    }
+    /**
+     * Returns a new transform translated by (x, y) in local coordinates
+     */
+    translate(x4, y4) {
+      return x4 === 0 && y4 === 0 ? this : new _ZoomTransform(this.k, this.x + this.k * x4, this.y + this.k * y4);
+    }
+    /**
+     * Apply transform to a point [x, y] -> [x', y']
+     */
+    apply(point) {
+      return [point[0] * this.k + this.x, point[1] * this.k + this.y];
+    }
+    /**
+     * Apply inverse transform to get original coordinates
+     */
+    applyX(x4) {
+      return x4 * this.k + this.x;
+    }
+    applyY(y4) {
+      return y4 * this.k + this.y;
+    }
+    /**
+     * Invert: given transformed point, return original point
+     */
+    invert(point) {
+      return [(point[0] - this.x) / this.k, (point[1] - this.y) / this.k];
+    }
+    invertX(x4) {
+      return (x4 - this.x) / this.k;
+    }
+    invertY(y4) {
+      return (y4 - this.y) / this.k;
+    }
+    /**
+     * Rescale a scale's domain according to this transform
+     */
+    rescaleX(x4) {
+      return x4.copy().domain(x4.range().map(this.invertX, this).map(x4.invert, x4));
+    }
+    rescaleY(y4) {
+      return y4.copy().domain(y4.range().map(this.invertY, this).map(y4.invert, y4));
+    }
+    toString() {
+      return `translate(${this.x},${this.y}) scale(${this.k})`;
+    }
+  };
+  var identity6 = new ZoomTransform(1, 0, 0);
+  function constrain(transform, extent, translateExtent) {
+    const dx0 = transform.invertX(extent[0][0]) - translateExtent[0][0];
+    const dx1 = transform.invertX(extent[1][0]) - translateExtent[1][0];
+    const dy0 = transform.invertY(extent[0][1]) - translateExtent[0][1];
+    const dy1 = transform.invertY(extent[1][1]) - translateExtent[1][1];
+    let x4 = transform.x;
+    let y4 = transform.y;
+    if (dx1 > dx0) {
+      x4 += (dx0 + dx1) / 2 * transform.k;
+    } else if (dx0 < 0) {
+      x4 -= dx0 * transform.k;
+    } else if (dx1 > 0) {
+      x4 -= dx1 * transform.k;
+    }
+    if (dy1 > dy0) {
+      y4 += (dy0 + dy1) / 2 * transform.k;
+    } else if (dy0 < 0) {
+      y4 -= dy0 * transform.k;
+    } else if (dy1 > 0) {
+      y4 -= dy1 * transform.k;
+    }
+    return x4 === transform.x && y4 === transform.y ? transform : new ZoomTransform(transform.k, x4, y4);
+  }
+  function zoomAround(transform, point, newK) {
+    const p2 = transform.invert(point);
+    const t2 = transform.scale(newK / transform.k);
+    return new ZoomTransform(
+      t2.k,
+      point[0] - p2[0] * t2.k,
+      point[1] - p2[1] * t2.k
+    );
+  }
+  function attachNativeZoom_(element4) {
+    return (config) => () => {
+      const scaleMin = config.scaleMin || 0.1;
+      const scaleMax = config.scaleMax || 10;
+      const targetSelector = config.targetSelector;
+      let transform = config.initialTransform ? new ZoomTransform(
+        config.initialTransform.k,
+        config.initialTransform.x,
+        config.initialTransform.y
+      ) : identity6;
+      let extent = null;
+      function getExtent() {
+        if (!extent) {
+          const rect2 = element4.getBoundingClientRect();
+          extent = [[0, 0], [rect2.width, rect2.height]];
+        }
+        return extent;
+      }
+      function toSVGCoords(clientX2, clientY2) {
+        const svg2 = element4.ownerSVGElement || element4;
+        if (svg2.createSVGPoint) {
+          const pt = svg2.createSVGPoint();
+          pt.x = clientX2;
+          pt.y = clientY2;
+          const ctm = svg2.getScreenCTM();
+          if (ctm) {
+            const inv = ctm.inverse();
+            const svgPt = pt.matrixTransform(inv);
+            return [svgPt.x, svgPt.y];
+          }
+        }
+        const rect2 = element4.getBoundingClientRect();
+        return [clientX2 - rect2.left, clientY2 - rect2.top];
+      }
+      function toSVGDelta(screenDx, screenDy) {
+        const svg2 = element4.ownerSVGElement || element4;
+        if (svg2.getScreenCTM) {
+          const ctm = svg2.getScreenCTM();
+          if (ctm) {
+            const scale = ctm.a;
+            return [screenDx / scale, screenDy / scale];
+          }
+        }
+        return [screenDx, screenDy];
+      }
+      let translateExtent = config.translateExtent || null;
+      const infiniteExtent = [[-Infinity, -Infinity], [Infinity, Infinity]];
+      function applyTransform() {
+        const target6 = element4.querySelector(targetSelector);
+        if (target6) {
+          target6.setAttribute("transform", transform.toString());
+        }
+        element4.__zoom = transform;
+        if (config.onZoom) {
+          config.onZoom({ k: transform.k, x: transform.x, y: transform.y })();
+        }
+      }
+      function setTransform(newTransform) {
+        const k = Math.max(scaleMin, Math.min(scaleMax, newTransform.k));
+        newTransform = new ZoomTransform(k, newTransform.x, newTransform.y);
+        if (translateExtent) {
+          newTransform = constrain(newTransform, getExtent(), translateExtent);
+        }
+        transform = newTransform;
+        applyTransform();
+      }
+      function handleWheel(event) {
+        event.preventDefault();
+        const point = toSVGCoords(event.clientX, event.clientY);
+        const factor = Math.pow(2, -event.deltaY * 2e-3);
+        const newK = Math.max(scaleMin, Math.min(scaleMax, transform.k * factor));
+        if (Math.abs(newK - transform.k) < 1e-3) return;
+        const newTransform = zoomAround(transform, point, newK);
+        setTransform(newTransform);
+      }
+      let isPanning = false;
+      let panStart = null;
+      let transformAtPanStart = null;
+      function handlePointerDown(event) {
+        if (event.button !== 0) return;
+        const target6 = event.target;
+        const isPanTarget = target6 === element4 || // SVG element itself
+        target6.tagName === "svg" || target6.classList.contains("zoom-background") || target6.classList.contains("zoom-group");
+        if (!isPanTarget) {
+          return;
+        }
+        isPanning = true;
+        panStart = [event.clientX, event.clientY];
+        transformAtPanStart = transform;
+        element4.setPointerCapture(event.pointerId);
+        element4.style.cursor = "grabbing";
+      }
+      function handlePointerMove(event) {
+        if (!isPanning) return;
+        const screenDx = event.clientX - panStart[0];
+        const screenDy = event.clientY - panStart[1];
+        const [dx, dy] = toSVGDelta(screenDx, screenDy);
+        const newTransform = new ZoomTransform(
+          transformAtPanStart.k,
+          transformAtPanStart.x + dx,
+          transformAtPanStart.y + dy
+        );
+        setTransform(newTransform);
+      }
+      function handlePointerUp(event) {
+        if (!isPanning) return;
+        isPanning = false;
+        element4.releasePointerCapture(event.pointerId);
+        element4.style.cursor = "grab";
+      }
+      let gestureStartTransform = null;
+      let gestureStartCenter = null;
+      function handleGestureStart(event) {
+        event.preventDefault();
+        gestureStartTransform = transform;
+        const rect2 = element4.getBoundingClientRect();
+        const screenCenterX = rect2.left + rect2.width / 2;
+        const screenCenterY = rect2.top + rect2.height / 2;
+        gestureStartCenter = toSVGCoords(screenCenterX, screenCenterY);
+      }
+      function handleGestureChange(event) {
+        event.preventDefault();
+        if (!gestureStartTransform) return;
+        const newK = gestureStartTransform.k * event.scale;
+        const newTransform = zoomAround(gestureStartTransform, gestureStartCenter, newK);
+        setTransform(newTransform);
+      }
+      function handleGestureEnd(event) {
+        event.preventDefault();
+        gestureStartTransform = null;
+      }
+      element4.addEventListener("wheel", handleWheel, { passive: false });
+      element4.addEventListener("pointerdown", handlePointerDown);
+      element4.addEventListener("pointermove", handlePointerMove);
+      element4.addEventListener("pointerup", handlePointerUp);
+      element4.addEventListener("pointercancel", handlePointerUp);
+      element4.addEventListener("gesturestart", handleGestureStart);
+      element4.addEventListener("gesturechange", handleGestureChange);
+      element4.addEventListener("gestureend", handleGestureEnd);
+      element4.style.cursor = "grab";
+      element4.style.touchAction = "none";
+      if (config.initialTransform) {
+        applyTransform();
+      }
+      const handle = {
+        // Get current transform
+        getTransform: () => ({ k: transform.k, x: transform.x, y: transform.y }),
+        // Set transform directly
+        setTransform: (t2) => () => {
+          setTransform(new ZoomTransform(t2.k, t2.x, t2.y));
+        },
+        // Reset to identity
+        resetZoom: () => {
+          setTransform(identity6);
+        },
+        // Zoom to specific scale at point
+        zoomTo: (k) => (point) => () => {
+          const newTransform = zoomAround(transform, [point.x, point.y], k);
+          setTransform(newTransform);
+        },
+        // Zoom in/out by factor at center
+        zoomBy: (factor) => () => {
+          const rect2 = element4.getBoundingClientRect();
+          const screenCenterX = rect2.left + rect2.width / 2;
+          const screenCenterY = rect2.top + rect2.height / 2;
+          const center2 = toSVGCoords(screenCenterX, screenCenterY);
+          const newK = transform.k * factor;
+          const newTransform = zoomAround(transform, center2, newK);
+          setTransform(newTransform);
+        },
+        // Cleanup
+        destroy: () => {
+          element4.removeEventListener("wheel", handleWheel);
+          element4.removeEventListener("pointerdown", handlePointerDown);
+          element4.removeEventListener("pointermove", handlePointerMove);
+          element4.removeEventListener("pointerup", handlePointerUp);
+          element4.removeEventListener("pointercancel", handlePointerUp);
+          element4.removeEventListener("gesturestart", handleGestureStart);
+          element4.removeEventListener("gesturechange", handleGestureChange);
+          element4.removeEventListener("gestureend", handleGestureEnd);
+          element4.style.cursor = "";
+          element4.style.touchAction = "";
+        }
+      };
+      return handle;
+    };
+  }
+  function attachZoomNative_(element4) {
+    return (scaleMin) => (scaleMax) => (targetSelector) => () => {
+      return attachNativeZoom_(element4)({
+        scaleMin,
+        scaleMax,
+        targetSelector,
+        initialTransform: null,
+        translateExtent: null,
+        onZoom: null
+      })();
+    };
+  }
+
+  // output/Hylograph.Internal.Behavior.FFI/foreign.js
+  function registerSimulation_(simId) {
+    return (reheatFn) => () => {
+      registerSimulationForPointer_(simId)(reheatFn)();
+    };
+  }
+  function unregisterSimulation_(simId) {
+    return () => {
+      unregisterSimulationForPointer_(simId)();
+    };
+  }
+
+  // output/Hylograph.Behavior/index.js
+  var unregisterSimulation = unregisterSimulation_;
+  var registerSimulation = registerSimulation_;
+
+  // output/Hylograph.Element.Types/index.js
+  var SVGContext = /* @__PURE__ */ (function() {
+    function SVGContext2() {
+    }
+    ;
+    SVGContext2.value = new SVGContext2();
+    return SVGContext2;
+  })();
+  var HTMLContext = /* @__PURE__ */ (function() {
+    function HTMLContext2() {
+    }
+    ;
+    HTMLContext2.value = new HTMLContext2();
+    return HTMLContext2;
+  })();
+  var Circle = /* @__PURE__ */ (function() {
+    function Circle3() {
+    }
+    ;
+    Circle3.value = new Circle3();
+    return Circle3;
+  })();
+  var Rect = /* @__PURE__ */ (function() {
+    function Rect2() {
+    }
+    ;
+    Rect2.value = new Rect2();
+    return Rect2;
+  })();
+  var Path = /* @__PURE__ */ (function() {
+    function Path2() {
+    }
+    ;
+    Path2.value = new Path2();
+    return Path2;
+  })();
+  var Line = /* @__PURE__ */ (function() {
+    function Line2() {
+    }
+    ;
+    Line2.value = new Line2();
+    return Line2;
+  })();
+  var Polygon = /* @__PURE__ */ (function() {
+    function Polygon2() {
+    }
+    ;
+    Polygon2.value = new Polygon2();
+    return Polygon2;
+  })();
+  var Text = /* @__PURE__ */ (function() {
+    function Text3() {
+    }
+    ;
+    Text3.value = new Text3();
+    return Text3;
+  })();
+  var Group = /* @__PURE__ */ (function() {
+    function Group2() {
+    }
+    ;
+    Group2.value = new Group2();
+    return Group2;
+  })();
+  var SVG = /* @__PURE__ */ (function() {
+    function SVG2() {
+    }
+    ;
+    SVG2.value = new SVG2();
+    return SVG2;
+  })();
+  var Defs = /* @__PURE__ */ (function() {
+    function Defs2() {
+    }
+    ;
+    Defs2.value = new Defs2();
+    return Defs2;
+  })();
+  var LinearGradient = /* @__PURE__ */ (function() {
+    function LinearGradient2() {
+    }
+    ;
+    LinearGradient2.value = new LinearGradient2();
+    return LinearGradient2;
+  })();
+  var RadialGradient = /* @__PURE__ */ (function() {
+    function RadialGradient2() {
+    }
+    ;
+    RadialGradient2.value = new RadialGradient2();
+    return RadialGradient2;
+  })();
+  var Stop = /* @__PURE__ */ (function() {
+    function Stop2() {
+    }
+    ;
+    Stop2.value = new Stop2();
+    return Stop2;
+  })();
+  var PatternFill = /* @__PURE__ */ (function() {
+    function PatternFill2() {
+    }
+    ;
+    PatternFill2.value = new PatternFill2();
+    return PatternFill2;
+  })();
+  var Title = /* @__PURE__ */ (function() {
+    function Title2() {
+    }
+    ;
+    Title2.value = new Title2();
+    return Title2;
+  })();
+  var Div = /* @__PURE__ */ (function() {
+    function Div2() {
+    }
+    ;
+    Div2.value = new Div2();
+    return Div2;
+  })();
+  var Span = /* @__PURE__ */ (function() {
+    function Span2() {
+    }
+    ;
+    Span2.value = new Span2();
+    return Span2;
+  })();
+  var Table = /* @__PURE__ */ (function() {
+    function Table2() {
+    }
+    ;
+    Table2.value = new Table2();
+    return Table2;
+  })();
+  var Tr = /* @__PURE__ */ (function() {
+    function Tr2() {
+    }
+    ;
+    Tr2.value = new Tr2();
+    return Tr2;
+  })();
+  var Td = /* @__PURE__ */ (function() {
+    function Td2() {
+    }
+    ;
+    Td2.value = new Td2();
+    return Td2;
+  })();
+  var Th = /* @__PURE__ */ (function() {
+    function Th2() {
+    }
+    ;
+    Th2.value = new Th2();
+    return Th2;
+  })();
+  var Tbody = /* @__PURE__ */ (function() {
+    function Tbody2() {
+    }
+    ;
+    Tbody2.value = new Tbody2();
+    return Tbody2;
+  })();
+  var Thead = /* @__PURE__ */ (function() {
+    function Thead2() {
+    }
+    ;
+    Thead2.value = new Thead2();
+    return Thead2;
+  })();
+  var Code = /* @__PURE__ */ (function() {
+    function Code2() {
+    }
+    ;
+    Code2.value = new Code2();
+    return Code2;
+  })();
+  var Var = /* @__PURE__ */ (function() {
+    function Var2() {
+    }
+    ;
+    Var2.value = new Var2();
+    return Var2;
+  })();
+  var Dfn = /* @__PURE__ */ (function() {
+    function Dfn2() {
+    }
+    ;
+    Dfn2.value = new Dfn2();
+    return Dfn2;
+  })();
+  var Dl = /* @__PURE__ */ (function() {
+    function Dl2() {
+    }
+    ;
+    Dl2.value = new Dl2();
+    return Dl2;
+  })();
+  var Dt = /* @__PURE__ */ (function() {
+    function Dt2() {
+    }
+    ;
+    Dt2.value = new Dt2();
+    return Dt2;
+  })();
+  var Dd = /* @__PURE__ */ (function() {
+    function Dd2() {
+    }
+    ;
+    Dd2.value = new Dd2();
+    return Dd2;
+  })();
+  var Ol = /* @__PURE__ */ (function() {
+    function Ol2() {
+    }
+    ;
+    Ol2.value = new Ol2();
+    return Ol2;
+  })();
+  var Ul = /* @__PURE__ */ (function() {
+    function Ul2() {
+    }
+    ;
+    Ul2.value = new Ul2();
+    return Ul2;
+  })();
+  var Li = /* @__PURE__ */ (function() {
+    function Li2() {
+    }
+    ;
+    Li2.value = new Li2();
+    return Li2;
+  })();
+  var Small = /* @__PURE__ */ (function() {
+    function Small3() {
+    }
+    ;
+    Small3.value = new Small3();
+    return Small3;
+  })();
+  var Em = /* @__PURE__ */ (function() {
+    function Em3() {
+    }
+    ;
+    Em3.value = new Em3();
+    return Em3;
+  })();
+  var Strong = /* @__PURE__ */ (function() {
+    function Strong2() {
+    }
+    ;
+    Strong2.value = new Strong2();
+    return Strong2;
+  })();
+  var Anchor = /* @__PURE__ */ (function() {
+    function Anchor2() {
+    }
+    ;
+    Anchor2.value = new Anchor2();
+    return Anchor2;
+  })();
+  var P = /* @__PURE__ */ (function() {
+    function P2() {
+    }
+    ;
+    P2.value = new P2();
+    return P2;
+  })();
+  var Pre = /* @__PURE__ */ (function() {
+    function Pre2() {
+    }
+    ;
+    Pre2.value = new Pre2();
+    return Pre2;
+  })();
+  var Section = /* @__PURE__ */ (function() {
+    function Section2() {
+    }
+    ;
+    Section2.value = new Section2();
+    return Section2;
+  })();
+  var Mark = /* @__PURE__ */ (function() {
+    function Mark2() {
+    }
+    ;
+    Mark2.value = new Mark2();
+    return Mark2;
+  })();
+  var Abbr = /* @__PURE__ */ (function() {
+    function Abbr2() {
+    }
+    ;
+    Abbr2.value = new Abbr2();
+    return Abbr2;
+  })();
+  var elementContext = function(v2) {
+    if (v2 instanceof Circle) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Rect) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Path) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Line) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Polygon) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Text) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Group) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof SVG) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Defs) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof LinearGradient) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof RadialGradient) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Stop) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof PatternFill) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Title) {
+      return SVGContext.value;
+    }
+    ;
+    if (v2 instanceof Div) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Span) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Table) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Tr) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Td) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Th) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Tbody) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Thead) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Code) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Var) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Dfn) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Dl) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Dt) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Dd) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Ol) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Ul) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Li) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Small) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Em) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Strong) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Anchor) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof P) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Pre) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Section) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Mark) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Abbr) {
+      return HTMLContext.value;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Element.Types (line 89, column 1 - line 89, column 47): " + [v2.constructor.name]);
+  };
+
   // output/Data.Map/index.js
   var keys2 = /* @__PURE__ */ (function() {
     var $38 = $$void(functorMap);
@@ -5903,7 +6983,7 @@
   // output/Hylograph.ForceEngine.Core/index.js
   var bind2 = /* @__PURE__ */ bind(bindEffect);
   var when2 = /* @__PURE__ */ when(applicativeEffect);
-  var identity6 = /* @__PURE__ */ identity(categoryFn);
+  var identity7 = /* @__PURE__ */ identity(categoryFn);
   var for_2 = /* @__PURE__ */ for_(applicativeEffect)(foldableArray);
   var startAnimation = function(onFrame) {
     return function __do5() {
@@ -5919,7 +6999,7 @@
       };
       var cancel = requestAnimationFrame_(loop2)();
       setCancelRef(cancelRef)(cancel)();
-      return bind2(getCancelRef(cancelRef))(identity6);
+      return bind2(getCancelRef(cancelRef))(identity7);
     };
   };
   var integratePositions = integratePositions_;
@@ -6576,549 +7656,6 @@
     };
   };
 
-  // output/Hylograph.Internal.Behavior.Types/index.js
-  var OnHover = /* @__PURE__ */ (function() {
-    function OnHover2() {
-    }
-    ;
-    OnHover2.value = new OnHover2();
-    return OnHover2;
-  })();
-  var WhenPrimary = /* @__PURE__ */ (function() {
-    function WhenPrimary2() {
-    }
-    ;
-    WhenPrimary2.value = new WhenPrimary2();
-    return WhenPrimary2;
-  })();
-  var WhenRelated = /* @__PURE__ */ (function() {
-    function WhenRelated2() {
-    }
-    ;
-    WhenRelated2.value = new WhenRelated2();
-    return WhenRelated2;
-  })();
-  var Primary = /* @__PURE__ */ (function() {
-    function Primary3() {
-    }
-    ;
-    Primary3.value = new Primary3();
-    return Primary3;
-  })();
-  var Related = /* @__PURE__ */ (function() {
-    function Related3() {
-    }
-    ;
-    Related3.value = new Related3();
-    return Related3;
-  })();
-  var Upstream = /* @__PURE__ */ (function() {
-    function Upstream2() {
-    }
-    ;
-    Upstream2.value = new Upstream2();
-    return Upstream2;
-  })();
-  var Downstream = /* @__PURE__ */ (function() {
-    function Downstream2() {
-    }
-    ;
-    Downstream2.value = new Downstream2();
-    return Downstream2;
-  })();
-  var Dimmed = /* @__PURE__ */ (function() {
-    function Dimmed3() {
-    }
-    ;
-    Dimmed3.value = new Dimmed3();
-    return Dimmed3;
-  })();
-  var Neutral = /* @__PURE__ */ (function() {
-    function Neutral3() {
-    }
-    ;
-    Neutral3.value = new Neutral3();
-    return Neutral3;
-  })();
-  var SimpleDrag = /* @__PURE__ */ (function() {
-    function SimpleDrag2() {
-    }
-    ;
-    SimpleDrag2.value = new SimpleDrag2();
-    return SimpleDrag2;
-  })();
-  var SimulationDrag = /* @__PURE__ */ (function() {
-    function SimulationDrag2(value0) {
-      this.value0 = value0;
-    }
-    ;
-    SimulationDrag2.create = function(value0) {
-      return new SimulationDrag2(value0);
-    };
-    return SimulationDrag2;
-  })();
-  var SimulationDragNested = /* @__PURE__ */ (function() {
-    function SimulationDragNested2(value0) {
-      this.value0 = value0;
-    }
-    ;
-    SimulationDragNested2.create = function(value0) {
-      return new SimulationDragNested2(value0);
-    };
-    return SimulationDragNested2;
-  })();
-  var simulationDragNested = /* @__PURE__ */ (function() {
-    return SimulationDragNested.create;
-  })();
-
-  // output/Hylograph.Internal.Element.Types/index.js
-  var SVGContext = /* @__PURE__ */ (function() {
-    function SVGContext2() {
-    }
-    ;
-    SVGContext2.value = new SVGContext2();
-    return SVGContext2;
-  })();
-  var HTMLContext = /* @__PURE__ */ (function() {
-    function HTMLContext2() {
-    }
-    ;
-    HTMLContext2.value = new HTMLContext2();
-    return HTMLContext2;
-  })();
-  var Circle = /* @__PURE__ */ (function() {
-    function Circle3() {
-    }
-    ;
-    Circle3.value = new Circle3();
-    return Circle3;
-  })();
-  var Rect = /* @__PURE__ */ (function() {
-    function Rect2() {
-    }
-    ;
-    Rect2.value = new Rect2();
-    return Rect2;
-  })();
-  var Path = /* @__PURE__ */ (function() {
-    function Path2() {
-    }
-    ;
-    Path2.value = new Path2();
-    return Path2;
-  })();
-  var Line = /* @__PURE__ */ (function() {
-    function Line2() {
-    }
-    ;
-    Line2.value = new Line2();
-    return Line2;
-  })();
-  var Polygon = /* @__PURE__ */ (function() {
-    function Polygon2() {
-    }
-    ;
-    Polygon2.value = new Polygon2();
-    return Polygon2;
-  })();
-  var Text = /* @__PURE__ */ (function() {
-    function Text3() {
-    }
-    ;
-    Text3.value = new Text3();
-    return Text3;
-  })();
-  var Group = /* @__PURE__ */ (function() {
-    function Group2() {
-    }
-    ;
-    Group2.value = new Group2();
-    return Group2;
-  })();
-  var SVG = /* @__PURE__ */ (function() {
-    function SVG2() {
-    }
-    ;
-    SVG2.value = new SVG2();
-    return SVG2;
-  })();
-  var Defs = /* @__PURE__ */ (function() {
-    function Defs2() {
-    }
-    ;
-    Defs2.value = new Defs2();
-    return Defs2;
-  })();
-  var LinearGradient = /* @__PURE__ */ (function() {
-    function LinearGradient2() {
-    }
-    ;
-    LinearGradient2.value = new LinearGradient2();
-    return LinearGradient2;
-  })();
-  var Stop = /* @__PURE__ */ (function() {
-    function Stop2() {
-    }
-    ;
-    Stop2.value = new Stop2();
-    return Stop2;
-  })();
-  var PatternFill = /* @__PURE__ */ (function() {
-    function PatternFill2() {
-    }
-    ;
-    PatternFill2.value = new PatternFill2();
-    return PatternFill2;
-  })();
-  var Title = /* @__PURE__ */ (function() {
-    function Title2() {
-    }
-    ;
-    Title2.value = new Title2();
-    return Title2;
-  })();
-  var Div = /* @__PURE__ */ (function() {
-    function Div2() {
-    }
-    ;
-    Div2.value = new Div2();
-    return Div2;
-  })();
-  var Span = /* @__PURE__ */ (function() {
-    function Span2() {
-    }
-    ;
-    Span2.value = new Span2();
-    return Span2;
-  })();
-  var Table = /* @__PURE__ */ (function() {
-    function Table2() {
-    }
-    ;
-    Table2.value = new Table2();
-    return Table2;
-  })();
-  var Tr = /* @__PURE__ */ (function() {
-    function Tr2() {
-    }
-    ;
-    Tr2.value = new Tr2();
-    return Tr2;
-  })();
-  var Td = /* @__PURE__ */ (function() {
-    function Td2() {
-    }
-    ;
-    Td2.value = new Td2();
-    return Td2;
-  })();
-  var Th = /* @__PURE__ */ (function() {
-    function Th2() {
-    }
-    ;
-    Th2.value = new Th2();
-    return Th2;
-  })();
-  var Tbody = /* @__PURE__ */ (function() {
-    function Tbody2() {
-    }
-    ;
-    Tbody2.value = new Tbody2();
-    return Tbody2;
-  })();
-  var Thead = /* @__PURE__ */ (function() {
-    function Thead2() {
-    }
-    ;
-    Thead2.value = new Thead2();
-    return Thead2;
-  })();
-  var Code = /* @__PURE__ */ (function() {
-    function Code2() {
-    }
-    ;
-    Code2.value = new Code2();
-    return Code2;
-  })();
-  var Var = /* @__PURE__ */ (function() {
-    function Var2() {
-    }
-    ;
-    Var2.value = new Var2();
-    return Var2;
-  })();
-  var Dfn = /* @__PURE__ */ (function() {
-    function Dfn2() {
-    }
-    ;
-    Dfn2.value = new Dfn2();
-    return Dfn2;
-  })();
-  var Dl = /* @__PURE__ */ (function() {
-    function Dl2() {
-    }
-    ;
-    Dl2.value = new Dl2();
-    return Dl2;
-  })();
-  var Dt = /* @__PURE__ */ (function() {
-    function Dt2() {
-    }
-    ;
-    Dt2.value = new Dt2();
-    return Dt2;
-  })();
-  var Dd = /* @__PURE__ */ (function() {
-    function Dd2() {
-    }
-    ;
-    Dd2.value = new Dd2();
-    return Dd2;
-  })();
-  var Ol = /* @__PURE__ */ (function() {
-    function Ol2() {
-    }
-    ;
-    Ol2.value = new Ol2();
-    return Ol2;
-  })();
-  var Ul = /* @__PURE__ */ (function() {
-    function Ul2() {
-    }
-    ;
-    Ul2.value = new Ul2();
-    return Ul2;
-  })();
-  var Li = /* @__PURE__ */ (function() {
-    function Li2() {
-    }
-    ;
-    Li2.value = new Li2();
-    return Li2;
-  })();
-  var Small = /* @__PURE__ */ (function() {
-    function Small3() {
-    }
-    ;
-    Small3.value = new Small3();
-    return Small3;
-  })();
-  var Em = /* @__PURE__ */ (function() {
-    function Em3() {
-    }
-    ;
-    Em3.value = new Em3();
-    return Em3;
-  })();
-  var Strong = /* @__PURE__ */ (function() {
-    function Strong2() {
-    }
-    ;
-    Strong2.value = new Strong2();
-    return Strong2;
-  })();
-  var Anchor = /* @__PURE__ */ (function() {
-    function Anchor2() {
-    }
-    ;
-    Anchor2.value = new Anchor2();
-    return Anchor2;
-  })();
-  var P = /* @__PURE__ */ (function() {
-    function P2() {
-    }
-    ;
-    P2.value = new P2();
-    return P2;
-  })();
-  var Pre = /* @__PURE__ */ (function() {
-    function Pre2() {
-    }
-    ;
-    Pre2.value = new Pre2();
-    return Pre2;
-  })();
-  var Section = /* @__PURE__ */ (function() {
-    function Section2() {
-    }
-    ;
-    Section2.value = new Section2();
-    return Section2;
-  })();
-  var Mark = /* @__PURE__ */ (function() {
-    function Mark2() {
-    }
-    ;
-    Mark2.value = new Mark2();
-    return Mark2;
-  })();
-  var Abbr = /* @__PURE__ */ (function() {
-    function Abbr2() {
-    }
-    ;
-    Abbr2.value = new Abbr2();
-    return Abbr2;
-  })();
-  var elementContext = function(v2) {
-    if (v2 instanceof Circle) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Rect) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Path) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Line) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Polygon) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Text) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Group) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof SVG) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Defs) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof LinearGradient) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Stop) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof PatternFill) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Title) {
-      return SVGContext.value;
-    }
-    ;
-    if (v2 instanceof Div) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Span) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Table) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Tr) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Td) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Th) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Tbody) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Thead) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Code) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Var) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Dfn) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Dl) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Dt) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Dd) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Ol) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Ul) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Li) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Small) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Em) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Strong) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Anchor) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof P) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Pre) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Section) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Mark) {
-      return HTMLContext.value;
-    }
-    ;
-    if (v2 instanceof Abbr) {
-      return HTMLContext.value;
-    }
-    ;
-    throw new Error("Failed pattern match at Hylograph.Internal.Element.Types (line 83, column 1 - line 83, column 47): " + [v2.constructor.name]);
-  };
-
   // output/Hylograph.HATS/index.js
   var show3 = /* @__PURE__ */ show(showNumber);
   var append3 = /* @__PURE__ */ append(semigroupArray);
@@ -7383,7 +7920,7 @@
         return Empty.value;
       }
       ;
-      throw new Error("Failed pattern match at Hylograph.HATS (line 497, column 20 - line 502, column 17): " + [v2.constructor.name]);
+      throw new Error("Failed pattern match at Hylograph.HATS (line 500, column 20 - line 505, column 17): " + [v2.constructor.name]);
     };
   };
   var forEach = function(name15) {
@@ -7446,516 +7983,6 @@
   var cx = /* @__PURE__ */ staticNum("cx");
   var class_ = /* @__PURE__ */ staticStr("class");
   var attr = staticStr;
-
-  // output/Hylograph.Interaction.Pointer/foreign.js
-  function attachSimpleDrag_(element4) {
-    return () => () => {
-      let isDragging = false;
-      let transform = { x: 0, y: 0 };
-      function handlePointerDown(event) {
-        if (event.button !== 0) return;
-        isDragging = true;
-        element4.setPointerCapture(event.pointerId);
-        event.preventDefault();
-        event.stopPropagation();
-        if (element4.parentNode) {
-          element4.parentNode.appendChild(element4);
-        }
-        element4.style.cursor = "grabbing";
-      }
-      function handlePointerMove(event) {
-        if (!isDragging) return;
-        const svg2 = element4.ownerSVGElement;
-        if (svg2) {
-          const pt = svg2.createSVGPoint();
-          const ctm = svg2.getScreenCTM();
-          if (ctm) {
-            pt.x = event.movementX;
-            pt.y = event.movementY;
-            const scale = ctm.a;
-            transform.x += event.movementX / scale;
-            transform.y += event.movementY / scale;
-          } else {
-            transform.x += event.movementX;
-            transform.y += event.movementY;
-          }
-        } else {
-          transform.x += event.movementX;
-          transform.y += event.movementY;
-        }
-        element4.setAttribute("transform", `translate(${transform.x},${transform.y})`);
-      }
-      function handlePointerUp(event) {
-        if (!isDragging) return;
-        isDragging = false;
-        element4.releasePointerCapture(event.pointerId);
-        element4.style.cursor = "grab";
-      }
-      function handlePointerCancel(event) {
-        if (!isDragging) return;
-        isDragging = false;
-        element4.releasePointerCapture(event.pointerId);
-        element4.style.cursor = "grab";
-      }
-      function handleDragStart(event) {
-        event.preventDefault();
-      }
-      element4.addEventListener("pointerdown", handlePointerDown);
-      element4.addEventListener("pointermove", handlePointerMove);
-      element4.addEventListener("pointerup", handlePointerUp);
-      element4.addEventListener("pointercancel", handlePointerCancel);
-      element4.addEventListener("dragstart", handleDragStart);
-      element4.style.cursor = "grab";
-      element4.style.touchAction = "none";
-      return element4;
-    };
-  }
-  var simulationRegistry = /* @__PURE__ */ new Map();
-  function registerSimulationForPointer_(simId) {
-    return (reheatFn) => () => {
-      simulationRegistry.set(simId, { reheat: reheatFn });
-    };
-  }
-  function unregisterSimulationForPointer_(simId) {
-    return () => {
-      simulationRegistry.delete(simId);
-    };
-  }
-  function getSimulationReheat(simId) {
-    const sim = simulationRegistry.get(simId);
-    return sim ? sim.reheat : null;
-  }
-  function attachSimulationDragById_(element4) {
-    return (simId) => () => {
-      let isDragging = false;
-      function handlePointerDown(event) {
-        if (event.button !== 0) return;
-        isDragging = true;
-        element4.setPointerCapture(event.pointerId);
-        event.preventDefault();
-        const node = element4.__data__;
-        if (!node) {
-          console.warn("[PointerDrag] No datum on element");
-          return;
-        }
-        const reheat4 = getSimulationReheat(simId);
-        if (reheat4) {
-          reheat4();
-        } else {
-          console.warn(`[PointerDrag] No simulation registered with ID: ${simId}`);
-        }
-        node.fx = node.x;
-        node.fy = node.y;
-        element4.style.cursor = "grabbing";
-      }
-      function handlePointerMove(event) {
-        if (!isDragging) return;
-        const node = element4.__data__;
-        if (!node) return;
-        const svg2 = element4.ownerSVGElement;
-        if (svg2) {
-          const pt = svg2.createSVGPoint();
-          pt.x = event.clientX;
-          pt.y = event.clientY;
-          const parentGroup = element4.parentElement;
-          const ctm = parentGroup?.getScreenCTM?.() || svg2.getScreenCTM();
-          if (ctm) {
-            const svgPt = pt.matrixTransform(ctm.inverse());
-            node.fx = svgPt.x;
-            node.fy = svgPt.y;
-          }
-        } else {
-          node.fx = event.clientX;
-          node.fy = event.clientY;
-        }
-      }
-      function handlePointerUp(event) {
-        if (!isDragging) return;
-        isDragging = false;
-        element4.releasePointerCapture(event.pointerId);
-        const node = element4.__data__;
-        if (node) {
-          node.fx = null;
-          node.fy = null;
-        }
-        element4.style.cursor = "grab";
-      }
-      function handleDragStart(event) {
-        event.preventDefault();
-      }
-      element4.addEventListener("pointerdown", handlePointerDown);
-      element4.addEventListener("pointermove", handlePointerMove);
-      element4.addEventListener("pointerup", handlePointerUp);
-      element4.addEventListener("pointercancel", handlePointerUp);
-      element4.addEventListener("dragstart", handleDragStart);
-      element4.style.cursor = "grab";
-      element4.style.touchAction = "none";
-      return element4;
-    };
-  }
-  function attachSimulationDragNestedById_(element4) {
-    return (simId) => () => {
-      let isDragging = false;
-      function handlePointerDown(event) {
-        if (event.button !== 0) return;
-        isDragging = true;
-        element4.setPointerCapture(event.pointerId);
-        event.preventDefault();
-        const datum = element4.__data__;
-        const node = datum?.node;
-        if (!node) {
-          console.warn("[PointerDragNested] No datum.node on element");
-          return;
-        }
-        const reheat4 = getSimulationReheat(simId);
-        if (reheat4) {
-          reheat4();
-        } else {
-          console.warn(`[PointerDragNested] No simulation registered with ID: ${simId}`);
-        }
-        node.fx = node.x;
-        node.fy = node.y;
-        element4.style.cursor = "grabbing";
-      }
-      function handlePointerMove(event) {
-        if (!isDragging) return;
-        const datum = element4.__data__;
-        const node = datum?.node;
-        if (!node) return;
-        const svg2 = element4.ownerSVGElement;
-        if (svg2) {
-          const pt = svg2.createSVGPoint();
-          pt.x = event.clientX;
-          pt.y = event.clientY;
-          const parentGroup = element4.parentElement;
-          const ctm = parentGroup?.getScreenCTM?.() || svg2.getScreenCTM();
-          if (ctm) {
-            const svgPt = pt.matrixTransform(ctm.inverse());
-            node.fx = svgPt.x;
-            node.fy = svgPt.y;
-          }
-        } else {
-          node.fx = event.clientX;
-          node.fy = event.clientY;
-        }
-      }
-      function handlePointerUp(event) {
-        if (!isDragging) return;
-        isDragging = false;
-        element4.releasePointerCapture(event.pointerId);
-        const datum = element4.__data__;
-        const node = datum?.node;
-        if (node) {
-          node.fx = null;
-          node.fy = null;
-        }
-        element4.style.cursor = "grab";
-      }
-      function handleDragStart(event) {
-        event.preventDefault();
-      }
-      element4.addEventListener("pointerdown", handlePointerDown);
-      element4.addEventListener("pointermove", handlePointerMove);
-      element4.addEventListener("pointerup", handlePointerUp);
-      element4.addEventListener("pointercancel", handlePointerUp);
-      element4.addEventListener("dragstart", handleDragStart);
-      element4.style.cursor = "grab";
-      element4.style.touchAction = "none";
-      return element4;
-    };
-  }
-
-  // output/Hylograph.Interaction.Zoom/foreign.js
-  var ZoomTransform = class _ZoomTransform {
-    constructor(k, x4, y4) {
-      this.k = k;
-      this.x = x4;
-      this.y = y4;
-    }
-    /**
-     * Returns a new transform scaled by k
-     */
-    scale(k) {
-      return k === 1 ? this : new _ZoomTransform(this.k * k, this.x, this.y);
-    }
-    /**
-     * Returns a new transform translated by (x, y) in local coordinates
-     */
-    translate(x4, y4) {
-      return x4 === 0 && y4 === 0 ? this : new _ZoomTransform(this.k, this.x + this.k * x4, this.y + this.k * y4);
-    }
-    /**
-     * Apply transform to a point [x, y] -> [x', y']
-     */
-    apply(point) {
-      return [point[0] * this.k + this.x, point[1] * this.k + this.y];
-    }
-    /**
-     * Apply inverse transform to get original coordinates
-     */
-    applyX(x4) {
-      return x4 * this.k + this.x;
-    }
-    applyY(y4) {
-      return y4 * this.k + this.y;
-    }
-    /**
-     * Invert: given transformed point, return original point
-     */
-    invert(point) {
-      return [(point[0] - this.x) / this.k, (point[1] - this.y) / this.k];
-    }
-    invertX(x4) {
-      return (x4 - this.x) / this.k;
-    }
-    invertY(y4) {
-      return (y4 - this.y) / this.k;
-    }
-    /**
-     * Rescale a scale's domain according to this transform
-     */
-    rescaleX(x4) {
-      return x4.copy().domain(x4.range().map(this.invertX, this).map(x4.invert, x4));
-    }
-    rescaleY(y4) {
-      return y4.copy().domain(y4.range().map(this.invertY, this).map(y4.invert, y4));
-    }
-    toString() {
-      return `translate(${this.x},${this.y}) scale(${this.k})`;
-    }
-  };
-  var identity7 = new ZoomTransform(1, 0, 0);
-  function constrain(transform, extent, translateExtent) {
-    const dx0 = transform.invertX(extent[0][0]) - translateExtent[0][0];
-    const dx1 = transform.invertX(extent[1][0]) - translateExtent[1][0];
-    const dy0 = transform.invertY(extent[0][1]) - translateExtent[0][1];
-    const dy1 = transform.invertY(extent[1][1]) - translateExtent[1][1];
-    let x4 = transform.x;
-    let y4 = transform.y;
-    if (dx1 > dx0) {
-      x4 += (dx0 + dx1) / 2 * transform.k;
-    } else if (dx0 < 0) {
-      x4 -= dx0 * transform.k;
-    } else if (dx1 > 0) {
-      x4 -= dx1 * transform.k;
-    }
-    if (dy1 > dy0) {
-      y4 += (dy0 + dy1) / 2 * transform.k;
-    } else if (dy0 < 0) {
-      y4 -= dy0 * transform.k;
-    } else if (dy1 > 0) {
-      y4 -= dy1 * transform.k;
-    }
-    return x4 === transform.x && y4 === transform.y ? transform : new ZoomTransform(transform.k, x4, y4);
-  }
-  function zoomAround(transform, point, newK) {
-    const p2 = transform.invert(point);
-    const t2 = transform.scale(newK / transform.k);
-    return new ZoomTransform(
-      t2.k,
-      point[0] - p2[0] * t2.k,
-      point[1] - p2[1] * t2.k
-    );
-  }
-  function attachNativeZoom_(element4) {
-    return (config) => () => {
-      const scaleMin = config.scaleMin || 0.1;
-      const scaleMax = config.scaleMax || 10;
-      const targetSelector = config.targetSelector;
-      let transform = config.initialTransform ? new ZoomTransform(
-        config.initialTransform.k,
-        config.initialTransform.x,
-        config.initialTransform.y
-      ) : identity7;
-      let extent = null;
-      function getExtent() {
-        if (!extent) {
-          const rect2 = element4.getBoundingClientRect();
-          extent = [[0, 0], [rect2.width, rect2.height]];
-        }
-        return extent;
-      }
-      function toSVGCoords(clientX2, clientY2) {
-        const svg2 = element4.ownerSVGElement || element4;
-        if (svg2.createSVGPoint) {
-          const pt = svg2.createSVGPoint();
-          pt.x = clientX2;
-          pt.y = clientY2;
-          const ctm = svg2.getScreenCTM();
-          if (ctm) {
-            const inv = ctm.inverse();
-            const svgPt = pt.matrixTransform(inv);
-            return [svgPt.x, svgPt.y];
-          }
-        }
-        const rect2 = element4.getBoundingClientRect();
-        return [clientX2 - rect2.left, clientY2 - rect2.top];
-      }
-      function toSVGDelta(screenDx, screenDy) {
-        const svg2 = element4.ownerSVGElement || element4;
-        if (svg2.getScreenCTM) {
-          const ctm = svg2.getScreenCTM();
-          if (ctm) {
-            const scale = ctm.a;
-            return [screenDx / scale, screenDy / scale];
-          }
-        }
-        return [screenDx, screenDy];
-      }
-      let translateExtent = config.translateExtent || null;
-      const infiniteExtent = [[-Infinity, -Infinity], [Infinity, Infinity]];
-      function applyTransform() {
-        const target6 = element4.querySelector(targetSelector);
-        if (target6) {
-          target6.setAttribute("transform", transform.toString());
-        }
-        element4.__zoom = transform;
-        if (config.onZoom) {
-          config.onZoom({ k: transform.k, x: transform.x, y: transform.y })();
-        }
-      }
-      function setTransform(newTransform) {
-        const k = Math.max(scaleMin, Math.min(scaleMax, newTransform.k));
-        newTransform = new ZoomTransform(k, newTransform.x, newTransform.y);
-        if (translateExtent) {
-          newTransform = constrain(newTransform, getExtent(), translateExtent);
-        }
-        transform = newTransform;
-        applyTransform();
-      }
-      function handleWheel(event) {
-        event.preventDefault();
-        const point = toSVGCoords(event.clientX, event.clientY);
-        const factor = Math.pow(2, -event.deltaY * 2e-3);
-        const newK = Math.max(scaleMin, Math.min(scaleMax, transform.k * factor));
-        if (Math.abs(newK - transform.k) < 1e-3) return;
-        const newTransform = zoomAround(transform, point, newK);
-        setTransform(newTransform);
-      }
-      let isPanning = false;
-      let panStart = null;
-      let transformAtPanStart = null;
-      function handlePointerDown(event) {
-        if (event.button !== 0) return;
-        const target6 = event.target;
-        const isPanTarget = target6 === element4 || // SVG element itself
-        target6.tagName === "svg" || target6.classList.contains("zoom-background") || target6.classList.contains("zoom-group");
-        if (!isPanTarget) {
-          return;
-        }
-        isPanning = true;
-        panStart = [event.clientX, event.clientY];
-        transformAtPanStart = transform;
-        element4.setPointerCapture(event.pointerId);
-        element4.style.cursor = "grabbing";
-      }
-      function handlePointerMove(event) {
-        if (!isPanning) return;
-        const screenDx = event.clientX - panStart[0];
-        const screenDy = event.clientY - panStart[1];
-        const [dx, dy] = toSVGDelta(screenDx, screenDy);
-        const newTransform = new ZoomTransform(
-          transformAtPanStart.k,
-          transformAtPanStart.x + dx,
-          transformAtPanStart.y + dy
-        );
-        setTransform(newTransform);
-      }
-      function handlePointerUp(event) {
-        if (!isPanning) return;
-        isPanning = false;
-        element4.releasePointerCapture(event.pointerId);
-        element4.style.cursor = "grab";
-      }
-      let gestureStartTransform = null;
-      let gestureStartCenter = null;
-      function handleGestureStart(event) {
-        event.preventDefault();
-        gestureStartTransform = transform;
-        const rect2 = element4.getBoundingClientRect();
-        const screenCenterX = rect2.left + rect2.width / 2;
-        const screenCenterY = rect2.top + rect2.height / 2;
-        gestureStartCenter = toSVGCoords(screenCenterX, screenCenterY);
-      }
-      function handleGestureChange(event) {
-        event.preventDefault();
-        if (!gestureStartTransform) return;
-        const newK = gestureStartTransform.k * event.scale;
-        const newTransform = zoomAround(gestureStartTransform, gestureStartCenter, newK);
-        setTransform(newTransform);
-      }
-      function handleGestureEnd(event) {
-        event.preventDefault();
-        gestureStartTransform = null;
-      }
-      element4.addEventListener("wheel", handleWheel, { passive: false });
-      element4.addEventListener("pointerdown", handlePointerDown);
-      element4.addEventListener("pointermove", handlePointerMove);
-      element4.addEventListener("pointerup", handlePointerUp);
-      element4.addEventListener("pointercancel", handlePointerUp);
-      element4.addEventListener("gesturestart", handleGestureStart);
-      element4.addEventListener("gesturechange", handleGestureChange);
-      element4.addEventListener("gestureend", handleGestureEnd);
-      element4.style.cursor = "grab";
-      element4.style.touchAction = "none";
-      if (config.initialTransform) {
-        applyTransform();
-      }
-      const handle = {
-        // Get current transform
-        getTransform: () => ({ k: transform.k, x: transform.x, y: transform.y }),
-        // Set transform directly
-        setTransform: (t2) => () => {
-          setTransform(new ZoomTransform(t2.k, t2.x, t2.y));
-        },
-        // Reset to identity
-        resetZoom: () => {
-          setTransform(identity7);
-        },
-        // Zoom to specific scale at point
-        zoomTo: (k) => (point) => () => {
-          const newTransform = zoomAround(transform, [point.x, point.y], k);
-          setTransform(newTransform);
-        },
-        // Zoom in/out by factor at center
-        zoomBy: (factor) => () => {
-          const rect2 = element4.getBoundingClientRect();
-          const screenCenterX = rect2.left + rect2.width / 2;
-          const screenCenterY = rect2.top + rect2.height / 2;
-          const center2 = toSVGCoords(screenCenterX, screenCenterY);
-          const newK = transform.k * factor;
-          const newTransform = zoomAround(transform, center2, newK);
-          setTransform(newTransform);
-        },
-        // Cleanup
-        destroy: () => {
-          element4.removeEventListener("wheel", handleWheel);
-          element4.removeEventListener("pointerdown", handlePointerDown);
-          element4.removeEventListener("pointermove", handlePointerMove);
-          element4.removeEventListener("pointerup", handlePointerUp);
-          element4.removeEventListener("pointercancel", handlePointerUp);
-          element4.removeEventListener("gesturestart", handleGestureStart);
-          element4.removeEventListener("gesturechange", handleGestureChange);
-          element4.removeEventListener("gestureend", handleGestureEnd);
-          element4.style.cursor = "";
-          element4.style.touchAction = "";
-        }
-      };
-      return handle;
-    };
-  }
-  function attachZoomNative_(element4) {
-    return (scaleMin) => (scaleMax) => (targetSelector) => () => {
-      return attachNativeZoom_(element4)({
-        scaleMin,
-        scaleMax,
-        targetSelector,
-        initialTransform: null,
-        translateExtent: null,
-        onZoom: null
-      })();
-    };
-  }
 
   // output/Hylograph.HATS.InterpreterTick/foreign.js
   var selectElement = (selector) => (doc) => () => {
@@ -8407,7 +8434,203 @@
     activeBrushes.get(group4).push(handle);
   };
 
-  // output/Hylograph.Internal.Transition.Types/index.js
+  // output/Hylograph.Transition.Tick/index.js
+  var linear = function(t2) {
+    return t2;
+  };
+  var elasticC5 = /* @__PURE__ */ (function() {
+    return 2 * pi / 4.5;
+  })();
+  var elasticC4 = /* @__PURE__ */ (function() {
+    return 2 * pi / 3;
+  })();
+  var easeOutSin = function(t2) {
+    return sin(t2 * pi / 2);
+  };
+  var easeOutQuad = function(t2) {
+    return 1 - (1 - t2) * (1 - t2);
+  };
+  var easeOutExp = function(t2) {
+    var $21 = t2 === 1;
+    if ($21) {
+      return 1;
+    }
+    ;
+    return 1 - pow(2)(-10 * t2);
+  };
+  var easeOutElastic = function(t2) {
+    var $22 = t2 === 0;
+    if ($22) {
+      return 0;
+    }
+    ;
+    var $23 = t2 === 1;
+    if ($23) {
+      return 1;
+    }
+    ;
+    return pow(2)(-10 * t2) * sin((t2 * 10 - 0.75) * elasticC4) + 1;
+  };
+  var easeOutCubic = function(t2) {
+    return 1 - (1 - t2) * (1 - t2) * (1 - t2);
+  };
+  var easeOutCircle = function(t2) {
+    return sqrt(1 - (t2 - 1) * (t2 - 1));
+  };
+  var easeInSin = function(t2) {
+    return 1 - cos(t2 * pi / 2);
+  };
+  var easeInQuad = function(t2) {
+    return t2 * t2;
+  };
+  var easeInOutSin = function(t2) {
+    return -(cos(pi * t2) - 1) / 2;
+  };
+  var easeInOutQuad = function(t2) {
+    var $24 = t2 < 0.5;
+    if ($24) {
+      return 2 * t2 * t2;
+    }
+    ;
+    return 1 - (-2 * t2 + 2) * (-2 * t2 + 2) / 2;
+  };
+  var easeInOutExp = function(t2) {
+    var $25 = t2 === 0;
+    if ($25) {
+      return 0;
+    }
+    ;
+    var $26 = t2 === 1;
+    if ($26) {
+      return 1;
+    }
+    ;
+    var $27 = t2 < 0.5;
+    if ($27) {
+      return pow(2)(20 * t2 - 10) / 2;
+    }
+    ;
+    return (2 - pow(2)(-20 * t2 + 10)) / 2;
+  };
+  var easeInOutElastic = function(t2) {
+    var $28 = t2 === 0;
+    if ($28) {
+      return 0;
+    }
+    ;
+    var $29 = t2 === 1;
+    if ($29) {
+      return 1;
+    }
+    ;
+    var $30 = t2 < 0.5;
+    if ($30) {
+      return -(pow(2)(20 * t2 - 10) * sin((20 * t2 - 11.125) * elasticC5)) / 2;
+    }
+    ;
+    return pow(2)(-20 * t2 + 10) * sin((20 * t2 - 11.125) * elasticC5) / 2 + 1;
+  };
+  var easeInOutCubic = function(t2) {
+    var $31 = t2 < 0.5;
+    if ($31) {
+      return 4 * t2 * t2 * t2;
+    }
+    ;
+    return 1 - (-2 * t2 + 2) * (-2 * t2 + 2) * (-2 * t2 + 2) / 2;
+  };
+  var easeInOutCircle = function(t2) {
+    var $32 = t2 < 0.5;
+    if ($32) {
+      return (1 - sqrt(1 - 2 * t2 * (2 * t2))) / 2;
+    }
+    ;
+    return (sqrt(1 - (-2 * t2 + 2) * (-2 * t2 + 2)) + 1) / 2;
+  };
+  var easeInExp = function(t2) {
+    var $33 = t2 === 0;
+    if ($33) {
+      return 0;
+    }
+    ;
+    return pow(2)(10 * (t2 - 1));
+  };
+  var easeInElastic = function(t2) {
+    var $34 = t2 === 0;
+    if ($34) {
+      return 0;
+    }
+    ;
+    var $35 = t2 === 1;
+    if ($35) {
+      return 1;
+    }
+    ;
+    return -pow(2)(10 * t2 - 10) * sin((t2 * 10 - 10.75) * elasticC4);
+  };
+  var easeInCubic = function(t2) {
+    return t2 * t2 * t2;
+  };
+  var easeInCircle = function(t2) {
+    return 1 - sqrt(1 - t2 * t2);
+  };
+  var bounceN1 = 7.5625;
+  var bounceD1 = 2.75;
+  var easeOutBounce = function(t2) {
+    var $36 = t2 < 1 / bounceD1;
+    if ($36) {
+      return bounceN1 * t2 * t2;
+    }
+    ;
+    var $37 = t2 < 2 / bounceD1;
+    if ($37) {
+      var t$prime = t2 - 1.5 / bounceD1;
+      return bounceN1 * t$prime * t$prime + 0.75;
+    }
+    ;
+    var $38 = t2 < 2.5 / bounceD1;
+    if ($38) {
+      var t$prime = t2 - 2.25 / bounceD1;
+      return bounceN1 * t$prime * t$prime + 0.9375;
+    }
+    ;
+    var t$prime = t2 - 2.625 / bounceD1;
+    return bounceN1 * t$prime * t$prime + 0.984375;
+  };
+  var easeInBounce = function(t2) {
+    return 1 - easeOutBounce(1 - t2);
+  };
+  var easeInOutBounce = function(t2) {
+    var $39 = t2 < 0.5;
+    if ($39) {
+      return (1 - easeOutBounce(1 - 2 * t2)) / 2;
+    }
+    ;
+    return (1 + easeOutBounce(2 * t2 - 1)) / 2;
+  };
+  var backC1 = 1.70158;
+  var backC2 = /* @__PURE__ */ (function() {
+    return backC1 * 1.525;
+  })();
+  var easeInOutBack = function(t2) {
+    var $40 = t2 < 0.5;
+    if ($40) {
+      return 2 * t2 * (2 * t2) * ((backC2 + 1) * 2 * t2 - backC2) / 2;
+    }
+    ;
+    return ((2 * t2 - 2) * (2 * t2 - 2) * ((backC2 + 1) * (t2 * 2 - 2) + backC2) + 2) / 2;
+  };
+  var backC3 = /* @__PURE__ */ (function() {
+    return backC1 + 1;
+  })();
+  var easeInBack = function(t2) {
+    return backC3 * t2 * t2 * t2 - backC1 * t2 * t2;
+  };
+  var easeOutBack = function(t2) {
+    var t$prime = t2 - 1;
+    return 1 + backC3 * t$prime * t$prime * t$prime + backC1 * t$prime * t$prime;
+  };
+
+  // output/Hylograph.Transition.Types/index.js
   var Linear = /* @__PURE__ */ (function() {
     function Linear2() {
     }
@@ -8639,202 +8862,6 @@
     BounceInOut2.value = new BounceInOut2();
     return BounceInOut2;
   })();
-
-  // output/Hylograph.Transition.Tick/index.js
-  var linear = function(t2) {
-    return t2;
-  };
-  var elasticC5 = /* @__PURE__ */ (function() {
-    return 2 * pi / 4.5;
-  })();
-  var elasticC4 = /* @__PURE__ */ (function() {
-    return 2 * pi / 3;
-  })();
-  var easeOutSin = function(t2) {
-    return sin(t2 * pi / 2);
-  };
-  var easeOutQuad = function(t2) {
-    return 1 - (1 - t2) * (1 - t2);
-  };
-  var easeOutExp = function(t2) {
-    var $21 = t2 === 1;
-    if ($21) {
-      return 1;
-    }
-    ;
-    return 1 - pow(2)(-10 * t2);
-  };
-  var easeOutElastic = function(t2) {
-    var $22 = t2 === 0;
-    if ($22) {
-      return 0;
-    }
-    ;
-    var $23 = t2 === 1;
-    if ($23) {
-      return 1;
-    }
-    ;
-    return pow(2)(-10 * t2) * sin((t2 * 10 - 0.75) * elasticC4) + 1;
-  };
-  var easeOutCubic = function(t2) {
-    return 1 - (1 - t2) * (1 - t2) * (1 - t2);
-  };
-  var easeOutCircle = function(t2) {
-    return sqrt(1 - (t2 - 1) * (t2 - 1));
-  };
-  var easeInSin = function(t2) {
-    return 1 - cos(t2 * pi / 2);
-  };
-  var easeInQuad = function(t2) {
-    return t2 * t2;
-  };
-  var easeInOutSin = function(t2) {
-    return -(cos(pi * t2) - 1) / 2;
-  };
-  var easeInOutQuad = function(t2) {
-    var $24 = t2 < 0.5;
-    if ($24) {
-      return 2 * t2 * t2;
-    }
-    ;
-    return 1 - (-2 * t2 + 2) * (-2 * t2 + 2) / 2;
-  };
-  var easeInOutExp = function(t2) {
-    var $25 = t2 === 0;
-    if ($25) {
-      return 0;
-    }
-    ;
-    var $26 = t2 === 1;
-    if ($26) {
-      return 1;
-    }
-    ;
-    var $27 = t2 < 0.5;
-    if ($27) {
-      return pow(2)(20 * t2 - 10) / 2;
-    }
-    ;
-    return (2 - pow(2)(-20 * t2 + 10)) / 2;
-  };
-  var easeInOutElastic = function(t2) {
-    var $28 = t2 === 0;
-    if ($28) {
-      return 0;
-    }
-    ;
-    var $29 = t2 === 1;
-    if ($29) {
-      return 1;
-    }
-    ;
-    var $30 = t2 < 0.5;
-    if ($30) {
-      return -(pow(2)(20 * t2 - 10) * sin((20 * t2 - 11.125) * elasticC5)) / 2;
-    }
-    ;
-    return pow(2)(-20 * t2 + 10) * sin((20 * t2 - 11.125) * elasticC5) / 2 + 1;
-  };
-  var easeInOutCubic = function(t2) {
-    var $31 = t2 < 0.5;
-    if ($31) {
-      return 4 * t2 * t2 * t2;
-    }
-    ;
-    return 1 - (-2 * t2 + 2) * (-2 * t2 + 2) * (-2 * t2 + 2) / 2;
-  };
-  var easeInOutCircle = function(t2) {
-    var $32 = t2 < 0.5;
-    if ($32) {
-      return (1 - sqrt(1 - 2 * t2 * (2 * t2))) / 2;
-    }
-    ;
-    return (sqrt(1 - (-2 * t2 + 2) * (-2 * t2 + 2)) + 1) / 2;
-  };
-  var easeInExp = function(t2) {
-    var $33 = t2 === 0;
-    if ($33) {
-      return 0;
-    }
-    ;
-    return pow(2)(10 * (t2 - 1));
-  };
-  var easeInElastic = function(t2) {
-    var $34 = t2 === 0;
-    if ($34) {
-      return 0;
-    }
-    ;
-    var $35 = t2 === 1;
-    if ($35) {
-      return 1;
-    }
-    ;
-    return -pow(2)(10 * t2 - 10) * sin((t2 * 10 - 10.75) * elasticC4);
-  };
-  var easeInCubic = function(t2) {
-    return t2 * t2 * t2;
-  };
-  var easeInCircle = function(t2) {
-    return 1 - sqrt(1 - t2 * t2);
-  };
-  var bounceN1 = 7.5625;
-  var bounceD1 = 2.75;
-  var easeOutBounce = function(t2) {
-    var $36 = t2 < 1 / bounceD1;
-    if ($36) {
-      return bounceN1 * t2 * t2;
-    }
-    ;
-    var $37 = t2 < 2 / bounceD1;
-    if ($37) {
-      var t$prime = t2 - 1.5 / bounceD1;
-      return bounceN1 * t$prime * t$prime + 0.75;
-    }
-    ;
-    var $38 = t2 < 2.5 / bounceD1;
-    if ($38) {
-      var t$prime = t2 - 2.25 / bounceD1;
-      return bounceN1 * t$prime * t$prime + 0.9375;
-    }
-    ;
-    var t$prime = t2 - 2.625 / bounceD1;
-    return bounceN1 * t$prime * t$prime + 0.984375;
-  };
-  var easeInBounce = function(t2) {
-    return 1 - easeOutBounce(1 - t2);
-  };
-  var easeInOutBounce = function(t2) {
-    var $39 = t2 < 0.5;
-    if ($39) {
-      return (1 - easeOutBounce(1 - 2 * t2)) / 2;
-    }
-    ;
-    return (1 + easeOutBounce(2 * t2 - 1)) / 2;
-  };
-  var backC1 = 1.70158;
-  var backC2 = /* @__PURE__ */ (function() {
-    return backC1 * 1.525;
-  })();
-  var easeInOutBack = function(t2) {
-    var $40 = t2 < 0.5;
-    if ($40) {
-      return 2 * t2 * (2 * t2) * ((backC2 + 1) * 2 * t2 - backC2) / 2;
-    }
-    ;
-    return ((2 * t2 - 2) * (2 * t2 - 2) * ((backC2 + 1) * (t2 * 2 - 2) + backC2) + 2) / 2;
-  };
-  var backC3 = /* @__PURE__ */ (function() {
-    return backC1 + 1;
-  })();
-  var easeInBack = function(t2) {
-    return backC3 * t2 * t2 * t2 - backC1 * t2 * t2;
-  };
-  var easeOutBack = function(t2) {
-    var t$prime = t2 - 1;
-    return 1 + backC3 * t$prime * t$prime * t$prime + backC1 * t$prime * t$prime;
-  };
 
   // output/Hylograph.HATS.Transitions/index.js
   var toTickEasing = function(v2) {
@@ -9151,6 +9178,10 @@
     ;
     if (v2 instanceof LinearGradient) {
       return "linearGradient";
+    }
+    ;
+    if (v2 instanceof RadialGradient) {
+      return "radialGradient";
     }
     ;
     if (v2 instanceof Stop) {
@@ -9562,7 +9593,7 @@
       return 2;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 717, column 23 - line 720, column 19): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 718, column 23 - line 721, column 19): " + [v2.constructor.name]);
   };
   var interactionStateToInt = function(v2) {
     if (v2 instanceof Primary2) {
@@ -9585,7 +9616,7 @@
       return 4;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 724, column 25 - line 729, column 18): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 725, column 25 - line 730, column 18): " + [v2.constructor.name]);
   };
   var highlightClassToInt = function(v2) {
     if (v2 instanceof Primary) {
@@ -9612,7 +9643,7 @@
       return 5;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 706, column 23 - line 712, column 21): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 707, column 23 - line 713, column 21): " + [v2.constructor.name]);
   };
   var enumerateDFS = function(root) {
     return function(getChildren) {
@@ -9725,6 +9756,10 @@
     ;
     if (v2 instanceof LinearGradient) {
       return "linearGradient";
+    }
+    ;
+    if (v2 instanceof RadialGradient) {
+      return "radialGradient";
     }
     ;
     if (v2 instanceof Stop) {
@@ -9843,7 +9878,7 @@
       return "abbr";
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 593, column 24 - line 632, column 17): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 593, column 24 - line 633, column 17): " + [v2.constructor.name]);
   };
   var clearChildren = function(el) {
     return function __do5() {
@@ -9872,7 +9907,7 @@
                 return plainHandler(unit)();
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 690, column 5 - line 699, column 26): " + [v2.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 691, column 5 - line 700, column 26): " + [v2.constructor.name]);
             };
           })();
           addEventListener("click")(listener)(false)(toEventTarget(el))();
@@ -10668,18 +10703,6 @@
       };
     };
   };
-
-  // output/Hylograph.Internal.Behavior.FFI/foreign.js
-  function registerSimulation_(simId) {
-    return (reheatFn) => () => {
-      registerSimulationForPointer_(simId)(reheatFn)();
-    };
-  }
-  function unregisterSimulation_(simId) {
-    return () => {
-      unregisterSimulationForPointer_(simId)();
-    };
-  }
 
   // output/Hylograph.Kernel.D3.Links/foreign.js
   var buildIntSet = (arr) => new Set(arr);
@@ -12119,7 +12142,7 @@
     return "#fff";
   };
   var simulationId = "force-playground";
-  var unregisterSimulation = /* @__PURE__ */ unregisterSimulation_(simulationId);
+  var unregisterSimulation2 = /* @__PURE__ */ unregisterSimulation(simulationId);
   var renderSVGContainer = function(containerSelector) {
     var containerTree = elem3(SVG.value)([width(svgWidth), height(svgHeight), viewBox(-svgWidth / 2)(-svgHeight / 2)(svgWidth)(svgHeight), attr("id")("network-force-svg"), class_("network-force"), preserveAspectRatio("xMidYMid meet")])([elem3(Group.value)([attr("id")("network-links"), class_("links")])([]), elem3(Group.value)([attr("id")("network-nodes"), class_("nodes")])([])]);
     return function __do5() {
@@ -12127,8 +12150,8 @@
       return unit;
     };
   };
-  var registerSimulation = function(reheatFn) {
-    return registerSimulation_(simulationId)(reheatFn);
+  var registerSimulation2 = function(reheatFn) {
+    return registerSimulation(simulationId)(reheatFn);
   };
   var opacityForRenderNode = function(rn) {
     if (rn.exitProgress instanceof Just) {
@@ -15189,7 +15212,7 @@
       }
       ;
       if (v2 instanceof Finalize2) {
-        return liftEffect7(unregisterSimulation);
+        return liftEffect7(unregisterSimulation2);
       }
       ;
       if (v2 instanceof SimTick) {
@@ -15245,7 +15268,7 @@
               var model = fromGeneratedGraph(generated);
               return discard2(liftEffect7(log2("V2: Generated: " + (show9(length(model.nodes)) + (" nodes, " + (show9(length(model.links)) + " links"))))))(function() {
                 return bind6(liftEffect7(createSimulation(model)))(function(result) {
-                  return discard2(liftEffect7(registerSimulation(result.handle.reheat)))(function() {
+                  return discard2(liftEffect7(registerSimulation2(result.handle.reheat)))(function() {
                     return discard2(liftEffect7(renderSVGContainer("#force-playground-container")))(function() {
                       return bind6(liftEffect7(toHalogenEmitter(result.events)))(function(halogenEmitter) {
                         return discard2($$void9(subscribe3(mapFlipped2(halogenEmitter)(function(event) {
