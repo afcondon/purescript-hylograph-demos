@@ -15,5 +15,6 @@ sigil/public/bundle.js
 sigil-hats/public/bundle.js
 baskerville-make/public/bundle.js
 baskerville-sudoku/public/bundle.js
+components/public/bundle.js
 .direnv/
 .psc-ide-port
