@@ -1,0 +1,26 @@
+package:
+  name: hylograph-demo-onion
+  description: Watercolour and pen-plotter finishes — catalogue, recipes, Les Mis
+  dependencies:
+    - aff
+    - arrays
+    - console
+    - effect
+    - either
+    - foldable-traversable
+    - halogen
+    - halogen-svg-elems
+    - hylograph-onion
+    - hylograph-simulation
+    - hylograph-simulation-halogen
+    - integers
+    - maybe
+    - nullable
+    - numbers
+    - prelude
+    - refs
+    - tuples
+  bundle:
+    module: Demo.Main
+    outfile: public/bundle.js
+    platform: browser

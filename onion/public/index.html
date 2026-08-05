@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hylograph-onion</title>
+  <style>
+    :root {
+      --paper: #f5f0e8;
+      --ink: #1a1612;
+      --ink-muted: #8a857d;
+      --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 3rem 2rem;
+    }
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+    }
+    .subtitle {
+      font-size: 0.7rem;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2.5rem;
+    }
+    #hero {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+    }
+    nav {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    nav a {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--ink-muted);
+      transition: background 0.15s;
+    }
+    nav a:hover {
+      background: rgba(26, 22, 18, 0.05);
+    }
+    .tagline {
+      font-size: 0.65rem;
+      color: var(--ink-muted);
+      max-width: 420px;
+      text-align: center;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <h1>hylograph-onion</h1>
+  <p class="subtitle">Watercolour, pen-plotter, and hand-coloured finishes for data visualisation</p>
+
+  <div id="hero"></div>
+
+  <nav>
+    <a href="catalogue.html">Catalogue</a>
+    <a href="recipes.html">Recipes</a>
+    <a href="lesmis.html">Les Mis</a>
+  </nav>
+
+  <p class="tagline">
+    Watercolour marks as a visual encoding channel for data visualisation.
+    Size, shape, colour, fuzziness, opacity, gradient, orientation, aspect,
+    and palette — each an independent dimension mapped from data.
+  </p>
+
+  <script type="module" src="bundle.js"></script>
+</body>
+</html>

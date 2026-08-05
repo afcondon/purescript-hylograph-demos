@@ -1,0 +1,88 @@
+:root {
+  --paper: #f5f0e8;
+  --ink: #1a1612;
+  --ink-muted: #8a857d;
+  --ink-light: #c4bfb5;
+  --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 2.5rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+header {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--ink-light);
+  padding-bottom: 1.5rem;
+}
+
+h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  margin-top: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dimension {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(26, 22, 18, 0.06);
+  align-items: start;
+}
+
+.dimension-label h2 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.3rem;
+}
+
+.dimension-label p {
+  font-size: 0.65rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+.dimension-cells {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.dimension-cells svg {
+  border: 1px solid rgba(26, 22, 18, 0.06);
+  background: var(--paper);
+}
+
+.dimension-code {
+  grid-column: 2;
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  background: rgba(26, 22, 18, 0.03);
+  border: 1px solid rgba(26, 22, 18, 0.06);
+  font-family: "SF Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.65rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  white-space: pre;
+  overflow-x: auto;
+  max-width: 100%;
+}

@@ -8,6 +8,7 @@ node_modules/
 graph/public/bundle.js
 graph-decomposition/public/bundle.js
 layout/public/bundle.js
+onion/public/bundle.js
 music/public/bundle.js
 selection/public/bundle.js
 simulation/public/bundle.js

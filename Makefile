@@ -1,4 +1,4 @@
-DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats components
+DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats components onion
 
 .PHONY: all clean site $(DEMOS)
 
