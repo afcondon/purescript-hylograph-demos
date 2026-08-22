@@ -34,7 +34,8 @@ import Data.Number.Format (fixed, toStringWith)
 import Data.Tuple (Tuple(..))
 import DataViz.Layout.StateMachine (StateMachine, StateMachineLayout, circularLayout, defaultConfig, layoutWithConfig, treeStrategy)
 import Effect.Aff.Class (class MonadAff)
-import Glassbox.Codec.JSON (parseSpec)
+import Glassbox.Codec.JSON (parseSpec, printSpecPretty)
+import Glassbox.Codec.Mermaid (toMermaid)
 import Glassbox.Demo.Fetch (fetchText)
 import Glassbox.Demo.Render (Focus, diagramTree)
 import Glassbox.Describe (EdgeExtra, annotate, defaultOptions, describe, machineEdges)
@@ -77,6 +78,14 @@ data LayoutMode = AsRing | AsTree
 
 derive instance eqLayoutMode :: Eq LayoutMode
 
+-- | The machine has more than one textual reading, and neither is the source
+-- | of the drawing — all three come off the same decoded value.
+data TextView
+  = AsArtifact  -- ^ the machine as the decoder understood it, re-encoded
+  | AsMermaid   -- ^ the derived diagram, in a notation GitHub renders
+
+derive instance eqTextView :: Eq TextView
+
 -- | `Nothing` for `loaded` means the artifact has not arrived, or did not
 -- | survive the boundary. A host with no valid machine shows why and offers
 -- | nothing else — it does not carry on with a default.
@@ -87,6 +96,8 @@ type State =
   , showRefusals :: Boolean
   , layoutMode :: LayoutMode
   , hover :: Maybe String
+  , textView :: TextView
+  , textOpen :: Boolean
   -- HATS handlers are plain `Effect Unit`, so hovering has to be posted back
   -- into Halogen through a subscription rather than returned as an Action.
   , listener :: Maybe (HS.Listener Action)
@@ -112,6 +123,8 @@ data Action
   | ToggleRefusals
   | SetLayout LayoutMode
   | SetHover (Maybe String)
+  | SetTextView TextView
+  | ToggleText
 
 component :: forall q i o m. MonadAff m => H.Component q i o m
 component = H.mkComponent
@@ -122,6 +135,8 @@ component = H.mkComponent
       , showRefusals: true
       , layoutMode: AsTree
       , hover: Nothing
+      , textView: AsArtifact
+      , textOpen: false
       , listener: Nothing
       }
   , render
@@ -194,6 +209,10 @@ handleAction = case _ of
   SetLayout mode -> do
     H.modify_ \s -> s { layoutMode = mode }
     redraw
+
+  SetTextView view -> H.modify_ \s -> s { textView = view, textOpen = true }
+
+  ToggleText -> H.modify_ \s -> s { textOpen = not s.textOpen }
 
   SetHover target -> do
     current <- H.gets _.hover
@@ -320,6 +339,7 @@ render state =
             , factsBlock l
             , configBlock l
             , shapeBlock state
+            , textBlock state l
             ]
     )
 
@@ -454,6 +474,52 @@ configBlock l
 configValue :: Loaded -> ConfigId -> Value -> Value
 configValue l key fallback =
   fromMaybe fallback (lookupConfig l.world key)
+
+-- | The machine, in words.
+-- |
+-- | Two readings, and the honest thing about both is that neither is a second
+-- | description kept in step by hand — the artifact is the decoded value
+-- | re-encoded, and the Mermaid is derived from the same resolution of the same
+-- | rules that produced the picture. Three renderings, one value.
+textBlock :: forall m. State -> Loaded -> H.ComponentHTML Action () m
+textBlock state l =
+  HH.div [ HP.class_ (H.ClassName "block") ]
+    [ HH.h2_
+        [ HH.button
+            [ HE.onClick \_ -> ToggleText, HP.class_ (H.ClassName "disclose") ]
+            [ HH.text (if state.textOpen then "▾ In words" else "▸ In words") ]
+        ]
+    , if not state.textOpen then HH.text ""
+      else HH.div_
+        [ HH.div [ HP.class_ (H.ClassName "buttons") ]
+            [ tab AsArtifact "the artifact"
+            , tab AsMermaid "as Mermaid"
+            ]
+        , HH.pre_ [ HH.text body ]
+        , HH.p [ HP.class_ (H.ClassName "quiet") ] [ HH.text gloss ]
+        ]
+    ]
+  where
+  tab view label =
+    HH.button
+      [ HE.onClick \_ -> SetTextView view
+      , HP.class_ (H.ClassName (if state.textView == view then "on" else ""))
+      ]
+      [ HH.text label ]
+
+  body = case state.textView of
+    AsArtifact -> printSpecPretty l.spec
+    AsMermaid -> toMermaid (annotated state l)
+
+  gloss = case state.textView of
+    AsArtifact ->
+      "The machine as the decoder understood it, re-encoded — not the bytes that arrived. \
+      \If this differs from the file on disk, the codec lost something."
+    AsMermaid ->
+      "Derived from the same rules as the picture, so it changes when the \
+      \configuration does — but refusals are left out, since as self-loops they \
+      \would treble the edge count to say what the styling already says. \
+      \Paste it into GitHub, which renders it."
 
 shapeBlock :: forall m. State -> H.ComponentHTML Action () m
 shapeBlock state =

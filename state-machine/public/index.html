@@ -26,7 +26,7 @@
   h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; }
   .lede { margin: 0; max-width: 62ch; color: var(--muted); }
   code { font-family: "SF Mono", Menlo, monospace; font-size: 0.88em; }
-  .panes { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: 40px; align-items: start; }
+  .panes { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(360px, 1fr); gap: 40px; align-items: start; }
   @media (max-width: 900px) { .panes { grid-template-columns: 1fr; } }
   .pane--diagram { border: 1px solid var(--rule); background: #fff; padding: 16px; }
   #glassbox-diagram svg { display: block; width: 100%; height: auto; }
@@ -59,8 +59,18 @@
   .gloss { color: var(--muted); font-size: 12px; }
   pre {
     background: #fff; border: 1px solid var(--rule); padding: 12px;
-    overflow-x: auto; font-size: 11.5px; line-height: 1.45; margin: 0;
+    overflow: auto; max-height: 420px;
+    font-size: 11.5px; line-height: 1.45; margin: 0;
+    white-space: pre; tab-size: 2;
   }
+  .disclose {
+    background: none; border: 0; padding: 0; cursor: pointer;
+    font: inherit; color: inherit; letter-spacing: inherit;
+  }
+  /* A disclosure is not a button you press for an effect, so it must not
+     invert on hover the way the event buttons do. */
+  .disclose:hover { background: none; color: var(--muted); }
+  .pane--controls { position: sticky; top: 24px; }
 </style>
 </head>
 <body>

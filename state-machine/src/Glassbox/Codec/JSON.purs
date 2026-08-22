@@ -39,6 +39,7 @@ module Glassbox.Codec.JSON
   , encodeSpec
   , parseSpec
   , printSpec
+  , printSpecPretty
   ) where
 
 import Prelude
@@ -95,6 +96,16 @@ encodeSpec = Codec.encode specCodec
 
 printSpec :: Spec -> String
 printSpec = J.stringify <<< encodeSpec
+
+foreign import stringifyPrettyImpl :: Json -> String
+
+-- | The artifact as the decoder understood it, re-encoded and indented.
+-- |
+-- | Deliberately NOT the bytes that arrived. Showing the round trip is the
+-- | point: if this differs from the file on disk, the codec lost something,
+-- | and it can be seen rather than inferred from a passing test.
+printSpecPretty :: Spec -> String
+printSpecPretty = stringifyPrettyImpl <<< encodeSpec
 
 -- =============================================================================
 -- Small codecs

@@ -98,10 +98,10 @@
     return dict.map;
   };
   var mapFlipped = function(dictFunctor) {
-    var map113 = map(dictFunctor);
+    var map114 = map(dictFunctor);
     return function(fa) {
       return function(f) {
-        return map113(f)(fa);
+        return map114(f)(fa);
       };
     };
   };
@@ -109,10 +109,10 @@
     return map(dictFunctor)($$const(unit));
   };
   var voidLeft = function(dictFunctor) {
-    var map113 = map(dictFunctor);
+    var map114 = map(dictFunctor);
     return function(f) {
       return function(x) {
-        return map113($$const(x))(f);
+        return map114($$const(x))(f);
       };
     };
   };
@@ -298,10 +298,10 @@
   };
   var eq2 = /* @__PURE__ */ eq(eqBoolean);
   var notEq = function(dictEq) {
-    var eq32 = eq(dictEq);
+    var eq33 = eq(dictEq);
     return function(x) {
       return function(y) {
-        return eq2(eq32(x)(y))(false);
+        return eq2(eq33(x)(y))(false);
       };
     };
   };
@@ -2163,10 +2163,10 @@
     };
   };
   var functorExceptT = function(dictFunctor) {
-    var map113 = map(dictFunctor);
+    var map114 = map(dictFunctor);
     return {
       map: function(f) {
-        return mapExceptT(map113(map5(f)));
+        return mapExceptT(map114(map5(f)));
       }
     };
   };
@@ -4744,7 +4744,7 @@
     },
     foldMap: function(dictMonoid) {
       var mempty2 = mempty(dictMonoid);
-      var append14 = append(dictMonoid.Semigroup0());
+      var append15 = append(dictMonoid.Semigroup0());
       return function(f) {
         var go2 = function(v) {
           if (v instanceof Leaf) {
@@ -4752,7 +4752,7 @@
           }
           ;
           if (v instanceof Node) {
-            return append14(go2(v.value4))(append14(f(v.value3))(go2(v.value5)));
+            return append15(go2(v.value4))(append15(f(v.value3))(go2(v.value5)));
           }
           ;
           throw new Error("Failed pattern match at Data.Map.Internal (line 181, column 10 - line 184, column 28): " + [v.constructor.name]);
@@ -4806,7 +4806,7 @@
     },
     foldMapWithIndex: function(dictMonoid) {
       var mempty2 = mempty(dictMonoid);
-      var append14 = append(dictMonoid.Semigroup0());
+      var append15 = append(dictMonoid.Semigroup0());
       return function(f) {
         var go2 = function(v) {
           if (v instanceof Leaf) {
@@ -4814,7 +4814,7 @@
           }
           ;
           if (v instanceof Node) {
-            return append14(go2(v.value4))(append14(f(v.value2)(v.value3))(go2(v.value5)));
+            return append15(go2(v.value4))(append15(f(v.value2)(v.value3))(go2(v.value5)));
           }
           ;
           throw new Error("Failed pattern match at Data.Map.Internal (line 201, column 10 - line 204, column 30): " + [v.constructor.name]);
@@ -6024,6 +6024,9 @@
     };
   };
 
+  // output/Glassbox.Codec.JSON/foreign.js
+  var stringifyPrettyImpl = (json) => JSON.stringify(json, null, 2);
+
   // output/Data.Argonaut.Core/foreign.js
   function id(x) {
     return x;
@@ -6215,6 +6218,13 @@
   var hasCodePointAt = typeof String.prototype.codePointAt === "function";
 
   // output/Data.String.Common/foreign.js
+  var replaceAll = function(s1) {
+    return function(s2) {
+      return function(s3) {
+        return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2);
+      };
+    };
+  };
   var joinWith = function(s) {
     return function(xs) {
       return xs.join(s);
@@ -6740,7 +6750,7 @@
         return id(v.value0);
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 124, column 12 - line 127, column 32): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 135, column 12 - line 138, column 32): " + [v.constructor.name]);
     };
     var decode2 = function(json) {
       return caseJson($$const(new Left(new TypeMismatch("number, boolean or string"))))(function($97) {
@@ -6812,7 +6822,7 @@
           return lmap3(AtKey.create(k))(decode(array(codec2))(v.value0));
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 423, column 20 - line 425, column 68): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 434, column 20 - line 436, column 68): " + [v.constructor.name]);
       };
     };
   };
@@ -6851,7 +6861,7 @@
         return obj([new Tuple("fact", id(v.value0))]);
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 176, column 12 - line 179, column 63): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 187, column 12 - line 190, column 63): " + [v.constructor.name]);
     };
     var decode2 = function(json) {
       var v = toObject(json);
@@ -6873,7 +6883,7 @@
         return new Left(new TypeMismatch("an expression: a literal, {config}, or {fact}"));
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 180, column 17 - line 185, column 85): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 191, column 17 - line 196, column 85): " + [v.constructor.name]);
     };
     return codec$prime(decode2)(encode2);
   })();
@@ -6887,7 +6897,7 @@
         return "runtime";
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 145, column 8 - line 147, column 29): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 156, column 8 - line 158, column 29): " + [v.constructor.name]);
     };
     var from3 = function(v) {
       if (v === "user") {
@@ -6999,7 +7009,7 @@
         return "ge";
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 160, column 8 - line 166, column 17): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 171, column 8 - line 177, column 17): " + [v.constructor.name]);
     };
     var from3 = function(v) {
       if (v === "eq") {
@@ -7053,7 +7063,7 @@
           return obj([new Tuple("op", encode(cmpOpCodec)(v.value0)), new Tuple("left", encode(exprCodec)(v.value1)), new Tuple("right", encode(exprCodec)(v.value2))]);
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 190, column 17 - line 199, column 8): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 201, column 17 - line 210, column 8): " + [v.constructor.name]);
       };
     };
     var decode2 = function(self) {
@@ -7093,7 +7103,7 @@
           return map14(Holds.create)(decode(exprCodec)(json));
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 200, column 22 - line 211, column 58): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 211, column 22 - line 222, column 58): " + [v.constructor.name]);
       };
     };
     return fix(function(self) {
@@ -7111,7 +7121,7 @@
           return [new Tuple("when", encode(guardCodec)(c.when.value0))];
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 225, column 16 - line 227, column 61): " + [c.when.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 236, column 16 - line 238, column 61): " + [c.when.constructor.name]);
       })();
       var outcomePart = (function() {
         if (c.outcome instanceof Move) {
@@ -7126,7 +7136,7 @@
           return [new Tuple("refuse", encode(refusalIdCodec)(c.outcome.value0))];
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 228, column 19 - line 231, column 73): " + [c.outcome.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 239, column 19 - line 242, column 73): " + [c.outcome.constructor.name]);
       })();
       return obj(append5(whenPart)(outcomePart));
     };
@@ -7142,7 +7152,7 @@
             return map14(Just.create)(decode(guardCodec)(v.value0));
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 234, column 14 - line 236, column 51): " + [v.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 245, column 14 - line 247, column 51): " + [v.constructor.name]);
         })())(function(when$prime) {
           return bind12((function() {
             var v = stringAt(o)("refuse");
@@ -7279,85 +7289,9 @@
       return decodeSpec(json);
     });
   };
-
-  // output/Glassbox.Demo.Fetch/foreign.js
-  var fetchTextImpl = (url2) => (onError, onSuccess) => {
-    const controller = new AbortController();
-    fetch(url2, { signal: controller.signal }).then(
-      (response) => response.ok ? response.text() : Promise.reject(new Error(url2 + ": " + response.status + " " + response.statusText))
-    ).then(onSuccess).catch(onError);
-    return (_cancelError, _onCancelerError, onCancelerSuccess) => {
-      controller.abort();
-      onCancelerSuccess();
-    };
-  };
-
-  // output/Effect.Aff.Compat/index.js
-  var fromEffectFnAff = function(v) {
-    return makeAff(function(k) {
-      return function __do2() {
-        var v1 = v(function($9) {
-          return k(Left.create($9))();
-        }, function($10) {
-          return k(Right.create($10))();
-        });
-        return function(e) {
-          return makeAff(function(k2) {
-            return function __do3() {
-              v1(e, function($11) {
-                return k2(Left.create($11))();
-              }, function($12) {
-                return k2(Right.create($12))();
-              });
-              return nonCanceler;
-            };
-          });
-        };
-      };
-    });
-  };
-
-  // output/Glassbox.Demo.Fetch/index.js
-  var fetchText = function($1) {
-    return fromEffectFnAff(fetchTextImpl($1));
-  };
-
-  // output/DataViz.Layout.StateMachine.Path/index.js
-  var show3 = /* @__PURE__ */ show(showNumber);
-  var selfLoopPathD = function(path) {
-    var dy = path.controlY - path.startY;
-    var dx = path.controlX - path.startX;
-    var radius = sqrt(dx * dx + dy * dy) * 0.8;
-    return "M " + (show3(path.startX) + (" " + (show3(path.startY) + (" A " + (show3(radius) + (" " + (show3(radius) + (" 0" + (" 1" + (" 1" + (" " + (show3(path.endX) + (" " + show3(path.endY))))))))))))));
-  };
-  var transitionPathD = function(path) {
-    if (path.isSelfLoop) {
-      return selfLoopPathD(path);
-    }
-    ;
-    return "M " + (show3(path.startX) + (" " + (show3(path.startY) + (" Q " + (show3(path.controlX) + (" " + (show3(path.controlY) + (" " + (show3(path.endX) + (" " + show3(path.endY)))))))))));
-  };
-  var initialArrowPathD = function(pos) {
-    return function(len) {
-      var endY = pos.y + len * sin(pos.angle);
-      var endX = pos.x + len * cos(pos.angle);
-      return "M " + (show3(pos.x) + (" " + (show3(pos.y) + (" L " + (show3(endX) + (" " + show3(endY)))))));
-    };
-  };
-  var arrowheadPathD = function(tipX) {
-    return function(tipY) {
-      return function(angle) {
-        return function(size6) {
-          var backAngle2 = angle + pi + 0.4;
-          var backAngle1 = angle + pi - 0.4;
-          var back2y = tipY + size6 * sin(backAngle2);
-          var back2x = tipX + size6 * cos(backAngle2);
-          var back1y = tipY + size6 * sin(backAngle1);
-          var back1x = tipX + size6 * cos(backAngle1);
-          return "M " + (show3(tipX) + (" " + (show3(tipY) + (" L " + (show3(back1x) + (" " + (show3(back1y) + (" L " + (show3(back2x) + (" " + (show3(back2y) + " Z")))))))))));
-        };
-      };
-    };
+  var encodeSpec = /* @__PURE__ */ encode(specCodec);
+  var printSpecPretty = function($111) {
+    return stringifyPrettyImpl(encodeSpec($111));
   };
 
   // output/Glassbox.Run/index.js
@@ -7856,6 +7790,125 @@
       return {
         states: machine.states,
         transitions: map16(mark2)(machine.transitions)
+      };
+    };
+  };
+
+  // output/Glassbox.Codec.Mermaid/index.js
+  var notEq5 = /* @__PURE__ */ notEq(eqEdgeKind);
+  var append12 = /* @__PURE__ */ append(semigroupArray);
+  var map17 = /* @__PURE__ */ map(functorArray);
+  var toMermaid = function(machine) {
+    var marker = function(v) {
+      if (v instanceof OnDeadline) {
+        return "after ";
+      }
+      ;
+      return "";
+    };
+    var initialLine = (function() {
+      var v = find2(function(v1) {
+        return v1.isInitial;
+      })(machine.states);
+      if (v instanceof Just) {
+        return ["    [*] --> " + v.value0.id];
+      }
+      ;
+      if (v instanceof Nothing) {
+        return [];
+      }
+      ;
+      throw new Error("Failed pattern match at Glassbox.Codec.Mermaid (line 37, column 17 - line 39, column 18): " + [v.constructor.name]);
+    })();
+    var drawn = function(edge) {
+      return notEq5(edge.extra.kind)(OnRefusal.value);
+    };
+    var clean = replaceAll(":")(" ");
+    var edgeLine = function(edge) {
+      return "    " + (edge.from + (" --> " + (edge.to + (" : " + (marker(edge.extra.kind) + clean(edge.label))))));
+    };
+    var stateLine = function(state3) {
+      return "    " + (state3.id + (" : " + clean(state3.label)));
+    };
+    return joinWith("\n")(append12(["stateDiagram-v2"])(append12(map17(stateLine)(machine.states))(append12(initialLine)(map17(edgeLine)(filter(drawn)(machine.transitions))))));
+  };
+
+  // output/Glassbox.Demo.Fetch/foreign.js
+  var fetchTextImpl = (url2) => (onError, onSuccess) => {
+    const controller = new AbortController();
+    fetch(url2, { signal: controller.signal }).then(
+      (response) => response.ok ? response.text() : Promise.reject(new Error(url2 + ": " + response.status + " " + response.statusText))
+    ).then(onSuccess).catch(onError);
+    return (_cancelError, _onCancelerError, onCancelerSuccess) => {
+      controller.abort();
+      onCancelerSuccess();
+    };
+  };
+
+  // output/Effect.Aff.Compat/index.js
+  var fromEffectFnAff = function(v) {
+    return makeAff(function(k) {
+      return function __do2() {
+        var v1 = v(function($9) {
+          return k(Left.create($9))();
+        }, function($10) {
+          return k(Right.create($10))();
+        });
+        return function(e) {
+          return makeAff(function(k2) {
+            return function __do3() {
+              v1(e, function($11) {
+                return k2(Left.create($11))();
+              }, function($12) {
+                return k2(Right.create($12))();
+              });
+              return nonCanceler;
+            };
+          });
+        };
+      };
+    });
+  };
+
+  // output/Glassbox.Demo.Fetch/index.js
+  var fetchText = function($1) {
+    return fromEffectFnAff(fetchTextImpl($1));
+  };
+
+  // output/DataViz.Layout.StateMachine.Path/index.js
+  var show3 = /* @__PURE__ */ show(showNumber);
+  var selfLoopPathD = function(path) {
+    var dy = path.controlY - path.startY;
+    var dx = path.controlX - path.startX;
+    var radius = sqrt(dx * dx + dy * dy) * 0.8;
+    return "M " + (show3(path.startX) + (" " + (show3(path.startY) + (" A " + (show3(radius) + (" " + (show3(radius) + (" 0" + (" 1" + (" 1" + (" " + (show3(path.endX) + (" " + show3(path.endY))))))))))))));
+  };
+  var transitionPathD = function(path) {
+    if (path.isSelfLoop) {
+      return selfLoopPathD(path);
+    }
+    ;
+    return "M " + (show3(path.startX) + (" " + (show3(path.startY) + (" Q " + (show3(path.controlX) + (" " + (show3(path.controlY) + (" " + (show3(path.endX) + (" " + show3(path.endY)))))))))));
+  };
+  var initialArrowPathD = function(pos) {
+    return function(len) {
+      var endY = pos.y + len * sin(pos.angle);
+      var endX = pos.x + len * cos(pos.angle);
+      return "M " + (show3(pos.x) + (" " + (show3(pos.y) + (" L " + (show3(endX) + (" " + show3(endY)))))));
+    };
+  };
+  var arrowheadPathD = function(tipX) {
+    return function(tipY) {
+      return function(angle) {
+        return function(size6) {
+          var backAngle2 = angle + pi + 0.4;
+          var backAngle1 = angle + pi - 0.4;
+          var back2y = tipY + size6 * sin(backAngle2);
+          var back2x = tipX + size6 * cos(backAngle2);
+          var back1y = tipY + size6 * sin(backAngle1);
+          var back1x = tipX + size6 * cos(backAngle1);
+          return "M " + (show3(tipX) + (" " + (show3(tipY) + (" L " + (show3(back1x) + (" " + (show3(back1y) + (" L " + (show3(back2x) + (" " + (show3(back2y) + " Z")))))))))));
+        };
       };
     };
   };
@@ -8695,8 +8748,8 @@
   var show5 = /* @__PURE__ */ show(showNumber);
   var elem4 = /* @__PURE__ */ elem2(/* @__PURE__ */ eqTuple(eqString)(eqString));
   var elem1 = /* @__PURE__ */ elem2(eqString);
-  var append12 = /* @__PURE__ */ append(semigroupArray);
-  var map17 = /* @__PURE__ */ map(functorArray);
+  var append13 = /* @__PURE__ */ append(semigroupArray);
+  var map18 = /* @__PURE__ */ map(functorArray);
   var shortcut = "#1f6feb";
   var pale = "#cfcfcf";
   var muted = "#8a8a8a";
@@ -8900,7 +8953,7 @@
       return function(focus3) {
         return function(layout) {
           var initialArrow = elem3(Path.value)([staticStr("d")(initialArrowPathD(layout.initialArrow)(8)), staticStr("fill")(ink), staticStr("stroke")(ink), staticStr("stroke-width")("1.5")])([]);
-          return elem3(SVG.value)([staticStr("viewBox")(show5(layout.originX) + (" " + (show5(layout.originY) + (" " + (show5(layout.width) + (" " + show5(layout.height))))))), staticStr("preserveAspectRatio")("xMidYMid meet"), staticStr("width")("100%")])(append12([initialArrow])(append12(map17(edgeGroup(focus3))(layout.transitions))(map17(stateGroup(callbacks)(currentId)(focus3))(layout.states))));
+          return elem3(SVG.value)([staticStr("viewBox")(show5(layout.originX) + (" " + (show5(layout.originY) + (" " + (show5(layout.width) + (" " + show5(layout.height))))))), staticStr("preserveAspectRatio")("xMidYMid meet"), staticStr("width")("100%")])(append13([initialArrow])(append13(map18(edgeGroup(focus3))(layout.transitions))(map18(stateGroup(callbacks)(currentId)(focus3))(layout.states))));
         };
       };
     };
@@ -9035,8 +9088,8 @@
   });
 
   // output/Halogen.VDom.Types/index.js
-  var map18 = /* @__PURE__ */ map(functorArray);
-  var map19 = /* @__PURE__ */ map(functorTuple);
+  var map19 = /* @__PURE__ */ map(functorArray);
+  var map110 = /* @__PURE__ */ map(functorTuple);
   var Text2 = /* @__PURE__ */ (function() {
     function Text3(value0) {
       this.value0 = value0;
@@ -9148,11 +9201,11 @@
       }
       ;
       if (v2 instanceof Elem2) {
-        return new Elem2(v2.value0, v2.value1, v.value0(v2.value2), map18(go2)(v2.value3));
+        return new Elem2(v2.value0, v2.value1, v.value0(v2.value2), map19(go2)(v2.value3));
       }
       ;
       if (v2 instanceof Keyed) {
-        return new Keyed(v2.value0, v2.value1, v.value0(v2.value2), map18(map19(go2))(v2.value3));
+        return new Keyed(v2.value0, v2.value1, v.value0(v2.value2), map19(map110(go2))(v2.value3));
       }
       ;
       if (v2 instanceof Widget) {
@@ -10452,18 +10505,18 @@
   };
   var foldFree = function(dictMonadRec) {
     var Monad0 = dictMonadRec.Monad0();
-    var map113 = map(Monad0.Bind1().Apply0().Functor0());
+    var map114 = map(Monad0.Bind1().Apply0().Functor0());
     var pure15 = pure(Monad0.Applicative0());
     var tailRecM4 = tailRecM(dictMonadRec);
     return function(k) {
       var go2 = function(f) {
         var v = toView(f);
         if (v instanceof Return) {
-          return map113(Done.create)(pure15(v.value0));
+          return map114(Done.create)(pure15(v.value0));
         }
         ;
         if (v instanceof Bind) {
-          return map113(function($199) {
+          return map114(function($199) {
             return Loop.create(v.value1($199));
           })(k(v.value0));
         }
@@ -10906,6 +10959,8 @@
   };
   var label = /* @__PURE__ */ element2("label");
   var p = /* @__PURE__ */ element2("p");
+  var pre = /* @__PURE__ */ element2("pre");
+  var pre_ = /* @__PURE__ */ pre([]);
   var span2 = /* @__PURE__ */ element2("span");
   var span_ = /* @__PURE__ */ span2([]);
   var strong = /* @__PURE__ */ element2("strong");
@@ -12951,7 +13006,7 @@
   var traverse_4 = /* @__PURE__ */ traverse_(applicativeEffect)(foldableArray);
   var pure7 = /* @__PURE__ */ pure(applicativeEffect);
   var unwrap4 = /* @__PURE__ */ unwrap();
-  var map110 = /* @__PURE__ */ map(functorMaybe);
+  var map111 = /* @__PURE__ */ map(functorMaybe);
   var map26 = /* @__PURE__ */ map(functorEffect);
   var traverse2 = /* @__PURE__ */ traverse(traversableArray)(applicativeEffect);
   var union4 = /* @__PURE__ */ union(ordString);
@@ -13515,7 +13570,7 @@
                 ;
                 if (phaseSpec.transition instanceof Just) {
                   var duration2 = unwrap4(phaseSpec.transition.value0.duration);
-                  var baseDelay = fromMaybe(0)(map110(unwrap4)(phaseSpec.transition.value0.delay));
+                  var baseDelay = fromMaybe(0)(map111(unwrap4)(phaseSpec.transition.value0.delay));
                   var staggerDelay = fromMaybe(0)(phaseSpec.transition.value0.staggerDelay);
                   var delay = baseDelay + staggerDelay * toNumber(idx);
                   var easing = toTickEasing(phaseSpec.transition.value0.easing);
@@ -13536,7 +13591,7 @@
               ;
               if (phaseSpec.transition instanceof Just) {
                 var duration2 = unwrap4(phaseSpec.transition.value0.duration);
-                var baseDelay = fromMaybe(0)(map110(unwrap4)(phaseSpec.transition.value0.delay));
+                var baseDelay = fromMaybe(0)(map111(unwrap4)(phaseSpec.transition.value0.delay));
                 var staggerDelay = fromMaybe(0)(phaseSpec.transition.value0.staggerDelay);
                 var delay = baseDelay + staggerDelay * toNumber(idx);
                 var easing = toTickEasing(phaseSpec.transition.value0.easing);
@@ -13557,7 +13612,7 @@
                 ;
                 if (phaseSpec.transition instanceof Just) {
                   var duration2 = unwrap4(phaseSpec.transition.value0.duration);
-                  var baseDelay = fromMaybe(0)(map110(unwrap4)(phaseSpec.transition.value0.delay));
+                  var baseDelay = fromMaybe(0)(map111(unwrap4)(phaseSpec.transition.value0.delay));
                   var staggerDelay = fromMaybe(0)(phaseSpec.transition.value0.staggerDelay);
                   var delay = baseDelay + staggerDelay * toNumber(idx);
                   var easing = toTickEasing(phaseSpec.transition.value0.easing);
@@ -14091,8 +14146,8 @@
   // output/Glassbox.Demo.Component/index.js
   var map27 = /* @__PURE__ */ map(functorMaybe);
   var type_19 = /* @__PURE__ */ type_3(isPropInputType);
-  var map111 = /* @__PURE__ */ map(functorArray);
-  var append13 = /* @__PURE__ */ append(semigroupArray);
+  var map112 = /* @__PURE__ */ map(functorArray);
+  var append14 = /* @__PURE__ */ append(semigroupArray);
   var induce2 = /* @__PURE__ */ induce(ordString);
   var mkSimpleGraph2 = /* @__PURE__ */ mkSimpleGraph(ordString);
   var value13 = /* @__PURE__ */ value2(isPropString);
@@ -14112,7 +14167,21 @@
   var gets2 = /* @__PURE__ */ gets(monadStateHalogenM);
   var pure1 = /* @__PURE__ */ pure(applicativeHalogenM);
   var when4 = /* @__PURE__ */ when(applicativeHalogenM);
-  var notEq5 = /* @__PURE__ */ notEq(/* @__PURE__ */ eqMaybe(eqString));
+  var notEq6 = /* @__PURE__ */ notEq(/* @__PURE__ */ eqMaybe(eqString));
+  var AsArtifact = /* @__PURE__ */ (function() {
+    function AsArtifact2() {
+    }
+    ;
+    AsArtifact2.value = new AsArtifact2();
+    return AsArtifact2;
+  })();
+  var AsMermaid = /* @__PURE__ */ (function() {
+    function AsMermaid2() {
+    }
+    ;
+    AsMermaid2.value = new AsMermaid2();
+    return AsMermaid2;
+  })();
   var AsRing = /* @__PURE__ */ (function() {
     function AsRing2() {
     }
@@ -14227,6 +14296,23 @@
     };
     return SetHover2;
   })();
+  var SetTextView = /* @__PURE__ */ (function() {
+    function SetTextView2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    SetTextView2.create = function(value0) {
+      return new SetTextView2(value0);
+    };
+    return SetTextView2;
+  })();
+  var ToggleText = /* @__PURE__ */ (function() {
+    function ToggleText2() {
+    }
+    ;
+    ToggleText2.value = new ToggleText2();
+    return ToggleText2;
+  })();
   var pendingLine = function(l) {
     var v = dueAt(l.spec)(l.world)(l.current)(l.enteredAt);
     if (v instanceof Just) {
@@ -14237,7 +14323,7 @@
       return text("");
     }
     ;
-    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 371, column 17 - line 375, column 24): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 391, column 17 - line 395, column 24): " + [v.constructor.name]);
   };
   var statusBlock = function(v) {
     return function(l) {
@@ -14259,10 +14345,10 @@
             return p([class_("quiet")])([text(labelOfEvent(l.spec)(l.last.value0.event))]);
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 359, column 36 - line 366, column 93): " + [l.last.value0.outcome.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 379, column 36 - line 386, column 93): " + [l.last.value0.outcome.constructor.name]);
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 357, column 7 - line 366, column 93): " + [l.last.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 377, column 7 - line 386, column 93): " + [l.last.constructor.name]);
       })(), pendingLine(l)]);
     };
   };
@@ -14274,6 +14360,8 @@
         showRefusals: state3.showRefusals,
         layoutMode: state3.layoutMode,
         hover: state3.hover,
+        textView: state3.textView,
+        textOpen: state3.textOpen,
         listener: state3.listener,
         loaded: map27(f)(state3.loaded)
       };
@@ -14298,10 +14386,10 @@
       var row = function(decl) {
         return label([class_("toggle")])([input([type_19(InputCheckbox.value), checked2(factIsSet(l)(decl.id)), onChecked(SetFact.create(decl.id))]), text(decl.label)]);
       };
-      return div2([class_("block")])([h2_([text("The world")]), p([class_("quiet")])([text("Facts the host reports. They change what an event means, not what the machine is.")]), div_(map111(row)(l.spec.facts))]);
+      return div2([class_("block")])([h2_([text("The world")]), p([class_("quiet")])([text("Facts the host reports. They change what an event means, not what the machine is.")]), div_(map112(row)(l.spec.facts))]);
     }
     ;
-    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 394, column 1 - line 394, column 62): " + [l.constructor.name]);
+    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 414, column 1 - line 414, column 62): " + [l.constructor.name]);
   };
   var eventsBlock = function(l) {
     var tickButton = button([onClick(function(v) {
@@ -14312,11 +14400,27 @@
         return new Fire(event);
       })])([text(labelOfEvent(l.spec)(event))]);
     };
-    return div2([class_("block")])([h2_([text("Events")]), div2([class_("buttons")])(append13(map111(button3)(userEvents(l.spec)))([tickButton])), p([class_("quiet")])([text("Runtime events are not offered \u2014 only the machine's clock delivers those.")])]);
+    return div2([class_("block")])([h2_([text("Events")]), div2([class_("buttons")])(append14(map112(button3)(userEvents(l.spec)))([tickButton])), p([class_("quiet")])([text("Runtime events are not offered \u2014 only the machine's clock delivers those.")])]);
   };
   var errorBlock = function(err) {
     return div2([class_("block")])([h2_([text("This artifact did not load")]), p([class_("refusal")])([text(err)]), p([class_("quiet")])([text("A machine that fails the boundary does not run.")])]);
   };
+  var eqTextView = {
+    eq: function(x) {
+      return function(y) {
+        if (x instanceof AsArtifact && y instanceof AsArtifact) {
+          return true;
+        }
+        ;
+        if (x instanceof AsMermaid && y instanceof AsMermaid) {
+          return true;
+        }
+        ;
+        return false;
+      };
+    }
+  };
+  var eq23 = /* @__PURE__ */ eq(eqTextView);
   var eqLayoutMode = {
     eq: function(x) {
       return function(y) {
@@ -14332,13 +14436,13 @@
       };
     }
   };
-  var eq23 = /* @__PURE__ */ eq(eqLayoutMode);
+  var eq32 = /* @__PURE__ */ eq(eqLayoutMode);
   var shapeBlock = function(state3) {
     return div2([class_("block")])([h2_([text("Drawing")]), div2([class_("buttons")])([button([onClick(function(v) {
       return new SetLayout(AsTree.value);
     }), class_((function() {
-      var $107 = eq23(state3.layoutMode)(AsTree.value);
-      if ($107) {
+      var $116 = eq32(state3.layoutMode)(AsTree.value);
+      if ($116) {
         return "on";
       }
       ;
@@ -14346,8 +14450,8 @@
     })())])([text("as the user meets it")]), button([onClick(function(v) {
       return new SetLayout(AsRing.value);
     }), class_((function() {
-      var $108 = eq23(state3.layoutMode)(AsRing.value);
-      if ($108) {
+      var $117 = eq32(state3.layoutMode)(AsRing.value);
+      if ($117) {
         return "on";
       }
       ;
@@ -14366,7 +14470,7 @@
   var induced = function(state3) {
     return function(l) {
       var base2 = described(state3)(l);
-      return induce2(l.spec.initial)(mkSimpleGraph2(map111(function(v) {
+      return induce2(l.spec.initial)(mkSimpleGraph2(map112(function(v) {
         return v.id;
       })(base2.states))(machineEdges(base2)));
     };
@@ -14398,12 +14502,12 @@
           return label([class_("field")])([text(decl.label), span_([text(v.value0)])]);
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 431, column 18 - line 452, column 59): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 451, column 18 - line 472, column 59): " + [v.constructor.name]);
       };
-      return div2([class_("block")])([h2_([text("Configuration")]), p([class_("quiet")])([text("Config reshapes the machine \u2014 watch a state strand itself as you change one.")]), div_(map111(row)(l.spec.config))]);
+      return div2([class_("block")])([h2_([text("Configuration")]), p([class_("quiet")])([text("Config reshapes the machine \u2014 watch a state strand itself as you change one.")]), div_(map112(row)(l.spec.config))]);
     }
     ;
-    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 420, column 1 - line 420, column 63): " + [l.constructor.name]);
+    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 440, column 1 - line 440, column 63): " + [l.constructor.name]);
   };
   var catalogue = [{
     file: "machines/loop.json",
@@ -14426,32 +14530,15 @@
       return button([onClick(function(v) {
         return new Load(entry.file);
       }), class_((function() {
-        var $115 = entry.file === state3.source;
-        if ($115) {
+        var $124 = entry.file === state3.source;
+        if ($124) {
           return "on";
         }
         ;
         return "";
       })())])([text(entry.name)]);
     };
-    return div2([class_("block")])([h2_([text("Machine")]), div2([class_("buttons")])(map111(button3)(catalogue)), p([class_("quiet")])([text("Both are JSON files fetched at runtime. Nothing here was compiled to know about either.")])]);
-  };
-  var render = function(state3) {
-    return div_(append13([pickerBlock(state3)])((function() {
-      if (state3.error instanceof Just) {
-        return [errorBlock(state3.error.value0)];
-      }
-      ;
-      if (state3.loaded instanceof Nothing) {
-        return [p([class_("quiet")])([text("loading\u2026")])];
-      }
-      ;
-      if (state3.loaded instanceof Just) {
-        return [statusBlock(state3)(state3.loaded.value0), eventsBlock(state3.loaded.value0), factsBlock(state3.loaded.value0), configBlock(state3.loaded.value0), shapeBlock(state3)];
-      }
-      ;
-      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 314, column 12 - line 323, column 14): " + [state3.error.constructor.name, state3.loaded.constructor.name]);
-    })()));
+    return div2([class_("block")])([h2_([text("Machine")]), div2([class_("buttons")])(map112(button3)(catalogue)), p([class_("quiet")])([text("Both are JSON files fetched at runtime. Nothing here was compiled to know about either.")])]);
   };
   var annotated = function(state3) {
     return function(l) {
@@ -14467,12 +14554,12 @@
           return e.from === target6 || e.to === target6;
         })(annotated(state3)(l).transitions);
         return {
-          states: nub4(append13(route)(append13([target6])(append13(map111(function(v) {
+          states: nub4(append14(route)(append14([target6])(append14(map112(function(v) {
             return v.from;
-          })(incident))(map111(function(v) {
+          })(incident))(map112(function(v) {
             return v.to;
           })(incident))))),
-          edges: nub12(append13(routeEdges)(map111(function(e) {
+          edges: nub12(append14(routeEdges)(map112(function(e) {
             return new Tuple(e.from, e.to);
           })(incident)))
         };
@@ -14501,7 +14588,7 @@
         })(treeStrategy(induced(state3)(l)))(annotated(state3)(l));
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 254, column 19 - line 262, column 26): " + [state3.layoutMode.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 273, column 19 - line 281, column 26): " + [state3.layoutMode.constructor.name]);
     };
   };
   var redraw = function(dictMonadAff) {
@@ -14521,7 +14608,7 @@
             };
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 287, column 16 - line 289, column 37): " + [state3.listener.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 306, column 16 - line 308, column 37): " + [state3.listener.constructor.name]);
         })()
       };
       return liftEffect8(function __do2() {
@@ -14534,9 +14621,82 @@
           return $$void8(rerender("#glassbox-diagram")(diagramTree(callbacks)(state3.loaded.value0.current)(focusOf(state3)(state3.loaded.value0))(laidOut(state3)(state3.loaded.value0))))();
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 297, column 5 - line 304, column 10): " + [state3.loaded.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 316, column 5 - line 323, column 10): " + [state3.loaded.constructor.name]);
       });
     });
+  };
+  var textBlock = function(state3) {
+    return function(l) {
+      var tab = function(view) {
+        return function(label5) {
+          return button([onClick(function(v) {
+            return new SetTextView(view);
+          }), class_((function() {
+            var $131 = eq23(state3.textView)(view);
+            if ($131) {
+              return "on";
+            }
+            ;
+            return "";
+          })())])([text(label5)]);
+        };
+      };
+      var gloss = (function() {
+        if (state3.textView instanceof AsArtifact) {
+          return "The machine as the decoder understood it, re-encoded \u2014 not the bytes that arrived. If this differs from the file on disk, the codec lost something.";
+        }
+        ;
+        if (state3.textView instanceof AsMermaid) {
+          return "Derived from the same rules as the picture, so it changes when the configuration does \u2014 but refusals are left out, since as self-loops they would treble the edge count to say what the styling already says. Paste it into GitHub, which renders it.";
+        }
+        ;
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 514, column 11 - line 522, column 48): " + [state3.textView.constructor.name]);
+      })();
+      var body2 = (function() {
+        if (state3.textView instanceof AsArtifact) {
+          return printSpecPretty(l.spec);
+        }
+        ;
+        if (state3.textView instanceof AsMermaid) {
+          return toMermaid(annotated(state3)(l));
+        }
+        ;
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 510, column 10 - line 512, column 47): " + [state3.textView.constructor.name]);
+      })();
+      return div2([class_("block")])([h2_([button([onClick(function(v) {
+        return ToggleText.value;
+      }), class_("disclose")])([text((function() {
+        if (state3.textOpen) {
+          return "\u25BE In words";
+        }
+        ;
+        return "\u25B8 In words";
+      })())])]), (function() {
+        var $135 = !state3.textOpen;
+        if ($135) {
+          return text("");
+        }
+        ;
+        return div_([div2([class_("buttons")])([tab(AsArtifact.value)("the artifact"), tab(AsMermaid.value)("as Mermaid")]), pre_([text(body2)]), p([class_("quiet")])([text(gloss)])]);
+      })()]);
+    };
+  };
+  var render = function(state3) {
+    return div_(append14([pickerBlock(state3)])((function() {
+      if (state3.error instanceof Just) {
+        return [errorBlock(state3.error.value0)];
+      }
+      ;
+      if (state3.loaded instanceof Nothing) {
+        return [p([class_("quiet")])([text("loading\u2026")])];
+      }
+      ;
+      if (state3.loaded instanceof Just) {
+        return [statusBlock(state3)(state3.loaded.value0), eventsBlock(state3.loaded.value0), factsBlock(state3.loaded.value0), configBlock(state3.loaded.value0), shapeBlock(state3), textBlock(state3)(state3.loaded.value0)];
+      }
+      ;
+      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 333, column 12 - line 343, column 14): " + [state3.error.constructor.name, state3.loaded.constructor.name]);
+    })()));
   };
   var advance = function(event) {
     return function(l) {
@@ -14551,8 +14711,8 @@
           outcome: v.value1.outcome
         }),
         enteredAt: (function() {
-          var $127 = eq14(v.value0)(l.current);
-          if ($127) {
+          var $141 = eq14(v.value0)(l.current);
+          if ($141) {
             return l.enteredAt;
           }
           ;
@@ -14586,16 +14746,16 @@
         return bind5(liftEffect8(create))(function(v1) {
           return discard22(void1(subscribe2(v1.emitter)))(function() {
             return discard22(modify_3(function(s) {
-              var $136 = {};
-              for (var $137 in s) {
-                if ({}.hasOwnProperty.call(s, $137)) {
-                  $136[$137] = s[$137];
+              var $150 = {};
+              for (var $151 in s) {
+                if ({}.hasOwnProperty.call(s, $151)) {
+                  $150[$151] = s[$151];
                 }
                 ;
               }
               ;
-              $136.listener = new Just(v1.listener);
-              return $136;
+              $150.listener = new Just(v1.listener);
+              return $150;
             }))(function() {
               return bind5(gets2(function(v2) {
                 return v2.source;
@@ -14613,35 +14773,35 @@
             var v1 = parseSpec(text6);
             if (v1 instanceof Left) {
               return modify_3(function(s) {
-                var $142 = {};
-                for (var $143 in s) {
-                  if ({}.hasOwnProperty.call(s, $143)) {
-                    $142[$143] = s[$143];
+                var $156 = {};
+                for (var $157 in s) {
+                  if ({}.hasOwnProperty.call(s, $157)) {
+                    $156[$157] = s[$157];
                   }
                   ;
                 }
                 ;
-                $142.loaded = Nothing.value;
-                $142.error = new Just(v1.value0);
-                $142.source = v.value0;
-                return $142;
+                $156.loaded = Nothing.value;
+                $156.error = new Just(v1.value0);
+                $156.source = v.value0;
+                return $156;
               });
             }
             ;
             if (v1 instanceof Right) {
               return modify_3(function(s) {
-                var $146 = {};
-                for (var $147 in s) {
-                  if ({}.hasOwnProperty.call(s, $147)) {
-                    $146[$147] = s[$147];
+                var $160 = {};
+                for (var $161 in s) {
+                  if ({}.hasOwnProperty.call(s, $161)) {
+                    $160[$161] = s[$161];
                   }
                   ;
                 }
                 ;
-                $146.source = v.value0;
-                $146.error = Nothing.value;
-                $146.hover = Nothing.value;
-                $146.loaded = new Just({
+                $160.source = v.value0;
+                $160.error = Nothing.value;
+                $160.hover = Nothing.value;
+                $160.loaded = new Just({
                   spec: v1.value0,
                   world: worldFrom(v1.value0),
                   current: v1.value0.initial,
@@ -14649,11 +14809,11 @@
                   now: 0,
                   enteredAt: 0
                 });
-                return $146;
+                return $160;
               });
             }
             ;
-            throw new Error("Failed pattern match at Glassbox.Demo.Component (line 151, column 5 - line 165, column 10): " + [v1.constructor.name]);
+            throw new Error("Failed pattern match at Glassbox.Demo.Component (line 166, column 5 - line 180, column 10): " + [v1.constructor.name]);
           })())(function() {
             return redraw1;
           });
@@ -14722,7 +14882,7 @@
             }));
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 185, column 5 - line 187, column 93): " + [v1.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 200, column 5 - line 202, column 93): " + [v1.constructor.name]);
         })())(function() {
           return redraw1;
         });
@@ -14730,16 +14890,16 @@
       ;
       if (v instanceof ToggleRefusals) {
         return discard22(modify_3(function(s) {
-          var $160 = {};
-          for (var $161 in s) {
-            if ({}.hasOwnProperty.call(s, $161)) {
-              $160[$161] = s[$161];
+          var $174 = {};
+          for (var $175 in s) {
+            if ({}.hasOwnProperty.call(s, $175)) {
+              $174[$175] = s[$175];
             }
             ;
           }
           ;
-          $160.showRefusals = !s.showRefusals;
-          return $160;
+          $174.showRefusals = !s.showRefusals;
+          return $174;
         }))(function() {
           return redraw1;
         });
@@ -14747,18 +14907,49 @@
       ;
       if (v instanceof SetLayout) {
         return discard22(modify_3(function(s) {
-          var $163 = {};
-          for (var $164 in s) {
-            if ({}.hasOwnProperty.call(s, $164)) {
-              $163[$164] = s[$164];
+          var $177 = {};
+          for (var $178 in s) {
+            if ({}.hasOwnProperty.call(s, $178)) {
+              $177[$178] = s[$178];
             }
             ;
           }
           ;
-          $163.layoutMode = v.value0;
-          return $163;
+          $177.layoutMode = v.value0;
+          return $177;
         }))(function() {
           return redraw1;
+        });
+      }
+      ;
+      if (v instanceof SetTextView) {
+        return modify_3(function(s) {
+          var $181 = {};
+          for (var $182 in s) {
+            if ({}.hasOwnProperty.call(s, $182)) {
+              $181[$182] = s[$182];
+            }
+            ;
+          }
+          ;
+          $181.textView = v.value0;
+          $181.textOpen = true;
+          return $181;
+        });
+      }
+      ;
+      if (v instanceof ToggleText) {
+        return modify_3(function(s) {
+          var $185 = {};
+          for (var $186 in s) {
+            if ({}.hasOwnProperty.call(s, $186)) {
+              $185[$186] = s[$186];
+            }
+            ;
+          }
+          ;
+          $185.textOpen = !s.textOpen;
+          return $185;
         });
       }
       ;
@@ -14766,24 +14957,24 @@
         return bind5(gets2(function(v1) {
           return v1.hover;
         }))(function(current) {
-          return when4(notEq5(current)(v.value0))(discard22(modify_3(function(s) {
-            var $167 = {};
-            for (var $168 in s) {
-              if ({}.hasOwnProperty.call(s, $168)) {
-                $167[$168] = s[$168];
+          return when4(notEq6(current)(v.value0))(discard22(modify_3(function(s) {
+            var $188 = {};
+            for (var $189 in s) {
+              if ({}.hasOwnProperty.call(s, $189)) {
+                $188[$189] = s[$189];
               }
               ;
             }
             ;
-            $167.hover = v.value0;
-            return $167;
+            $188.hover = v.value0;
+            return $188;
           }))(function() {
             return redraw1;
           }));
         });
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 139, column 16 - line 204, column 13): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 154, column 16 - line 223, column 13): " + [v.constructor.name]);
     };
   };
   var component = function(dictMonadAff) {
@@ -14798,6 +14989,8 @@
           showRefusals: true,
           layoutMode: AsTree.value,
           hover: Nothing.value,
+          textView: AsArtifact.value,
+          textOpen: false,
           listener: Nothing.value
         };
       },
@@ -14936,7 +15129,7 @@
   var pure10 = /* @__PURE__ */ pure(applicativeAff);
   var map29 = /* @__PURE__ */ map(functorCoyoneda);
   var parallel3 = /* @__PURE__ */ parallel(parallelAff);
-  var map112 = /* @__PURE__ */ map(functorAff);
+  var map113 = /* @__PURE__ */ map(functorAff);
   var sequential2 = /* @__PURE__ */ sequential(parallelAff);
   var map210 = /* @__PURE__ */ map(functorMaybe);
   var insert6 = /* @__PURE__ */ insert(ordSubscriptionId);
@@ -15027,7 +15220,7 @@
                     })(dsx);
                   }));
                 };
-                return map112(v2.value2)(sequential2(v2.value0(applicativeParAff)(evalChild)(v1.children)));
+                return map113(v2.value2)(sequential2(v2.value0(applicativeParAff)(evalChild)(v1.children)));
               })(cqb);
             });
           };
