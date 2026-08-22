@@ -9,6 +9,14 @@ workspace:
       path: ../purescript-hylograph-components
     hylograph-onion:
       path: ../purescript-hylograph-onion
+    # Local, because the state-machine demo needs `Transition extra`, which is
+    # newer than the published 0.3.0. Keep publish.version at 0.3.0 there until
+    # we actually publish, or every sibling demo's `<0.4.0` range breaks.
+    hylograph-layout:
+      path: ../purescript-hylograph-layout
+    # Kmett's machines, ported. Not in the registry.
+    machines:
+      path: ../../purescript-ports/purescript-machines
     baskerville-core:
       path: ../../purescript-baskerville
     baskerville-sudoku:

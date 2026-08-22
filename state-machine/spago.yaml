@@ -1,0 +1,21 @@
+package:
+  name: hylograph-demo-state-machine
+  description: "Glassbox step 0: one describable value, interpreted into a Mealy and derived into a diagram"
+  dependencies:
+    - arrays: ">=7.3.0 <8.0.0"
+    - effect: ">=4.0.0 <5.0.0"
+    - halogen: ">=7.0.0 <8.0.0"
+    - hylograph-layout: ">=0.3.0 <0.4.0"
+    - hylograph-selection: ">=0.5.1 <0.6.0"
+    - machines
+    - maybe: ">=6.0.0 <7.0.0"
+    - numbers: ">=9.0.1 <10.0.0"
+    - prelude: ">=6.0.2 <7.0.0"
+    - strings: ">=6.0.1 <7.0.0"
+    - tuples: ">=7.0.0 <8.0.0"
+    - aff: ">=7.1.0 <8.0.0"
+
+  bundle:
+    module: Glassbox.Demo.Main
+    outfile: public/bundle.js
+    platform: browser

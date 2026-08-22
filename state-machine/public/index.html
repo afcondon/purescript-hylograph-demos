@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glassbox — steps 0 and 2</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #6a6a6a;
+    --rule: #d8d8d8;
+    --paper: #fbfbfa;
+    --accent: #c8102e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Helvetica Neue", Helvetica, system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .glassbox { max-width: 1180px; margin: 0 auto; padding: 48px 32px 64px; }
+  header { border-bottom: 2px solid var(--ink); padding-bottom: 20px; margin-bottom: 32px; }
+  h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .lede { margin: 0; max-width: 62ch; color: var(--muted); }
+  code { font-family: "SF Mono", Menlo, monospace; font-size: 0.88em; }
+  .panes { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: 40px; align-items: start; }
+  @media (max-width: 900px) { .panes { grid-template-columns: 1fr; } }
+  .pane--diagram { border: 1px solid var(--rule); background: #fff; padding: 16px; }
+  #glassbox-diagram svg { display: block; width: 100%; height: auto; }
+  .caption { margin: 10px 2px 0; font-size: 12px; color: var(--muted); }
+  .block { margin-bottom: 30px; }
+  h2 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+       color: var(--muted); margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+  .current { font-size: 26px; font-weight: 600; margin: 0 0 2px; letter-spacing: -0.01em; }
+  .quiet { margin: 0; color: var(--muted); font-size: 13px; }
+  .refusal { margin: 0; color: var(--accent); font-size: 13px; }
+  .pending { margin: 6px 0 0; color: var(--accent); font-size: 13px; font-weight: 500; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  button {
+    font: inherit; font-size: 13px; padding: 6px 12px; cursor: pointer;
+    background: #fff; color: var(--ink); border: 1px solid var(--ink); border-radius: 0;
+  }
+  button:hover { background: var(--ink); color: #fff; }
+  button.on { background: var(--ink); color: #fff; }
+  button.tick { border-style: dashed; }
+  label { display: block; font-size: 13px; margin-top: 6px; color: var(--muted); }
+  ul.classes { list-style: none; padding: 0; margin: 8px 0; font-size: 13px; }
+  ul.classes li { display: flex; align-items: baseline; gap: 7px; margin-bottom: 3px; }
+  .swatch { flex: none; width: 22px; height: 0; border-top-width: 2px; border-top-style: solid;
+            border-color: var(--ink); position: relative; top: -4px; }
+  .cls--back .swatch { opacity: 0.45; border-top-width: 1px; }
+  .cls--forward .swatch { border-color: #1f6feb; border-top-style: dashed; }
+  .cls--cross .swatch { border-color: #b8860b; border-top-style: dotted; }
+  .cls--self .swatch { border-color: var(--muted); border-top-style: dotted; }
+  .cls--unreachable .swatch { border-color: #cfcfcf; }
+  .gloss { color: var(--muted); font-size: 12px; }
+  pre {
+    background: #fff; border: 1px solid var(--rule); padding: 12px;
+    overflow-x: auto; font-size: 11.5px; line-height: 1.45; margin: 0;
+  }
+</style>
+</head>
+<body>
+<div class="glassbox">
+  <header>
+    <h1>Glassbox — the machine, and the tree it induces</h1>
+    <p class="lede">One value, read three ways: interpreted into a <code>Mealy</code>
+    from purescript-machines, derived into a diagram for
+    <code>DataViz.Layout.StateMachine</code>, and analysed into the shortest-path tree
+    a user is forced to build — with every edge that tree does not explain sorted
+    into the way out, a shortcut, or a jump into another branch. The highlighted
+    state is read from the running machine, not from a copy.</p>
+  </header>
+  <div class="panes">
+    <section class="pane pane--diagram">
+      <div id="glassbox-diagram"></div>
+      <p class="caption">Hover any state to isolate its route from home and everything it touches.</p>
+    </section>
+    <aside class="pane pane--controls" id="glassbox-controls"></aside>
+  </div>
+</div>
+<script type="module" src="./bundle.js"></script>
+</body>
+</html>
