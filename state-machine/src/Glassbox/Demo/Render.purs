@@ -20,7 +20,7 @@ import Effect (Effect)
 import Data.Maybe (Maybe(..), fromMaybe)
 import DataViz.Layout.StateMachine (LayoutState, LayoutTransition, StateMachineLayout, arrowheadPathD, initialArrowPathD, transitionPathD)
 import Glassbox.Describe (EdgeExtra, EdgeKind(..))
-import Glassbox.Tree (EdgeClass(..))
+import Data.Graph.InducedTree (EdgeClass(..))
 import Hylograph.HATS (Tree, onMouseEnter, onMouseLeave, staticNum, staticStr, withBehaviors)
 import Hylograph.HATS (elem) as HATS
 import Hylograph.Internal.Element.Types (ElementType(..))

@@ -32,13 +32,13 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Number as Number
 import Data.Number.Format (fixed, toStringWith)
 import Data.Tuple (Tuple(..))
-import DataViz.Layout.StateMachine (StateMachine, StateMachineLayout, circularLayout, defaultConfig, layoutWithConfig)
+import DataViz.Layout.StateMachine (StateMachine, StateMachineLayout, circularLayout, defaultConfig, layoutWithConfig, treeStrategy)
 import Effect.Aff.Class (class MonadAff)
 import Glassbox.Codec.JSON (parseSpec)
 import Glassbox.Demo.Fetch (fetchText)
 import Glassbox.Demo.Render (Focus, diagramTree)
 import Glassbox.Describe (EdgeExtra, annotate, defaultOptions, describe, machineEdges)
-import Glassbox.Layout.Tree (treeStrategy)
+
 import Glassbox.Run (World, dueAt, lookupConfig, lookupFact, setConfig, setFact, step, worldFrom)
 import Glassbox.Spec
   ( ConfigId
@@ -53,7 +53,8 @@ import Glassbox.Spec
   , textOfRefusal
   , userEvents
   )
-import Glassbox.Tree (Induced, induce, pathFromRoot)
+import Data.Graph.Algorithms (mkSimpleGraph)
+import Data.Graph.InducedTree (Induced, induce, pathFromRoot)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
@@ -236,13 +237,13 @@ described :: State -> Loaded -> StateMachine Unit EdgeExtra
 described state l =
   describe (defaultOptions { showRefusals = state.showRefusals }) l.world l.spec
 
-induced :: State -> Loaded -> Induced
+induced :: State -> Loaded -> Induced String
 induced state l =
   let
     base = described state l
     StateId root = l.spec.initial
   in
-    induce root (map _.id base.states) (machineEdges base)
+    induce root (mkSimpleGraph (map _.id base.states) (machineEdges base))
 
 annotated :: State -> Loaded -> StateMachine Unit EdgeExtra
 annotated state l = annotate (induced state l) (described state l)

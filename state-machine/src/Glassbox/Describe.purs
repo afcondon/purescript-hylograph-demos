@@ -47,7 +47,7 @@ import Glassbox.Spec
   , labelOfEvent
   , textOfRefusal
   )
-import Glassbox.Tree (EdgeClass, Induced, classOf)
+import Data.Graph.InducedTree (EdgeClass, Induced, classOf)
 
 -- | How an edge came to exist.
 data EdgeKind
@@ -73,7 +73,7 @@ type EdgeExtra =
 -- |
 -- | A second, independent annotation on the same edges. `describe` says how an
 -- | edge came to exist; `annotate` says what it means to someone navigating.
-annotate :: Induced -> StateMachine Unit EdgeExtra -> StateMachine Unit EdgeExtra
+annotate :: Induced String -> StateMachine Unit EdgeExtra -> StateMachine Unit EdgeExtra
 annotate induced machine = machine
   { transitions = map mark machine.transitions }
   where
