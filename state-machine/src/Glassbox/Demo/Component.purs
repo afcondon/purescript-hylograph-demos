@@ -1,12 +1,19 @@
 -- | Glassbox.Demo.Component
 -- |
--- | Steps 0 and 2 of Glassbox: one value, run and drawn — and drawn as the tree
--- | the user actually experiences.
+-- | A machine inspector: it loads an artifact and shows you what it does.
 -- |
 -- | The acceptance test this component exists to satisfy, and to be able to
--- | fail, is that **the highlighted state is read from the running Mealy**.
--- | `State.step` is only ever written from `stepMealy`; nothing else in this
--- | module assigns it.
+-- | fail, is that **it knows nothing about any particular machine**. There is no
+-- | `Phase`, no `LoopEvent`, no count-in and no converter anywhere in this file.
+-- | Every button, toggle and field below is generated from what the artifact
+-- | declares about itself, which is why the same component runs a guitar looper
+-- | and a car radio without being recompiled. If a machine ever needs a line
+-- | here, the thesis has failed.
+-- |
+-- | The current state is a plain `StateId` held in the component's own state —
+-- | comparable, printable, serialisable. An earlier version stored a `Mealy`,
+-- | which meant the same phase lived in two places and one of them was a
+-- | closure.
 -- |
 -- | The diagram lives in a container declared by the page, NOT in this
 -- | component's tree. Halogen owns its own DOM and HATS owns its own DOM, and
@@ -20,37 +27,59 @@ module Glassbox.Demo.Component
 import Prelude
 
 import Data.Array as Array
-import Data.Machine.Mealy (Mealy, stepMealy)
-import Data.Map as Map
-import Data.Maybe (Maybe(..), isJust, maybe)
+import Data.Either (Either(..))
+import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Number as Number
 import Data.Number.Format (fixed, toStringWith)
 import Data.Tuple (Tuple(..))
 import DataViz.Layout.StateMachine (StateMachine, StateMachineLayout, circularLayout, defaultConfig, layoutWithConfig)
 import Effect.Aff.Class (class MonadAff)
-import Glassbox.Codec.Mermaid (toMermaid)
-import Glassbox.Demo.Loop (Beats, Cfg, Env, LoopEvent(..), Phase, defaultCfg, defaultEnv, loopMachine, userEvents)
+import Glassbox.Codec.JSON (parseSpec)
+import Glassbox.Demo.Fetch (fetchText)
 import Glassbox.Demo.Render (Focus, diagramTree)
 import Glassbox.Describe (EdgeExtra, annotate, defaultOptions, describe, machineEdges)
-import Glassbox.Interpret (Input, Step, initialStep, toMealy)
 import Glassbox.Layout.Tree (treeStrategy)
-import Glassbox.Machine (Outcome(..), refusalText)
-import Glassbox.Tree (EdgeClass(..), Induced, asymmetries, depthOf, edgeClassLabel, induce, pathFromRoot, returnCostOf)
+import Glassbox.Run (World, dueAt, lookupConfig, lookupFact, setConfig, setFact, step, worldFrom)
+import Glassbox.Spec
+  ( ConfigId
+  , EventId
+  , FactId
+  , Outcome(..)
+  , Spec
+  , StateId(..)
+  , Value(..)
+  , labelOfEvent
+  , labelOfState
+  , textOfRefusal
+  , userEvents
+  )
+import Glassbox.Tree (Induced, induce, pathFromRoot)
 import Halogen as H
-import Halogen.Subscription as HS
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
+import Halogen.Subscription as HS
 import Hylograph.HATS.InterpreterTick (clearContainer, rerender)
+
+-- | The artifacts on offer. Adding one here is a link in a menu, not a feature:
+-- | the machine itself is entirely in the file.
+catalogue :: Array { file :: String, name :: String }
+catalogue =
+  [ { file: "machines/loop.json", name: "Guitar looper" }
+  , { file: "machines/car-radio.json", name: "Car radio" }
+  ]
 
 data LayoutMode = AsRing | AsTree
 
 derive instance eqLayoutMode :: Eq LayoutMode
 
+-- | `Nothing` for `loaded` means the artifact has not arrived, or did not
+-- | survive the boundary. A host with no valid machine shows why and offers
+-- | nothing else — it does not carry on with a default.
 type State =
-  { mealy :: Mealy (Input Env Cfg LoopEvent) (Step Phase LoopEvent)
-  , step :: Step Phase LoopEvent          -- the ONLY source for the highlight
-  , env :: Env
-  , cfg :: Cfg
+  { loaded :: Maybe Loaded
+  , error :: Maybe String
+  , source :: String
   , showRefusals :: Boolean
   , layoutMode :: LayoutMode
   , hover :: Maybe String
@@ -59,12 +88,23 @@ type State =
   , listener :: Maybe (HS.Listener Action)
   }
 
+type Loaded =
+  { spec :: Spec
+  , world :: World
+  , current :: StateId
+  , last :: Maybe { event :: EventId, outcome :: Outcome }
+  , now :: Number
+  , enteredAt :: Number
+  }
+
 data Action
   = Initialize
-  | Fire LoopEvent
+  | Load String
+  | Fire EventId
   | Tick
-  | SetCountIn Beats
-  | ToggleConverter
+  | SetFact FactId Boolean
+  | SetConfigNumber ConfigId String
+  | SetConfigBool ConfigId Boolean
   | ToggleRefusals
   | SetLayout LayoutMode
   | SetHover (Maybe String)
@@ -72,10 +112,9 @@ data Action
 component :: forall q i o m. MonadAff m => H.Component q i o m
 component = H.mkComponent
   { initialState: \_ ->
-      { mealy: toMealy loopMachine
-      , step: initialStep loopMachine PressStop
-      , env: defaultEnv
-      , cfg: defaultCfg
+      { loaded: Nothing
+      , error: Nothing
+      , source: fromMaybe "" (map _.file (Array.head catalogue))
       , showRefusals: true
       , layoutMode: AsTree
       , hover: Nothing
@@ -98,30 +137,50 @@ handleAction = case _ of
     { emitter, listener } <- H.liftEffect HS.create
     void (H.subscribe emitter)
     H.modify_ \s -> s { listener = Just listener }
+    source <- H.gets _.source
+    handleAction (Load source)
+
+  Load file -> do
+    text <- H.liftAff (fetchText file)
+    -- The boundary is checked, not trusted: a machine that does not decode does
+    -- not run, and the reason is shown rather than swallowed.
+    case parseSpec text of
+      Left err -> H.modify_ \s -> s { loaded = Nothing, error = Just err, source = file }
+      Right spec -> H.modify_ \s -> s
+        { source = file
+        , error = Nothing
+        , hover = Nothing
+        , loaded = Just
+            { spec
+            , world: worldFrom spec
+            , current: spec.initial
+            , last: Nothing
+            , now: 0.0
+            , enteredAt: 0.0
+            }
+        }
     redraw
 
   Fire event -> do
-    H.modify_ (advance event)
+    H.modify_ (overLoaded (advance event))
     redraw
 
   Tick -> do
-    state <- H.get
-    let ticked = state { env = state.env { nowBeats = state.env.nowBeats + 1.0 } }
-    H.put (if dueNow ticked then advance Elapsed ticked else ticked)
+    H.modify_ (overLoaded tick)
     redraw
 
-  SetCountIn n -> do
-    H.modify_ \s -> s { cfg = s.cfg { countInBeats = n } }
+  SetFact key on -> do
+    H.modify_ (overLoaded \l -> l { world = setFact key (VBoolean on) l.world })
     redraw
 
-  ToggleConverter -> do
-    H.modify_ \s -> s
-      { env = s.env
-          { converterHeldBy = case s.env.converterHeldBy of
-              Just _ -> Nothing
-              Nothing -> Just 3
-          }
-      }
+  SetConfigBool key on -> do
+    H.modify_ (overLoaded \l -> l { world = setConfig key (VBoolean on) l.world })
+    redraw
+
+  SetConfigNumber key raw -> do
+    case Number.fromString raw of
+      Nothing -> pure unit
+      Just n -> H.modify_ (overLoaded \l -> l { world = setConfig key (VNumber n) l.world })
     redraw
 
   ToggleRefusals -> do
@@ -140,32 +199,82 @@ handleAction = case _ of
       H.modify_ \s -> s { hover = target }
       redraw
 
--- | Feed one event through the Mealy and take the machine's word for the result.
-advance :: LoopEvent -> State -> State
-advance event state =
+overLoaded :: (Loaded -> Loaded) -> State -> State
+overLoaded f state = state { loaded = map f state.loaded }
+
+-- | Feed one event through the machine and take its word for the result.
+advance :: EventId -> Loaded -> Loaded
+advance event l =
   let
-    input = { env: state.env, cfg: state.cfg, event }
-    Tuple nextMealy step = stepMealy state.mealy input
-    entered =
-      if step.current == step.from then state.env.enteredAt else state.env.nowBeats
+    Tuple next record = step l.spec l.world l.current event
   in
-    state
-      { mealy = nextMealy
-      , step = step
-      , env = state.env { enteredAt = entered }
+    l
+      { current = next
+      , last = Just { event, outcome: record.outcome }
+      , enteredAt = if next == l.current then l.enteredAt else l.now
       }
 
-dueNow :: State -> Boolean
-dueNow state = case loopMachine.pending state.env state.cfg state.step.current of
-  Just { at } -> state.env.nowBeats >= at
-  Nothing -> false
-
--- | Clear before redrawing.
+-- | Advance the clock, and deliver the deadline's event if it has come due.
 -- |
--- | The edge count genuinely changes — a different count-in reshapes the
--- | machine, and refusals can be hidden — and HATS joins by position, so a
--- | shorter list would leave the tail of the previous drawing on screen wearing
--- | the wrong attributes.
+-- | The runtime owns deadline delivery, which is what a declared `pending`
+-- | buys: there is no timer to leave running when the state changes.
+tick :: Loaded -> Loaded
+tick l =
+  let
+    ticked = l { now = l.now + 1.0 }
+  in
+    case dueAt ticked.spec ticked.world ticked.current ticked.enteredAt of
+      Just { fires, at } | ticked.now >= at -> advance fires ticked
+      _ -> ticked
+
+-- ---------------------------------------------------------------------------
+-- The readings of the machine, all from one value
+-- ---------------------------------------------------------------------------
+
+described :: State -> Loaded -> StateMachine Unit EdgeExtra
+described state l =
+  describe (defaultOptions { showRefusals = state.showRefusals }) l.world l.spec
+
+induced :: State -> Loaded -> Induced
+induced state l =
+  let
+    base = described state l
+    StateId root = l.spec.initial
+  in
+    induce root (map _.id base.states) (machineEdges base)
+
+annotated :: State -> Loaded -> StateMachine Unit EdgeExtra
+annotated state l = annotate (induced state l) (described state l)
+
+laidOut :: State -> Loaded -> StateMachineLayout Unit EdgeExtra
+laidOut state l = case state.layoutMode of
+  AsRing -> layoutWithConfig defaultConfig circularLayout (annotated state l)
+  AsTree ->
+    -- Nearly straight links: a ring needs its chords bowed apart, a tidy tree
+    -- does not, and the bow is what was throwing the labels on top of each
+    -- other.
+    layoutWithConfig (defaultConfig { edgeCurvature = 0.04 })
+      (treeStrategy (induced state l))
+      (annotated state l)
+
+-- | What to keep lit when the reader is pointing at a state.
+-- |
+-- | Two things, and the first is the one worth having: **the path home**, from
+-- | the induced tree, which answers the question a user actually has — *how do I
+-- | get here* — and which no amount of edge routing would have made legible in a
+-- | crowded picture.
+focusOf :: State -> Loaded -> Maybe Focus
+focusOf state l = state.hover <#> \target ->
+  let
+    route = pathFromRoot (induced state l) target
+    routeEdges = Array.zip route (Array.drop 1 route)
+    incident = Array.filter (\e -> e.from == target || e.to == target)
+      (annotated state l).transitions
+  in
+    { states: Array.nub (route <> [ target ] <> map _.from incident <> map _.to incident)
+    , edges: Array.nub (routeEdges <> map (\e -> Tuple e.from e.to) incident)
+    }
+
 redraw :: forall o m. MonadAff m => H.HalogenM State Action () o m Unit
 redraw = do
   state <- H.get
@@ -176,65 +285,19 @@ redraw = do
           Nothing -> \_ -> pure unit
       }
   H.liftEffect do
+    -- The edge count genuinely changes — a different config reshapes the
+    -- machine, and refusals can be hidden — and HATS joins by position, so a
+    -- shorter list would leave the tail of the previous drawing on screen
+    -- wearing the wrong attributes.
     clearContainer "#glassbox-diagram"
-    void $ rerender "#glassbox-diagram"
-      ( diagramTree callbacks
-          (loopMachine.stateId state.step.current)
-          (focusOf state)
-          (laidOut state)
-      )
-
--- | What to keep lit when the reader is pointing at a state.
--- |
--- | Two things, and the first is the one worth having: **the path home**, from
--- | the induced tree, which answers the question a user actually has — *how do I
--- | get here* — and which no amount of edge routing would have made legible in a
--- | crowded picture. The second is the state's own incident edges: what you can
--- | do once you arrive, and what else leads here.
-focusOf :: State -> Maybe Focus
-focusOf state = state.hover <#> \target ->
-  let
-    tree = induced state
-    route = pathFromRoot tree target
-    routeEdges = Array.zip route (Array.drop 1 route)
-    incident = Array.filter (\e -> e.from == target || e.to == target)
-      (annotated state).transitions
-  in
-    { states: Array.nub (route <> [ target ] <> map _.from incident <> map _.to incident)
-    , edges: Array.nub (routeEdges <> map (\e -> Tuple e.from e.to) incident)
-    }
-
--- ---------------------------------------------------------------------------
--- The three readings of the machine, all from one value
--- ---------------------------------------------------------------------------
-
-described :: State -> StateMachine Unit EdgeExtra
-described state =
-  describe (defaultOptions { showRefusals = state.showRefusals })
-    state.env
-    state.cfg
-    loopMachine
-
-induced :: State -> Induced
-induced state =
-  let base = described state
-  in induce (loopMachine.stateId loopMachine.initial)
-       (map _.id base.states)
-       (machineEdges base)
-
-annotated :: State -> StateMachine Unit EdgeExtra
-annotated state = annotate (induced state) (described state)
-
-laidOut :: State -> StateMachineLayout Unit EdgeExtra
-laidOut state = case state.layoutMode of
-  AsRing -> layoutWithConfig defaultConfig circularLayout (annotated state)
-  AsTree ->
-    -- Nearly straight links: a ring needs its chords bowed apart, a tidy tree
-    -- does not, and the bow is what was throwing the labels on top of each
-    -- other.
-    layoutWithConfig (defaultConfig { edgeCurvature = 0.04 })
-      (treeStrategy (induced state))
-      (annotated state)
+    case state.loaded of
+      Nothing -> pure unit
+      Just l -> void $ rerender "#glassbox-diagram"
+        ( diagramTree callbacks
+            (case l.current of StateId s -> s)
+            (focusOf state l)
+            (laidOut state l)
+        )
 
 -- ---------------------------------------------------------------------------
 -- View
@@ -243,186 +306,173 @@ laidOut state = case state.layoutMode of
 render :: forall m. State -> H.ComponentHTML Action () m
 render state =
   HH.div_
-    [ statusBlock state
-    , transportBlock
-    , settingsBlock state
-    , shapeBlock state
-    , mermaidBlock state
+    ( [ pickerBlock state ]
+        <> case state.error, state.loaded of
+          Just err, _ -> [ errorBlock err ]
+          _, Nothing -> [ HH.p [ HP.class_ (H.ClassName "quiet") ] [ HH.text "loading…" ] ]
+          _, Just l ->
+            [ statusBlock state l
+            , eventsBlock l
+            , factsBlock l
+            , configBlock l
+            , shapeBlock state
+            ]
+    )
+
+errorBlock :: forall m. String -> H.ComponentHTML Action () m
+errorBlock err =
+  HH.div [ HP.class_ (H.ClassName "block") ]
+    [ HH.h2_ [ HH.text "This artifact did not load" ]
+    , HH.p [ HP.class_ (H.ClassName "refusal") ] [ HH.text err ]
+    , HH.p [ HP.class_ (H.ClassName "quiet") ]
+        [ HH.text "A machine that fails the boundary does not run." ]
     ]
 
-statusBlock :: forall m. State -> H.ComponentHTML Action () m
-statusBlock state =
+pickerBlock :: forall m. State -> H.ComponentHTML Action () m
+pickerBlock state =
   HH.div [ HP.class_ (H.ClassName "block") ]
-    [ HH.h2_ [ HH.text "State" ]
+    [ HH.h2_ [ HH.text "Machine" ]
+    , HH.div [ HP.class_ (H.ClassName "buttons") ] (map button catalogue)
+    , HH.p [ HP.class_ (H.ClassName "quiet") ]
+        [ HH.text "Both are JSON files fetched at runtime. Nothing here was compiled to know about either." ]
+    ]
+  where
+  button entry =
+    HH.button
+      [ HE.onClick \_ -> Load entry.file
+      , HP.class_ (H.ClassName (if entry.file == state.source then "on" else ""))
+      ]
+      [ HH.text entry.name ]
+
+statusBlock :: forall m. State -> Loaded -> H.ComponentHTML Action () m
+statusBlock _ l =
+  HH.div [ HP.class_ (H.ClassName "block") ]
+    [ HH.h2_ [ HH.text l.spec.title ]
     , HH.p [ HP.class_ (H.ClassName "current") ]
-        [ HH.text (loopMachine.stateLabel state.step.current) ]
-    , case state.step.outcome of
-        Refused refusal ->
-          HH.p [ HP.class_ (H.ClassName "refusal") ]
-            [ HH.strong_ [ HH.text "refused — " ], HH.text (refusalText refusal) ]
-        Stay -> HH.p [ HP.class_ (H.ClassName "quiet") ] [ HH.text "nothing to do here" ]
-        Move _ ->
-          HH.p [ HP.class_ (H.ClassName "quiet") ]
-            [ HH.text (loopMachine.eventLabel state.step.event) ]
-    , pendingLine state
+        [ HH.text (labelOfState l.spec l.current) ]
+    , case l.last of
+        Nothing -> HH.p [ HP.class_ (H.ClassName "quiet") ] [ HH.text "nothing pressed yet" ]
+        Just { event, outcome } -> case outcome of
+          Refuse rid ->
+            HH.p [ HP.class_ (H.ClassName "refusal") ]
+              [ HH.strong_ [ HH.text "refused — " ], HH.text (textOfRefusal l.spec rid) ]
+          Stay ->
+            HH.p [ HP.class_ (H.ClassName "quiet") ] [ HH.text "nothing to do here" ]
+          Move _ ->
+            HH.p [ HP.class_ (H.ClassName "quiet") ] [ HH.text (labelOfEvent l.spec event) ]
+    , pendingLine l
     ]
 
-pendingLine :: forall m. State -> H.ComponentHTML Action () m
-pendingLine state =
-  case loopMachine.pending state.env state.cfg state.step.current of
-    Just { at } ->
-      HH.p [ HP.class_ (H.ClassName "pending") ]
-        [ HH.text ("starts in " <> beats (at - state.env.nowBeats) <> " beats") ]
-    Nothing -> HH.text ""
+pendingLine :: forall m. Loaded -> H.ComponentHTML Action () m
+pendingLine l = case dueAt l.spec l.world l.current l.enteredAt of
+  Just { fires, at } ->
+    HH.p [ HP.class_ (H.ClassName "pending") ]
+      [ HH.text (labelOfEvent l.spec fires <> " in " <> toStringWith (fixed 0) (at - l.now)) ]
+  Nothing -> HH.text ""
 
-transportBlock :: forall m. H.ComponentHTML Action () m
-transportBlock =
+eventsBlock :: forall m. Loaded -> H.ComponentHTML Action () m
+eventsBlock l =
   HH.div [ HP.class_ (H.ClassName "block") ]
-    [ HH.h2_ [ HH.text "Footswitch" ]
+    [ HH.h2_ [ HH.text "Events" ]
     , HH.div [ HP.class_ (H.ClassName "buttons") ]
-        (map button userEvents <> [ tickButton ])
+        (map button (userEvents l.spec) <> [ tickButton ])
+    , HH.p [ HP.class_ (H.ClassName "quiet") ]
+        [ HH.text "Runtime events are not offered — only the machine's clock delivers those." ]
     ]
   where
   button event =
-    HH.button [ HE.onClick \_ -> Fire event ]
-      [ HH.text (loopMachine.eventLabel event) ]
+    HH.button [ HE.onClick \_ -> Fire event ] [ HH.text (labelOfEvent l.spec event) ]
 
   tickButton =
     HH.button [ HE.onClick \_ -> Tick, HP.class_ (H.ClassName "tick") ]
-      [ HH.text "tick +1 beat" ]
+      [ HH.text "tick +1" ]
 
-settingsBlock :: forall m. State -> H.ComponentHTML Action () m
-settingsBlock state =
-  HH.div [ HP.class_ (H.ClassName "block") ]
-    [ HH.h2_ [ HH.text "Configuration" ]
-    , HH.p [ HP.class_ (H.ClassName "quiet") ]
-        [ HH.text "Count-in reshapes the machine — watch Armed strand itself." ]
-    , HH.div [ HP.class_ (H.ClassName "buttons") ]
-        (map countInButton [ 0.0, 2.0, 4.0 ])
-    , HH.div [ HP.class_ (H.ClassName "buttons") ]
-        [ layoutButton AsTree "as the user's tree"
-        , layoutButton AsRing "as a ring"
+factsBlock :: forall m. Loaded -> H.ComponentHTML Action () m
+factsBlock l
+  | Array.null l.spec.facts = HH.text ""
+  | otherwise =
+      HH.div [ HP.class_ (H.ClassName "block") ]
+        [ HH.h2_ [ HH.text "The world" ]
+        , HH.p [ HP.class_ (H.ClassName "quiet") ]
+            [ HH.text "Facts the host reports. They change what an event means, not what the machine is." ]
+        , HH.div_ (map row l.spec.facts)
         ]
-    , HH.label_
-        [ HH.input
-            [ HP.type_ HP.InputCheckbox
-            , HP.checked (isJust state.env.converterHeldBy)
-            , HE.onChange \_ -> ToggleConverter
+      where
+      row decl =
+        HH.label [ HP.class_ (H.ClassName "toggle") ]
+          [ HH.input
+              [ HP.type_ HP.InputCheckbox
+              , HP.checked (factIsSet l decl.id)
+              , HE.onChecked (SetFact decl.id)
+              ]
+          , HH.text decl.label
+          ]
+
+factIsSet :: Loaded -> FactId -> Boolean
+factIsSet l key = case lookupFact l.world key of
+  Just (VBoolean b) -> b
+  _ -> false
+
+configBlock :: forall m. Loaded -> H.ComponentHTML Action () m
+configBlock l
+  | Array.null l.spec.config = HH.text ""
+  | otherwise =
+      HH.div [ HP.class_ (H.ClassName "block") ]
+        [ HH.h2_ [ HH.text "Configuration" ]
+        , HH.p [ HP.class_ (H.ClassName "quiet") ]
+            [ HH.text "Config reshapes the machine — watch a state strand itself as you change one." ]
+        , HH.div_ (map row l.spec.config)
+        ]
+      where
+      row decl = case configValue l decl.id decl.default of
+        VBoolean b ->
+          HH.label [ HP.class_ (H.ClassName "toggle") ]
+            [ HH.input
+                [ HP.type_ HP.InputCheckbox
+                , HP.checked b
+                , HE.onChecked (SetConfigBool decl.id)
+                ]
+            , HH.text decl.label
             ]
-        , HH.text " loop 3 holds the converter"
-        ]
-    , HH.label_
-        [ HH.input
-            [ HP.type_ HP.InputCheckbox
-            , HP.checked state.showRefusals
-            , HE.onChange \_ -> ToggleRefusals
+        VNumber n ->
+          HH.label [ HP.class_ (H.ClassName "field") ]
+            [ HH.text decl.label
+            , HH.input
+                [ HP.type_ HP.InputNumber
+                , HP.value (toStringWith (fixed 0) n)
+                , HE.onValueInput (SetConfigNumber decl.id)
+                ]
             ]
-        , HH.text " draw refusals"
-        ]
-    , HH.p [ HP.class_ (H.ClassName "quiet") ]
-        [ HH.text ("now: beat " <> beats state.env.nowBeats) ]
-    ]
-  where
-  countInButton n =
-    HH.button
-      [ HE.onClick \_ -> SetCountIn n
-      , HP.class_ (H.ClassName (if state.cfg.countInBeats == n then "on" else ""))
-      ]
-      [ HH.text (beats n <> " beat count-in") ]
+        VString s ->
+          HH.label [ HP.class_ (H.ClassName "field") ]
+            [ HH.text decl.label, HH.span_ [ HH.text s ] ]
 
-  layoutButton mode label =
-    HH.button
-      [ HE.onClick \_ -> SetLayout mode
-      , HP.class_ (H.ClassName (if state.layoutMode == mode then "on" else ""))
-      ]
-      [ HH.text label ]
+configValue :: Loaded -> ConfigId -> Value -> Value
+configValue l key fallback =
+  fromMaybe fallback (lookupConfig l.world key)
 
--- | What the induced tree says about the machine.
--- |
--- | Not decoration: this is the first of the lints, and every number in it comes
--- | from the same value the diagram is drawn from.
 shapeBlock :: forall m. State -> H.ComponentHTML Action () m
 shapeBlock state =
   HH.div [ HP.class_ (H.ClassName "block") ]
-    [ HH.h2_ [ HH.text "Shape" ]
-    , HH.p [ HP.class_ (H.ClassName "quiet") ]
-        [ HH.text (reading) ]
-    , HH.ul [ HP.class_ (H.ClassName "classes") ] (map classRow presentClasses)
-    , unreachableLine
-    , asymmetryLine
-    ]
-  where
-  tree = induced state
-  here = loopMachine.stateId state.step.current
-
-  -- Hovering asks about a state you are not in, which is the more useful
-  -- question: the panel follows the pointer when there is one.
-  reading = case state.hover of
-    Just target -> labelFor target <> ": " <> costs target
-    Nothing -> "here: " <> costs here
-
-  labelFor id = case Array.find (\p -> loopMachine.stateId p == id) loopMachine.states of
-    Just phase -> loopMachine.stateLabel phase
-    Nothing -> id
-
-  costs node
-    | node == tree.root = "home"
-    | otherwise =
-        maybe "unreachable" show (depthOf tree node) <> " presses in, "
-          <> maybe "no way back" show (returnCostOf tree node) <> " back out"
-
-  counts =
-    Map.toUnfoldable (Map.fromFoldableWith (+) (map (\c -> Tuple c 1) allRoles))
-      :: Array (Tuple EdgeClass Int)
-
-  allRoles = Array.mapMaybe (\e -> e.extra.role) (annotated state).transitions
-
-  presentClasses = counts
-
-  classRow (Tuple cls n) =
-    HH.li [ HP.class_ (H.ClassName ("cls cls--" <> edgeClassLabel cls)) ]
-      [ HH.span [ HP.class_ (H.ClassName "swatch") ] []
-      , HH.text (edgeClassLabel cls <> " × " <> show n)
-      , HH.span [ HP.class_ (H.ClassName "gloss") ] [ HH.text (gloss cls) ]
-      ]
-
-  gloss = case _ of
-    TreeEdge -> "how you first arrive"
-    BackEdge -> "the way out"
-    ForwardEdge -> "a shortcut past a level"
-    CrossEdge -> "a jump into another branch"
-    SelfEdge -> "goes nowhere"
-    FromUnreachable -> "leaves a state you cannot reach"
-
-  unreachableLine = case tree.unreachable of
-    [] -> HH.text ""
-    states ->
-      HH.p [ HP.class_ (H.ClassName "refusal") ]
-        [ HH.strong_ [ HH.text "unreachable — " ]
-        , HH.text (Array.intercalate ", " states)
+    [ HH.h2_ [ HH.text "Drawing" ]
+    , HH.div [ HP.class_ (H.ClassName "buttons") ]
+        [ HH.button
+            [ HE.onClick \_ -> SetLayout AsTree
+            , HP.class_ (H.ClassName (if state.layoutMode == AsTree then "on" else ""))
+            ]
+            [ HH.text "as the user meets it" ]
+        , HH.button
+            [ HE.onClick \_ -> SetLayout AsRing
+            , HP.class_ (H.ClassName (if state.layoutMode == AsRing then "on" else ""))
+            ]
+            [ HH.text "as a graph" ]
         ]
-
-  asymmetryLine = case Array.head (asymmetries tree) of
-    Just worst ->
-      HH.p [ HP.class_ (H.ClassName "pending") ]
-        [ HH.text
-            ( "worst return: " <> worst.state <> ", in by " <> show worst.inCost
-                <> ", out by "
-                <> show worst.outCost
-            )
+    , HH.label [ HP.class_ (H.ClassName "toggle") ]
+        [ HH.input
+            [ HP.type_ HP.InputCheckbox
+            , HP.checked state.showRefusals
+            , HE.onChecked \_ -> ToggleRefusals
+            ]
+        , HH.text "show refusals"
         ]
-    Nothing ->
-      HH.p [ HP.class_ (H.ClassName "quiet") ]
-        [ HH.text "no state costs more to leave than to reach" ]
-
-mermaidBlock :: forall m. State -> H.ComponentHTML Action () m
-mermaidBlock state =
-  HH.div [ HP.class_ (H.ClassName "block") ]
-    [ HH.h2_ [ HH.text "Mermaid" ]
-    , HH.p [ HP.class_ (H.ClassName "quiet") ]
-        [ HH.text "The same description, emitted for an independent renderer." ]
-    , HH.pre_ [ HH.code_ [ HH.text (toMermaid (annotated state)) ] ]
     ]
-
-beats :: Number -> String
-beats = toStringWith (fixed 0)

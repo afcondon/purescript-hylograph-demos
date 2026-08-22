@@ -14,7 +14,7 @@ module Glassbox.Demo.Render
 
 import Prelude
 
-import Data.Array (concatMap, elem)
+import Data.Array (elem)
 import Data.Tuple (Tuple(..))
 import Effect (Effect)
 import Data.Maybe (Maybe(..), fromMaybe)

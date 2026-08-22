@@ -1,12 +1,20 @@
 -- | Glassbox.Describe
 -- |
--- | The other reading of a `Machine`: derive the drawing.
+-- | The other reading of a `Spec`: derive the drawing.
 -- |
 -- | The diagram is **derived, not declared**. Every edge here is produced by
--- | actually calling `transition`, so there is no second description that could
--- | drift from the first. An earlier sketch gave `Machine` a `describe` field
--- | alongside `transition`; that would have been two sources for one truth, and
--- | the entire premise of the project is that they cannot be allowed to diverge.
+-- | actually resolving a rule under a world, so there is no second description
+-- | that could drift from the first. An earlier sketch gave the machine a
+-- | `describe` field alongside its transition function; that would have been two
+-- | sources for one truth, and the entire premise of the project is that they
+-- | cannot be allowed to diverge.
+-- |
+-- | Because the drawing is derived **under a world**, config genuinely reshapes
+-- | it: set the looper's count-in to zero and Armed loses its only inbound edge;
+-- | tell the car radio it has no CD slot and the CD state is stranded. That is
+-- | the mechanical test the format uses to sort config from parameter — *does
+-- | the diagram change when you change it?* — and it only works because the
+-- | picture is computed rather than authored.
 -- |
 -- | Output is `DataViz.Layout.StateMachine`'s own `StateMachine`, so it feeds
 -- | that module's `layout` directly. Edge payloads ride in the `Transition`
@@ -29,13 +37,22 @@ import Data.Maybe (Maybe(..))
 import Data.String (joinWith)
 import Data.Tuple (Tuple(..))
 import DataViz.Layout.StateMachine (StateMachine, Transition)
-import Glassbox.Machine (Machine, Outcome(..), Pending, refusalText)
+import Glassbox.Run (World, resolve)
+import Glassbox.Spec
+  ( EventId
+  , Outcome(..)
+  , Spec
+  , StateId(..)
+  , deadlineFor
+  , labelOfEvent
+  , textOfRefusal
+  )
 import Glassbox.Tree (EdgeClass, Induced, classOf)
 
 -- | How an edge came to exist.
 data EdgeKind
   = OnEvent      -- ^ an event moved the machine
-  | OnDeadline   -- ^ a pending transition will fire it with no event from anyone
+  | OnDeadline   -- ^ it will fire with no event from anyone
   | OnRefusal    -- ^ the event was refused, with a reason
 
 derive instance eqEdgeKind :: Eq EdgeKind
@@ -54,10 +71,8 @@ type EdgeExtra =
 
 -- | Attach each edge's position relative to the induced tree.
 -- |
--- | A second, independent annotation on the same edges — which is what the
--- | `extra` parameter added to `DataViz.Layout.StateMachine`'s `Transition` is
--- | earning here. `describe` says how an edge came to exist; `annotate` says
--- | what it means to someone navigating.
+-- | A second, independent annotation on the same edges. `describe` says how an
+-- | edge came to exist; `annotate` says what it means to someone navigating.
 annotate :: Induced -> StateMachine Unit EdgeExtra -> StateMachine Unit EdgeExtra
 annotate induced machine = machine
   { transitions = map mark machine.transitions }
@@ -75,75 +90,67 @@ type DescribeOptions =
 defaultOptions :: DescribeOptions
 defaultOptions = { showRefusals: true }
 
--- | Derive the diagram by running `transition` over states x events.
-describe
-  :: forall env cfg state event deadline
-   . Eq state
-  => Eq event
-  => DescribeOptions
-  -> env
-  -> cfg
-  -> Machine env cfg state event deadline
-  -> StateMachine Unit EdgeExtra
-describe options env cfg machine =
-  { states: map toState machine.states
+-- | Derive the diagram by resolving every (state, event) pair under one world.
+describe :: DescribeOptions -> World -> Spec -> StateMachine Unit EdgeExtra
+describe options world spec =
+  { states: map toState spec.states
   , transitions: merge (eventEdges <> deadlineEdges)
   }
   where
-  toState state =
-    { id: machine.stateId state
-    , label: machine.stateLabel state
-    , isInitial: state == machine.initial
-    , isFinal: machine.isFinal state
+  toState decl =
+    { id: raw decl.id
+    , label: decl.label
+    , isInitial: decl.id == spec.initial
+    , isFinal: decl.final
     , extra: unit
     }
 
-  -- Every (state, event) pair, asked of the transition function itself.
-  eventEdges = filter keep $ concatMap probeState machine.states
+  raw (StateId s) = s
+
+  eventEdges = filter keep (concatMap probeState spec.states)
     where
     keep edge = options.showRefusals || edge.extra.kind /= OnRefusal
 
-  -- An event that only ever arrives because a deadline delivered it is drawn
-  -- as a deadline edge below. Probing it here as well would draw the same
-  -- transition twice, once truthfully and once misleadingly — as though a foot
-  -- could cause it.
-  probeState state =
-    Array.mapMaybe (probe state) (filter (not <<< deliveredByDeadline state) machine.events)
+  -- An event that only ever arrives because a deadline delivered it is drawn as
+  -- a deadline edge below. Probing it here as well would draw the same
+  -- transition twice, once truthfully and once misleadingly — as though a
+  -- person could cause it.
+  probeState decl =
+    Array.mapMaybe (probe decl.id)
+      (filter (not <<< deliveredByDeadline decl.id) (map _.id spec.events))
 
-  deliveredByDeadline state event = case machine.pending env cfg state of
-    Just { fires } -> fires == event
+  deliveredByDeadline sid event = case deadlineFor spec sid of
+    Just d -> d.fires == event
     Nothing -> false
 
-  probe state event =
-    case machine.transition env cfg state event of
+  probe :: StateId -> EventId -> Maybe (Transition EdgeExtra)
+  probe from event = case resolve spec world from event of
+    Move next -> Just
+      { from: raw from
+      , to: raw next
+      , label: labelOfEvent spec event
+      , extra: { kind: OnEvent, reason: Nothing, role: Nothing }
+      }
+    Refuse rid -> Just
+      { from: raw from
+      , to: raw from
+      , label: labelOfEvent spec event
+      , extra: { kind: OnRefusal, reason: Just (textOfRefusal spec rid), role: Nothing }
+      }
+    Stay -> Nothing
+
+  -- A state that resolves by itself. The target is obtained by asking the rules
+  -- what the pending event does, never by trusting the deadline to say where it
+  -- goes — which is why a `Deadline` names an event rather than a state.
+  deadlineEdges = Array.mapMaybe deadlineEdge spec.states
+
+  deadlineEdge decl = case deadlineFor spec decl.id of
+    Nothing -> Nothing
+    Just d -> case resolve spec world decl.id d.fires of
       Move next -> Just
-        { from: machine.stateId state
-        , to: machine.stateId next
-        , label: machine.eventLabel event
-        , extra: { kind: OnEvent, reason: Nothing, role: Nothing }
-        }
-      Refused refusal -> Just
-        { from: machine.stateId state
-        , to: machine.stateId state
-        , label: machine.eventLabel event
-        , extra: { kind: OnRefusal, reason: Just (refusalText refusal), role: Nothing }
-        }
-      Stay -> Nothing
-
-  -- A state that resolves by itself. The target is obtained by asking
-  -- `transition` what the pending event does, never by trusting `pending` to
-  -- say where it goes.
-  deadlineEdges = Array.mapMaybe deadlineEdge machine.states
-
-  deadlineEdge state = machine.pending env cfg state >>= edgeFor state
-
-  edgeFor :: state -> Pending event deadline -> Maybe (Transition EdgeExtra)
-  edgeFor state { fires } =
-    case machine.transition env cfg state fires of
-      Move next -> Just
-        { from: machine.stateId state
-        , to: machine.stateId next
-        , label: machine.eventLabel fires
+        { from: raw decl.id
+        , to: raw next
+        , label: labelOfEvent spec d.fires
         , extra: { kind: OnDeadline, reason: Nothing, role: Nothing }
         }
       _ -> Nothing

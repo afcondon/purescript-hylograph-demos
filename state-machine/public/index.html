@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Glassbox — steps 0 and 2</title>
+<title>Glassbox — a machine is a file</title>
 <style>
   :root {
     --ink: #1a1a1a;
@@ -66,13 +66,14 @@
 <body>
 <div class="glassbox">
   <header>
-    <h1>Glassbox — the machine, and the tree it induces</h1>
-    <p class="lede">One value, read three ways: interpreted into a <code>Mealy</code>
-    from purescript-machines, derived into a diagram for
-    <code>DataViz.Layout.StateMachine</code>, and analysed into the shortest-path tree
-    a user is forced to build — with every edge that tree does not explain sorted
-    into the way out, a shortcut, or a jump into another branch. The highlighted
-    state is read from the running machine, not from a copy.</p>
+    <h1>Glassbox — a machine is a file</h1>
+    <p class="lede">Both machines below are JSON artifacts fetched at runtime.
+    Nothing in this page was compiled to know that a guitar looper or a car
+    radio exists: the same code loads either, runs it, and derives the drawing
+    from the very same value it is running — so the picture and the program
+    cannot disagree. Change a configuration setting and watch a state strand
+    itself, which is the mechanical test for whether a setting belongs to the
+    machine at all.</p>
   </header>
   <div class="panes">
     <section class="pane pane--diagram">

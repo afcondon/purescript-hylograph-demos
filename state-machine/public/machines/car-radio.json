@@ -1,0 +1,102 @@
+{
+  "glassbox": 1,
+  "id": "car-radio",
+  "title": "Car radio",
+
+  "_note": [
+    "The acceptance test for phase 1 of docs/kb/plans/the-same-machine.md:",
+    "a machine that exists ONLY as this file. No PureScript was written for it,",
+    "no constructor names it, nothing was recompiled to add it. If that ever",
+    "stops being true, the thesis has failed.",
+    "",
+    "It also exercises the three things a general FSM format tends to lack:",
+    "config that RESHAPES the machine (turn off the CD slot and the cd state",
+    "becomes unreachable, and the diagram changes to say so), a state that",
+    "resolves by itself (seeking gives up after a while with no user event),",
+    "and refusals that carry a reason rather than doing nothing silently."
+  ],
+
+  "initial": "off",
+
+  "states": [
+    { "id": "off",       "label": "Off" },
+    { "id": "radio",     "label": "Radio" },
+    { "id": "seeking",   "label": "Seeking" },
+    { "id": "cd",        "label": "CD" },
+    { "id": "bluetooth", "label": "Bluetooth" }
+  ],
+
+  "events": [
+    { "id": "power",  "label": "power",  "source": "user" },
+    { "id": "source", "label": "source", "source": "user" },
+    { "id": "seek",   "label": "seek",   "source": "user" },
+    { "id": "cancel", "label": "cancel", "source": "user" },
+    { "id": "eject",  "label": "eject",  "source": "user" },
+    { "id": "giveup", "label": "no station found", "source": "runtime" }
+  ],
+
+  "config": [
+    { "id": "has-cd-slot",  "label": "This trim has a CD slot", "default": true },
+    { "id": "seek-seconds", "label": "Seek gives up after (s)", "default": 8 }
+  ],
+
+  "facts": [
+    { "id": "disc-loaded",      "label": "A disc is in the slot" },
+    { "id": "bluetooth-paired", "label": "A phone is paired" }
+  ],
+
+  "refusals": [
+    { "id": "no-disc",   "text": "there is no disc in the slot" },
+    { "id": "no-phone",  "text": "no phone is paired" },
+    { "id": "not-fitted","text": "this car has no CD slot" }
+  ],
+
+  "rules": [
+    { "from": "off", "on": "power",  "cases": [ { "to": "radio" } ] },
+    { "from": "off", "on": "source", "cases": [ { "stay": true } ] },
+    { "from": "off", "on": "seek",   "cases": [ { "stay": true } ] },
+    { "from": "off", "on": "cancel", "cases": [ { "stay": true } ] },
+    { "from": "off", "on": "eject",  "cases": [ { "stay": true } ] },
+    { "from": "off", "on": "giveup", "cases": [ { "stay": true } ] },
+
+    { "from": "radio", "on": "power",  "cases": [ { "to": "off" } ] },
+    { "from": "radio", "on": "seek",   "cases": [ { "to": "seeking" } ] },
+    { "from": "radio", "on": "source", "cases": [
+      { "when": { "all": [ { "config": "has-cd-slot" }, { "fact": "disc-loaded" } ] }, "to": "cd" },
+      { "when": { "not": { "config": "has-cd-slot" } }, "refuse": "not-fitted" },
+      { "when": { "not": { "fact": "disc-loaded" } }, "refuse": "no-disc" },
+      { "stay": true }
+    ]},
+    { "from": "radio", "on": "cancel", "cases": [ { "stay": true } ] },
+    { "from": "radio", "on": "eject",  "cases": [ { "refuse": "no-disc" } ] },
+    { "from": "radio", "on": "giveup", "cases": [ { "stay": true } ] },
+
+    { "from": "seeking", "on": "giveup", "cases": [ { "to": "radio" } ] },
+    { "from": "seeking", "on": "cancel", "cases": [ { "to": "radio" } ] },
+    { "from": "seeking", "on": "seek",   "cases": [ { "stay": true } ] },
+    { "from": "seeking", "on": "power",  "cases": [ { "to": "off" } ] },
+    { "from": "seeking", "on": "source", "cases": [ { "stay": true } ] },
+    { "from": "seeking", "on": "eject",  "cases": [ { "refuse": "no-disc" } ] },
+
+    { "from": "cd", "on": "power",  "cases": [ { "to": "off" } ] },
+    { "from": "cd", "on": "eject",  "cases": [ { "to": "radio" } ] },
+    { "from": "cd", "on": "source", "cases": [
+      { "when": { "fact": "bluetooth-paired" }, "to": "bluetooth" },
+      { "refuse": "no-phone" }
+    ]},
+    { "from": "cd", "on": "seek",   "cases": [ { "stay": true } ] },
+    { "from": "cd", "on": "cancel", "cases": [ { "stay": true } ] },
+    { "from": "cd", "on": "giveup", "cases": [ { "stay": true } ] },
+
+    { "from": "bluetooth", "on": "power",  "cases": [ { "to": "off" } ] },
+    { "from": "bluetooth", "on": "source", "cases": [ { "to": "radio" } ] },
+    { "from": "bluetooth", "on": "eject",  "cases": [ { "refuse": "no-disc" } ] },
+    { "from": "bluetooth", "on": "seek",   "cases": [ { "stay": true } ] },
+    { "from": "bluetooth", "on": "cancel", "cases": [ { "stay": true } ] },
+    { "from": "bluetooth", "on": "giveup", "cases": [ { "stay": true } ] }
+  ],
+
+  "deadlines": [
+    { "in": "seeking", "fires": "giveup", "after": { "config": "seek-seconds" } }
+  ]
+}
