@@ -14,6 +14,11 @@ workspace:
     # we actually publish, or every sibling demo's `<0.4.0` range breaks.
     hylograph-layout:
       path: ../purescript-hylograph-layout
+    # Local for the same reason, and it has to be pinned rather than left to the
+    # registry: hylograph-layout above now imports `Data.Graph.InducedTree`, so
+    # one consistent copy of hylograph-graph has to be in the build.
+    hylograph-graph:
+      path: ../purescript-hylograph-graph
     # Kmett's machines, ported. Not in the registry.
     machines:
       path: ../../purescript-ports/purescript-machines
