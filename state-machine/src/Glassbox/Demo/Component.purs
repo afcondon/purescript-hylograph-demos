@@ -69,6 +69,8 @@ catalogue =
   [ { file: "machines/loop.json", name: "Guitar looper" }
   , { file: "machines/car-radio.json", name: "Car radio" }
   , { file: "machines/elevator.json", name: "Elevator" }
+  , { file: "machines/washing-machine.json", name: "Washing machine" }
+  , { file: "machines/heating.json", name: "Heating" }
   ]
 
 data LayoutMode = AsRing | AsTree

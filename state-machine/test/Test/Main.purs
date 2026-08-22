@@ -156,7 +156,7 @@ configReshapesTheDiagram = do
 roundTrips :: Effect (Array Boolean)
 roundTrips = do
   section "The round trip"
-  for ["loop.json", "car-radio.json", "elevator.json"] \name -> do
+  for ["loop.json", "car-radio.json", "elevator.json", "washing-machine.json", "heating.json"] \name -> do
     spec <- loadOrDie name
     case decodeSpec (encodeSpec spec) of
       Left err -> check (name <> " survives encode/decode") false <* log ("    " <> err)
@@ -269,6 +269,62 @@ elevatorStressesTheFormat = do
   pure [ a, b, c, d, e, f ]
 
 -- =============================================================================
+-- The rule five machines agree on
+-- =============================================================================
+
+-- | Three machines in a row forced the same move, so it is a rule and not an
+-- | anecdote: **a machine here has no memory beyond the state it is in**, so
+-- | every count, index, position and history lives in the host and arrives as a
+-- | fact. These pin the three instances, because if a later format change makes
+-- | any of them unexpressible the rule has quietly moved.
+hostHoldsTheMemory :: Effect (Array Boolean)
+hostHoldsTheMemory = do
+  section "Counts, positions and history live in the host"
+
+  wash <- loadOrDie "washing-machine.json"
+  let base = worldFrom wash
+
+  -- A count: the drum controller counts rinses; the machine only asks.
+  a <- check "another rinse loops back; none goes on to spin"
+    ( resolve wash (setFact (FactId "more-rinses") (VBoolean true) base)
+        (StateId "draining") (EventId "step-done") == Move (StateId "rinse-filling")
+      && resolve wash base (StateId "draining") (EventId "step-done") == Move (StateId "spinning")
+    )
+
+  -- A history: resume returns to where it was interrupted.
+  b <- check "resume returns to the interrupted step, not a fixed one"
+    ( resolve wash (setFact (FactId "paused-in-rinse") (VBoolean true) base)
+        (StateId "paused") (EventId "resume") == Move (StateId "rinsing")
+      && resolve wash (setFact (FactId "paused-in-fill") (VBoolean true) base)
+        (StateId "paused") (EventId "resume") == Move (StateId "filling")
+    )
+
+  c <- check "the door refuses to open mid-cycle, with a reason"
+    (resolve wash base (StateId "spinning") (EventId "open") == Refuse (RefusalId "door-locked"))
+
+  d <- check "prewash is config: switching it off strands the prewash state"
+    (not (reachesIn (describe defaultOptions base wash) "prewashing"))
+  e <- check "and switching it on gives it a way in"
+    (reachesIn (describe defaultOptions (setConfig (ConfigId "has-prewash") (VBoolean true) base) wash) "prewashing")
+
+  heat <- loadOrDie "heating.json"
+  let cold = worldFrom heat
+  f <- check "no frost protection fitted: boost from off is refused"
+    (resolve heat (setConfig (ConfigId "has-frost-watch") (VBoolean false) cold)
+      (StateId "off") (EventId "boost") == Refuse (RefusalId "no-frost"))
+  g <- check "a locked-out boiler refuses everything but reset"
+    ( resolve heat cold (StateId "fault") (EventId "mode") == Refuse (RefusalId "in-fault")
+      && resolve heat cold (StateId "fault") (EventId "reset") == Move (StateId "off")
+    )
+  h <- check "boost ends on its own after the configured interval"
+    (dueAt heat cold (StateId "boosting") 0.0 == Just { fires: EventId "boost-over", at: 60.0 })
+
+  pure [ a, b, c, d, e, f, g, h ]
+  where
+  reachesIn machine target =
+    not (null (filter (\t -> t.to == target && t.from /= target) machine.transitions))
+
+-- =============================================================================
 -- The boundary refuses what it does not understand
 -- =============================================================================
 
@@ -298,6 +354,7 @@ main = do
     , roundTrips
     , loopParity
     , elevatorStressesTheFormat
+    , hostHoldsTheMemory
     , boundaryIsChecked
     ]
   let results = join groups
