@@ -156,7 +156,7 @@ configReshapesTheDiagram = do
 roundTrips :: Effect (Array Boolean)
 roundTrips = do
   section "The round trip"
-  for ["loop.json", "car-radio.json"] \name -> do
+  for ["loop.json", "car-radio.json", "elevator.json"] \name -> do
     spec <- loadOrDie name
     case decodeSpec (encodeSpec spec) of
       Left err -> check (name <> " survives encode/decode") false <* log ("    " <> err)
@@ -234,6 +234,41 @@ loopParity = do
   pure [ a, b, c ]
 
 -- =============================================================================
+-- A machine the format was not designed around
+-- =============================================================================
+
+-- | The looper and the car radio were both authored by whoever designed the
+-- | format, so their fitting proves little. This one was written to push back.
+-- |
+-- | It is here mainly to pin the modelling decision it forced: floor NUMBER is
+-- | host state reaching the machine as facts, not a state and not config, since
+-- | changing floors does not change the diagram. If a later format change makes
+-- | that unexpressible, these fail.
+elevatorStressesTheFormat :: Effect (Array Boolean)
+elevatorStressesTheFormat = do
+  section "A machine the format was not designed around"
+  spec <- loadOrDie "elevator.json"
+  let idle = worldFrom spec
+  let above = setFact (FactId "wanted-above") (VBoolean true) idle
+  let blocked = setFact (FactId "doors-blocked") (VBoolean true) idle
+
+  a <- check "with nothing requested, a call refuses rather than moving"
+    (resolve spec idle (StateId "idle") (EventId "call") == Refuse (RefusalId "nowhere-to-go"))
+  b <- check "with a floor requested above, it goes up"
+    (resolve spec above (StateId "idle") (EventId "call") == Move (StateId "up"))
+  c <- check "the doors refuse to close on an obstruction"
+    (resolve spec blocked (StateId "doors-open") (EventId "close") == Refuse (RefusalId "blocked"))
+  d <- check "and the dwell timeout does not close them either"
+    (resolve spec blocked (StateId "doors-open") (EventId "dwelt") == Stay)
+  e <- check "emergency stop is reachable from every moving state"
+    (all (\s -> resolve spec idle (StateId s) (EventId "alarm") == Move (StateId "stopped"))
+      [ "idle", "up", "down", "arriving", "doors-open", "held" ])
+  f <- check "removing the hold button strands the held state"
+    (resolve spec (setConfig (ConfigId "has-hold-button") (VBoolean false) idle)
+      (StateId "doors-open") (EventId "open") == Refuse (RefusalId "no-hold-button"))
+  pure [ a, b, c, d, e, f ]
+
+-- =============================================================================
 -- The boundary refuses what it does not understand
 -- =============================================================================
 
@@ -262,6 +297,7 @@ main = do
     , configReshapesTheDiagram
     , roundTrips
     , loopParity
+    , elevatorStressesTheFormat
     , boundaryIsChecked
     ]
   let results = join groups

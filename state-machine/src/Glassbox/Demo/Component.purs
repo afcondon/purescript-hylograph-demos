@@ -67,6 +67,7 @@ catalogue :: Array { file :: String, name :: String }
 catalogue =
   [ { file: "machines/loop.json", name: "Guitar looper" }
   , { file: "machines/car-radio.json", name: "Car radio" }
+  , { file: "machines/elevator.json", name: "Elevator" }
   ]
 
 data LayoutMode = AsRing | AsTree
