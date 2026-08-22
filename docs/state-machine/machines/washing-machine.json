@@ -1,0 +1,181 @@
+{
+  "glassbox": 1,
+  "id": "washing-machine",
+  "title": "Washing machine",
+
+  "_note": [
+    "Chosen because its natural authoring is a SEQUENCE — fill, then wash, then",
+    "drain, then rinse, then spin — and the format has no word for 'and then'.",
+    "Every step of the chain is hand-wired here: each state names its successor",
+    "on `step-done`. Reordering the programme means editing every rule in the",
+    "chain, which is exactly the kind of restructuring the graphical editor is",
+    "supposed to make free.",
+    "",
+    "The sharper problem is RINSE COUNT. A machine that rinses three times has",
+    "no more modes than one that rinses twice — rinsing is rinsing — so the",
+    "count cannot be states without duplicating the cycle. And it cannot be",
+    "config either, because config is read, never counted down: this format",
+    "gives a machine no memory beyond the state it is in.",
+    "",
+    "The resolution is the same one the elevator forced: the host keeps the",
+    "number and reports a fact. `more-rinses` is the drum controller counting,",
+    "not the machine.",
+    "",
+    "Pause makes it three. Resuming must return to whatever step was",
+    "interrupted — a Harel history state — and this format has no history, so",
+    "`paused-in-*` facts carry it and the host remembers. Three instances of one",
+    "rule: COUNTS, INDICES, POSITIONS AND HISTORY LIVE IN THE HOST, because a",
+    "machine here has no memory beyond the state it is in. Nothing in the format",
+    "says so, and a designer who does not know it will build a state per rinse",
+    "and a paused-state per step."
+  ],
+
+  "initial": "idle",
+
+  "states": [
+    { "id": "idle",         "label": "Idle" },
+    { "id": "locking",      "label": "Locking" },
+    { "id": "prewashing",   "label": "Prewash" },
+    { "id": "filling",      "label": "Filling" },
+    { "id": "washing",      "label": "Washing" },
+    { "id": "draining",     "label": "Draining" },
+    { "id": "rinse-filling","label": "Rinse fill" },
+    { "id": "rinsing",      "label": "Rinsing" },
+    { "id": "spinning",     "label": "Spinning" },
+    { "id": "unlocking",    "label": "Unlocking" },
+    { "id": "done",         "label": "Done", "final": true },
+    { "id": "paused",       "label": "Paused" }
+  ],
+
+  "events": [
+    { "id": "start",     "label": "start",        "source": "user" },
+    { "id": "pause",     "label": "pause",        "source": "user" },
+    { "id": "resume",    "label": "resume",       "source": "user" },
+    { "id": "cancel",    "label": "cancel",       "source": "user" },
+    { "id": "open",      "label": "open door",    "source": "user" },
+    { "id": "step-done", "label": "step complete", "source": "runtime" }
+  ],
+
+  "config": [
+    { "id": "has-prewash", "label": "Prewash in this programme", "default": false }
+  ],
+
+  "facts": [
+    { "id": "door-shut",   "label": "The door is shut" },
+    { "id": "more-rinses",     "label": "The controller wants another rinse" },
+    { "id": "drum-wet",        "label": "There is water in the drum" },
+    { "id": "paused-in-fill",  "label": "Paused while filling" },
+    { "id": "paused-in-rinse", "label": "Paused while rinsing" }
+  ],
+
+  "refusals": [
+    { "id": "door-ajar",    "text": "the door is not shut" },
+    { "id": "door-locked",  "text": "the door is locked while the drum is running" },
+    { "id": "still-wet",    "text": "the drum must drain before the door opens" },
+    { "id": "not-running",  "text": "nothing is running" }
+  ],
+
+  "rules": [
+    { "from": "idle", "on": "start", "cases": [
+      { "when": { "not": { "fact": "door-shut" } }, "refuse": "door-ajar" },
+      { "to": "locking" }
+    ]},
+    { "from": "idle", "on": "open",      "cases": [ { "stay": true } ] },
+    { "from": "idle", "on": "pause",     "cases": [ { "refuse": "not-running" } ] },
+    { "from": "idle", "on": "resume",    "cases": [ { "refuse": "not-running" } ] },
+    { "from": "idle", "on": "cancel",    "cases": [ { "stay": true } ] },
+    { "from": "idle", "on": "step-done", "cases": [ { "stay": true } ] },
+
+    { "from": "locking", "on": "step-done", "cases": [
+      { "when": { "config": "has-prewash" }, "to": "prewashing" },
+      { "to": "filling" }
+    ]},
+    { "from": "locking", "on": "cancel", "cases": [ { "to": "unlocking" } ] },
+    { "from": "locking", "on": "open",   "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "locking", "on": "pause",  "cases": [ { "to": "paused" } ] },
+    { "from": "locking", "on": "resume", "cases": [ { "stay": true } ] },
+    { "from": "locking", "on": "start",  "cases": [ { "stay": true } ] },
+
+    { "from": "prewashing", "on": "step-done", "cases": [ { "to": "draining" } ] },
+    { "from": "prewashing", "on": "pause",     "cases": [ { "to": "paused" } ] },
+    { "from": "prewashing", "on": "cancel",    "cases": [ { "to": "draining" } ] },
+    { "from": "prewashing", "on": "open",      "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "prewashing", "on": "resume",    "cases": [ { "stay": true } ] },
+    { "from": "prewashing", "on": "start",     "cases": [ { "stay": true } ] },
+
+    { "from": "filling", "on": "step-done", "cases": [ { "to": "washing" } ] },
+    { "from": "filling", "on": "pause",     "cases": [ { "to": "paused" } ] },
+    { "from": "filling", "on": "cancel",    "cases": [ { "to": "draining" } ] },
+    { "from": "filling", "on": "open",      "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "filling", "on": "resume",    "cases": [ { "stay": true } ] },
+    { "from": "filling", "on": "start",     "cases": [ { "stay": true } ] },
+
+    { "from": "washing", "on": "step-done", "cases": [ { "to": "draining" } ] },
+    { "from": "washing", "on": "pause",     "cases": [ { "to": "paused" } ] },
+    { "from": "washing", "on": "cancel",    "cases": [ { "to": "draining" } ] },
+    { "from": "washing", "on": "open",      "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "washing", "on": "resume",    "cases": [ { "stay": true } ] },
+    { "from": "washing", "on": "start",     "cases": [ { "stay": true } ] },
+
+    { "from": "draining", "on": "step-done", "cases": [
+      { "when": { "fact": "more-rinses" }, "to": "rinse-filling" },
+      { "to": "spinning" }
+    ]},
+    { "from": "draining", "on": "pause",  "cases": [ { "stay": true } ] },
+    { "from": "draining", "on": "cancel", "cases": [ { "stay": true } ] },
+    { "from": "draining", "on": "open",   "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "draining", "on": "resume", "cases": [ { "stay": true } ] },
+    { "from": "draining", "on": "start",  "cases": [ { "stay": true } ] },
+
+    { "from": "rinse-filling", "on": "step-done", "cases": [ { "to": "rinsing" } ] },
+    { "from": "rinse-filling", "on": "pause",     "cases": [ { "to": "paused" } ] },
+    { "from": "rinse-filling", "on": "cancel",    "cases": [ { "to": "draining" } ] },
+    { "from": "rinse-filling", "on": "open",      "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "rinse-filling", "on": "resume",    "cases": [ { "stay": true } ] },
+    { "from": "rinse-filling", "on": "start",     "cases": [ { "stay": true } ] },
+
+    { "from": "rinsing", "on": "step-done", "cases": [ { "to": "draining" } ] },
+    { "from": "rinsing", "on": "pause",     "cases": [ { "to": "paused" } ] },
+    { "from": "rinsing", "on": "cancel",    "cases": [ { "to": "draining" } ] },
+    { "from": "rinsing", "on": "open",      "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "rinsing", "on": "resume",    "cases": [ { "stay": true } ] },
+    { "from": "rinsing", "on": "start",     "cases": [ { "stay": true } ] },
+
+    { "from": "spinning", "on": "step-done", "cases": [ { "to": "unlocking" } ] },
+    { "from": "spinning", "on": "pause",     "cases": [ { "to": "paused" } ] },
+    { "from": "spinning", "on": "cancel",    "cases": [ { "to": "unlocking" } ] },
+    { "from": "spinning", "on": "open",      "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "spinning", "on": "resume",    "cases": [ { "stay": true } ] },
+    { "from": "spinning", "on": "start",     "cases": [ { "stay": true } ] },
+
+    { "from": "unlocking", "on": "step-done", "cases": [
+      { "when": { "fact": "drum-wet" }, "refuse": "still-wet" },
+      { "to": "done" }
+    ]},
+    { "from": "unlocking", "on": "open",   "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "unlocking", "on": "pause",  "cases": [ { "stay": true } ] },
+    { "from": "unlocking", "on": "resume", "cases": [ { "stay": true } ] },
+    { "from": "unlocking", "on": "cancel", "cases": [ { "stay": true } ] },
+    { "from": "unlocking", "on": "start",  "cases": [ { "stay": true } ] },
+
+    { "from": "done", "on": "open",      "cases": [ { "to": "idle" } ] },
+    { "from": "done", "on": "start",     "cases": [ { "to": "locking" } ] },
+    { "from": "done", "on": "pause",     "cases": [ { "refuse": "not-running" } ] },
+    { "from": "done", "on": "resume",    "cases": [ { "refuse": "not-running" } ] },
+    { "from": "done", "on": "cancel",    "cases": [ { "stay": true } ] },
+    { "from": "done", "on": "step-done", "cases": [ { "stay": true } ] },
+
+    { "from": "paused", "on": "resume", "cases": [
+      { "when": { "fact": "paused-in-rinse" }, "to": "rinsing" },
+      { "when": { "fact": "paused-in-fill" }, "to": "filling" },
+      { "to": "washing" }
+    ]},
+    { "from": "paused", "on": "cancel",    "cases": [ { "to": "draining" } ] },
+    { "from": "paused", "on": "open",      "cases": [ { "refuse": "door-locked" } ] },
+    { "from": "paused", "on": "pause",     "cases": [ { "stay": true } ] },
+    { "from": "paused", "on": "start",     "cases": [ { "stay": true } ] },
+    { "from": "paused", "on": "step-done", "cases": [ { "stay": true } ] }
+  ],
+
+  "deadlines": []
+}

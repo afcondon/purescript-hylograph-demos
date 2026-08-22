@@ -1,0 +1,145 @@
+{
+  "glassbox": 1,
+  "id": "elevator",
+  "title": "Elevator",
+
+  "_note": [
+    "Written to try to BREAK the format, not to flatter it. The looper and the",
+    "car radio were both authored by whoever designed the format, so of course",
+    "they fitted. An elevator is the first machine that pushes back.",
+    "",
+    "The thing it pushes on is floors. A twelve-storey lift plainly has more to",
+    "it than a three-storey one, but 'which floor am I on' is NOT a mode: the",
+    "lift behaves identically on floor 2 and floor 7, and making each floor a",
+    "state would give twelve copies of one machine and an unreadable drawing.",
+    "",
+    "So the floor number lives in the HOST, and reaches the machine as facts —",
+    "is anything requested above me, below me, here. That is how real lift",
+    "controllers are written, and the format's own sorting test agrees: change",
+    "the current floor and the diagram does not move, so it is not part of the",
+    "machine. Change 'doors need holding' and it does.",
+    "",
+    "The cost is that a designer has to know to do this, and nothing in the",
+    "format tells them. That is a finding, not a defect."
+  ],
+
+  "initial": "idle",
+
+  "states": [
+    { "id": "idle",       "label": "Idle" },
+    { "id": "up",         "label": "Going up" },
+    { "id": "down",       "label": "Going down" },
+    { "id": "arriving",   "label": "Arriving" },
+    { "id": "doors-open", "label": "Doors open" },
+    { "id": "held",       "label": "Doors held" },
+    { "id": "stopped",    "label": "Emergency stop" }
+  ],
+
+  "events": [
+    { "id": "call",      "label": "call",           "source": "user" },
+    { "id": "open",      "label": "open doors",     "source": "user" },
+    { "id": "close",     "label": "close doors",    "source": "user" },
+    { "id": "alarm",     "label": "emergency stop", "source": "user" },
+    { "id": "reset",     "label": "reset",          "source": "user" },
+    { "id": "reached",   "label": "floor reached",  "source": "runtime" },
+    { "id": "dwelt",     "label": "dwell elapsed",  "source": "runtime" }
+  ],
+
+  "config": [
+    { "id": "dwell-seconds",    "label": "Doors stay open for (s)", "default": 6 },
+    { "id": "has-hold-button",  "label": "This car has a hold button", "default": true }
+  ],
+
+  "facts": [
+    { "id": "wanted-above",  "label": "A floor above is requested" },
+    { "id": "wanted-below",  "label": "A floor below is requested" },
+    { "id": "doors-blocked", "label": "Something is in the doorway" }
+  ],
+
+  "refusals": [
+    { "id": "nowhere-to-go",  "text": "no floor is requested" },
+    { "id": "moving",         "text": "the car is moving" },
+    { "id": "blocked",        "text": "something is in the doorway" },
+    { "id": "no-hold-button", "text": "this car has no hold button" },
+    { "id": "stopped-fast",   "text": "the emergency stop is engaged" }
+  ],
+
+  "rules": [
+    { "from": "idle", "on": "call", "cases": [
+      { "when": { "fact": "wanted-above" }, "to": "up" },
+      { "when": { "fact": "wanted-below" }, "to": "down" },
+      { "refuse": "nowhere-to-go" }
+    ]},
+    { "from": "idle", "on": "open",    "cases": [ { "to": "doors-open" } ] },
+    { "from": "idle", "on": "close",   "cases": [ { "stay": true } ] },
+    { "from": "idle", "on": "alarm",   "cases": [ { "to": "stopped" } ] },
+    { "from": "idle", "on": "reset",   "cases": [ { "stay": true } ] },
+    { "from": "idle", "on": "reached", "cases": [ { "stay": true } ] },
+    { "from": "idle", "on": "dwelt",   "cases": [ { "stay": true } ] },
+
+    { "from": "up", "on": "reached", "cases": [ { "to": "arriving" } ] },
+    { "from": "up", "on": "alarm",   "cases": [ { "to": "stopped" } ] },
+    { "from": "up", "on": "open",    "cases": [ { "refuse": "moving" } ] },
+    { "from": "up", "on": "call",    "cases": [ { "stay": true } ] },
+    { "from": "up", "on": "close",   "cases": [ { "stay": true } ] },
+    { "from": "up", "on": "reset",   "cases": [ { "stay": true } ] },
+    { "from": "up", "on": "dwelt",   "cases": [ { "stay": true } ] },
+
+    { "from": "down", "on": "reached", "cases": [ { "to": "arriving" } ] },
+    { "from": "down", "on": "alarm",   "cases": [ { "to": "stopped" } ] },
+    { "from": "down", "on": "open",    "cases": [ { "refuse": "moving" } ] },
+    { "from": "down", "on": "call",    "cases": [ { "stay": true } ] },
+    { "from": "down", "on": "close",   "cases": [ { "stay": true } ] },
+    { "from": "down", "on": "reset",   "cases": [ { "stay": true } ] },
+    { "from": "down", "on": "dwelt",   "cases": [ { "stay": true } ] },
+
+    { "from": "arriving", "on": "dwelt",   "cases": [ { "to": "doors-open" } ] },
+    { "from": "arriving", "on": "alarm",   "cases": [ { "to": "stopped" } ] },
+    { "from": "arriving", "on": "open",    "cases": [ { "to": "doors-open" } ] },
+    { "from": "arriving", "on": "call",    "cases": [ { "stay": true } ] },
+    { "from": "arriving", "on": "close",   "cases": [ { "stay": true } ] },
+    { "from": "arriving", "on": "reset",   "cases": [ { "stay": true } ] },
+    { "from": "arriving", "on": "reached", "cases": [ { "stay": true } ] },
+
+    { "from": "doors-open", "on": "close", "cases": [
+      { "when": { "fact": "doors-blocked" }, "refuse": "blocked" },
+      { "when": { "fact": "wanted-above" }, "to": "up" },
+      { "when": { "fact": "wanted-below" }, "to": "down" },
+      { "to": "idle" }
+    ]},
+    { "from": "doors-open", "on": "dwelt", "cases": [
+      { "when": { "fact": "doors-blocked" }, "stay": true },
+      { "when": { "fact": "wanted-above" }, "to": "up" },
+      { "when": { "fact": "wanted-below" }, "to": "down" },
+      { "to": "idle" }
+    ]},
+    { "from": "doors-open", "on": "open", "cases": [
+      { "when": { "not": { "config": "has-hold-button" } }, "refuse": "no-hold-button" },
+      { "to": "held" }
+    ]},
+    { "from": "doors-open", "on": "alarm",   "cases": [ { "to": "stopped" } ] },
+    { "from": "doors-open", "on": "call",    "cases": [ { "stay": true } ] },
+    { "from": "doors-open", "on": "reset",   "cases": [ { "stay": true } ] },
+    { "from": "doors-open", "on": "reached", "cases": [ { "stay": true } ] },
+
+    { "from": "held", "on": "close",   "cases": [ { "to": "doors-open" } ] },
+    { "from": "held", "on": "alarm",   "cases": [ { "to": "stopped" } ] },
+    { "from": "held", "on": "open",    "cases": [ { "stay": true } ] },
+    { "from": "held", "on": "call",    "cases": [ { "stay": true } ] },
+    { "from": "held", "on": "reset",   "cases": [ { "stay": true } ] },
+    { "from": "held", "on": "reached", "cases": [ { "stay": true } ] },
+    { "from": "held", "on": "dwelt",   "cases": [ { "stay": true } ] },
+
+    { "from": "stopped", "on": "reset",   "cases": [ { "to": "doors-open" } ] },
+    { "from": "stopped", "on": "call",    "cases": [ { "refuse": "stopped-fast" } ] },
+    { "from": "stopped", "on": "open",    "cases": [ { "refuse": "stopped-fast" } ] },
+    { "from": "stopped", "on": "close",   "cases": [ { "refuse": "stopped-fast" } ] },
+    { "from": "stopped", "on": "alarm",   "cases": [ { "stay": true } ] },
+    { "from": "stopped", "on": "reached", "cases": [ { "stay": true } ] },
+    { "from": "stopped", "on": "dwelt",   "cases": [ { "stay": true } ] }
+  ],
+
+  "deadlines": [
+    { "in": "doors-open", "fires": "dwelt", "after": { "config": "dwell-seconds" } }
+  ]
+}
