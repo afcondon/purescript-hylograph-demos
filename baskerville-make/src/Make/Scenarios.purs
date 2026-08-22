@@ -197,7 +197,7 @@ docker-minard:
 	docker compose --profile minard up -d
 
 docker-hypo:
-	@echo "Starting hypo-punter profile..."
+	@echo "Starting polyglot-pythia-showcases profile..."
 	docker compose --profile hypo up -d
 
 docker-tidal:
