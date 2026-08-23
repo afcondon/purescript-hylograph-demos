@@ -1,21 +1,21 @@
 machine  washing-machine
 title    "Washing machine"
-format   1
+format   2
 initial  idle
 
-STATES           LABEL
+STATES           LABEL       ON ENTRY            ON EXIT
   idle           Idle
-  locking        Locking
-  prewashing     Prewash
-  filling        Filling
-  washing        Washing
-  draining       Draining
-  rinse-filling  Rinse fill
-  rinsing        Rinsing
-  spinning       Spinning
-  unlocking      Unlocking
-  done           Done
-  paused         Paused
+  locking        Locking     lock-door
+  prewashing     Prewash     fill-drum, tumble
+  filling        Filling     fill-drum
+  washing        Washing     heat-water, tumble
+  draining       Draining    drain
+  rinse-filling  Rinse fill  fill-drum
+  rinsing        Rinsing     tumble
+  spinning       Spinning    drain, spin
+  unlocking      Unlocking   unlock-door
+  done           Done        chime
+  paused         Paused      hold-everything
 
 EVENTS       SOURCE   LABEL
   start      user
@@ -40,6 +40,17 @@ REFUSALS       MEANING
   door-locked  the door is locked while the drum is running
   still-wet    the drum must drain before the door opens
   not-running  nothing is running
+
+COMMANDS           MEANING
+  lock-door        Lock the door
+  unlock-door      Unlock the door
+  fill-drum        Fill the drum
+  heat-water       Heat the water
+  tumble           Tumble the drum
+  drain            Drain the drum
+  spin             Spin
+  hold-everything  Hold everything where it is
+  chime            Sound the end-of-cycle chime
 
 GRID   rows are states, columns are events
                    start    pause         resume        cancel     open          step-done

@@ -1,5 +1,19 @@
+# Commands, added with the effects fork. Every one of them hangs off a
+# STATE rather than an edge, so 'entering Recording starts the recorder' is
+# said once and holds for all four ways in.
+#
+# This machine also found the one place the shape is awkward, and it is
+# recorded here rather than papered over. Playing -> Overdub emits
+# stop-playback then start-overdub, because leaving Playing exits it; a real
+# looper wants a handover, not a stop followed by a start. Nothing in the
+# format is wrong — the modelling is, and there are two honest fixes. Either
+# the host reads the pair as a handover, or overdub stops being a state and
+# becomes a fact about Playing. It is exactly the case edge-specific
+# commands were held back to wait for, and it is not yet convincing enough
+# to add them.
+
 machine  loop   "One loop of a six-loop looper"
-format   1
+format   2
 initial  empty
 
 states
@@ -28,7 +42,19 @@ refusals
   nothing-yet      "nothing recorded yet"
   overdub-in-play  "stopped loops overdub from Playing"
 
+commands
+  discard-audio   "Throw away this loop's audio"
+  start-count-in  "Start the count-in click"
+  stop-count-in   "Stop the count-in click"
+  start-recorder  "Start recording"
+  stop-recorder   "Stop recording"
+  start-playback  "Start playing this loop"
+  stop-playback   "Stop playing this loop"
+  start-overdub   "Start overdubbing onto this loop"
+  stop-overdub    "Stop overdubbing"
+
 empty:
+  entry  discard-audio
   record                when converter-held      -> refuse converter-busy
                         elif count-in-beats > 0  -> armed
                         else                     -> recording
@@ -36,23 +62,31 @@ empty:
   stop, clear, elapsed                           -> stay
 
 armed:  after count-in-beats fires elapsed
+  entry  start-count-in
+  exit   stop-count-in
   elapsed              -> recording
   record, stop, clear  -> empty
   play                 -> stay
 
 recording:
+  entry  start-recorder
+  exit   stop-recorder
   record, play  -> playing
   stop          -> stopped
   clear         -> empty
   elapsed       -> stay
 
 playing:
+  entry  start-playback
+  exit   stop-playback
   record         -> overdubbing
   stop           -> stopped
   clear          -> empty
   play, elapsed  -> stay
 
 overdubbing:
+  entry  start-overdub
+  exit   stop-overdub
   record, play  -> playing
   stop          -> stopped
   clear         -> empty

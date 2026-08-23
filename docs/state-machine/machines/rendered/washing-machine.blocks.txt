@@ -22,9 +22,16 @@
 # machine here has no memory beyond the state it is in. Nothing in the format
 # says so, and a designer who does not know it will build a state per rinse
 # and a paused-state per step.
+#
+# Commands make a fourth point, and a happier one. Twelve states share eight
+# commands: `fill-drum` serves both Filling and Rinse fill, `tumble` serves
+# both Washing and Rinsing. A command is a word in the host's vocabulary,
+# not a name for a state, and the reuse is what proves it. There is not one
+# exit command in the whole machine — a step ends because the next step
+# starts.
 
 machine  washing-machine  "Washing machine"
-format   1
+format   2
 initial  idle
 
 states
@@ -65,6 +72,17 @@ refusals
   still-wet    "the drum must drain before the door opens"
   not-running  "nothing is running"
 
+commands
+  lock-door        "Lock the door"
+  unlock-door      "Unlock the door"
+  fill-drum        "Fill the drum"
+  heat-water       "Heat the water"
+  tumble           "Tumble the drum"
+  drain            "Drain the drum"
+  spin             "Spin"
+  hold-everything  "Hold everything where it is"
+  chime            "Sound the end-of-cycle chime"
+
 idle:
   start                    when not door-shut  -> refuse door-ajar
                            else                -> locking
@@ -72,6 +90,7 @@ idle:
   pause, resume                                -> refuse not-running
 
 locking:
+  entry  lock-door
   step-done      when has-prewash  -> prewashing
                  else              -> filling
   cancel                           -> unlocking
@@ -80,12 +99,14 @@ locking:
   resume, start                    -> stay
 
 prewashing:
+  entry  fill-drum, tumble
   step-done, cancel  -> draining
   pause              -> paused
   open               -> refuse door-locked
   resume, start      -> stay
 
 filling:
+  entry  fill-drum
   step-done      -> washing
   pause          -> paused
   cancel         -> draining
@@ -93,18 +114,21 @@ filling:
   resume, start  -> stay
 
 washing:
+  entry  heat-water, tumble
   step-done, cancel  -> draining
   pause              -> paused
   open               -> refuse door-locked
   resume, start      -> stay
 
 draining:
+  entry  drain
   step-done                     when more-rinses  -> rinse-filling
                                 else              -> spinning
   pause, cancel, resume, start                    -> stay
   open                                            -> refuse door-locked
 
 rinse-filling:
+  entry  fill-drum
   step-done      -> rinsing
   pause          -> paused
   cancel         -> draining
@@ -112,30 +136,35 @@ rinse-filling:
   resume, start  -> stay
 
 rinsing:
+  entry  tumble
   step-done, cancel  -> draining
   pause              -> paused
   open               -> refuse door-locked
   resume, start      -> stay
 
 spinning:
+  entry  drain, spin
   step-done, cancel  -> unlocking
   pause              -> paused
   open               -> refuse door-locked
   resume, start      -> stay
 
 unlocking:
+  entry  unlock-door
   step-done                     when drum-wet  -> refuse still-wet
                                 else           -> done
   open                                         -> refuse door-locked
   pause, resume, cancel, start                 -> stay
 
 done:  final
+  entry  chime
   open               -> idle
   start              -> locking
   pause, resume      -> refuse not-running
   cancel, step-done  -> stay
 
 paused:
+  entry  hold-everything
   resume                   when paused-in-rinse  -> rinsing
                            elif paused-in-fill   -> filling
                            else                  -> washing

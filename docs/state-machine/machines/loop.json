@@ -1,16 +1,32 @@
 {
-  "glassbox": 1,
+  "glassbox": 2,
   "id": "loop",
   "title": "One loop of a six-loop looper",
+
+  "notes": [
+    "Commands, added with the effects fork. Every one of them hangs off a",
+    "STATE rather than an edge, so 'entering Recording starts the recorder' is",
+    "said once and holds for all four ways in.",
+    "",
+    "This machine also found the one place the shape is awkward, and it is",
+    "recorded here rather than papered over. Playing -> Overdub emits",
+    "stop-playback then start-overdub, because leaving Playing exits it; a real",
+    "looper wants a handover, not a stop followed by a start. Nothing in the",
+    "format is wrong — the modelling is, and there are two honest fixes. Either",
+    "the host reads the pair as a handover, or overdub stops being a state and",
+    "becomes a fact about Playing. It is exactly the case edge-specific",
+    "commands were held back to wait for, and it is not yet convincing enough",
+    "to add them."
+  ],
 
   "initial": "empty",
 
   "states": [
-    { "id": "empty",       "label": "Empty" },
-    { "id": "armed",       "label": "Armed" },
-    { "id": "recording",   "label": "Recording" },
-    { "id": "playing",     "label": "Playing" },
-    { "id": "overdubbing", "label": "Overdub" },
+    { "id": "empty",       "label": "Empty",     "entry": ["discard-audio"] },
+    { "id": "armed",       "label": "Armed",     "entry": ["start-count-in"], "exit": ["stop-count-in"] },
+    { "id": "recording",   "label": "Recording", "entry": ["start-recorder"], "exit": ["stop-recorder"] },
+    { "id": "playing",     "label": "Playing",   "entry": ["start-playback"], "exit": ["stop-playback"] },
+    { "id": "overdubbing", "label": "Overdub",   "entry": ["start-overdub"],  "exit": ["stop-overdub"] },
     { "id": "stopped",     "label": "Stopped" }
   ],
 
@@ -34,6 +50,18 @@
     { "id": "converter-busy",  "text": "another loop holds the converter" },
     { "id": "nothing-yet",     "text": "nothing recorded yet" },
     { "id": "overdub-in-play", "text": "stopped loops overdub from Playing" }
+  ],
+
+  "commands": [
+    { "id": "discard-audio",  "label": "Throw away this loop's audio" },
+    { "id": "start-count-in", "label": "Start the count-in click" },
+    { "id": "stop-count-in",  "label": "Stop the count-in click" },
+    { "id": "start-recorder", "label": "Start recording" },
+    { "id": "stop-recorder",  "label": "Stop recording" },
+    { "id": "start-playback", "label": "Start playing this loop" },
+    { "id": "stop-playback",  "label": "Stop playing this loop" },
+    { "id": "start-overdub",  "label": "Start overdubbing onto this loop" },
+    { "id": "stop-overdub",   "label": "Stop overdubbing" }
   ],
 
   "rules": [

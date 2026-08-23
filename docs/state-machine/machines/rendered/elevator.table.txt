@@ -1,16 +1,16 @@
 machine  elevator
 title    "Elevator"
-format   1
+format   2
 initial  idle
 
-STATES        LABEL
-  idle        Idle
-  up          Going up
-  down        Going down
-  arriving    Arriving
-  doors-open  Doors open
-  held        Doors held
-  stopped     Emergency stop
+STATES        LABEL           ON ENTRY                  ON EXIT
+  idle        Idle            close-doors, hold-brake
+  up          Going up        close-doors, drive-up
+  down        Going down      close-doors, drive-down
+  arriving    Arriving        stop-drive, ring-arrival
+  doors-open  Doors open      open-doors
+  held        Doors held      hold-doors
+  stopped     Emergency stop  stop-drive, sound-alarm   cancel-alarm
 
 EVENTS     SOURCE   LABEL
   call     user
@@ -36,6 +36,18 @@ REFUSALS          MEANING
   blocked         something is in the doorway
   no-hold-button  this car has no hold button
   stopped-fast    the emergency stop is engaged
+
+COMMANDS        MEANING
+  hold-brake    Set the parking brake
+  drive-up      Drive the car up
+  drive-down    Drive the car down
+  stop-drive    Stop the drive
+  ring-arrival  Ring the arrival chime
+  open-doors    Open the doors
+  close-doors   Close the doors
+  hold-doors    Hold the doors open
+  sound-alarm   Sound the alarm
+  cancel-alarm  Silence the alarm
 
 GRID   rows are states, columns are events
                 call           open           close          alarm    reset       reached   dwelt

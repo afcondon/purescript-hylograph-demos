@@ -25,6 +25,7 @@
   header { border-bottom: 2px solid var(--ink); padding-bottom: 20px; margin-bottom: 32px; }
   h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; }
   .lede { margin: 0; max-width: 62ch; color: var(--muted); }
+  .lede + .lede { margin-top: 12px; }
   code { font-family: "SF Mono", Menlo, monospace; font-size: 0.88em; }
   .panes { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(360px, 1fr); gap: 40px; align-items: start; }
   @media (max-width: 900px) { .panes { grid-template-columns: 1fr; } }
@@ -38,6 +39,17 @@
   .quiet { margin: 0; color: var(--muted); font-size: 13px; }
   .refusal { margin: 0; color: var(--accent); font-size: 13px; }
   .pending { margin: 6px 0 0; color: var(--accent); font-size: 13px; font-weight: 500; }
+  .hook { margin: 6px 0 0; font-size: 13px; }
+  /* The standing fact reads as prose; the log reads as a tape, so it is
+     monospaced and numbered from the newest. */
+  ol.log {
+    list-style: none; padding: 0; margin: 12px 0 0;
+    font-family: "SF Mono", Menlo, monospace; font-size: 11.5px; line-height: 1.7;
+    border-top: 1px solid var(--rule);
+  }
+  ol.log li { padding-top: 4px; }
+  ol.log li:first-child { padding-top: 8px; color: var(--ink); }
+  ol.log li ~ li { color: #8a8a8a; }
   .buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
   button {
     font: inherit; font-size: 13px; padding: 6px 12px; cursor: pointer;
@@ -77,13 +89,20 @@
 <div class="glassbox">
   <header>
     <h1>Glassbox — a machine is a file</h1>
-    <p class="lede">Both machines below are JSON artifacts fetched at runtime.
+    <p class="lede">Every machine below is a JSON artifact fetched at runtime.
     Nothing in this page was compiled to know that a guitar looper or a car
     radio exists: the same code loads either, runs it, and derives the drawing
     from the very same value it is running — so the picture and the program
     cannot disagree. Change a configuration setting and watch a state strand
     itself, which is the mechanical test for whether a setting belongs to the
     machine at all.</p>
+    <p class="lede">A machine can now drive something as well as describe it.
+    Commands hang off a <em>state</em> rather than an arrow — the small grey
+    <code>+</code> and <code>&#8722;</code> under each node — so
+    <em>entering&nbsp;Recording starts the recorder</em> is written once and
+    holds for every way in, including the one added next month. A refusal
+    commands nothing at all, and staying put is not the same as leaving and
+    coming back.</p>
   </header>
   <div class="panes">
     <section class="pane pane--diagram">

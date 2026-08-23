@@ -1,14 +1,14 @@
 machine  car-radio
 title    "Car radio"
-format   1
+format   2
 initial  off
 
-STATES       LABEL
-  off        Off
-  radio      Radio
-  seeking    Seeking
-  cd         CD
-  bluetooth  Bluetooth
+STATES       LABEL      ON ENTRY       ON EXIT
+  off        Off        power-down
+  radio      Radio      tune-radio
+  seeking    Seeking    start-seek     stop-seek
+  cd         CD         spin-up-disc
+  bluetooth  Bluetooth  connect-phone  disconnect-phone
 
 EVENTS    SOURCE   LABEL
   power   user
@@ -30,6 +30,15 @@ REFUSALS      MEANING
   no-disc     there is no disc in the slot
   no-phone    no phone is paired
   not-fitted  this car has no CD slot
+
+COMMANDS            MEANING
+  power-down        Shut the head unit down
+  tune-radio        Tune to the stored station
+  start-seek        Start scanning for a station
+  stop-seek         Stop scanning
+  spin-up-disc      Spin the disc up and play it
+  connect-phone     Connect the paired phone
+  disconnect-phone  Disconnect the phone
 
 GRID   rows are states, columns are events
                power  source  seek     cancel  eject     giveup

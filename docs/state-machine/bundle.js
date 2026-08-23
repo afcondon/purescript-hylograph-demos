@@ -2391,12 +2391,12 @@
   var foldMapDefaultR = function(dictFoldable) {
     var foldr22 = foldr(dictFoldable);
     return function(dictMonoid) {
-      var append11 = append(dictMonoid.Semigroup0());
+      var append15 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(f) {
         return foldr22(function(x) {
           return function(acc) {
-            return append11(f(x))(acc);
+            return append15(f(x))(acc);
           };
         })(mempty2);
       };
@@ -3422,6 +3422,16 @@
     };
   };
   var slice = /* @__PURE__ */ runFn3(sliceImpl);
+  var take = function(n) {
+    return function(xs) {
+      var $152 = n < 1;
+      if ($152) {
+        return [];
+      }
+      ;
+      return slice(0)(n)(xs);
+    };
+  };
   var singleton2 = function(a2) {
     return [a2];
   };
@@ -3597,13 +3607,13 @@
   var foldMapWithIndexDefaultR = function(dictFoldableWithIndex) {
     var foldrWithIndex1 = foldrWithIndex(dictFoldableWithIndex);
     return function(dictMonoid) {
-      var append11 = append(dictMonoid.Semigroup0());
+      var append15 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(f) {
         return foldrWithIndex1(function(i2) {
           return function(x) {
             return function(acc) {
-              return append11(f(i2)(x))(acc);
+              return append15(f(i2)(x))(acc);
             };
           };
         })(mempty2);
@@ -5456,6 +5466,20 @@
     };
   })();
 
+  // output/Data.String.Common/foreign.js
+  var replaceAll = function(s1) {
+    return function(s2) {
+      return function(s3) {
+        return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2);
+      };
+    };
+  };
+  var joinWith = function(s) {
+    return function(xs) {
+      return xs.join(s);
+    };
+  };
+
   // output/DataViz.Layout.StateMachine.Layout/index.js
   var elemIndex2 = /* @__PURE__ */ elemIndex(eqInt);
   var foldl3 = /* @__PURE__ */ foldl(foldableArray);
@@ -6250,20 +6274,6 @@
   var hasFromCodePoint = typeof String.prototype.fromCodePoint === "function";
   var hasCodePointAt = typeof String.prototype.codePointAt === "function";
 
-  // output/Data.String.Common/foreign.js
-  var replaceAll = function(s1) {
-    return function(s2) {
-      return function(s3) {
-        return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2);
-      };
-    };
-  };
-  var joinWith = function(s) {
-    return function(xs) {
-      return xs.join(s);
-    };
-  };
-
   // output/Data.Codec.Argonaut/index.js
   var show1 = /* @__PURE__ */ show(showInt);
   var lmap2 = /* @__PURE__ */ lmap(bifunctorEither);
@@ -6425,6 +6435,7 @@
 
   // output/Glassbox.Spec/index.js
   var map11 = /* @__PURE__ */ map(functorArray);
+  var max6 = /* @__PURE__ */ max(ordInt);
   var VNumber = /* @__PURE__ */ (function() {
     function VNumber2(value0) {
       this.value0 = value0;
@@ -6541,6 +6552,9 @@
     };
     return FactOf2;
   })();
+  var CommandId = function(x) {
+    return x;
+  };
   var OpEq = /* @__PURE__ */ (function() {
     function OpEq2() {
     }
@@ -6646,6 +6660,20 @@
     ;
     return false;
   };
+  var requiredVersion = function(spec) {
+    var hasCommands = function(s) {
+      return !$$null(s.entry) || !$$null(s.exit);
+    };
+    var $100 = $$null(spec.commands) && !any2(hasCommands)(spec.states);
+    if ($100) {
+      return 1;
+    }
+    ;
+    return 2;
+  };
+  var versionFor = function(spec) {
+    return max6(spec.version)(requiredVersion(spec));
+  };
   var outcomeTarget = function(current) {
     return function(v) {
       if (v instanceof Move) {
@@ -6660,14 +6688,14 @@
         return current;
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Spec (line 194, column 25 - line 197, column 22): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Spec (line 255, column 25 - line 258, column 22): " + [v.constructor.name]);
     };
   };
   var ordStateId = ordString;
   var ordFactId = ordString;
   var ordEventId = ordString;
   var ordConfigId = ordString;
-  var formatVersion = 1;
+  var formatVersion = 2;
   var eqValue = {
     eq: function(x) {
       return function(y) {
@@ -6689,6 +6717,15 @@
   };
   var eqStateId = eqString;
   var eq4 = /* @__PURE__ */ eq(eqStateId);
+  var exitOf = function(spec) {
+    return function(sid) {
+      return maybe([])(function(v) {
+        return v.exit;
+      })(find2(function(s) {
+        return eq4(s.id)(sid);
+      })(spec.states));
+    };
+  };
   var labelOfState = function(spec) {
     return function(v) {
       return maybe(v)(function(v1) {
@@ -6752,6 +6789,26 @@
       };
     };
   };
+  var eqCommandId = eqString;
+  var eq11 = /* @__PURE__ */ eq(eqCommandId);
+  var labelOfCommand = function(spec) {
+    return function(v) {
+      return maybe(v)(function(v1) {
+        return v1.label;
+      })(find2(function(c) {
+        return eq11(c.id)(v);
+      })(spec.commands));
+    };
+  };
+  var entryOf = function(spec) {
+    return function(sid) {
+      return maybe([])(function(v) {
+        return v.entry;
+      })(find2(function(s) {
+        return eq4(s.id)(sid);
+      })(spec.states));
+    };
+  };
   var deadlineFor = function(spec) {
     return function(sid) {
       return head(filter(function(d) {
@@ -6785,15 +6842,15 @@
         return id(v.value0);
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 135, column 12 - line 138, column 32): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 151, column 12 - line 154, column 32): " + [v.constructor.name]);
     };
     var decode2 = function(json) {
-      return caseJson($$const(new Left(new TypeMismatch("number, boolean or string"))))(function($99) {
-        return Right.create(VBoolean.create($99));
-      })(function($100) {
-        return Right.create(VNumber.create($100));
-      })(function($101) {
-        return Right.create(VString.create($101));
+      return caseJson($$const(new Left(new TypeMismatch("number, boolean or string"))))(function($104) {
+        return Right.create(VBoolean.create($104));
+      })(function($105) {
+        return Right.create(VNumber.create($105));
+      })(function($106) {
+        return Right.create(VString.create($106));
       })($$const(new Left(new TypeMismatch("number, boolean or string"))))($$const(new Left(new TypeMismatch("number, boolean or string"))))(json);
     };
     return codec$prime(decode2)(encode2);
@@ -6803,8 +6860,8 @@
       return bind2(lookup3(k)(o))(toString2);
     };
   };
-  var stateIdCodec = /* @__PURE__ */ prismaticCodec("StateId")(function($102) {
-    return Just.create(StateId($102));
+  var stateIdCodec = /* @__PURE__ */ prismaticCodec("StateId")(function($107) {
+    return Just.create(StateId($107));
   })(function(v) {
     return v;
   })(string);
@@ -6818,15 +6875,15 @@
       return note(new AtKey(k, MissingValue.value))(lookup3(k)(o));
     };
   };
-  var refusalIdCodec = /* @__PURE__ */ prismaticCodec("RefusalId")(function($103) {
-    return Just.create(RefusalId($103));
+  var refusalIdCodec = /* @__PURE__ */ prismaticCodec("RefusalId")(function($108) {
+    return Just.create(RefusalId($108));
   })(function(v) {
     return v;
   })(string);
   var obj = /* @__PURE__ */ (function() {
-    var $104 = fromFoldable7(foldableArray);
-    return function($105) {
-      return id($104($105));
+    var $109 = fromFoldable7(foldableArray);
+    return function($110) {
+      return id($109($110));
     };
   })();
   var refusalDeclCodec = /* @__PURE__ */ (function() {
@@ -6852,6 +6909,23 @@
     ;
     return [new Tuple("notes", id(map14(id)(v)))];
   };
+  var normalise = function(spec) {
+    return {
+      id: spec.id,
+      title: spec.title,
+      notes: spec.notes,
+      initial: spec.initial,
+      states: spec.states,
+      events: spec.events,
+      config: spec.config,
+      facts: spec.facts,
+      refusals: spec.refusals,
+      commands: spec.commands,
+      rules: spec.rules,
+      deadlines: spec.deadlines,
+      version: versionFor(spec)
+    };
+  };
   var listAt = function(o) {
     return function(k) {
       return function(codec2) {
@@ -6864,12 +6938,12 @@
           return lmap3(AtKey.create(k))(decode(array(codec2))(v.value0));
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 444, column 20 - line 446, column 68): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 494, column 20 - line 496, column 68): " + [v.constructor.name]);
       };
     };
   };
-  var factIdCodec = /* @__PURE__ */ prismaticCodec("FactId")(function($106) {
-    return Just.create(FactId($106));
+  var factIdCodec = /* @__PURE__ */ prismaticCodec("FactId")(function($111) {
+    return Just.create(FactId($111));
   })(function(v) {
     return v;
   })(string);
@@ -6903,7 +6977,7 @@
         return obj([new Tuple("fact", id(v.value0))]);
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 187, column 12 - line 190, column 63): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 203, column 12 - line 206, column 63): " + [v.constructor.name]);
     };
     var decode2 = function(json) {
       var v = toObject(json);
@@ -6925,7 +6999,7 @@
         return new Left(new TypeMismatch("an expression: a literal, {config}, or {fact}"));
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 191, column 17 - line 196, column 85): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 207, column 17 - line 212, column 85): " + [v.constructor.name]);
     };
     return codec$prime(decode2)(encode2);
   })();
@@ -6939,7 +7013,7 @@
         return "runtime";
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 156, column 8 - line 158, column 29): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 172, column 8 - line 174, column 29): " + [v.constructor.name]);
     };
     var from3 = function(v) {
       if (v === "user") {
@@ -6954,8 +7028,8 @@
     };
     return prismaticCodec("EventSource")(from3)(to)(string);
   })();
-  var eventIdCodec = /* @__PURE__ */ prismaticCodec("EventId")(function($107) {
-    return Just.create(EventId($107));
+  var eventIdCodec = /* @__PURE__ */ prismaticCodec("EventId")(function($112) {
+    return Just.create(EventId($112));
   })(function(v) {
     return v;
   })(string);
@@ -7000,8 +7074,8 @@
     };
     return codec$prime(decode2)(encode2);
   })();
-  var configIdCodec = /* @__PURE__ */ prismaticCodec("ConfigId")(function($108) {
-    return Just.create(ConfigId($108));
+  var configIdCodec = /* @__PURE__ */ prismaticCodec("ConfigId")(function($113) {
+    return Just.create(ConfigId($113));
   })(function(v) {
     return v;
   })(string);
@@ -7019,6 +7093,36 @@
               label: label5,
               "default": def
             });
+          });
+        });
+      });
+    };
+    return codec$prime(decode2)(encode2);
+  })();
+  var commandIdCodec = /* @__PURE__ */ prismaticCodec("CommandId")(function($114) {
+    return Just.create(CommandId($114));
+  })(function(v) {
+    return v;
+  })(string);
+  var commandsField = function(key) {
+    return function(v) {
+      if (v.length === 0) {
+        return [];
+      }
+      ;
+      return [new Tuple(key, id(map14(encode(commandIdCodec))(v)))];
+    };
+  };
+  var commandDeclCodec = /* @__PURE__ */ (function() {
+    var encode2 = function(c) {
+      return obj([new Tuple("id", encode(commandIdCodec)(c.id)), new Tuple("label", id(c.label))]);
+    };
+    var decode2 = function(json) {
+      return bind12(note(new TypeMismatch("a command object"))(toObject(json)))(function(o) {
+        return bind12(requiredString(o)("id"))(function(raw) {
+          return pure4({
+            id: raw,
+            label: fromMaybe(raw)(stringAt(o)("label"))
           });
         });
       });
@@ -7051,7 +7155,7 @@
         return "ge";
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 171, column 8 - line 177, column 17): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 187, column 8 - line 193, column 17): " + [v.constructor.name]);
     };
     var from3 = function(v) {
       if (v === "eq") {
@@ -7105,7 +7209,7 @@
           return obj([new Tuple("op", encode(cmpOpCodec)(v.value0)), new Tuple("left", encode(exprCodec)(v.value1)), new Tuple("right", encode(exprCodec)(v.value2))]);
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 201, column 17 - line 210, column 8): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 217, column 17 - line 226, column 8): " + [v.constructor.name]);
       };
     };
     var decode2 = function(self) {
@@ -7145,7 +7249,7 @@
           return map15(Holds.create)(decode(exprCodec)(json));
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 211, column 22 - line 222, column 58): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 227, column 22 - line 238, column 58): " + [v.constructor.name]);
       };
     };
     return fix(function(self) {
@@ -7163,7 +7267,7 @@
           return [new Tuple("when", encode(guardCodec)(c.when.value0))];
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 236, column 16 - line 238, column 61): " + [c.when.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 252, column 16 - line 254, column 61): " + [c.when.constructor.name]);
       })();
       var outcomePart = (function() {
         if (c.outcome instanceof Move) {
@@ -7178,7 +7282,7 @@
           return [new Tuple("refuse", encode(refusalIdCodec)(c.outcome.value0))];
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 239, column 19 - line 242, column 73): " + [c.outcome.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 255, column 19 - line 258, column 73): " + [c.outcome.constructor.name]);
       })();
       return obj(append5(whenPart)(outcomePart));
     };
@@ -7194,7 +7298,7 @@
             return map15(Just.create)(decode(guardCodec)(v.value0));
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 245, column 14 - line 247, column 51): " + [v.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 261, column 14 - line 263, column 51): " + [v.constructor.name]);
         })())(function(when$prime) {
           return bind12((function() {
             var v = stringAt(o)("refuse");
@@ -7252,22 +7356,28 @@
   };
   var stateDeclCodec = /* @__PURE__ */ (function() {
     var encode2 = function(s) {
-      return obj(append5([new Tuple("id", encode(stateIdCodec)(s.id)), new Tuple("label", id(s.label))])((function() {
+      return obj(append5([new Tuple("id", encode(stateIdCodec)(s.id)), new Tuple("label", id(s.label))])(append5((function() {
         if (s["final"]) {
           return [new Tuple("final", id(true))];
         }
         ;
         return [];
-      })()));
+      })())(append5(commandsField("entry")(s.entry))(commandsField("exit")(s.exit)))));
     };
     var decode2 = function(json) {
       return bind12(note(new TypeMismatch("a state object"))(toObject(json)))(function(o) {
         return bind12(requiredString(o)("id"))(function(raw) {
           var label5 = fromMaybe(raw)(stringAt(o)("label"));
-          return pure4({
-            id: raw,
-            label: label5,
-            "final": boolAt(o)("final")
+          return bind12(lmap3(AtKey.create("entry"))(listAt(o)("entry")(commandIdCodec)))(function(entry) {
+            return bind12(lmap3(AtKey.create("exit"))(listAt(o)("exit")(commandIdCodec)))(function(exit) {
+              return pure4({
+                id: raw,
+                label: label5,
+                "final": boolAt(o)("final"),
+                entry,
+                exit
+              });
+            });
           });
         });
       });
@@ -7276,7 +7386,7 @@
   })();
   var specCodec = /* @__PURE__ */ (function() {
     var encode2 = function(s) {
-      return obj(append5([new Tuple("glassbox", encode($$int)(s.version)), new Tuple("id", id(s.id)), new Tuple("title", id(s.title))])(append5(notesField(s.notes))([new Tuple("initial", encode(stateIdCodec)(s.initial)), new Tuple("states", id(map14(encode(stateDeclCodec))(s.states))), new Tuple("events", id(map14(encode(eventDeclCodec))(s.events))), new Tuple("config", id(map14(encode(configDeclCodec))(s.config))), new Tuple("facts", id(map14(encode(factDeclCodec))(s.facts))), new Tuple("refusals", id(map14(encode(refusalDeclCodec))(s.refusals))), new Tuple("rules", id(map14(encode(ruleCodec))(s.rules))), new Tuple("deadlines", id(map14(encode(deadlineCodec))(s.deadlines)))])));
+      return obj(append5([new Tuple("glassbox", encode($$int)(versionFor(s))), new Tuple("id", id(s.id)), new Tuple("title", id(s.title))])(append5(notesField(s.notes))([new Tuple("initial", encode(stateIdCodec)(s.initial)), new Tuple("states", id(map14(encode(stateDeclCodec))(s.states))), new Tuple("events", id(map14(encode(eventDeclCodec))(s.events))), new Tuple("config", id(map14(encode(configDeclCodec))(s.config))), new Tuple("facts", id(map14(encode(factDeclCodec))(s.facts))), new Tuple("refusals", id(map14(encode(refusalDeclCodec))(s.refusals))), new Tuple("commands", id(map14(encode(commandDeclCodec))(s.commands))), new Tuple("rules", id(map14(encode(ruleCodec))(s.rules))), new Tuple("deadlines", id(map14(encode(deadlineCodec))(s.deadlines)))])));
     };
     var decode2 = function(json) {
       return bind12(note(new TypeMismatch("a Glassbox artifact object"))(toObject(json)))(function(o) {
@@ -7290,21 +7400,24 @@
                       return bind12(listAt(o)("config")(configDeclCodec))(function(config) {
                         return bind12(listAt(o)("facts")(factDeclCodec))(function(facts) {
                           return bind12(listAt(o)("refusals")(refusalDeclCodec))(function(refusals) {
-                            return bind12(listAt(o)("rules")(ruleCodec))(function(rules) {
-                              return bind12(listAt(o)("deadlines")(deadlineCodec))(function(deadlines) {
-                                return pure4({
-                                  version,
-                                  id: id3,
-                                  notes,
-                                  title: fromMaybe(id3)(stringAt(o)("title")),
-                                  initial,
-                                  states,
-                                  events,
-                                  config,
-                                  facts,
-                                  refusals,
-                                  rules,
-                                  deadlines
+                            return bind12(listAt(o)("commands")(commandDeclCodec))(function(commands) {
+                              return bind12(listAt(o)("rules")(ruleCodec))(function(rules) {
+                                return bind12(listAt(o)("deadlines")(deadlineCodec))(function(deadlines) {
+                                  return pure4(normalise({
+                                    version,
+                                    id: id3,
+                                    notes,
+                                    title: fromMaybe(id3)(stringAt(o)("title")),
+                                    initial,
+                                    states,
+                                    events,
+                                    config,
+                                    facts,
+                                    refusals,
+                                    commands,
+                                    rules,
+                                    deadlines
+                                  }));
                                 });
                               });
                             });
@@ -7323,10 +7436,10 @@
     return codec$prime(decode2)(encode2);
   })();
   var decodeSpec = /* @__PURE__ */ (function() {
-    var $109 = lmap3(printJsonDecodeError);
-    var $110 = decode(specCodec);
-    return function($111) {
-      return $109($110($111));
+    var $115 = lmap3(printJsonDecodeError);
+    var $116 = decode(specCodec);
+    return function($117) {
+      return $115($116($117));
     };
   })();
   var parseSpec = function(text6) {
@@ -7335,8 +7448,8 @@
     });
   };
   var encodeSpec = /* @__PURE__ */ encode(specCodec);
-  var printSpecPretty = function($113) {
-    return stringifyPrettyImpl(encodeSpec($113));
+  var printSpecPretty = function($119) {
+    return stringifyPrettyImpl(encodeSpec($119));
   };
 
   // output/Glassbox.Demo.Fetch/foreign.js
@@ -7431,6 +7544,7 @@
   var notEq3 = /* @__PURE__ */ notEq(eqValue);
   var eq12 = /* @__PURE__ */ eq(eqOrdering);
   var notEq1 = /* @__PURE__ */ notEq(eqOrdering);
+  var append6 = /* @__PURE__ */ append(semigroupArray);
   var worldFrom = function(spec) {
     return {
       config: foldl2(function(m) {
@@ -7440,6 +7554,9 @@
       })(empty4)(spec.config),
       facts: empty4
     };
+  };
+  var startCommands = function(spec) {
+    return entryOf(spec)(spec.initial);
   };
   var setFact = function(k) {
     return function(v) {
@@ -7485,7 +7602,7 @@
         return lookupFact(world)(v.value0);
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Run (line 96, column 18 - line 99, column 33): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Run (line 103, column 18 - line 106, column 33): " + [v.constructor.name]);
     };
   };
   var dueAt = function(spec) {
@@ -7509,7 +7626,7 @@
             return Nothing.value;
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Run (line 189, column 34 - line 193, column 17): " + [v.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Run (line 239, column 34 - line 243, column 17): " + [v.constructor.name]);
         };
       };
     };
@@ -7564,7 +7681,7 @@
           return false;
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Run (line 119, column 8 - line 126, column 17): " + [ordering.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Run (line 126, column 8 - line 133, column 17): " + [ordering.constructor.name]);
       };
     };
   };
@@ -7604,7 +7721,7 @@
         return false;
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Run (line 102, column 19 - line 109, column 18): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Run (line 109, column 19 - line 116, column 18): " + [v.constructor.name]);
     };
   };
   var resolve = function(spec) {
@@ -7620,7 +7737,7 @@
               return evalGuard(world)(c.when.value0);
             }
             ;
-            throw new Error("Failed pattern match at Glassbox.Run (line 151, column 15 - line 153, column 32): " + [c.when.constructor.name]);
+            throw new Error("Failed pattern match at Glassbox.Run (line 158, column 15 - line 160, column 32): " + [c.when.constructor.name]);
           };
           var v = ruleFor(spec)(from3)(on2);
           if (v instanceof Nothing) {
@@ -7637,11 +7754,30 @@
               return v1.value0.outcome;
             }
             ;
-            throw new Error("Failed pattern match at Glassbox.Run (line 147, column 16 - line 149, column 24): " + [v1.constructor.name]);
+            throw new Error("Failed pattern match at Glassbox.Run (line 154, column 16 - line 156, column 24): " + [v1.constructor.name]);
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Run (line 145, column 30 - line 149, column 24): " + [v.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Run (line 152, column 30 - line 156, column 24): " + [v.constructor.name]);
         };
+      };
+    };
+  };
+  var commandsFor = function(spec) {
+    return function(from3) {
+      return function(v) {
+        if (v instanceof Refuse) {
+          return [];
+        }
+        ;
+        if (v instanceof Stay) {
+          return [];
+        }
+        ;
+        if (v instanceof Move) {
+          return append6(exitOf(spec)(from3))(entryOf(spec)(v.value0));
+        }
+        ;
+        throw new Error("Failed pattern match at Glassbox.Run (line 184, column 25 - line 187, column 49): " + [v.constructor.name]);
       };
     };
   };
@@ -7651,11 +7787,13 @@
         return function(event) {
           var outcome = resolve(spec)(world)(from3)(event);
           var current = outcomeTarget(from3)(outcome);
+          var commands = commandsFor(spec)(from3)(outcome);
           return new Tuple(current, {
             from: from3,
             event,
             outcome,
-            current
+            current,
+            commands
           });
         };
       };
@@ -7664,7 +7802,7 @@
 
   // output/Glassbox.Edges/index.js
   var map16 = /* @__PURE__ */ map(functorArray);
-  var append6 = /* @__PURE__ */ append(semigroupArray);
+  var append7 = /* @__PURE__ */ append(semigroupArray);
   var nubEq2 = /* @__PURE__ */ nubEq(eqEventId);
   var sort2 = /* @__PURE__ */ sort(ordEventId);
   var eq13 = /* @__PURE__ */ eq(eqEventId);
@@ -7865,7 +8003,7 @@
           throw new Error("Failed pattern match at Glassbox.Edges (line 119, column 23 - line 124, column 19): " + [v.constructor.name]);
         };
         var deadlineEdges = mapMaybe(deadlineEdge)(spec.states);
-        return merge(filter(keep)(append6(eventEdges)(deadlineEdges)));
+        return merge(filter(keep)(append7(eventEdges)(deadlineEdges)));
       };
     };
   };
@@ -8423,7 +8561,7 @@
 
   // output/Hylograph.HATS/index.js
   var show4 = /* @__PURE__ */ show(showNumber);
-  var append7 = /* @__PURE__ */ append(semigroupArray);
+  var append8 = /* @__PURE__ */ append(semigroupArray);
   var DepthFirst = /* @__PURE__ */ (function() {
     function DepthFirst2() {
     }
@@ -8661,7 +8799,7 @@
           elemType: v.value0.elemType,
           attrs: v.value0.attrs,
           children: v.value0.children,
-          behaviors: append7(v.value0.behaviors)(bs)
+          behaviors: append8(v.value0.behaviors)(bs)
         });
       }
       ;
@@ -8704,9 +8842,9 @@
   // output/Glassbox.Demo.Render/index.js
   var show5 = /* @__PURE__ */ show(showNumber);
   var elem4 = /* @__PURE__ */ elem2(/* @__PURE__ */ eqTuple(eqString)(eqString));
+  var map17 = /* @__PURE__ */ map(functorArray);
   var elem1 = /* @__PURE__ */ elem2(eqString);
   var append12 = /* @__PURE__ */ append(semigroupArray);
-  var map17 = /* @__PURE__ */ map(functorArray);
   var shortcut = "#1f6feb";
   var pale = "#cfcfcf";
   var muted = "#8a8a8a";
@@ -8726,7 +8864,7 @@
         return "0.06";
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Demo.Render (line 241, column 22 - line 243, column 44): " + [focus3.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Demo.Render (line 268, column 22 - line 270, column 44): " + [focus3.constructor.name]);
     };
   };
   var ellipseD = function(cx) {
@@ -8837,13 +8975,22 @@
           return elem4(new Tuple(t.transition.from, t.transition.to))(focus3.value0.edges);
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Render (line 94, column 13 - line 96, column 69): " + [focus3.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Render (line 95, column 13 - line 97, column 69): " + [focus3.constructor.name]);
       })();
       return elem3(Group.value)([staticStr("opacity")(fade(focus3)(inFocus))])(edgeElements(t));
     };
   };
   var stateElements = function(currentId) {
     return function(v) {
+      var prefixed = function(mark2) {
+        var $55 = joinWith(" ");
+        var $56 = map17(function(c) {
+          return mark2 + c;
+        });
+        return function($57) {
+          return $55($56($57));
+        };
+      };
       var isCurrent = v.state.id === currentId;
       var halo = elem3(Path.value)([staticStr("d")(ellipseD(v.position.cx)(v.position.cy)(v.position.rx + 6)(v.position.ry + 6)), staticStr("fill")("none"), staticStr("stroke")(accent), staticStr("stroke-width")("1"), staticStr("stroke-opacity")((function() {
         if (isCurrent) {
@@ -8852,6 +8999,11 @@
         ;
         return "0";
       })())])([]);
+      var caption2 = function(dy) {
+        return function(text6) {
+          return elem3(Text.value)([staticNum("x")(v.position.cx), staticNum("y")(v.position.cy + v.position.ry + dy), staticStr("text-anchor")("middle"), staticStr("font-size")("8.5"), staticStr("font-family")("ui-monospace, SFMono-Regular, Menlo, monospace"), staticStr("fill")("#9a9a9a"), staticStr("textContent")(text6)])([]);
+        };
+      };
       return [halo, elem3(Path.value)([staticStr("d")(ellipseD(v.position.cx)(v.position.cy)(v.position.rx)(v.position.ry)), staticStr("fill")((function() {
         if (isCurrent) {
           return accent;
@@ -8882,7 +9034,7 @@
         }
         ;
         return ink;
-      })()), staticStr("textContent")(v.state.label)])([])];
+      })()), staticStr("textContent")(v.state.label)])([]), caption2(11)(prefixed("+")(v.state.extra.entry)), caption2(20)(prefixed("\u2212")(v.state.extra.exit))];
     };
   };
   var stateGroup = function(callbacks) {
@@ -8898,7 +9050,7 @@
               return true;
             }
             ;
-            throw new Error("Failed pattern match at Glassbox.Demo.Render (line 197, column 21 - line 199, column 20): " + [focus3.constructor.name]);
+            throw new Error("Failed pattern match at Glassbox.Demo.Render (line 198, column 21 - line 200, column 20): " + [focus3.constructor.name]);
           };
           return withBehaviors([onMouseEnter(callbacks.hover(new Just(placed.state.id))), onMouseLeave(callbacks.hover(Nothing.value))])(elem3(Group.value)([staticStr("opacity")(fade(focus3)(stateInFocus(placed.state.id))), staticStr("cursor")("pointer")])(stateElements(currentId)(placed)));
         };
@@ -8937,6 +9089,9 @@
   };
   var describe = function(spec) {
     return function(edges) {
+      var rawCommand = function(v) {
+        return v;
+      };
       var raw = function(v) {
         return v;
       };
@@ -8946,7 +9101,10 @@
           label: decl.label,
           isInitial: eq6(decl.id)(spec.initial),
           isFinal: decl["final"],
-          extra: unit
+          extra: {
+            entry: map18(rawCommand)(decl.entry),
+            exit: map18(rawCommand)(decl.exit)
+          }
         };
       };
       var toTransition = function(edge) {
@@ -10447,7 +10605,7 @@
       return val;
     };
   };
-  var append8 = /* @__PURE__ */ append(semigroupCatList);
+  var append9 = /* @__PURE__ */ append(semigroupCatList);
   var Free = /* @__PURE__ */ (function() {
     function Free2(value0, value1) {
       this.value0 = value0;
@@ -10493,7 +10651,7 @@
       };
       var concatF = function(v22) {
         return function(r) {
-          return new Free(v22.value0, append8(v22.value1)(r));
+          return new Free(v22.value0, append9(v22.value1)(r));
         };
       };
       if (v.value0 instanceof Return) {
@@ -10622,7 +10780,7 @@
   // output/Halogen.Subscription/index.js
   var $$void6 = /* @__PURE__ */ $$void(functorEffect);
   var bind3 = /* @__PURE__ */ bind(bindEffect);
-  var append9 = /* @__PURE__ */ append(semigroupArray);
+  var append10 = /* @__PURE__ */ append(semigroupArray);
   var traverse_2 = /* @__PURE__ */ traverse_(applicativeEffect);
   var traverse_1 = /* @__PURE__ */ traverse_2(foldableArray);
   var unsubscribe = function(v) {
@@ -10646,7 +10804,7 @@
       emitter: function(k) {
         return function __do2() {
           modify_(function(v) {
-            return append9(v)([k]);
+            return append10(v)([k]);
           })(subscribers)();
           return modify_(deleteBy(unsafeRefEq)(k))(subscribers);
         };
@@ -11037,6 +11195,9 @@
     return element2("input")(props)([]);
   };
   var label = /* @__PURE__ */ element2("label");
+  var li = /* @__PURE__ */ element2("li");
+  var li_ = /* @__PURE__ */ li([]);
+  var ol = /* @__PURE__ */ element2("ol");
   var p = /* @__PURE__ */ element2("p");
   var pre = /* @__PURE__ */ element2("pre");
   var pre_ = /* @__PURE__ */ pre([]);
@@ -13079,7 +13240,7 @@
   var fromEvent = /* @__PURE__ */ unsafeReadProtoTagged("MouseEvent");
 
   // output/Hylograph.HATS.InterpreterTick/index.js
-  var append10 = /* @__PURE__ */ append(semigroupArray);
+  var append11 = /* @__PURE__ */ append(semigroupArray);
   var map27 = /* @__PURE__ */ map(functorArray);
   var bind4 = /* @__PURE__ */ bind(bindEffect);
   var traverse_4 = /* @__PURE__ */ traverse_(applicativeEffect)(foldableArray);
@@ -13171,7 +13332,7 @@
           var childResults = concatMap(go2)(children2);
           var $77 = isLeaf || includeInternal;
           if ($77) {
-            return append10([node])(childResults);
+            return append11([node])(childResults);
           }
           ;
           return childResults;
@@ -13200,7 +13361,7 @@
               ;
               return [];
             })();
-            return append10(thisNode)(go2(append10(v.value0.tail)(children2)));
+            return append11(thisNode)(go2(append11(v.value0.tail)(children2)));
           }
           ;
           throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 556, column 14 - line 563, column 43): " + [v.constructor.name]);
@@ -13707,9 +13868,9 @@
           return function(b2) {
             return {
               selections: union4(a2.selections)(b2.selections),
-              entering: append10(a2.entering)(b2.entering),
-              updating: append10(a2.updating)(b2.updating),
-              exiting: append10(a2.exiting)(b2.exiting)
+              entering: append11(a2.entering)(b2.entering),
+              updating: append11(a2.updating)(b2.updating),
+              exiting: append11(a2.exiting)(b2.exiting)
             };
           };
         };
@@ -14164,7 +14325,7 @@
                     var childMaps = foldl2(union4)(empty4)(map27(function(v1) {
                       return v1.childSelections;
                     })(enterResults));
-                    var selections = insert5(spec.name)(append10(updateElements)(enterElements))(childMaps);
+                    var selections = insert5(spec.name)(append11(updateElements)(enterElements))(childMaps);
                     var totalElements = length(updateElements) + length(enterElements) | 0;
                     return {
                       result: {
@@ -14400,7 +14561,7 @@
       return text("");
     }
     ;
-    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 391, column 17 - line 395, column 24): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 416, column 17 - line 420, column 24): " + [v.constructor.name]);
   };
   var statusBlock = function(v) {
     return function(l) {
@@ -14422,10 +14583,10 @@
             return p([class_("quiet")])([text(labelOfEvent(l.spec)(l.last.value0.event))]);
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 379, column 36 - line 386, column 93): " + [l.last.value0.outcome.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 404, column 36 - line 411, column 93): " + [l.last.value0.outcome.constructor.name]);
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 377, column 7 - line 386, column 93): " + [l.last.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 402, column 7 - line 411, column 93): " + [l.last.constructor.name]);
       })(), pendingLine(l)]);
     };
   };
@@ -14466,7 +14627,7 @@
       return div2([class_("block")])([h2_([text("The world")]), p([class_("quiet")])([text("Facts the host reports. They change what an event means, not what the machine is.")]), div_(map112(row)(l.spec.facts))]);
     }
     ;
-    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 414, column 1 - line 414, column 62): " + [l.constructor.name]);
+    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 477, column 1 - line 477, column 62): " + [l.constructor.name]);
   };
   var eventsBlock = function(l) {
     var tickButton = button([onClick(function(v) {
@@ -14518,8 +14679,8 @@
     return div2([class_("block")])([h2_([text("Drawing")]), div2([class_("buttons")])([button([onClick(function(v) {
       return new SetLayout(AsTree.value);
     }), class_((function() {
-      var $113 = eq32(state3.layoutMode)(AsTree.value);
-      if ($113) {
+      var $114 = eq32(state3.layoutMode)(AsTree.value);
+      if ($114) {
         return "on";
       }
       ;
@@ -14527,8 +14688,8 @@
     })())])([text("as the user meets it")]), button([onClick(function(v) {
       return new SetLayout(AsRing.value);
     }), class_((function() {
-      var $114 = eq32(state3.layoutMode)(AsRing.value);
-      if ($114) {
+      var $115 = eq32(state3.layoutMode)(AsRing.value);
+      if ($115) {
         return "on";
       }
       ;
@@ -14551,8 +14712,8 @@
           return button([onClick(function(v) {
             return new SetTextView(view);
           }), class_((function() {
-            var $115 = eq23(state3.textView)(view);
-            if ($115) {
+            var $116 = eq23(state3.textView)(view);
+            if ($116) {
               return "on";
             }
             ;
@@ -14569,7 +14730,7 @@
           return "The same machine as text \u2014 derived from the same rules as the picture, so it changes when the configuration does. Refusals are left out, since as self-loops they would treble the edge count to say what the styling already says. Mermaid stateDiagram-v2 syntax, so GitHub renders it if you paste it; nothing here depends on Mermaid to draw anything.";
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 514, column 11 - line 523, column 68): " + [state3.textView.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 577, column 11 - line 586, column 68): " + [state3.textView.constructor.name]);
       })();
       var body2 = (function() {
         if (state3.textView instanceof AsArtifact) {
@@ -14580,7 +14741,7 @@
           return toStateDiagram(l.spec)(edgesFor(state3)(l));
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 510, column 10 - line 512, column 62): " + [state3.textView.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 573, column 10 - line 575, column 62): " + [state3.textView.constructor.name]);
       })();
       return div2([class_("block")])([h2_([button([onClick(function(v) {
         return ToggleText.value;
@@ -14591,8 +14752,8 @@
         ;
         return "\u25B8 In words";
       })())])]), (function() {
-        var $119 = !state3.textOpen;
-        if ($119) {
+        var $120 = !state3.textOpen;
+        if ($120) {
           return text("");
         }
         ;
@@ -14637,12 +14798,43 @@
           return label([class_("field")])([text(decl.label), span_([text(v.value0)])]);
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 451, column 18 - line 472, column 59): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 514, column 18 - line 535, column 59): " + [v.constructor.name]);
       };
       return div2([class_("block")])([h2_([text("Configuration")]), p([class_("quiet")])([text("Config reshapes the machine \u2014 watch a state strand itself as you change one.")]), div_(map112(row)(l.spec.config))]);
     }
     ;
-    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 440, column 1 - line 440, column 63): " + [l.constructor.name]);
+    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 503, column 1 - line 503, column 63): " + [l.constructor.name]);
+  };
+  var commandsBlock = function(l) {
+    if ($$null(l.spec.commands)) {
+      return text("");
+    }
+    ;
+    if (otherwise) {
+      var line = function(entry) {
+        return li_([span2([class_("quiet")])([text(entry.why + ": ")]), (function() {
+          if (entry.commands.length === 0) {
+            return span2([class_("quiet")])([text("nothing")]);
+          }
+          ;
+          return text(joinWith(" \u2192 ")(map112(function(c) {
+            return labelOfCommand(l.spec)(c);
+          })(entry.commands)));
+        })()]);
+      };
+      var hooks = function(caption2) {
+        return function(v) {
+          if (v.length === 0) {
+            return [];
+          }
+          ;
+          return [p([class_("hook")])([span2([class_("quiet")])([text(caption2 + " \u2014 ")]), text(joinWith(", ")(map112(labelOfCommand(l.spec))(v)))])];
+        };
+      };
+      return div2([class_("block")])([h2_([text("What the host is told to do")]), p([class_("quiet")])([text("Commands hang off states, not arrows \u2014 so entering a state means the same thing however you got there.")]), div_(hooks("on entering here")(entryOf(l.spec)(l.current))), div_(hooks("on leaving here")(exitOf(l.spec)(l.current))), ol([class_("log")])(map112(line)(l.log))]);
+    }
+    ;
+    throw new Error("Failed pattern match at Glassbox.Demo.Component (line 446, column 1 - line 446, column 65): " + [l.constructor.name]);
   };
   var catalogue = [{
     file: "machines/loop.json",
@@ -14665,8 +14857,8 @@
       return button([onClick(function(v) {
         return new Load(entry.file);
       }), class_((function() {
-        var $126 = entry.file === state3.source;
-        if ($126) {
+        var $130 = entry.file === state3.source;
+        if ($130) {
           return "on";
         }
         ;
@@ -14686,10 +14878,10 @@
       }
       ;
       if (state3.loaded instanceof Just) {
-        return [statusBlock(state3)(state3.loaded.value0), eventsBlock(state3.loaded.value0), factsBlock(state3.loaded.value0), configBlock(state3.loaded.value0), shapeBlock(state3), textBlock(state3)(state3.loaded.value0)];
+        return [statusBlock(state3)(state3.loaded.value0), eventsBlock(state3.loaded.value0), commandsBlock(state3.loaded.value0), factsBlock(state3.loaded.value0), configBlock(state3.loaded.value0), shapeBlock(state3), textBlock(state3)(state3.loaded.value0)];
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 333, column 12 - line 343, column 14): " + [state3.error.constructor.name, state3.loaded.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 357, column 12 - line 368, column 14): " + [state3.error.constructor.name, state3.loaded.constructor.name]);
     })()));
   };
   var annotated = function(state3) {
@@ -14740,7 +14932,7 @@
         })(treeStrategy(induced(state3)(l)))(annotated(state3)(l));
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 273, column 19 - line 281, column 26): " + [state3.layoutMode.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 297, column 19 - line 305, column 26): " + [state3.layoutMode.constructor.name]);
     };
   };
   var redraw = function(dictMonadAff) {
@@ -14760,7 +14952,7 @@
             };
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 306, column 16 - line 308, column 37): " + [state3.listener.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 330, column 16 - line 332, column 37): " + [state3.listener.constructor.name]);
         })()
       };
       return liftEffect8(function __do2() {
@@ -14773,7 +14965,7 @@
           return $$void8(rerender("#glassbox-diagram")(diagramTree(callbacks)(state3.loaded.value0.current)(focusOf(state3)(state3.loaded.value0))(laidOut(state3)(state3.loaded.value0))))();
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 316, column 5 - line 323, column 10): " + [state3.loaded.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 340, column 5 - line 347, column 10): " + [state3.loaded.constructor.name]);
       });
     });
   };
@@ -14790,13 +14982,17 @@
           outcome: v.value1.outcome
         }),
         enteredAt: (function() {
-          var $138 = eq14(v.value0)(l.current);
-          if ($138) {
+          var $142 = eq14(v.value0)(l.current);
+          if ($142) {
             return l.enteredAt;
           }
           ;
           return l.now;
-        })()
+        })(),
+        log: take(12)(append14([{
+          why: labelOfEvent(l.spec)(event),
+          commands: v.value1.commands
+        }])(l.log))
       };
     };
   };
@@ -14805,6 +15001,7 @@
       current: l.current,
       enteredAt: l.enteredAt,
       last: l.last,
+      log: l.log,
       spec: l.spec,
       world: l.world,
       now: l.now + 1
@@ -14825,16 +15022,16 @@
         return bind5(liftEffect8(create))(function(v1) {
           return discard22(void1(subscribe2(v1.emitter)))(function() {
             return discard22(modify_3(function(s) {
-              var $147 = {};
-              for (var $148 in s) {
-                if ({}.hasOwnProperty.call(s, $148)) {
-                  $147[$148] = s[$148];
+              var $151 = {};
+              for (var $152 in s) {
+                if ({}.hasOwnProperty.call(s, $152)) {
+                  $151[$152] = s[$152];
                 }
                 ;
               }
               ;
-              $147.listener = new Just(v1.listener);
-              return $147;
+              $151.listener = new Just(v1.listener);
+              return $151;
             }))(function() {
               return bind5(gets2(function(v2) {
                 return v2.source;
@@ -14852,23 +15049,6 @@
             var v1 = parseSpec(text6);
             if (v1 instanceof Left) {
               return modify_3(function(s) {
-                var $153 = {};
-                for (var $154 in s) {
-                  if ({}.hasOwnProperty.call(s, $154)) {
-                    $153[$154] = s[$154];
-                  }
-                  ;
-                }
-                ;
-                $153.loaded = Nothing.value;
-                $153.error = new Just(v1.value0);
-                $153.source = v.value0;
-                return $153;
-              });
-            }
-            ;
-            if (v1 instanceof Right) {
-              return modify_3(function(s) {
                 var $157 = {};
                 for (var $158 in s) {
                   if ({}.hasOwnProperty.call(s, $158)) {
@@ -14877,22 +15057,43 @@
                   ;
                 }
                 ;
+                $157.loaded = Nothing.value;
+                $157.error = new Just(v1.value0);
                 $157.source = v.value0;
-                $157.error = Nothing.value;
-                $157.hover = Nothing.value;
-                $157.loaded = new Just({
+                return $157;
+              });
+            }
+            ;
+            if (v1 instanceof Right) {
+              return modify_3(function(s) {
+                var $161 = {};
+                for (var $162 in s) {
+                  if ({}.hasOwnProperty.call(s, $162)) {
+                    $161[$162] = s[$162];
+                  }
+                  ;
+                }
+                ;
+                $161.source = v.value0;
+                $161.error = Nothing.value;
+                $161.hover = Nothing.value;
+                $161.loaded = new Just({
                   spec: v1.value0,
                   world: worldFrom(v1.value0),
                   current: v1.value0.initial,
                   last: Nothing.value,
                   now: 0,
-                  enteredAt: 0
+                  enteredAt: 0,
+                  log: [{
+                    why: "on starting",
+                    commands: startCommands(v1.value0)
+                  }]
                 });
-                return $157;
+                return $161;
               });
             }
             ;
-            throw new Error("Failed pattern match at Glassbox.Demo.Component (line 166, column 5 - line 180, column 10): " + [v1.constructor.name]);
+            throw new Error("Failed pattern match at Glassbox.Demo.Component (line 181, column 5 - line 199, column 10): " + [v1.constructor.name]);
           })())(function() {
             return redraw1;
           });
@@ -14919,6 +15120,7 @@
             last: l.last,
             now: l.now,
             enteredAt: l.enteredAt,
+            log: l.log,
             world: setFact(v.value0)(new VBoolean(v.value1))(l.world)
           };
         })))(function() {
@@ -14934,6 +15136,7 @@
             last: l.last,
             now: l.now,
             enteredAt: l.enteredAt,
+            log: l.log,
             world: setConfig(v.value0)(new VBoolean(v.value1))(l.world)
           };
         })))(function() {
@@ -14956,12 +15159,13 @@
                 last: l.last,
                 now: l.now,
                 enteredAt: l.enteredAt,
+                log: l.log,
                 world: setConfig(v.value0)(new VNumber(v1.value0))(l.world)
               };
             }));
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 200, column 5 - line 202, column 93): " + [v1.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Demo.Component (line 219, column 5 - line 221, column 93): " + [v1.constructor.name]);
         })())(function() {
           return redraw1;
         });
@@ -14969,16 +15173,16 @@
       ;
       if (v instanceof ToggleRefusals) {
         return discard22(modify_3(function(s) {
-          var $171 = {};
-          for (var $172 in s) {
-            if ({}.hasOwnProperty.call(s, $172)) {
-              $171[$172] = s[$172];
+          var $175 = {};
+          for (var $176 in s) {
+            if ({}.hasOwnProperty.call(s, $176)) {
+              $175[$176] = s[$176];
             }
             ;
           }
           ;
-          $171.showRefusals = !s.showRefusals;
-          return $171;
+          $175.showRefusals = !s.showRefusals;
+          return $175;
         }))(function() {
           return redraw1;
         });
@@ -14986,23 +15190,6 @@
       ;
       if (v instanceof SetLayout) {
         return discard22(modify_3(function(s) {
-          var $174 = {};
-          for (var $175 in s) {
-            if ({}.hasOwnProperty.call(s, $175)) {
-              $174[$175] = s[$175];
-            }
-            ;
-          }
-          ;
-          $174.layoutMode = v.value0;
-          return $174;
-        }))(function() {
-          return redraw1;
-        });
-      }
-      ;
-      if (v instanceof SetTextView) {
-        return modify_3(function(s) {
           var $178 = {};
           for (var $179 in s) {
             if ({}.hasOwnProperty.call(s, $179)) {
@@ -15011,13 +15198,14 @@
             ;
           }
           ;
-          $178.textView = v.value0;
-          $178.textOpen = true;
+          $178.layoutMode = v.value0;
           return $178;
+        }))(function() {
+          return redraw1;
         });
       }
       ;
-      if (v instanceof ToggleText) {
+      if (v instanceof SetTextView) {
         return modify_3(function(s) {
           var $182 = {};
           for (var $183 in s) {
@@ -15027,8 +15215,24 @@
             ;
           }
           ;
-          $182.textOpen = !s.textOpen;
+          $182.textView = v.value0;
+          $182.textOpen = true;
           return $182;
+        });
+      }
+      ;
+      if (v instanceof ToggleText) {
+        return modify_3(function(s) {
+          var $186 = {};
+          for (var $187 in s) {
+            if ({}.hasOwnProperty.call(s, $187)) {
+              $186[$187] = s[$187];
+            }
+            ;
+          }
+          ;
+          $186.textOpen = !s.textOpen;
+          return $186;
         });
       }
       ;
@@ -15037,23 +15241,23 @@
           return v1.hover;
         }))(function(current) {
           return when4(notEq5(current)(v.value0))(discard22(modify_3(function(s) {
-            var $185 = {};
-            for (var $186 in s) {
-              if ({}.hasOwnProperty.call(s, $186)) {
-                $185[$186] = s[$186];
+            var $189 = {};
+            for (var $190 in s) {
+              if ({}.hasOwnProperty.call(s, $190)) {
+                $189[$190] = s[$190];
               }
               ;
             }
             ;
-            $185.hover = v.value0;
-            return $185;
+            $189.hover = v.value0;
+            return $189;
           }))(function() {
             return redraw1;
           }));
         });
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 154, column 16 - line 223, column 13): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Demo.Component (line 169, column 16 - line 242, column 13): " + [v.constructor.name]);
     };
   };
   var component = function(dictMonadAff) {

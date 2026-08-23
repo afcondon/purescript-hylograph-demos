@@ -1,14 +1,14 @@
 machine  loop
 title    "One loop of a six-loop looper"
-format   1
+format   2
 initial  empty
 
-STATES         LABEL
-  empty        Empty
-  armed        Armed
-  recording    Recording
-  playing      Playing
-  overdubbing  Overdub
+STATES         LABEL      ON ENTRY        ON EXIT
+  empty        Empty      discard-audio
+  armed        Armed      start-count-in  stop-count-in
+  recording    Recording  start-recorder  stop-recorder
+  playing      Playing    start-playback  stop-playback
+  overdubbing  Overdub    start-overdub   stop-overdub
   stopped      Stopped
 
 EVENTS     SOURCE   LABEL
@@ -28,6 +28,17 @@ REFUSALS           MEANING
   converter-busy   another loop holds the converter
   nothing-yet      nothing recorded yet
   overdub-in-play  stopped loops overdub from Playing
+
+COMMANDS          MEANING
+  discard-audio   Throw away this loop's audio
+  start-count-in  Start the count-in click
+  stop-count-in   Stop the count-in click
+  start-recorder  Start recording
+  stop-recorder   Stop recording
+  start-playback  Start playing this loop
+  stop-playback   Stop playing this loop
+  start-overdub   Start overdubbing onto this loop
+  stop-overdub    Stop overdubbing
 
 GRID   rows are states, columns are events
                  record            play          stop     clear  elapsed

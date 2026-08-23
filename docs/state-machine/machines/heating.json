@@ -1,5 +1,5 @@
 {
-  "glassbox": 1,
+  "glassbox": 2,
   "id": "heating",
   "title": "Heating controller",
 
@@ -22,18 +22,24 @@
     "is still right and is still not implemented — `worldFrom` makes one world",
     "for one machine, and nothing composes two.",
     "",
-    "So the honest artifact is one circuit, and the missing feature has a name."
+    "So the honest artifact is one circuit, and the missing feature has a name.",
+    "",
+    "Commands here are the cleanest case in the corpus, because the boiler is a",
+    "genuinely two-valued thing: four of the six states want it off and two want",
+    "it on, and each says so on entry. It also has the corpus's most defensible",
+    "exit command — leaving Fault clears the lockout, and there is exactly one",
+    "way out of Fault, so no neighbouring state can disagree about it."
   ],
 
   "initial": "off",
 
   "states": [
-    { "id": "off",       "label": "Off" },
-    { "id": "frost",     "label": "Frost watch" },
-    { "id": "satisfied", "label": "Up to temperature" },
-    { "id": "heating",   "label": "Heating" },
-    { "id": "boosting",  "label": "Boost" },
-    { "id": "fault",     "label": "Fault" }
+    { "id": "off",       "label": "Off",               "entry": ["burner-off", "pump-off"] },
+    { "id": "frost",     "label": "Frost watch",       "entry": ["burner-off", "pump-off"] },
+    { "id": "satisfied", "label": "Up to temperature", "entry": ["burner-off", "pump-off"] },
+    { "id": "heating",   "label": "Heating",           "entry": ["pump-on", "burner-on"] },
+    { "id": "boosting",  "label": "Boost",             "entry": ["pump-on", "burner-on"] },
+    { "id": "fault",     "label": "Fault",             "entry": ["burner-off", "pump-off", "latch-fault"], "exit": ["clear-fault"] }
   ],
 
   "events": [
@@ -61,6 +67,15 @@
     { "id": "in-fault",   "text": "the boiler has locked out; reset it first" },
     { "id": "no-frost",   "text": "this controller has no frost protection" },
     { "id": "not-boosting", "text": "no boost is running" }
+  ],
+
+  "commands": [
+    { "id": "burner-on",   "label": "Fire the burner" },
+    { "id": "burner-off",  "label": "Shut the burner down" },
+    { "id": "pump-on",     "label": "Run the circulating pump" },
+    { "id": "pump-off",    "label": "Stop the circulating pump" },
+    { "id": "latch-fault", "label": "Latch the fault and light the lamp" },
+    { "id": "clear-fault", "label": "Clear the fault lockout" }
   ],
 
   "rules": [

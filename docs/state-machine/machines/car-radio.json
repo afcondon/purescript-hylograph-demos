@@ -1,5 +1,5 @@
 {
-  "glassbox": 1,
+  "glassbox": 2,
   "id": "car-radio",
   "title": "Car radio",
 
@@ -13,17 +13,23 @@
     "config that RESHAPES the machine (turn off the CD slot and the cd state",
     "becomes unreachable, and the diagram changes to say so), a state that",
     "resolves by itself (seeking gives up after a while with no user event),",
-    "and refusals that carry a reason rather than doing nothing silently."
+    "and refusals that carry a reason rather than doing nothing silently.",
+    "",
+    "Since the effects fork it also carries commands. Note that every source",
+    "state establishes itself on ENTRY — tune the radio, spin the disc up — so",
+    "the host is told what must now be true rather than what changed. Only two",
+    "exits exist, and both tear down something no other state can own: the seek",
+    "scanner and the phone connection."
   ],
 
   "initial": "off",
 
   "states": [
-    { "id": "off",       "label": "Off" },
-    { "id": "radio",     "label": "Radio" },
-    { "id": "seeking",   "label": "Seeking" },
-    { "id": "cd",        "label": "CD" },
-    { "id": "bluetooth", "label": "Bluetooth" }
+    { "id": "off",       "label": "Off",       "entry": ["power-down"] },
+    { "id": "radio",     "label": "Radio",     "entry": ["tune-radio"] },
+    { "id": "seeking",   "label": "Seeking",   "entry": ["start-seek"], "exit": ["stop-seek"] },
+    { "id": "cd",        "label": "CD",        "entry": ["spin-up-disc"] },
+    { "id": "bluetooth", "label": "Bluetooth", "entry": ["connect-phone"], "exit": ["disconnect-phone"] }
   ],
 
   "events": [
@@ -49,6 +55,16 @@
     { "id": "no-disc",   "text": "there is no disc in the slot" },
     { "id": "no-phone",  "text": "no phone is paired" },
     { "id": "not-fitted","text": "this car has no CD slot" }
+  ],
+
+  "commands": [
+    { "id": "power-down",       "label": "Shut the head unit down" },
+    { "id": "tune-radio",       "label": "Tune to the stored station" },
+    { "id": "start-seek",       "label": "Start scanning for a station" },
+    { "id": "stop-seek",        "label": "Stop scanning" },
+    { "id": "spin-up-disc",     "label": "Spin the disc up and play it" },
+    { "id": "connect-phone",    "label": "Connect the paired phone" },
+    { "id": "disconnect-phone", "label": "Disconnect the phone" }
   ],
 
   "rules": [

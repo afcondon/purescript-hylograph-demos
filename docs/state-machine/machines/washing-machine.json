@@ -1,5 +1,5 @@
 {
-  "glassbox": 1,
+  "glassbox": 2,
   "id": "washing-machine",
   "title": "Washing machine",
 
@@ -27,24 +27,31 @@
     "rule: COUNTS, INDICES, POSITIONS AND HISTORY LIVE IN THE HOST, because a",
     "machine here has no memory beyond the state it is in. Nothing in the format",
     "says so, and a designer who does not know it will build a state per rinse",
-    "and a paused-state per step."
+    "and a paused-state per step.",
+    "",
+    "Commands make a fourth point, and a happier one. Twelve states share eight",
+    "commands: `fill-drum` serves both Filling and Rinse fill, `tumble` serves",
+    "both Washing and Rinsing. A command is a word in the host's vocabulary,",
+    "not a name for a state, and the reuse is what proves it. There is not one",
+    "exit command in the whole machine — a step ends because the next step",
+    "starts."
   ],
 
   "initial": "idle",
 
   "states": [
     { "id": "idle",         "label": "Idle" },
-    { "id": "locking",      "label": "Locking" },
-    { "id": "prewashing",   "label": "Prewash" },
-    { "id": "filling",      "label": "Filling" },
-    { "id": "washing",      "label": "Washing" },
-    { "id": "draining",     "label": "Draining" },
-    { "id": "rinse-filling","label": "Rinse fill" },
-    { "id": "rinsing",      "label": "Rinsing" },
-    { "id": "spinning",     "label": "Spinning" },
-    { "id": "unlocking",    "label": "Unlocking" },
-    { "id": "done",         "label": "Done", "final": true },
-    { "id": "paused",       "label": "Paused" }
+    { "id": "locking",      "label": "Locking",    "entry": ["lock-door"] },
+    { "id": "prewashing",   "label": "Prewash",    "entry": ["fill-drum", "tumble"] },
+    { "id": "filling",      "label": "Filling",    "entry": ["fill-drum"] },
+    { "id": "washing",      "label": "Washing",    "entry": ["heat-water", "tumble"] },
+    { "id": "draining",     "label": "Draining",   "entry": ["drain"] },
+    { "id": "rinse-filling","label": "Rinse fill", "entry": ["fill-drum"] },
+    { "id": "rinsing",      "label": "Rinsing",    "entry": ["tumble"] },
+    { "id": "spinning",     "label": "Spinning",   "entry": ["drain", "spin"] },
+    { "id": "unlocking",    "label": "Unlocking",  "entry": ["unlock-door"] },
+    { "id": "done",         "label": "Done", "final": true, "entry": ["chime"] },
+    { "id": "paused",       "label": "Paused",     "entry": ["hold-everything"] }
   ],
 
   "events": [
@@ -73,6 +80,18 @@
     { "id": "door-locked",  "text": "the door is locked while the drum is running" },
     { "id": "still-wet",    "text": "the drum must drain before the door opens" },
     { "id": "not-running",  "text": "nothing is running" }
+  ],
+
+  "commands": [
+    { "id": "lock-door",       "label": "Lock the door" },
+    { "id": "unlock-door",     "label": "Unlock the door" },
+    { "id": "fill-drum",       "label": "Fill the drum" },
+    { "id": "heat-water",      "label": "Heat the water" },
+    { "id": "tumble",          "label": "Tumble the drum" },
+    { "id": "drain",           "label": "Drain the drum" },
+    { "id": "spin",            "label": "Spin" },
+    { "id": "hold-everything", "label": "Hold everything where it is" },
+    { "id": "chime",           "label": "Sound the end-of-cycle chime" }
   ],
 
   "rules": [

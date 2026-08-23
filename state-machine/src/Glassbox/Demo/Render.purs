@@ -18,8 +18,9 @@ import Data.Array (elem)
 import Data.Tuple (Tuple(..))
 import Effect (Effect)
 import Data.Maybe (Maybe(..), fromMaybe)
+import Data.String (joinWith)
 import DataViz.Layout.StateMachine (LayoutState, LayoutTransition, StateMachineLayout, arrowheadPathD, initialArrowPathD, transitionPathD)
-import Glassbox.Draw (EdgeExtra)
+import Glassbox.Draw (EdgeExtra, StateExtra)
 import Glassbox.Edges (EdgeKind(..))
 import Data.Graph.InducedTree (EdgeClass(..))
 import Hylograph.HATS (Tree, onMouseEnter, onMouseLeave, staticNum, staticStr, withBehaviors)
@@ -59,7 +60,7 @@ type Callbacks =
   { hover :: Maybe String -> Effect Unit
   }
 
-diagramTree :: Callbacks -> String -> Maybe Focus -> StateMachineLayout Unit EdgeExtra -> Tree
+diagramTree :: Callbacks -> String -> Maybe Focus -> StateMachineLayout StateExtra EdgeExtra -> Tree
 diagramTree callbacks currentId focus layout =
   HATS.elem SVG
     [ staticStr "viewBox"
@@ -181,7 +182,7 @@ edgeElements { transition, path } =
 -- | which paints one state's attributes onto its neighbour and makes the
 -- | diagram disagree with the machine for reasons that have nothing to do with
 -- | the machine. The halo is always present and merely invisible when idle.
-stateGroup :: Callbacks -> String -> Maybe Focus -> LayoutState Unit -> Tree
+stateGroup :: Callbacks -> String -> Maybe Focus -> LayoutState StateExtra -> Tree
 stateGroup callbacks currentId focus placed =
   withBehaviors
     [ onMouseEnter (callbacks.hover (Just placed.state.id))
@@ -198,7 +199,11 @@ stateGroup callbacks currentId focus placed =
     Just f -> elem id f.states
     Nothing -> true
 
-stateElements :: String -> LayoutState Unit -> Array Tree
+-- | Five elements per state since commands landed, and the last two are always
+-- | present even when they have nothing to say — see the note above about HATS
+-- | joining by position. A state that runs nothing gets an empty label rather
+-- | than no label.
+stateElements :: String -> LayoutState StateExtra -> Array Tree
 stateElements currentId { state, position } =
       [ halo
       , HATS.elem Path
@@ -220,9 +225,31 @@ stateElements currentId { state, position } =
           , staticStr "textContent" state.label
           ]
           []
+      , caption 11.0 (prefixed "+" state.extra.entry)
+      , caption 20.0 (prefixed "\x2212" state.extra.exit)
       ]
   where
   isCurrent = state.id == currentId
+
+  -- `+` on the way in, `−` on the way out, on two lines rather than one.
+  -- One line was legible in isolation and collided with the neighbouring
+  -- state's caption the moment two nodes sat close together, which in a
+  -- machine of this size is most of them. The panel beside the drawing carries
+  -- the full sentence; this is only the reminder that a command lives HERE, on
+  -- the state, and not on any of the arrows.
+  prefixed mark = joinWith " " <<< map (\c -> mark <> c)
+
+  caption dy text =
+    HATS.elem Text
+      [ staticNum "x" position.cx
+      , staticNum "y" (position.cy + position.ry + dy)
+      , staticStr "text-anchor" "middle"
+      , staticStr "font-size" "8.5"
+      , staticStr "font-family" "ui-monospace, SFMono-Regular, Menlo, monospace"
+      , staticStr "fill" "#9a9a9a"
+      , staticStr "textContent" text
+      ]
+      []
 
   halo =
     HATS.elem Path

@@ -8,9 +8,15 @@
 # becomes unreachable, and the diagram changes to say so), a state that
 # resolves by itself (seeking gives up after a while with no user event),
 # and refusals that carry a reason rather than doing nothing silently.
+#
+# Since the effects fork it also carries commands. Note that every source
+# state establishes itself on ENTRY — tune the radio, spin the disc up — so
+# the host is told what must now be true rather than what changed. Only two
+# exits exist, and both tear down something no other state can own: the seek
+# scanner and the phone connection.
 
 machine  car-radio  "Car radio"
-format   1
+format   2
 initial  off
 
 states
@@ -41,11 +47,22 @@ refusals
   no-phone    "no phone is paired"
   not-fitted  "this car has no CD slot"
 
+commands
+  power-down        "Shut the head unit down"
+  tune-radio        "Tune to the stored station"
+  start-seek        "Start scanning for a station"
+  stop-seek         "Stop scanning"
+  spin-up-disc      "Spin the disc up and play it"
+  connect-phone     "Connect the paired phone"
+  disconnect-phone  "Disconnect the phone"
+
 off:
+  entry  power-down
   power                                -> radio
   source, seek, cancel, eject, giveup  -> stay
 
 radio:
+  entry  tune-radio
   power                                             -> off
   seek                                              -> seeking
   source          when has-cd-slot and disc-loaded  -> cd
@@ -56,12 +73,15 @@ radio:
   eject                                             -> refuse no-disc
 
 seeking:  after seek-seconds fires giveup
+  entry  start-seek
+  exit   stop-seek
   giveup, cancel  -> radio
   seek, source    -> stay
   power           -> off
   eject           -> refuse no-disc
 
 cd:
+  entry  spin-up-disc
   power                                        -> off
   eject                                        -> radio
   source                when bluetooth-paired  -> bluetooth
@@ -69,6 +89,8 @@ cd:
   seek, cancel, giveup                         -> stay
 
 bluetooth:
+  entry  connect-phone
+  exit   disconnect-phone
   power                 -> off
   source                -> radio
   eject                 -> refuse no-disc

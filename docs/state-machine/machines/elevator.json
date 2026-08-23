@@ -1,5 +1,5 @@
 {
-  "glassbox": 1,
+  "glassbox": 2,
   "id": "elevator",
   "title": "Elevator",
 
@@ -20,19 +20,28 @@
     "machine. Change 'doors need holding' and it does.",
     "",
     "The cost is that a designer has to know to do this, and nothing in the",
-    "format tells them. That is a finding, not a defect."
+    "format tells them. That is a finding, not a defect.",
+    "",
+    "It pushed back a second time over commands, and taught the same lesson in",
+    "a different key. The obvious move is 'leaving doors-open closes the",
+    "doors' — and it is wrong, because doors-open is adjacent to doors-held,",
+    "which wants them left open. Doors are closed on ENTRY to each of the",
+    "states that require them shut instead. The general rule the corpus keeps",
+    "arriving at: entry commands say what must now be true and compose safely;",
+    "exit commands are only safe for something no neighbouring state can want,",
+    "which here is exactly one thing — the alarm."
   ],
 
   "initial": "idle",
 
   "states": [
-    { "id": "idle",       "label": "Idle" },
-    { "id": "up",         "label": "Going up" },
-    { "id": "down",       "label": "Going down" },
-    { "id": "arriving",   "label": "Arriving" },
-    { "id": "doors-open", "label": "Doors open" },
-    { "id": "held",       "label": "Doors held" },
-    { "id": "stopped",    "label": "Emergency stop" }
+    { "id": "idle",       "label": "Idle",           "entry": ["close-doors", "hold-brake"] },
+    { "id": "up",         "label": "Going up",       "entry": ["close-doors", "drive-up"] },
+    { "id": "down",       "label": "Going down",     "entry": ["close-doors", "drive-down"] },
+    { "id": "arriving",   "label": "Arriving",       "entry": ["stop-drive", "ring-arrival"] },
+    { "id": "doors-open", "label": "Doors open",     "entry": ["open-doors"] },
+    { "id": "held",       "label": "Doors held",     "entry": ["hold-doors"] },
+    { "id": "stopped",    "label": "Emergency stop", "entry": ["stop-drive", "sound-alarm"], "exit": ["cancel-alarm"] }
   ],
 
   "events": [
@@ -62,6 +71,19 @@
     { "id": "blocked",        "text": "something is in the doorway" },
     { "id": "no-hold-button", "text": "this car has no hold button" },
     { "id": "stopped-fast",   "text": "the emergency stop is engaged" }
+  ],
+
+  "commands": [
+    { "id": "hold-brake",   "label": "Set the parking brake" },
+    { "id": "drive-up",     "label": "Drive the car up" },
+    { "id": "drive-down",   "label": "Drive the car down" },
+    { "id": "stop-drive",   "label": "Stop the drive" },
+    { "id": "ring-arrival", "label": "Ring the arrival chime" },
+    { "id": "open-doors",   "label": "Open the doors" },
+    { "id": "close-doors",  "label": "Close the doors" },
+    { "id": "hold-doors",   "label": "Hold the doors open" },
+    { "id": "sound-alarm",  "label": "Sound the alarm" },
+    { "id": "cancel-alarm", "label": "Silence the alarm" }
   ],
 
   "rules": [

@@ -1,15 +1,15 @@
 machine  heating
 title    "Heating controller"
-format   1
+format   2
 initial  off
 
-STATES       LABEL
-  off        Off
-  frost      Frost watch
-  satisfied  Up to temperature
-  heating    Heating
-  boosting   Boost
-  fault      Fault
+STATES       LABEL              ON ENTRY                           ON EXIT
+  off        Off                burner-off, pump-off
+  frost      Frost watch        burner-off, pump-off
+  satisfied  Up to temperature  burner-off, pump-off
+  heating    Heating            pump-on, burner-on
+  boosting   Boost              pump-on, burner-on
+  fault      Fault              burner-off, pump-off, latch-fault  clear-fault
 
 EVENTS        SOURCE   LABEL
   mode        user
@@ -33,6 +33,14 @@ REFUSALS        MEANING
   in-fault      the boiler has locked out; reset it first
   no-frost      this controller has no frost protection
   not-boosting  no boost is running
+
+COMMANDS       MEANING
+  burner-on    Fire the burner
+  burner-off   Shut the burner down
+  pump-on      Run the circulating pump
+  pump-off     Stop the circulating pump
+  latch-fault  Latch the fault and light the lamp
+  clear-fault  Clear the fault lockout
 
 GRID   rows are states, columns are events
                mode       boost      cancel         reset  calls  satisfies  boost-over  faults

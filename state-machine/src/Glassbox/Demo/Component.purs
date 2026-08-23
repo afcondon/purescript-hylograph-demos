@@ -31,6 +31,7 @@ import Data.Either (Either(..))
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Number as Number
 import Data.Number.Format (fixed, toStringWith)
+import Data.String (joinWith)
 import Data.Tuple (Tuple(..))
 import DataViz.Layout.StateMachine (StateMachine, StateMachineLayout, circularLayout, defaultConfig, layoutWithConfig, treeStrategy)
 import Effect.Aff.Class (class MonadAff)
@@ -38,18 +39,22 @@ import Glassbox.Codec.JSON (parseSpec, printSpecPretty)
 import Glassbox.Export.StateDiagram (toStateDiagram)
 import Glassbox.Demo.Fetch (fetchText)
 import Glassbox.Demo.Render (Focus, diagramTree)
-import Glassbox.Draw (EdgeExtra, annotate, describe, inducedFrom)
+import Glassbox.Draw (EdgeExtra, StateExtra, annotate, describe, inducedFrom)
 
-import Glassbox.Run (World, dueAt, lookupConfig, lookupFact, setConfig, setFact, step, worldFrom)
+import Glassbox.Run (World, dueAt, lookupConfig, lookupFact, setConfig, setFact, startCommands, step, worldFrom)
 import Glassbox.Edges (Edge, defaultOptions, edgesOf)
 import Glassbox.Spec
-  ( ConfigId
+  ( CommandId
+  , ConfigId
   , EventId
   , FactId
   , Outcome(..)
   , Spec
   , StateId(..)
   , Value(..)
+  , entryOf
+  , exitOf
+  , labelOfCommand
   , labelOfEvent
   , labelOfState
   , textOfRefusal
@@ -110,6 +115,16 @@ type Loaded =
   , last :: Maybe { event :: EventId, outcome :: Outcome }
   , now :: Number
   , enteredAt :: Number
+  -- What the machine has asked the host to do, newest first. This demo is an
+  -- inspector rather than a looper, so it does not carry the commands out; it
+  -- writes down what it was told, which is the only part a reader can check
+  -- against the artifact.
+  , log :: Array LogLine
+  }
+
+type LogLine =
+  { why :: String
+  , commands :: Array CommandId
   }
 
 data Action
@@ -176,6 +191,10 @@ handleAction = case _ of
             , last: Nothing
             , now: 0.0
             , enteredAt: 0.0
+            -- Entering the initial state is owed before a single event has been
+            -- delivered. A host that skips this starts a machine whose state
+            -- says Recording and whose recorder was never started.
+            , log: [ { why: "on starting", commands: startCommands spec } ]
             }
         }
     redraw
@@ -235,6 +254,11 @@ advance event l =
       { current = next
       , last = Just { event, outcome: record.outcome }
       , enteredAt = if next == l.current then l.enteredAt else l.now
+      -- Recorded even when it is empty, because "you pressed that and the host
+      -- was told to do nothing" is the answer a reader most often wants and the
+      -- one a log that only shows activity cannot give.
+      , log = Array.take 12
+          ([ { why: labelOfEvent l.spec event, commands: record.commands } ] <> l.log)
       }
 
 -- | Advance the clock, and deliver the deadline's event if it has come due.
@@ -254,7 +278,7 @@ tick l =
 -- The readings of the machine, all from one value
 -- ---------------------------------------------------------------------------
 
-described :: State -> Loaded -> StateMachine Unit EdgeExtra
+described :: State -> Loaded -> StateMachine StateExtra EdgeExtra
 described state l =
   describe l.spec (edgesFor state l)
 
@@ -266,10 +290,10 @@ induced :: State -> Loaded -> Induced String
 induced state l = case l.spec.initial of
   StateId root -> inducedFrom (described state l) root
 
-annotated :: State -> Loaded -> StateMachine Unit EdgeExtra
+annotated :: State -> Loaded -> StateMachine StateExtra EdgeExtra
 annotated state l = annotate (induced state l) (described state l)
 
-laidOut :: State -> Loaded -> StateMachineLayout Unit EdgeExtra
+laidOut :: State -> Loaded -> StateMachineLayout StateExtra EdgeExtra
 laidOut state l = case state.layoutMode of
   AsRing -> layoutWithConfig defaultConfig circularLayout (annotated state l)
   AsTree ->
@@ -336,6 +360,7 @@ render state =
           _, Just l ->
             [ statusBlock state l
             , eventsBlock l
+            , commandsBlock l
             , factsBlock l
             , configBlock l
             , shapeBlock state
@@ -410,6 +435,44 @@ eventsBlock l =
   tickButton =
     HH.button [ HE.onClick \_ -> Tick, HP.class_ (H.ClassName "tick") ]
       [ HH.text "tick +1" ]
+
+-- | What the machine has told the host to do.
+-- |
+-- | Two halves, and the pairing is the argument. Above: the standing fact —
+-- | *being here* means these commands ran on the way in and these will run on
+-- | the way out — read straight off the state's own declaration. Below: what
+-- | has actually been asked for, in order. Press the same event from two
+-- | different places and the second list changes while the first explains why.
+commandsBlock :: forall m. Loaded -> H.ComponentHTML Action () m
+commandsBlock l
+  | Array.null l.spec.commands = HH.text ""
+  | otherwise =
+      HH.div [ HP.class_ (H.ClassName "block") ]
+        [ HH.h2_ [ HH.text "What the host is told to do" ]
+        , HH.p [ HP.class_ (H.ClassName "quiet") ]
+            [ HH.text "Commands hang off states, not arrows — so entering a state \
+              \means the same thing however you got there." ]
+        , HH.div_ (hooks "on entering here" (entryOf l.spec l.current))
+        , HH.div_ (hooks "on leaving here" (exitOf l.spec l.current))
+        , HH.ol [ HP.class_ (H.ClassName "log") ] (map line l.log)
+        ]
+      where
+      hooks caption = case _ of
+        [] -> []
+        cs ->
+          [ HH.p [ HP.class_ (H.ClassName "hook") ]
+              [ HH.span [ HP.class_ (H.ClassName "quiet") ] [ HH.text (caption <> " — ") ]
+              , HH.text (joinWith ", " (map (labelOfCommand l.spec) cs))
+              ]
+          ]
+
+      line entry =
+        HH.li_
+          [ HH.span [ HP.class_ (H.ClassName "quiet") ] [ HH.text (entry.why <> ": ") ]
+          , case entry.commands of
+              [] -> HH.span [ HP.class_ (H.ClassName "quiet") ] [ HH.text "nothing" ]
+              cs -> HH.text (joinWith " → " (map (\c -> labelOfCommand l.spec c) cs))
+          ]
 
 factsBlock :: forall m. Loaded -> H.ComponentHTML Action () m
 factsBlock l

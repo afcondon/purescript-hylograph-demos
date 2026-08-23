@@ -15,9 +15,18 @@
 #
 # The cost is that a designer has to know to do this, and nothing in the
 # format tells them. That is a finding, not a defect.
+#
+# It pushed back a second time over commands, and taught the same lesson in
+# a different key. The obvious move is 'leaving doors-open closes the
+# doors' — and it is wrong, because doors-open is adjacent to doors-held,
+# which wants them left open. Doors are closed on ENTRY to each of the
+# states that require them shut instead. The general rule the corpus keeps
+# arriving at: entry commands say what must now be true and compose safely;
+# exit commands are only safe for something no neighbouring state can want,
+# which here is exactly one thing — the alarm.
 
 machine  elevator  "Elevator"
-format   1
+format   2
 initial  idle
 
 states
@@ -54,7 +63,20 @@ refusals
   no-hold-button  "this car has no hold button"
   stopped-fast    "the emergency stop is engaged"
 
+commands
+  hold-brake    "Set the parking brake"
+  drive-up      "Drive the car up"
+  drive-down    "Drive the car down"
+  stop-drive    "Stop the drive"
+  ring-arrival  "Ring the arrival chime"
+  open-doors    "Open the doors"
+  close-doors   "Close the doors"
+  hold-doors    "Hold the doors open"
+  sound-alarm   "Sound the alarm"
+  cancel-alarm  "Silence the alarm"
+
 idle:
+  entry  close-doors, hold-brake
   call                          when wanted-above  -> up
                                 elif wanted-below  -> down
                                 else               -> refuse nowhere-to-go
@@ -63,23 +85,27 @@ idle:
   alarm                                            -> stopped
 
 up:
+  entry  close-doors, drive-up
   reached                    -> arriving
   alarm                      -> stopped
   open                       -> refuse moving
   call, close, reset, dwelt  -> stay
 
 down:
+  entry  close-doors, drive-down
   reached                    -> arriving
   alarm                      -> stopped
   open                       -> refuse moving
   call, close, reset, dwelt  -> stay
 
 arriving:
+  entry  stop-drive, ring-arrival
   dwelt, open                  -> doors-open
   alarm                        -> stopped
   call, close, reset, reached  -> stay
 
 doors-open:  after dwell-seconds fires dwelt
+  entry  open-doors
   close                 when doors-blocked        -> refuse blocked
                         elif wanted-above         -> up
                         elif wanted-below         -> down
@@ -94,11 +120,14 @@ doors-open:  after dwell-seconds fires dwelt
   call, reset, reached                            -> stay
 
 held:
+  entry  hold-doors
   close                              -> doors-open
   alarm                              -> stopped
   open, call, reset, reached, dwelt  -> stay
 
 stopped:
+  entry  stop-drive, sound-alarm
+  exit   cancel-alarm
   reset                  -> doors-open
   call, open, close      -> refuse stopped-fast
   alarm, reached, dwelt  -> stay
