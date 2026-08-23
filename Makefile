@@ -11,6 +11,19 @@ all: $(DEMOS)
 $(DEMOS):
 	spago bundle -p hylograph-demo-$@
 
+# Rebuild ONE demo and refresh only its copy under docs/. The `site` target
+# below is the right thing for a release — it wipes docs/ and rebuilds all of
+# them — but that is far too heavy to sit in an edit/reload loop on a single
+# demo, and doing the copy by hand is how docs/ drifts from the bundle.
+#
+#   make refresh-state-machine
+#
+refresh-%:
+	spago bundle -p hylograph-demo-$*
+	rm -rf docs/$*
+	cp -r $*/public docs/$*
+	@echo "docs/$* refreshed — http://localhost:3005/$*/"
+
 ISLANDS = hylograph scriptorium reasoning
 
 site: all
