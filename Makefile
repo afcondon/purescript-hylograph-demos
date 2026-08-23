@@ -11,6 +11,16 @@ all: $(DEMOS)
 $(DEMOS):
 	spago bundle -p hylograph-demo-$@
 
+# The five machine artifacts are the LIBRARY's conformance corpus — the same
+# files its test suite drives — and the demo shows copies of them. Copying in
+# one direction only is what stops the demo and the tests disagreeing about
+# what a machine says.
+state-machine: sync-machines
+.PHONY: sync-machines
+sync-machines:
+	rm -rf state-machine/public/machines
+	cp -r ../purescript-glassbox/core/machines state-machine/public/machines
+
 # Rebuild ONE demo and refresh only its copy under docs/. The `site` target
 # below is the right thing for a release — it wipes docs/ and rebuilds all of
 # them — but that is far too heavy to sit in an edit/reload loop on a single
@@ -19,7 +29,7 @@ $(DEMOS):
 #   make refresh-state-machine
 #
 refresh-%:
-	spago bundle -p hylograph-demo-$*
+	$(MAKE) $*
 	rm -rf docs/$*
 	cp -r $*/public docs/$*
 	@echo "docs/$* refreshed — http://localhost:3005/$*/"

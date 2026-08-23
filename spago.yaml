@@ -22,6 +22,12 @@ workspace:
     # Kmett's machines, ported. Not in the registry.
     machines:
       path: ../../purescript-ports/purescript-machines
+    # Glassbox is being broken out into its own library; both packages resolve
+    # to the sibling checkout until it is published.
+    glassbox:
+      path: ../purescript-glassbox/core
+    glassbox-draw:
+      path: ../purescript-glassbox/draw
     baskerville-core:
       path: ../../purescript-baskerville
     baskerville-sudoku:

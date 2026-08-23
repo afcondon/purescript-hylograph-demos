@@ -38,9 +38,10 @@ import Glassbox.Codec.JSON (parseSpec, printSpecPretty)
 import Glassbox.Export.StateDiagram (toStateDiagram)
 import Glassbox.Demo.Fetch (fetchText)
 import Glassbox.Demo.Render (Focus, diagramTree)
-import Glassbox.Describe (EdgeExtra, annotate, defaultOptions, describe, machineEdges)
+import Glassbox.Draw (EdgeExtra, annotate, describe, inducedFrom)
 
 import Glassbox.Run (World, dueAt, lookupConfig, lookupFact, setConfig, setFact, step, worldFrom)
+import Glassbox.Edges (Edge, defaultOptions, edgesOf)
 import Glassbox.Spec
   ( ConfigId
   , EventId
@@ -54,8 +55,7 @@ import Glassbox.Spec
   , textOfRefusal
   , userEvents
   )
-import Data.Graph.Algorithms (mkSimpleGraph)
-import Data.Graph.InducedTree (Induced, induce, pathFromRoot)
+import Data.Graph.InducedTree (Induced, pathFromRoot)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
@@ -256,15 +256,15 @@ tick l =
 
 described :: State -> Loaded -> StateMachine Unit EdgeExtra
 described state l =
-  describe (defaultOptions { showRefusals = state.showRefusals }) l.world l.spec
+  describe l.spec (edgesFor state l)
+
+edgesFor :: State -> Loaded -> Array Edge
+edgesFor state l =
+  edgesOf (defaultOptions { showRefusals = state.showRefusals }) l.world l.spec
 
 induced :: State -> Loaded -> Induced String
-induced state l =
-  let
-    base = described state l
-    StateId root = l.spec.initial
-  in
-    induce root (mkSimpleGraph (map _.id base.states) (machineEdges base))
+induced state l = case l.spec.initial of
+  StateId root -> inducedFrom (described state l) root
 
 annotated :: State -> Loaded -> StateMachine Unit EdgeExtra
 annotated state l = annotate (induced state l) (described state l)
@@ -509,7 +509,7 @@ textBlock state l =
 
   body = case state.textView of
     AsArtifact -> printSpecPretty l.spec
-    AsDiagramText -> toStateDiagram (annotated state l)
+    AsDiagramText -> toStateDiagram l.spec (edgesFor state l)
 
   gloss = case state.textView of
     AsArtifact ->

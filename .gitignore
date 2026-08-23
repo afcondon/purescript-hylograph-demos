@@ -18,5 +18,7 @@ baskerville-make/public/bundle.js
 baskerville-sudoku/public/bundle.js
 components/public/bundle.js
 state-machine/public/bundle.js
+# copied from purescript-glassbox/core/machines by `make sync-machines`
+state-machine/public/machines/
 .direnv/
 .psc-ide-port
