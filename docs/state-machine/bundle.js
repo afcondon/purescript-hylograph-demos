@@ -7294,6 +7294,86 @@
     return stringifyPrettyImpl(encodeSpec($111));
   };
 
+  // output/Glassbox.Demo.Fetch/foreign.js
+  var fetchTextImpl = (url2) => (onError, onSuccess) => {
+    const controller = new AbortController();
+    fetch(url2, { signal: controller.signal }).then(
+      (response) => response.ok ? response.text() : Promise.reject(new Error(url2 + ": " + response.status + " " + response.statusText))
+    ).then(onSuccess).catch(onError);
+    return (_cancelError, _onCancelerError, onCancelerSuccess) => {
+      controller.abort();
+      onCancelerSuccess();
+    };
+  };
+
+  // output/Effect.Aff.Compat/index.js
+  var fromEffectFnAff = function(v) {
+    return makeAff(function(k) {
+      return function __do2() {
+        var v1 = v(function($9) {
+          return k(Left.create($9))();
+        }, function($10) {
+          return k(Right.create($10))();
+        });
+        return function(e) {
+          return makeAff(function(k2) {
+            return function __do3() {
+              v1(e, function($11) {
+                return k2(Left.create($11))();
+              }, function($12) {
+                return k2(Right.create($12))();
+              });
+              return nonCanceler;
+            };
+          });
+        };
+      };
+    });
+  };
+
+  // output/Glassbox.Demo.Fetch/index.js
+  var fetchText = function($1) {
+    return fromEffectFnAff(fetchTextImpl($1));
+  };
+
+  // output/DataViz.Layout.StateMachine.Path/index.js
+  var show3 = /* @__PURE__ */ show(showNumber);
+  var selfLoopPathD = function(path) {
+    var dy = path.controlY - path.startY;
+    var dx = path.controlX - path.startX;
+    var radius = sqrt(dx * dx + dy * dy) * 0.8;
+    return "M " + (show3(path.startX) + (" " + (show3(path.startY) + (" A " + (show3(radius) + (" " + (show3(radius) + (" 0" + (" 1" + (" 1" + (" " + (show3(path.endX) + (" " + show3(path.endY))))))))))))));
+  };
+  var transitionPathD = function(path) {
+    if (path.isSelfLoop) {
+      return selfLoopPathD(path);
+    }
+    ;
+    return "M " + (show3(path.startX) + (" " + (show3(path.startY) + (" Q " + (show3(path.controlX) + (" " + (show3(path.controlY) + (" " + (show3(path.endX) + (" " + show3(path.endY)))))))))));
+  };
+  var initialArrowPathD = function(pos) {
+    return function(len) {
+      var endY = pos.y + len * sin(pos.angle);
+      var endX = pos.x + len * cos(pos.angle);
+      return "M " + (show3(pos.x) + (" " + (show3(pos.y) + (" L " + (show3(endX) + (" " + show3(endY)))))));
+    };
+  };
+  var arrowheadPathD = function(tipX) {
+    return function(tipY) {
+      return function(angle) {
+        return function(size6) {
+          var backAngle2 = angle + pi + 0.4;
+          var backAngle1 = angle + pi - 0.4;
+          var back2y = tipY + size6 * sin(backAngle2);
+          var back2x = tipX + size6 * cos(backAngle2);
+          var back1y = tipY + size6 * sin(backAngle1);
+          var back1x = tipX + size6 * cos(backAngle1);
+          return "M " + (show3(tipX) + (" " + (show3(tipY) + (" L " + (show3(back1x) + (" " + (show3(back1y) + (" L " + (show3(back2x) + (" " + (show3(back2y) + " Z")))))))))));
+        };
+      };
+    };
+  };
+
   // output/Glassbox.Run/index.js
   var insert3 = /* @__PURE__ */ insert(ordConfigId);
   var insert1 = /* @__PURE__ */ insert(ordFactId);
@@ -7790,125 +7870,6 @@
       return {
         states: machine.states,
         transitions: map16(mark2)(machine.transitions)
-      };
-    };
-  };
-
-  // output/Glassbox.Codec.Mermaid/index.js
-  var notEq5 = /* @__PURE__ */ notEq(eqEdgeKind);
-  var append12 = /* @__PURE__ */ append(semigroupArray);
-  var map17 = /* @__PURE__ */ map(functorArray);
-  var toMermaid = function(machine) {
-    var marker = function(v) {
-      if (v instanceof OnDeadline) {
-        return "after ";
-      }
-      ;
-      return "";
-    };
-    var initialLine = (function() {
-      var v = find2(function(v1) {
-        return v1.isInitial;
-      })(machine.states);
-      if (v instanceof Just) {
-        return ["    [*] --> " + v.value0.id];
-      }
-      ;
-      if (v instanceof Nothing) {
-        return [];
-      }
-      ;
-      throw new Error("Failed pattern match at Glassbox.Codec.Mermaid (line 37, column 17 - line 39, column 18): " + [v.constructor.name]);
-    })();
-    var drawn = function(edge) {
-      return notEq5(edge.extra.kind)(OnRefusal.value);
-    };
-    var clean = replaceAll(":")(" ");
-    var edgeLine = function(edge) {
-      return "    " + (edge.from + (" --> " + (edge.to + (" : " + (marker(edge.extra.kind) + clean(edge.label))))));
-    };
-    var stateLine = function(state3) {
-      return "    " + (state3.id + (" : " + clean(state3.label)));
-    };
-    return joinWith("\n")(append12(["stateDiagram-v2"])(append12(map17(stateLine)(machine.states))(append12(initialLine)(map17(edgeLine)(filter(drawn)(machine.transitions))))));
-  };
-
-  // output/Glassbox.Demo.Fetch/foreign.js
-  var fetchTextImpl = (url2) => (onError, onSuccess) => {
-    const controller = new AbortController();
-    fetch(url2, { signal: controller.signal }).then(
-      (response) => response.ok ? response.text() : Promise.reject(new Error(url2 + ": " + response.status + " " + response.statusText))
-    ).then(onSuccess).catch(onError);
-    return (_cancelError, _onCancelerError, onCancelerSuccess) => {
-      controller.abort();
-      onCancelerSuccess();
-    };
-  };
-
-  // output/Effect.Aff.Compat/index.js
-  var fromEffectFnAff = function(v) {
-    return makeAff(function(k) {
-      return function __do2() {
-        var v1 = v(function($9) {
-          return k(Left.create($9))();
-        }, function($10) {
-          return k(Right.create($10))();
-        });
-        return function(e) {
-          return makeAff(function(k2) {
-            return function __do3() {
-              v1(e, function($11) {
-                return k2(Left.create($11))();
-              }, function($12) {
-                return k2(Right.create($12))();
-              });
-              return nonCanceler;
-            };
-          });
-        };
-      };
-    });
-  };
-
-  // output/Glassbox.Demo.Fetch/index.js
-  var fetchText = function($1) {
-    return fromEffectFnAff(fetchTextImpl($1));
-  };
-
-  // output/DataViz.Layout.StateMachine.Path/index.js
-  var show3 = /* @__PURE__ */ show(showNumber);
-  var selfLoopPathD = function(path) {
-    var dy = path.controlY - path.startY;
-    var dx = path.controlX - path.startX;
-    var radius = sqrt(dx * dx + dy * dy) * 0.8;
-    return "M " + (show3(path.startX) + (" " + (show3(path.startY) + (" A " + (show3(radius) + (" " + (show3(radius) + (" 0" + (" 1" + (" 1" + (" " + (show3(path.endX) + (" " + show3(path.endY))))))))))))));
-  };
-  var transitionPathD = function(path) {
-    if (path.isSelfLoop) {
-      return selfLoopPathD(path);
-    }
-    ;
-    return "M " + (show3(path.startX) + (" " + (show3(path.startY) + (" Q " + (show3(path.controlX) + (" " + (show3(path.controlY) + (" " + (show3(path.endX) + (" " + show3(path.endY)))))))))));
-  };
-  var initialArrowPathD = function(pos) {
-    return function(len) {
-      var endY = pos.y + len * sin(pos.angle);
-      var endX = pos.x + len * cos(pos.angle);
-      return "M " + (show3(pos.x) + (" " + (show3(pos.y) + (" L " + (show3(endX) + (" " + show3(endY)))))));
-    };
-  };
-  var arrowheadPathD = function(tipX) {
-    return function(tipY) {
-      return function(angle) {
-        return function(size6) {
-          var backAngle2 = angle + pi + 0.4;
-          var backAngle1 = angle + pi - 0.4;
-          var back2y = tipY + size6 * sin(backAngle2);
-          var back2x = tipX + size6 * cos(backAngle2);
-          var back1y = tipY + size6 * sin(backAngle1);
-          var back1x = tipX + size6 * cos(backAngle1);
-          return "M " + (show3(tipX) + (" " + (show3(tipY) + (" L " + (show3(back1x) + (" " + (show3(back1y) + (" L " + (show3(back2x) + (" " + (show3(back2y) + " Z")))))))))));
-        };
       };
     };
   };
@@ -8748,8 +8709,8 @@
   var show5 = /* @__PURE__ */ show(showNumber);
   var elem4 = /* @__PURE__ */ elem2(/* @__PURE__ */ eqTuple(eqString)(eqString));
   var elem1 = /* @__PURE__ */ elem2(eqString);
-  var append13 = /* @__PURE__ */ append(semigroupArray);
-  var map18 = /* @__PURE__ */ map(functorArray);
+  var append12 = /* @__PURE__ */ append(semigroupArray);
+  var map17 = /* @__PURE__ */ map(functorArray);
   var shortcut = "#1f6feb";
   var pale = "#cfcfcf";
   var muted = "#8a8a8a";
@@ -8953,10 +8914,49 @@
       return function(focus3) {
         return function(layout) {
           var initialArrow = elem3(Path.value)([staticStr("d")(initialArrowPathD(layout.initialArrow)(8)), staticStr("fill")(ink), staticStr("stroke")(ink), staticStr("stroke-width")("1.5")])([]);
-          return elem3(SVG.value)([staticStr("viewBox")(show5(layout.originX) + (" " + (show5(layout.originY) + (" " + (show5(layout.width) + (" " + show5(layout.height))))))), staticStr("preserveAspectRatio")("xMidYMid meet"), staticStr("width")("100%")])(append13([initialArrow])(append13(map18(edgeGroup(focus3))(layout.transitions))(map18(stateGroup(callbacks)(currentId)(focus3))(layout.states))));
+          return elem3(SVG.value)([staticStr("viewBox")(show5(layout.originX) + (" " + (show5(layout.originY) + (" " + (show5(layout.width) + (" " + show5(layout.height))))))), staticStr("preserveAspectRatio")("xMidYMid meet"), staticStr("width")("100%")])(append12([initialArrow])(append12(map17(edgeGroup(focus3))(layout.transitions))(map17(stateGroup(callbacks)(currentId)(focus3))(layout.states))));
         };
       };
     };
+  };
+
+  // output/Glassbox.Export.StateDiagram/index.js
+  var notEq5 = /* @__PURE__ */ notEq(eqEdgeKind);
+  var append13 = /* @__PURE__ */ append(semigroupArray);
+  var map18 = /* @__PURE__ */ map(functorArray);
+  var toStateDiagram = function(machine) {
+    var marker = function(v) {
+      if (v instanceof OnDeadline) {
+        return "after ";
+      }
+      ;
+      return "";
+    };
+    var initialLine = (function() {
+      var v = find2(function(v1) {
+        return v1.isInitial;
+      })(machine.states);
+      if (v instanceof Just) {
+        return ["    [*] --> " + v.value0.id];
+      }
+      ;
+      if (v instanceof Nothing) {
+        return [];
+      }
+      ;
+      throw new Error("Failed pattern match at Glassbox.Export.StateDiagram (line 48, column 17 - line 50, column 18): " + [v.constructor.name]);
+    })();
+    var drawn = function(edge) {
+      return notEq5(edge.extra.kind)(OnRefusal.value);
+    };
+    var clean = replaceAll(":")(" ");
+    var edgeLine = function(edge) {
+      return "    " + (edge.from + (" --> " + (edge.to + (" : " + (marker(edge.extra.kind) + clean(edge.label))))));
+    };
+    var stateLine = function(state3) {
+      return "    " + (state3.id + (" : " + clean(state3.label)));
+    };
+    return joinWith("\n")(append13(["stateDiagram-v2"])(append13(map18(stateLine)(machine.states))(append13(initialLine)(map18(edgeLine)(filter(drawn)(machine.transitions))))));
   };
 
   // output/Data.Exists/index.js
@@ -14175,12 +14175,12 @@
     AsArtifact2.value = new AsArtifact2();
     return AsArtifact2;
   })();
-  var AsMermaid = /* @__PURE__ */ (function() {
-    function AsMermaid2() {
+  var AsDiagramText = /* @__PURE__ */ (function() {
+    function AsDiagramText2() {
     }
     ;
-    AsMermaid2.value = new AsMermaid2();
-    return AsMermaid2;
+    AsDiagramText2.value = new AsDiagramText2();
+    return AsDiagramText2;
   })();
   var AsRing = /* @__PURE__ */ (function() {
     function AsRing2() {
@@ -14412,7 +14412,7 @@
           return true;
         }
         ;
-        if (x instanceof AsMermaid && y instanceof AsMermaid) {
+        if (x instanceof AsDiagramText && y instanceof AsDiagramText) {
           return true;
         }
         ;
@@ -14646,22 +14646,22 @@
           return "The machine as the decoder understood it, re-encoded \u2014 not the bytes that arrived. If this differs from the file on disk, the codec lost something.";
         }
         ;
-        if (state3.textView instanceof AsMermaid) {
-          return "Derived from the same rules as the picture, so it changes when the configuration does \u2014 but refusals are left out, since as self-loops they would treble the edge count to say what the styling already says. Paste it into GitHub, which renders it.";
+        if (state3.textView instanceof AsDiagramText) {
+          return "The same machine as text \u2014 derived from the same rules as the picture, so it changes when the configuration does. Refusals are left out, since as self-loops they would treble the edge count to say what the styling already says. Mermaid stateDiagram-v2 syntax, so GitHub renders it if you paste it; nothing here depends on Mermaid to draw anything.";
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 514, column 11 - line 522, column 48): " + [state3.textView.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 514, column 11 - line 523, column 68): " + [state3.textView.constructor.name]);
       })();
       var body2 = (function() {
         if (state3.textView instanceof AsArtifact) {
           return printSpecPretty(l.spec);
         }
         ;
-        if (state3.textView instanceof AsMermaid) {
-          return toMermaid(annotated(state3)(l));
+        if (state3.textView instanceof AsDiagramText) {
+          return toStateDiagram(annotated(state3)(l));
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 510, column 10 - line 512, column 47): " + [state3.textView.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Demo.Component (line 510, column 10 - line 512, column 56): " + [state3.textView.constructor.name]);
       })();
       return div2([class_("block")])([h2_([button([onClick(function(v) {
         return ToggleText.value;
@@ -14677,7 +14677,7 @@
           return text("");
         }
         ;
-        return div_([div2([class_("buttons")])([tab(AsArtifact.value)("the artifact"), tab(AsMermaid.value)("as Mermaid")]), pre_([text(body2)]), p([class_("quiet")])([text(gloss)])]);
+        return div_([div2([class_("buttons")])([tab(AsArtifact.value)("the artifact"), tab(AsDiagramText.value)("as diagram text")]), pre_([text(body2)]), p([class_("quiet")])([text(gloss)])]);
       })()]);
     };
   };

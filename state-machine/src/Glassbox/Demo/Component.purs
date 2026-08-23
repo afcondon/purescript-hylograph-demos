@@ -35,7 +35,7 @@ import Data.Tuple (Tuple(..))
 import DataViz.Layout.StateMachine (StateMachine, StateMachineLayout, circularLayout, defaultConfig, layoutWithConfig, treeStrategy)
 import Effect.Aff.Class (class MonadAff)
 import Glassbox.Codec.JSON (parseSpec, printSpecPretty)
-import Glassbox.Codec.Mermaid (toMermaid)
+import Glassbox.Export.StateDiagram (toStateDiagram)
 import Glassbox.Demo.Fetch (fetchText)
 import Glassbox.Demo.Render (Focus, diagramTree)
 import Glassbox.Describe (EdgeExtra, annotate, defaultOptions, describe, machineEdges)
@@ -82,7 +82,7 @@ derive instance eqLayoutMode :: Eq LayoutMode
 -- | of the drawing — all three come off the same decoded value.
 data TextView
   = AsArtifact  -- ^ the machine as the decoder understood it, re-encoded
-  | AsMermaid   -- ^ the derived diagram, in a notation GitHub renders
+  | AsDiagramText -- ^ the same drawing as text, in a notation GitHub renders
 
 derive instance eqTextView :: Eq TextView
 
@@ -479,7 +479,7 @@ configValue l key fallback =
 -- |
 -- | Two readings, and the honest thing about both is that neither is a second
 -- | description kept in step by hand — the artifact is the decoded value
--- | re-encoded, and the Mermaid is derived from the same resolution of the same
+-- | re-encoded, and the text is derived from the same resolution of the same
 -- | rules that produced the picture. Three renderings, one value.
 textBlock :: forall m. State -> Loaded -> H.ComponentHTML Action () m
 textBlock state l =
@@ -493,7 +493,7 @@ textBlock state l =
       else HH.div_
         [ HH.div [ HP.class_ (H.ClassName "buttons") ]
             [ tab AsArtifact "the artifact"
-            , tab AsMermaid "as Mermaid"
+            , tab AsDiagramText "as diagram text"
             ]
         , HH.pre_ [ HH.text body ]
         , HH.p [ HP.class_ (H.ClassName "quiet") ] [ HH.text gloss ]
@@ -509,17 +509,18 @@ textBlock state l =
 
   body = case state.textView of
     AsArtifact -> printSpecPretty l.spec
-    AsMermaid -> toMermaid (annotated state l)
+    AsDiagramText -> toStateDiagram (annotated state l)
 
   gloss = case state.textView of
     AsArtifact ->
       "The machine as the decoder understood it, re-encoded — not the bytes that arrived. \
       \If this differs from the file on disk, the codec lost something."
-    AsMermaid ->
-      "Derived from the same rules as the picture, so it changes when the \
-      \configuration does — but refusals are left out, since as self-loops they \
-      \would treble the edge count to say what the styling already says. \
-      \Paste it into GitHub, which renders it."
+    AsDiagramText ->
+      "The same machine as text — derived from the same rules as the picture, so \
+      \it changes when the configuration does. Refusals are left out, since as \
+      \self-loops they would treble the edge count to say what the styling \
+      \already says. Mermaid stateDiagram-v2 syntax, so GitHub renders it if you \
+      \paste it; nothing here depends on Mermaid to draw anything."
 
 shapeBlock :: forall m. State -> H.ComponentHTML Action () m
 shapeBlock state =

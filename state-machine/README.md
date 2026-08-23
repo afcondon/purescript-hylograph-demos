@@ -24,7 +24,7 @@ stops being true, the thesis has failed and everything downstream is decoration.
 | `Glassbox.Describe` | derives the drawing by resolving rules under a world |
 | `Glassbox.Tree` | the shortest-path tree a user is forced to build, and its edge classes |
 | `Glassbox.Layout.Tree` | a tree strategy for `DataViz.Layout.StateMachine` |
-| `Glassbox.Codec.Mermaid` | one-way export for a free eyeball check |
+| `Glassbox.Export.StateDiagram` | one-way text export for a free eyeball check. Emits Mermaid's `stateDiagram-v2` dialect because things render it for free — but imports nothing and draws nothing; the picture is ours. |
 | `Glassbox.Demo.*` | the inspector — generic; it names no machine |
 
 ## The boundary
