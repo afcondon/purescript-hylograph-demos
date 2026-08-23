@@ -1,0 +1,77 @@
+machine  elevator
+title    "Elevator"
+format   1
+initial  idle
+
+STATES        LABEL
+  idle        Idle
+  up          Going up
+  down        Going down
+  arriving    Arriving
+  doors-open  Doors open
+  held        Doors held
+  stopped     Emergency stop
+
+EVENTS     SOURCE   LABEL
+  call     user
+  open     user     open doors
+  close    user     close doors
+  alarm    user     emergency stop
+  reset    user
+  reached  runtime  floor reached
+  dwelt    runtime  dwell elapsed
+
+CONFIG             DEFAULT  LABEL
+  dwell-seconds    6        Doors stay open for (s)
+  has-hold-button  true     This car has a hold button
+
+FACTS            MEANING
+  wanted-above   A floor above is requested
+  wanted-below   A floor below is requested
+  doors-blocked  Something is in the doorway
+
+REFUSALS          MEANING
+  nowhere-to-go   no floor is requested
+  moving          the car is moving
+  blocked         something is in the doorway
+  no-hold-button  this car has no hold button
+  stopped-fast    the emergency stop is engaged
+
+GRID   rows are states, columns are events
+                call           open           close          alarm    reset       reached   dwelt
+  > idle        [1]            doors-open     .              stopped  .           .         .
+    up          .              !moving        .              stopped  .           arriving  .
+    down        .              !moving        .              stopped  .           arriving  .
+    arriving    .              doors-open     .              stopped  .           .         doors-open
+    doors-open  .              [2]            [3]            stopped  .           .         @[4]
+    held        .              .              doors-open     stopped  .           .         .
+    stopped     !stopped-fast  !stopped-fast  !stopped-fast  .        doors-open  .         .
+
+KEY
+  >     the initial state
+  .     stay — the event is declared here and does nothing
+  !tag  refuse with that tag — see REFUSALS
+  [n]   guarded, or declared twice — see CASES
+  @     also fires by itself — see DEADLINES
+
+CASES
+  [1]  idle on call
+         when wanted-above         -> up
+         elif wanted-below         -> down
+         else                      refuse nowhere-to-go
+  [2]  doors-open on open
+         when not has-hold-button  refuse no-hold-button
+         else                      -> held
+  [3]  doors-open on close
+         when doors-blocked        refuse blocked
+         elif wanted-above         -> up
+         elif wanted-below         -> down
+         else                      -> idle
+  [4]  doors-open on dwelt
+         when doors-blocked        stay
+         elif wanted-above         -> up
+         elif wanted-below         -> down
+         else                      -> idle
+
+DEADLINES
+  doors-open  after dwell-seconds  fires dwelt

@@ -1,0 +1,65 @@
+machine  loop   "One loop of a six-loop looper"
+format   1
+initial  empty
+
+states
+  empty        "Empty"
+  armed        "Armed"
+  recording    "Recording"
+  playing      "Playing"
+  overdubbing  "Overdub"
+  stopped      "Stopped"
+
+events
+  record   user
+  play     user
+  stop     user
+  clear    user
+  elapsed  runtime  "count-in"
+
+config
+  count-in-beats  = 4  "Count-in (beats)"
+
+facts
+  converter-held  "Another loop holds the converter"
+
+refusals
+  converter-busy   "another loop holds the converter"
+  nothing-yet      "nothing recorded yet"
+  overdub-in-play  "stopped loops overdub from Playing"
+
+empty:
+  record                when converter-held      -> refuse converter-busy
+                        elif count-in-beats > 0  -> armed
+                        else                     -> recording
+  play                                           -> refuse nothing-yet
+  stop, clear, elapsed                           -> stay
+
+armed:  after count-in-beats fires elapsed
+  elapsed              -> recording
+  record, stop, clear  -> empty
+  play                 -> stay
+
+recording:
+  record, play  -> playing
+  stop          -> stopped
+  clear         -> empty
+  elapsed       -> stay
+
+playing:
+  record         -> overdubbing
+  stop           -> stopped
+  clear          -> empty
+  play, elapsed  -> stay
+
+overdubbing:
+  record, play  -> playing
+  stop          -> stopped
+  clear         -> empty
+  elapsed       -> stay
+
+stopped:
+  play           -> playing
+  clear          -> empty
+  record         -> refuse overdub-in-play
+  stop, elapsed  -> stay

@@ -1,0 +1,74 @@
+machine  heating
+title    "Heating controller"
+format   1
+initial  off
+
+STATES       LABEL
+  off        Off
+  frost      Frost watch
+  satisfied  Up to temperature
+  heating    Heating
+  boosting   Boost
+  fault      Fault
+
+EVENTS        SOURCE   LABEL
+  mode        user
+  boost       user
+  cancel      user     cancel boost
+  reset       user
+  calls       runtime  thermostat calls
+  satisfies   runtime  thermostat satisfied
+  boost-over  runtime  boost elapsed
+  faults      runtime  boiler fault
+
+CONFIG             DEFAULT  LABEL
+  has-frost-watch  true     Frost protection fitted
+  boost-minutes    60       Boost lasts (minutes)
+
+FACTS           MEANING
+  scheduled-on  The timer says it should be on
+  below-frost   It is cold enough to worry about pipes
+
+REFUSALS        MEANING
+  in-fault      the boiler has locked out; reset it first
+  no-frost      this controller has no frost protection
+  not-boosting  no boost is running
+
+GRID   rows are states, columns are events
+               mode       boost      cancel         reset  calls  satisfies  boost-over  faults
+  > off        [1]        [2]        !not-boosting  .      [3]    .          .           fault
+    frost      satisfied  boosting   !not-boosting  .      .      off        .           fault
+    satisfied  off        boosting   !not-boosting  .      [4]    .          .           fault
+    heating    off        boosting   !not-boosting  .      .      satisfied  .           fault
+    boosting   off        .          [5]            .      .      .          @[6]        fault
+    fault      !in-fault  !in-fault  !in-fault      off    .      .          .           .
+
+KEY
+  >     the initial state
+  .     stay — the event is declared here and does nothing
+  !tag  refuse with that tag — see REFUSALS
+  [n]   guarded, or declared twice — see CASES
+  @     also fires by itself — see DEADLINES
+
+CASES
+  [1]  off on mode
+         when scheduled-on                     -> heating
+         else                                  -> satisfied
+  [2]  off on boost
+         when not has-frost-watch              refuse no-frost
+         else                                  -> boosting
+  [3]  off on calls
+         when has-frost-watch and below-frost  -> frost
+         else                                  stay
+  [4]  satisfied on calls
+         when scheduled-on                     -> heating
+         else                                  stay
+  [5]  boosting on cancel
+         when scheduled-on                     -> heating
+         else                                  -> satisfied
+  [6]  boosting on boost-over
+         when scheduled-on                     -> heating
+         else                                  -> satisfied
+
+DEADLINES
+  boosting  after boost-minutes  fires boost-over

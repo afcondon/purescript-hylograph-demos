@@ -6764,9 +6764,9 @@
   var bind2 = /* @__PURE__ */ bind(bindMaybe);
   var bind12 = /* @__PURE__ */ bind(bindEither);
   var pure4 = /* @__PURE__ */ pure(applicativeEither);
+  var map14 = /* @__PURE__ */ map(functorArray);
   var lmap3 = /* @__PURE__ */ lmap(bifunctorEither);
-  var map14 = /* @__PURE__ */ map(functorEither);
-  var map15 = /* @__PURE__ */ map(functorArray);
+  var map15 = /* @__PURE__ */ map(functorEither);
   var append5 = /* @__PURE__ */ append(semigroupArray);
   var discard2 = /* @__PURE__ */ discard(discardUnit)(bindEither);
   var when3 = /* @__PURE__ */ when(applicativeEither);
@@ -6788,12 +6788,12 @@
       throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 135, column 12 - line 138, column 32): " + [v.constructor.name]);
     };
     var decode2 = function(json) {
-      return caseJson($$const(new Left(new TypeMismatch("number, boolean or string"))))(function($97) {
-        return Right.create(VBoolean.create($97));
-      })(function($98) {
-        return Right.create(VNumber.create($98));
-      })(function($99) {
-        return Right.create(VString.create($99));
+      return caseJson($$const(new Left(new TypeMismatch("number, boolean or string"))))(function($99) {
+        return Right.create(VBoolean.create($99));
+      })(function($100) {
+        return Right.create(VNumber.create($100));
+      })(function($101) {
+        return Right.create(VString.create($101));
       })($$const(new Left(new TypeMismatch("number, boolean or string"))))($$const(new Left(new TypeMismatch("number, boolean or string"))))(json);
     };
     return codec$prime(decode2)(encode2);
@@ -6803,8 +6803,8 @@
       return bind2(lookup3(k)(o))(toString2);
     };
   };
-  var stateIdCodec = /* @__PURE__ */ prismaticCodec("StateId")(function($100) {
-    return Just.create(StateId($100));
+  var stateIdCodec = /* @__PURE__ */ prismaticCodec("StateId")(function($102) {
+    return Just.create(StateId($102));
   })(function(v) {
     return v;
   })(string);
@@ -6818,15 +6818,15 @@
       return note(new AtKey(k, MissingValue.value))(lookup3(k)(o));
     };
   };
-  var refusalIdCodec = /* @__PURE__ */ prismaticCodec("RefusalId")(function($101) {
-    return Just.create(RefusalId($101));
+  var refusalIdCodec = /* @__PURE__ */ prismaticCodec("RefusalId")(function($103) {
+    return Just.create(RefusalId($103));
   })(function(v) {
     return v;
   })(string);
   var obj = /* @__PURE__ */ (function() {
-    var $102 = fromFoldable7(foldableArray);
-    return function($103) {
-      return id($102($103));
+    var $104 = fromFoldable7(foldableArray);
+    return function($105) {
+      return id($104($105));
     };
   })();
   var refusalDeclCodec = /* @__PURE__ */ (function() {
@@ -6845,6 +6845,13 @@
     };
     return codec$prime(decode2)(encode2);
   })();
+  var notesField = function(v) {
+    if (v.length === 0) {
+      return [];
+    }
+    ;
+    return [new Tuple("notes", id(map14(id)(v)))];
+  };
   var listAt = function(o) {
     return function(k) {
       return function(codec2) {
@@ -6857,12 +6864,12 @@
           return lmap3(AtKey.create(k))(decode(array(codec2))(v.value0));
         }
         ;
-        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 434, column 20 - line 436, column 68): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 444, column 20 - line 446, column 68): " + [v.constructor.name]);
       };
     };
   };
-  var factIdCodec = /* @__PURE__ */ prismaticCodec("FactId")(function($104) {
-    return Just.create(FactId($104));
+  var factIdCodec = /* @__PURE__ */ prismaticCodec("FactId")(function($106) {
+    return Just.create(FactId($106));
   })(function(v) {
     return v;
   })(string);
@@ -6901,7 +6908,7 @@
     var decode2 = function(json) {
       var v = toObject(json);
       if (v instanceof Nothing) {
-        return map14(Lit.create)(decode(valueCodec)(json));
+        return map15(Lit.create)(decode(valueCodec)(json));
       }
       ;
       if (v instanceof Just) {
@@ -6947,8 +6954,8 @@
     };
     return prismaticCodec("EventSource")(from3)(to)(string);
   })();
-  var eventIdCodec = /* @__PURE__ */ prismaticCodec("EventId")(function($105) {
-    return Just.create(EventId($105));
+  var eventIdCodec = /* @__PURE__ */ prismaticCodec("EventId")(function($107) {
+    return Just.create(EventId($107));
   })(function(v) {
     return v;
   })(string);
@@ -6978,8 +6985,8 @@
     };
     var decode2 = function(json) {
       return bind12(note(new TypeMismatch("a deadline object"))(toObject(json)))(function(o) {
-        return bind12(map14(StateId)(requiredString(o)("in")))(function(inState) {
-          return bind12(map14(EventId)(requiredString(o)("fires")))(function(fires) {
+        return bind12(map15(StateId)(requiredString(o)("in")))(function(inState) {
+          return bind12(map15(EventId)(requiredString(o)("fires")))(function(fires) {
             return bind12(bind12(required(o)("after"))(decode(exprCodec)))(function(after) {
               return pure4({
                 inState,
@@ -6993,8 +7000,8 @@
     };
     return codec$prime(decode2)(encode2);
   })();
-  var configIdCodec = /* @__PURE__ */ prismaticCodec("ConfigId")(function($106) {
-    return Just.create(ConfigId($106));
+  var configIdCodec = /* @__PURE__ */ prismaticCodec("ConfigId")(function($108) {
+    return Just.create(ConfigId($108));
   })(function(v) {
     return v;
   })(string);
@@ -7087,11 +7094,11 @@
         }
         ;
         if (v instanceof And) {
-          return obj([new Tuple("all", id(map15(encode(self))(v.value0)))]);
+          return obj([new Tuple("all", id(map14(encode(self))(v.value0)))]);
         }
         ;
         if (v instanceof Or) {
-          return obj([new Tuple("any", id(map15(encode(self))(v.value0)))]);
+          return obj([new Tuple("any", id(map14(encode(self))(v.value0)))]);
         }
         ;
         if (v instanceof Cmp) {
@@ -7105,7 +7112,7 @@
       return function(json) {
         var v = toObject(json);
         if (v instanceof Nothing) {
-          return map14(Holds.create)(decode(exprCodec)(json));
+          return map15(Holds.create)(decode(exprCodec)(json));
         }
         ;
         if (v instanceof Just) {
@@ -7114,15 +7121,15 @@
           var v3 = lookup3("all")(v.value0);
           var v4 = lookup3("not")(v.value0);
           if (v4 instanceof Just) {
-            return map14(Not.create)(decode(self)(v4.value0));
+            return map15(Not.create)(decode(self)(v4.value0));
           }
           ;
           if (v3 instanceof Just) {
-            return map14(And.create)(decode(array(self))(v3.value0));
+            return map15(And.create)(decode(array(self))(v3.value0));
           }
           ;
           if (v2 instanceof Just) {
-            return map14(Or.create)(decode(array(self))(v2.value0));
+            return map15(Or.create)(decode(array(self))(v2.value0));
           }
           ;
           if (v1 instanceof Just) {
@@ -7135,7 +7142,7 @@
             });
           }
           ;
-          return map14(Holds.create)(decode(exprCodec)(json));
+          return map15(Holds.create)(decode(exprCodec)(json));
         }
         ;
         throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 211, column 22 - line 222, column 58): " + [v.constructor.name]);
@@ -7184,7 +7191,7 @@
           }
           ;
           if (v instanceof Just) {
-            return map14(Just.create)(decode(guardCodec)(v.value0));
+            return map15(Just.create)(decode(guardCodec)(v.value0));
           }
           ;
           throw new Error("Failed pattern match at Glassbox.Codec.JSON (line 245, column 14 - line 247, column 51): " + [v.constructor.name]);
@@ -7219,12 +7226,12 @@
   })();
   var ruleCodec = /* @__PURE__ */ (function() {
     var encode2 = function(r) {
-      return obj([new Tuple("from", encode(stateIdCodec)(r.from)), new Tuple("on", encode(eventIdCodec)(r.on)), new Tuple("cases", id(map15(encode(caseCodec))(r.cases)))]);
+      return obj([new Tuple("from", encode(stateIdCodec)(r.from)), new Tuple("on", encode(eventIdCodec)(r.on)), new Tuple("cases", id(map14(encode(caseCodec))(r.cases)))]);
     };
     var decode2 = function(json) {
       return bind12(note(new TypeMismatch("a rule object"))(toObject(json)))(function(o) {
-        return bind12(map14(StateId)(requiredString(o)("from")))(function(from3) {
-          return bind12(map14(EventId)(requiredString(o)("on")))(function(on2) {
+        return bind12(map15(StateId)(requiredString(o)("from")))(function(from3) {
+          return bind12(map15(EventId)(requiredString(o)("on")))(function(on2) {
             return bind12(bind12(required(o)("cases"))(decode(array(caseCodec))))(function(cases) {
               return pure4({
                 from: from3,
@@ -7269,33 +7276,36 @@
   })();
   var specCodec = /* @__PURE__ */ (function() {
     var encode2 = function(s) {
-      return obj([new Tuple("glassbox", encode($$int)(s.version)), new Tuple("id", id(s.id)), new Tuple("title", id(s.title)), new Tuple("initial", encode(stateIdCodec)(s.initial)), new Tuple("states", id(map15(encode(stateDeclCodec))(s.states))), new Tuple("events", id(map15(encode(eventDeclCodec))(s.events))), new Tuple("config", id(map15(encode(configDeclCodec))(s.config))), new Tuple("facts", id(map15(encode(factDeclCodec))(s.facts))), new Tuple("refusals", id(map15(encode(refusalDeclCodec))(s.refusals))), new Tuple("rules", id(map15(encode(ruleCodec))(s.rules))), new Tuple("deadlines", id(map15(encode(deadlineCodec))(s.deadlines)))]);
+      return obj(append5([new Tuple("glassbox", encode($$int)(s.version)), new Tuple("id", id(s.id)), new Tuple("title", id(s.title))])(append5(notesField(s.notes))([new Tuple("initial", encode(stateIdCodec)(s.initial)), new Tuple("states", id(map14(encode(stateDeclCodec))(s.states))), new Tuple("events", id(map14(encode(eventDeclCodec))(s.events))), new Tuple("config", id(map14(encode(configDeclCodec))(s.config))), new Tuple("facts", id(map14(encode(factDeclCodec))(s.facts))), new Tuple("refusals", id(map14(encode(refusalDeclCodec))(s.refusals))), new Tuple("rules", id(map14(encode(ruleCodec))(s.rules))), new Tuple("deadlines", id(map14(encode(deadlineCodec))(s.deadlines)))])));
     };
     var decode2 = function(json) {
       return bind12(note(new TypeMismatch("a Glassbox artifact object"))(toObject(json)))(function(o) {
         return bind12(lmap3(AtKey.create("glassbox"))(bind12(required(o)("glassbox"))(decode($$int))))(function(version) {
           return discard2(when3(version > formatVersion)(new Left(new AtKey("glassbox", new TypeMismatch("format version " + (show2(version) + ("; this build reads " + show2(formatVersion))))))))(function() {
             return bind12(requiredString(o)("id"))(function(id3) {
-              return bind12(map14(StateId)(requiredString(o)("initial")))(function(initial) {
-                return bind12(listAt(o)("states")(stateDeclCodec))(function(states) {
-                  return bind12(listAt(o)("events")(eventDeclCodec))(function(events) {
-                    return bind12(listAt(o)("config")(configDeclCodec))(function(config) {
-                      return bind12(listAt(o)("facts")(factDeclCodec))(function(facts) {
-                        return bind12(listAt(o)("refusals")(refusalDeclCodec))(function(refusals) {
-                          return bind12(listAt(o)("rules")(ruleCodec))(function(rules) {
-                            return bind12(listAt(o)("deadlines")(deadlineCodec))(function(deadlines) {
-                              return pure4({
-                                version,
-                                id: id3,
-                                title: fromMaybe(id3)(stringAt(o)("title")),
-                                initial,
-                                states,
-                                events,
-                                config,
-                                facts,
-                                refusals,
-                                rules,
-                                deadlines
+              return bind12(listAt(o)("notes")(string))(function(notes) {
+                return bind12(map15(StateId)(requiredString(o)("initial")))(function(initial) {
+                  return bind12(listAt(o)("states")(stateDeclCodec))(function(states) {
+                    return bind12(listAt(o)("events")(eventDeclCodec))(function(events) {
+                      return bind12(listAt(o)("config")(configDeclCodec))(function(config) {
+                        return bind12(listAt(o)("facts")(factDeclCodec))(function(facts) {
+                          return bind12(listAt(o)("refusals")(refusalDeclCodec))(function(refusals) {
+                            return bind12(listAt(o)("rules")(ruleCodec))(function(rules) {
+                              return bind12(listAt(o)("deadlines")(deadlineCodec))(function(deadlines) {
+                                return pure4({
+                                  version,
+                                  id: id3,
+                                  notes,
+                                  title: fromMaybe(id3)(stringAt(o)("title")),
+                                  initial,
+                                  states,
+                                  events,
+                                  config,
+                                  facts,
+                                  refusals,
+                                  rules,
+                                  deadlines
+                                });
                               });
                             });
                           });
@@ -7313,10 +7323,10 @@
     return codec$prime(decode2)(encode2);
   })();
   var decodeSpec = /* @__PURE__ */ (function() {
-    var $107 = lmap3(printJsonDecodeError);
-    var $108 = decode(specCodec);
-    return function($109) {
-      return $107($108($109));
+    var $109 = lmap3(printJsonDecodeError);
+    var $110 = decode(specCodec);
+    return function($111) {
+      return $109($110($111));
     };
   })();
   var parseSpec = function(text6) {
@@ -7325,8 +7335,8 @@
     });
   };
   var encodeSpec = /* @__PURE__ */ encode(specCodec);
-  var printSpecPretty = function($111) {
-    return stringifyPrettyImpl(encodeSpec($111));
+  var printSpecPretty = function($113) {
+    return stringifyPrettyImpl(encodeSpec($113));
   };
 
   // output/Glassbox.Demo.Fetch/foreign.js
@@ -7653,8 +7663,8 @@
   };
 
   // output/Glassbox.Edges/index.js
-  var append6 = /* @__PURE__ */ append(semigroupArray);
   var map16 = /* @__PURE__ */ map(functorArray);
+  var append6 = /* @__PURE__ */ append(semigroupArray);
   var nubEq2 = /* @__PURE__ */ nubEq(eqEventId);
   var sort2 = /* @__PURE__ */ sort(ordEventId);
   var eq13 = /* @__PURE__ */ eq(eqEventId);
@@ -7766,7 +7776,7 @@
         });
       }
       ;
-      throw new Error("Failed pattern match at Glassbox.Edges (line 130, column 44 - line 138, column 8): " + [v1.constructor.name]);
+      throw new Error("Failed pattern match at Glassbox.Edges (line 132, column 44 - line 140, column 8): " + [v1.constructor.name]);
     };
     return mapMaybe(rebuild)(nub1(map16(key)(edges)));
   };
@@ -7800,7 +7810,7 @@
               return Nothing.value;
             }
             ;
-            throw new Error("Failed pattern match at Glassbox.Edges (line 107, column 22 - line 110, column 20): " + [v.constructor.name]);
+            throw new Error("Failed pattern match at Glassbox.Edges (line 109, column 22 - line 112, column 20): " + [v.constructor.name]);
           };
         };
         var keep = function(edge) {
@@ -7817,14 +7827,14 @@
               return false;
             }
             ;
-            throw new Error("Failed pattern match at Glassbox.Edges (line 103, column 35 - line 105, column 21): " + [v.constructor.name]);
+            throw new Error("Failed pattern match at Glassbox.Edges (line 105, column 35 - line 107, column 21): " + [v.constructor.name]);
           };
         };
         var probeState = function(decl) {
           return mapMaybe(probe(decl.id))(filter((function() {
-            var $59 = deliveredByDeadline(decl.id);
-            return function($60) {
-              return !$59($60);
+            var $68 = deliveredByDeadline(decl.id);
+            return function($69) {
+              return !$68($69);
             };
           })())(map16(function(v) {
             return v.id;
@@ -7852,7 +7862,7 @@
             return Nothing.value;
           }
           ;
-          throw new Error("Failed pattern match at Glassbox.Edges (line 117, column 23 - line 122, column 19): " + [v.constructor.name]);
+          throw new Error("Failed pattern match at Glassbox.Edges (line 119, column 23 - line 124, column 19): " + [v.constructor.name]);
         };
         var deadlineEdges = mapMaybe(deadlineEdge)(spec.states);
         return merge(filter(keep)(append6(eventEdges)(deadlineEdges)));

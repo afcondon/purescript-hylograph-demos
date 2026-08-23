@@ -3,7 +3,7 @@
   "id": "heating",
   "title": "Heating controller",
 
-  "_note": [
+  "notes": [
     "This is the CENTRAL HEATING circuit only, and that restriction is the",
     "finding. A real boiler serves two circuits — heating and hot water — which",
     "run independently: the water can be reheating while the radiators are",

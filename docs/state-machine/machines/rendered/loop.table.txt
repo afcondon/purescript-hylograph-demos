@@ -1,0 +1,55 @@
+machine  loop
+title    "One loop of a six-loop looper"
+format   1
+initial  empty
+
+STATES         LABEL
+  empty        Empty
+  armed        Armed
+  recording    Recording
+  playing      Playing
+  overdubbing  Overdub
+  stopped      Stopped
+
+EVENTS     SOURCE   LABEL
+  record   user
+  play     user
+  stop     user
+  clear    user
+  elapsed  runtime  count-in
+
+CONFIG            DEFAULT  LABEL
+  count-in-beats  4        Count-in (beats)
+
+FACTS             MEANING
+  converter-held  Another loop holds the converter
+
+REFUSALS           MEANING
+  converter-busy   another loop holds the converter
+  nothing-yet      nothing recorded yet
+  overdub-in-play  stopped loops overdub from Playing
+
+GRID   rows are states, columns are events
+                 record            play          stop     clear  elapsed
+  > empty        [1]               !nothing-yet  .        .      .
+    armed        empty             .             empty    empty  @recording
+    recording    playing           playing       stopped  empty  .
+    playing      overdubbing       .             stopped  empty  .
+    overdubbing  playing           playing       stopped  empty  .
+    stopped      !overdub-in-play  playing       .        empty  .
+
+KEY
+  >     the initial state
+  .     stay — the event is declared here and does nothing
+  !tag  refuse with that tag — see REFUSALS
+  [n]   guarded, or declared twice — see CASES
+  @     also fires by itself — see DEADLINES
+
+CASES
+  [1]  empty on record
+         when converter-held      refuse converter-busy
+         elif count-in-beats > 0  -> armed
+         else                     -> recording
+
+DEADLINES
+  armed  after count-in-beats  fires elapsed

@@ -1,0 +1,104 @@
+# Written to try to BREAK the format, not to flatter it. The looper and the
+# car radio were both authored by whoever designed the format, so of course
+# they fitted. An elevator is the first machine that pushes back.
+#
+# The thing it pushes on is floors. A twelve-storey lift plainly has more to
+# it than a three-storey one, but 'which floor am I on' is NOT a mode: the
+# lift behaves identically on floor 2 and floor 7, and making each floor a
+# state would give twelve copies of one machine and an unreadable drawing.
+#
+# So the floor number lives in the HOST, and reaches the machine as facts —
+# is anything requested above me, below me, here. That is how real lift
+# controllers are written, and the format's own sorting test agrees: change
+# the current floor and the diagram does not move, so it is not part of the
+# machine. Change 'doors need holding' and it does.
+#
+# The cost is that a designer has to know to do this, and nothing in the
+# format tells them. That is a finding, not a defect.
+
+machine  elevator  "Elevator"
+format   1
+initial  idle
+
+states
+  idle        "Idle"
+  up          "Going up"
+  down        "Going down"
+  arriving    "Arriving"
+  doors-open  "Doors open"
+  held        "Doors held"
+  stopped     "Emergency stop"
+
+events
+  call     user
+  open     user     "open doors"
+  close    user     "close doors"
+  alarm    user     "emergency stop"
+  reset    user
+  reached  runtime  "floor reached"
+  dwelt    runtime  "dwell elapsed"
+
+config
+  dwell-seconds    = 6     "Doors stay open for (s)"
+  has-hold-button  = true  "This car has a hold button"
+
+facts
+  wanted-above   "A floor above is requested"
+  wanted-below   "A floor below is requested"
+  doors-blocked  "Something is in the doorway"
+
+refusals
+  nowhere-to-go   "no floor is requested"
+  moving          "the car is moving"
+  blocked         "something is in the doorway"
+  no-hold-button  "this car has no hold button"
+  stopped-fast    "the emergency stop is engaged"
+
+idle:
+  call                          when wanted-above  -> up
+                                elif wanted-below  -> down
+                                else               -> refuse nowhere-to-go
+  open                                             -> doors-open
+  close, reset, reached, dwelt                     -> stay
+  alarm                                            -> stopped
+
+up:
+  reached                    -> arriving
+  alarm                      -> stopped
+  open                       -> refuse moving
+  call, close, reset, dwelt  -> stay
+
+down:
+  reached                    -> arriving
+  alarm                      -> stopped
+  open                       -> refuse moving
+  call, close, reset, dwelt  -> stay
+
+arriving:
+  dwelt, open                  -> doors-open
+  alarm                        -> stopped
+  call, close, reset, reached  -> stay
+
+doors-open:  after dwell-seconds fires dwelt
+  close                 when doors-blocked        -> refuse blocked
+                        elif wanted-above         -> up
+                        elif wanted-below         -> down
+                        else                      -> idle
+  dwelt                 when doors-blocked        -> stay
+                        elif wanted-above         -> up
+                        elif wanted-below         -> down
+                        else                      -> idle
+  open                  when not has-hold-button  -> refuse no-hold-button
+                        else                      -> held
+  alarm                                           -> stopped
+  call, reset, reached                            -> stay
+
+held:
+  close                              -> doors-open
+  alarm                              -> stopped
+  open, call, reset, reached, dwelt  -> stay
+
+stopped:
+  reset                  -> doors-open
+  call, open, close      -> refuse stopped-fast
+  alarm, reached, dwelt  -> stay

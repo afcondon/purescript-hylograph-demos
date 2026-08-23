@@ -1,0 +1,82 @@
+machine  washing-machine
+title    "Washing machine"
+format   1
+initial  idle
+
+STATES           LABEL
+  idle           Idle
+  locking        Locking
+  prewashing     Prewash
+  filling        Filling
+  washing        Washing
+  draining       Draining
+  rinse-filling  Rinse fill
+  rinsing        Rinsing
+  spinning       Spinning
+  unlocking      Unlocking
+  done           Done
+  paused         Paused
+
+EVENTS       SOURCE   LABEL
+  start      user
+  pause      user
+  resume     user
+  cancel     user
+  open       user     open door
+  step-done  runtime  step complete
+
+CONFIG         DEFAULT  LABEL
+  has-prewash  false    Prewash in this programme
+
+FACTS              MEANING
+  door-shut        The door is shut
+  more-rinses      The controller wants another rinse
+  drum-wet         There is water in the drum
+  paused-in-fill   Paused while filling
+  paused-in-rinse  Paused while rinsing
+
+REFUSALS       MEANING
+  door-ajar    the door is not shut
+  door-locked  the door is locked while the drum is running
+  still-wet    the drum must drain before the door opens
+  not-running  nothing is running
+
+GRID   rows are states, columns are events
+                   start    pause         resume        cancel     open          step-done
+  > idle           [1]      !not-running  !not-running  .          .             .
+    locking        .        paused        .             unlocking  !door-locked  [2]
+    prewashing     .        paused        .             draining   !door-locked  draining
+    filling        .        paused        .             draining   !door-locked  washing
+    washing        .        paused        .             draining   !door-locked  draining
+    draining       .        .             .             .          !door-locked  [3]
+    rinse-filling  .        paused        .             draining   !door-locked  rinsing
+    rinsing        .        paused        .             draining   !door-locked  draining
+    spinning       .        paused        .             unlocking  !door-locked  unlocking
+    unlocking      .        .             .             .          !door-locked  [4]
+    done *         locking  !not-running  !not-running  .          idle          .
+    paused         .        .             [5]           draining   !door-locked  .
+
+KEY
+  >     the initial state
+  *     a final state
+  .     stay — the event is declared here and does nothing
+  !tag  refuse with that tag — see REFUSALS
+  [n]   guarded, or declared twice — see CASES
+
+CASES
+  [1]  idle on start
+         when not door-shut    refuse door-ajar
+         else                  -> locking
+  [2]  locking on step-done
+         when has-prewash      -> prewashing
+         else                  -> filling
+  [3]  draining on step-done
+         when more-rinses      -> rinse-filling
+         else                  -> spinning
+  [4]  unlocking on step-done
+         when drum-wet         refuse still-wet
+         else                  -> done
+  [5]  paused on resume
+         when paused-in-rinse  -> rinsing
+         elif paused-in-fill   -> filling
+         else                  -> washing

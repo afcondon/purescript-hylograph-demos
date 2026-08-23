@@ -1,0 +1,60 @@
+machine  car-radio
+title    "Car radio"
+format   1
+initial  off
+
+STATES       LABEL
+  off        Off
+  radio      Radio
+  seeking    Seeking
+  cd         CD
+  bluetooth  Bluetooth
+
+EVENTS    SOURCE   LABEL
+  power   user
+  source  user
+  seek    user
+  cancel  user
+  eject   user
+  giveup  runtime  no station found
+
+CONFIG          DEFAULT  LABEL
+  has-cd-slot   true     This trim has a CD slot
+  seek-seconds  8        Seek gives up after (s)
+
+FACTS               MEANING
+  disc-loaded       A disc is in the slot
+  bluetooth-paired  A phone is paired
+
+REFUSALS      MEANING
+  no-disc     there is no disc in the slot
+  no-phone    no phone is paired
+  not-fitted  this car has no CD slot
+
+GRID   rows are states, columns are events
+               power  source  seek     cancel  eject     giveup
+  > off        radio  .       .        .       .         .
+    radio      off    [1]     seeking  .       !no-disc  .
+    seeking    off    .       .        radio   !no-disc  @radio
+    cd         off    [2]     .        .       radio     .
+    bluetooth  off    radio   .        .       !no-disc  .
+
+KEY
+  >     the initial state
+  .     stay — the event is declared here and does nothing
+  !tag  refuse with that tag — see REFUSALS
+  [n]   guarded, or declared twice — see CASES
+  @     also fires by itself — see DEADLINES
+
+CASES
+  [1]  radio on source
+         when has-cd-slot and disc-loaded  -> cd
+         elif not has-cd-slot              refuse not-fitted
+         elif not disc-loaded              refuse no-disc
+         else                              stay
+  [2]  cd on source
+         when bluetooth-paired             -> bluetooth
+         else                              refuse no-phone
+
+DEADLINES
+  seeking  after seek-seconds  fires giveup

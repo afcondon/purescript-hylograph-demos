@@ -1,0 +1,102 @@
+# This is the CENTRAL HEATING circuit only, and that restriction is the
+# finding. A real boiler serves two circuits — heating and hot water — which
+# run independently: the water can be reheating while the radiators are
+# satisfied, and either can be boosted without the other. They are not two
+# modes of one machine, they are two machines sharing a boiler.
+#
+# The format cannot say that. Its options are both bad. Model the product —
+# off, ch-only, hw-only, both — and six honest states become twenty-four,
+# then multiply again if a third zone is ever added. Or write two artifacts,
+# which is correct, and then discover the format has no way to state that two
+# machines run together, share facts, and contend for one boiler.
+#
+# This is the AND-state, and it was predicted: the earlier design notes call
+# concurrent machines alongside a mode machine exactly that, and answer it
+# with 'one machine, several instances sharing an environment'. That answer
+# is still right and is still not implemented — `worldFrom` makes one world
+# for one machine, and nothing composes two.
+#
+# So the honest artifact is one circuit, and the missing feature has a name.
+
+machine  heating  "Heating controller"
+format   1
+initial  off
+
+states
+  off        "Off"
+  frost      "Frost watch"
+  satisfied  "Up to temperature"
+  heating    "Heating"
+  boosting   "Boost"
+  fault      "Fault"
+
+events
+  mode        user
+  boost       user
+  cancel      user     "cancel boost"
+  reset       user
+  calls       runtime  "thermostat calls"
+  satisfies   runtime  "thermostat satisfied"
+  boost-over  runtime  "boost elapsed"
+  faults      runtime  "boiler fault"
+
+config
+  has-frost-watch  = true  "Frost protection fitted"
+  boost-minutes    = 60    "Boost lasts (minutes)"
+
+facts
+  scheduled-on  "The timer says it should be on"
+  below-frost   "It is cold enough to worry about pipes"
+
+refusals
+  in-fault      "the boiler has locked out; reset it first"
+  no-frost      "this controller has no frost protection"
+  not-boosting  "no boost is running"
+
+off:
+  mode                          when scheduled-on                     -> heating
+                                else                                  -> satisfied
+  calls                         when has-frost-watch and below-frost  -> frost
+                                else                                  -> stay
+  boost                         when not has-frost-watch              -> refuse no-frost
+                                else                                  -> boosting
+  cancel                                                              -> refuse not-boosting
+  reset, satisfies, boost-over                                        -> stay
+  faults                                                              -> fault
+
+frost:
+  satisfies                 -> off
+  mode                      -> satisfied
+  boost                     -> boosting
+  faults                    -> fault
+  calls, reset, boost-over  -> stay
+  cancel                    -> refuse not-boosting
+
+satisfied:
+  calls                         when scheduled-on  -> heating
+                                else               -> stay
+  mode                                             -> off
+  boost                                            -> boosting
+  faults                                           -> fault
+  satisfies, reset, boost-over                     -> stay
+  cancel                                           -> refuse not-boosting
+
+heating:
+  satisfies                 -> satisfied
+  mode                      -> off
+  boost                     -> boosting
+  faults                    -> fault
+  calls, reset, boost-over  -> stay
+  cancel                    -> refuse not-boosting
+
+boosting:  after boost-minutes fires boost-over
+  boost-over, cancel              when scheduled-on  -> heating
+                                  else               -> satisfied
+  faults                                             -> fault
+  mode                                               -> off
+  boost, calls, satisfies, reset                     -> stay
+
+fault:
+  reset                                 -> off
+  mode, boost, cancel                   -> refuse in-fault
+  calls, satisfies, boost-over, faults  -> stay

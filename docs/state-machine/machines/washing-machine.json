@@ -3,7 +3,7 @@
   "id": "washing-machine",
   "title": "Washing machine",
 
-  "_note": [
+  "notes": [
     "Chosen because its natural authoring is a SEQUENCE — fill, then wash, then",
     "drain, then rinse, then spin — and the format has no word for 'and then'.",
     "Every step of the chain is hand-wired here: each state names its successor",

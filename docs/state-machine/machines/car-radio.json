@@ -3,7 +3,7 @@
   "id": "car-radio",
   "title": "Car radio",
 
-  "_note": [
+  "notes": [
     "The acceptance test for phase 1 of docs/kb/plans/the-same-machine.md:",
     "a machine that exists ONLY as this file. No PureScript was written for it,",
     "no constructor names it, nothing was recompiled to add it. If that ever",
