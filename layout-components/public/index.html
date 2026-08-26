@@ -5,6 +5,22 @@
   <title>Layout Components · hylograph-layout-components</title>
   <style>
     html, body { margin: 0; padding: 0; background: #fafafa; color: #111; }
+
+    /* The library assigns the coordinated-highlight classes and leaves their
+       presentation to the host page — it ships no CSS of its own. Without
+       these rules the Primary / Related / Dimmed classification is applied
+       correctly and is completely invisible. Same shape as the rules in the
+       selection demo. */
+    .highlight-primary { opacity: 1 !important; }
+    .highlight-related { opacity: 1 !important; }
+    .highlight-dimmed  { opacity: 0.12 !important; }
+
+    .sankey-link, .sankey-node { transition: opacity 0.15s, fill-opacity 0.15s; }
+
+    /* Ribbons carry fill-opacity of their own, so the hovered one needs to
+       gain weight rather than just keep the opacity it already had. */
+    .sankey-link.highlight-primary { fill-opacity: 0.85 !important; }
+    .sankey-node.highlight-primary { stroke: #111; stroke-width: 1.5px; }
   </style>
 </head>
 <body>

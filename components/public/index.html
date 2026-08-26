@@ -6,6 +6,17 @@
   <style>
     html, body { margin: 0; padding: 0; background: #fafafa; color: #111; }
     .bar:hover { cursor: default; }
+
+    /* The library assigns the coordinated-highlight classes and leaves their
+       presentation to the host page — it ships no CSS of its own. Without
+       these rules the classification is applied correctly and is completely
+       invisible, which made the coordinated hover this page's prose promises
+       look like it did not work. Same shape as the selection demo's rules. */
+    .highlight-primary { opacity: 1 !important; }
+    .highlight-related { opacity: 1 !important; }
+    .highlight-dimmed  { opacity: 0.15 !important; }
+
+    svg * { transition: opacity 0.15s, fill-opacity 0.15s; }
   </style>
 </head>
 <body>
