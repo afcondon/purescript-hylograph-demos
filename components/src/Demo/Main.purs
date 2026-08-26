@@ -1,7 +1,12 @@
--- | Demo for hylograph-components. Shows two presets:
+-- | Gallery for hylograph-components. Every preset the library ships, each
+-- | with the prose that says what it is doing:
 -- |
--- | 1. BarChart ×2 — coordinated hover across a shared highlightGroup.
--- | 2. ScatterPlot — same Axis + Theme infrastructure, different mark type.
+-- | BarChart (stacking × orientation), LinePlot (area fill, multi-series),
+-- | ScatterPlot (continuous colour, mark shapes, jitter), Annotations,
+-- | Histogram-via-Binning, Heatmap, BoxPlot, Treemap, Legend, PieChart.
+-- |
+-- | The through-line: one Axis, one Theme, one Layout, one Frame under all of
+-- | them. Charts other libraries ship as separate modules are Config fields.
 module Demo.Main where
 
 import Prelude
@@ -358,7 +363,7 @@ rootComponent =
               [ HH.text "hylograph-components" ]
           , HH.p
               [ HP.style "font-size: 13px; color: #666; margin: 0 0 32px;" ]
-              [ HH.text "Two presets. Same Axis, same Theme, same Frame shape — different mark types." ]
+              [ HH.text "Seven chart presets and a Legend, over one shared substrate — the same Axis, Theme, Layout and Frame under all of them. What other libraries ship as separate modules (stacked bar, area chart, donut, histogram, strip plot) are Config fields here." ]
 
           , HH.h2 [ sectionStyle ] [ HH.text "BarChart" ]
           , HH.p [ subStyle ] [ HH.text "Coordinated hover: hover a bar and the matching category in the other chart highlights too (shared highlightGroup)." ]
