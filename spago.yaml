@@ -1,27 +1,22 @@
 workspace:
   packageSet:
-    registry: 77.13.1
+    registry: 80.8.0
   extraPackages:
-    # Newer than package set 77.13.1, which pins 0.5.1. Needed for
-    # `Hylograph.Behavior`; drop this when a set carries >= 0.5.3.
-    hylograph-selection: "0.5.3"
-    hylograph-components:
-      path: ../purescript-hylograph-components
+    # Not in any package set — unpublished. Built from the sibling checkout.
     hylograph-onion:
       path: ../purescript-hylograph-onion
     # Local, because the state-machine demo needs `Transition extra`, which is
-    # newer than the published 0.3.0. Keep publish.version at 0.3.0 there until
-    # we actually publish, or every sibling demo's `<0.4.0` range breaks.
+    # newer than the published 0.3.0 that package set 80.8.0 carries. Keep
+    # publish.version at 0.3.0 there until we actually publish, or every
+    # sibling demo's `<0.4.0` range breaks.
     hylograph-layout:
       path: ../purescript-hylograph-layout
     # Local for the same reason, and it has to be pinned rather than left to the
-    # registry: hylograph-layout above now imports `Data.Graph.InducedTree`, so
-    # one consistent copy of hylograph-graph has to be in the build.
+    # registry: hylograph-layout above imports `Data.Graph.InducedTree`, which
+    # post-dates hylograph-graph's v0.3.0 tag, so one consistent copy of
+    # hylograph-graph has to be in the build.
     hylograph-graph:
       path: ../purescript-hylograph-graph
-    # Kmett's machines, ported. Not in the registry.
-    machines:
-      path: ../../purescript-ports/purescript-machines
     # Glassbox is being broken out into its own library; both packages resolve
     # to the sibling checkout until it is published.
     glassbox:
