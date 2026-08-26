@@ -5,6 +5,9 @@ workspace:
     # Not in any package set — unpublished. Built from the sibling checkout.
     hylograph-onion:
       path: ../purescript-hylograph-onion
+    # Likewise unpublished: the layout-driven half of the chart library.
+    hylograph-layout-components:
+      path: ../purescript-hylograph-layout-components
     # Local, because the state-machine demo needs `Transition extra`, which is
     # newer than the published 0.3.0 that package set 80.8.0 carries. Keep
     # publish.version at 0.3.0 there until we actually publish, or every

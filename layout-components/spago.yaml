@@ -1,0 +1,16 @@
+package:
+  name: hylograph-demo-layout-components
+  dependencies:
+    - aff
+    - arrays
+    - effect
+    - halogen
+    - hylograph-components
+    - hylograph-layout-components
+    - maybe
+    - prelude
+
+  bundle:
+    module: Demo.LayoutComponents.Main
+    outfile: public/bundle.js
+    platform: browser
