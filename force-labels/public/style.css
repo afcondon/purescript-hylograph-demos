@@ -1,0 +1,48 @@
+/* The house look: paper, ink, hairlines. Colour says which part of the world
+   a nation is in. */
+:root {
+  --paper: #EFF1EE; --plate: #FBFCFA;
+  --ink: #14181A; --ink-2: #4E555A; --ink-3: #838C91;
+  --rule: #C0C7C3; --hairline: #DFE3DF;
+  --sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'IBM Plex Mono', Menlo, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); color: var(--ink); }
+body { font: 400 16px/1.4 var(--sans); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+main { max-width: 1280px; margin: 0 auto; padding: 40px 40px 48px; }
+
+.eyebrow { margin: 0 0 10px; font: 500 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+h1 { margin: 0; font: 600 34px/1.1 var(--sans); letter-spacing: -.012em; }
+.lede { margin: 12px 0 0; max-width: 50em; color: var(--ink-2); }
+
+/* buttons */
+#controls { margin-top: 28px; border-top: 2px solid var(--ink); padding-top: 14px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.buttons { display: flex; gap: 8px; }
+.button { appearance: none; border-radius: 0; cursor: pointer; padding: 7px 14px; border: 1px solid var(--rule);
+  background: var(--plate); color: var(--ink); font: 500 14px var(--sans); }
+.button:hover { border-color: var(--ink); }
+.button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.button.current { background: var(--ink); border-color: var(--ink); color: var(--plate); }
+
+/* the plot */
+#stage { margin-top: 14px; background: var(--plate); border: 1px solid var(--hairline); }
+#stage svg { display: block; width: 100%; height: auto; }
+.axes line { stroke: var(--hairline); stroke-width: 1; }
+.axes .tick { font: 400 10px var(--mono); fill: var(--ink-3); }
+.axes .tick.across { text-anchor: middle; }
+.axes .tick.up { text-anchor: end; dominant-baseline: central; }
+.axes .title { font: 500 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; fill: var(--ink-2); }
+.axes .title.across { text-anchor: end; }
+.leaders line { stroke: var(--ink-3); stroke-width: .6; }
+.dots circle { stroke: var(--plate); stroke-width: .75; }
+/* A label is Menlo at 9.5 px: Labels.Plot computes its width from that. */
+.labels rect { fill: var(--plate); fill-opacity: .82; stroke: none; }
+.labels text { font: 400 9.5px Menlo, monospace; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+
+/* readout */
+.figures { display: grid; grid-template-columns: repeat(9, 1fr); gap: 16px; margin-top: 14px; }
+.figure { border-top: 1px solid var(--ink); padding-top: 8px; display: flex; flex-direction: column; gap: 2px; }
+.figure .name { font: 500 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.figure .value { font: 500 15px var(--mono); white-space: nowrap; }

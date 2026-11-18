@@ -1,4 +1,4 @@
-DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats components layout-components onion state-machine force-attractors force-territories
+DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats components layout-components onion state-machine force-attractors force-territories force-labels force-downhill
 
 .PHONY: all clean site $(DEMOS)
 
@@ -24,13 +24,20 @@ sync-machines:
 # The force kernel is built (wasm-pack, --target web) in the showcases repo;
 # the demo serves a copy, so that public/ is everything a server needs.
 FORCE_KERNEL = ../../purescript-hylograph-showcases/wasm-force-demo/pkg
-force-attractors force-territories: sync-kernel
+force-attractors force-territories force-labels: sync-kernel
 .PHONY: sync-kernel
 sync-kernel:
-	@for demo in force-attractors force-territories; do \
+	@for demo in force-attractors force-territories force-labels; do \
 		mkdir -p $$demo/public/pkg; \
 		cp $(FORCE_KERNEL)/force_kernel.js $(FORCE_KERNEL)/force_kernel_bg.wasm $$demo/public/pkg/; \
 	done
+
+# The dependency graph force-downhill draws is a library's own: which module
+# of hylograph-selection imports which, read from the compiler's output.
+force-downhill: sync-imports
+.PHONY: sync-imports
+sync-imports:
+	node force-downhill/extract-imports.mjs
 
 # Rebuild ONE demo and refresh only its copy under docs/. The `site` target
 # below is the right thing for a release — it wipes docs/ and rebuilds all of

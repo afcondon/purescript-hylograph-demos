@@ -28,3 +28,6 @@ force-attractors/public/bundle.js
 force-attractors/public/pkg/
 force-territories/public/bundle.js
 force-territories/public/pkg/
+force-labels/public/bundle.js
+force-labels/public/pkg/
+force-downhill/public/bundle.js

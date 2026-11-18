@@ -1,0 +1,4464 @@
+{
+"source": "Gapminder nations (income per person, life expectancy, population), as d3's \"The Wealth & Health of Nations\" carries it; four years taken from polyglot/purescript-polyglot-site/site/website/public/assets/data/nations.json",
+"years": [
+1900,
+1950,
+1980,
+2008
+],
+"nations": [
+{
+"name": "Angola",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 528.7,
+"lifeExpectancy": 26.98,
+"population": 3014343
+},
+"1950": {
+"income": 3363.02,
+"lifeExpectancy": 29.22,
+"population": 4117617
+},
+"1980": {
+"income": 3074.75,
+"lifeExpectancy": 40.55,
+"population": 6741465
+},
+"2008": {
+"income": 5228.74,
+"lifeExpectancy": 47.06,
+"population": 12707546
+}
+}
+},
+{
+"name": "Benin",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 813.34,
+"lifeExpectancy": 31.0,
+"population": 1274160
+},
+"1950": {
+"income": 1104.47,
+"lifeExpectancy": 36.53,
+"population": 1672661
+},
+"1980": {
+"income": 1154.23,
+"lifeExpectancy": 50.54,
+"population": 3444361
+},
+"2008": {
+"income": 1459.07,
+"lifeExpectancy": 61.47,
+"population": 8294941
+}
+}
+},
+{
+"name": "Botswana",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 598.36,
+"lifeExpectancy": 33.6,
+"population": 121000
+},
+"1950": {
+"income": 825.25,
+"lifeExpectancy": 46.82,
+"population": 430413
+},
+"1980": {
+"income": 4178.48,
+"lifeExpectancy": 60.46,
+"population": 900476
+},
+"2008": {
+"income": 13240.06,
+"lifeExpectancy": 54.4,
+"population": 1638393
+}
+}
+},
+{
+"name": "Burkina Faso",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 491.41,
+"lifeExpectancy": 29.2,
+"population": 3333569
+},
+"1950": {
+"income": 515.71,
+"lifeExpectancy": 32.89,
+"population": 4376162
+},
+"1980": {
+"income": 794.76,
+"lifeExpectancy": 44.95,
+"population": 6315312
+},
+"2008": {
+"income": 1223.52,
+"lifeExpectancy": 53.06,
+"population": 14761339
+}
+}
+},
+{
+"name": "Burundi",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 366.93,
+"lifeExpectancy": 31.5,
+"population": 1799666
+},
+"1950": {
+"income": 322.23,
+"lifeExpectancy": 38.42,
+"population": 2362522
+},
+"1980": {
+"income": 539.85,
+"lifeExpectancy": 46.76,
+"population": 4299555
+},
+"2008": {
+"income": 450.54,
+"lifeExpectancy": 50.51,
+"population": 8691005
+}
+}
+},
+{
+"name": "Cameroon",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 760.08,
+"lifeExpectancy": 28.75,
+"population": 2379008
+},
+"1950": {
+"income": 1117.97,
+"lifeExpectancy": 37.85,
+"population": 4887591
+},
+"1980": {
+"income": 1989.19,
+"lifeExpectancy": 51.08,
+"population": 8746201
+},
+"2008": {
+"income": 2013.83,
+"lifeExpectancy": 51.1,
+"population": 18054929
+}
+}
+},
+{
+"name": "Cape Verde",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 472.27,
+"lifeExpectancy": 33.8,
+"population": 111523
+},
+"1950": {
+"income": 579.93,
+"lifeExpectancy": 47.32,
+"population": 146403
+},
+"1980": {
+"income": 1084.09,
+"lifeExpectancy": 61.47,
+"population": 296042
+},
+"2008": {
+"income": 3384.72,
+"lifeExpectancy": 71.4,
+"population": 426113
+}
+}
+},
+{
+"name": "Chad",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 588.56,
+"lifeExpectancy": 30.9,
+"population": 1432000
+},
+"1950": {
+"income": 1127.84,
+"lifeExpectancy": 37.39,
+"population": 2607769
+},
+"1980": {
+"income": 804.73,
+"lifeExpectancy": 48.26,
+"population": 4542002
+},
+"2008": {
+"income": 1622.41,
+"lifeExpectancy": 48.76,
+"population": 10541156
+}
+}
+},
+{
+"name": "Comoros",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 949.25,
+"lifeExpectancy": 32.1,
+"population": 112784
+},
+"1950": {
+"income": 1052.1,
+"lifeExpectancy": 40.1,
+"population": 148057
+},
+"1980": {
+"income": 1208.28,
+"lifeExpectancy": 51.96,
+"population": 333513
+},
+"2008": {
+"income": 1026.03,
+"lifeExpectancy": 65.36,
+"population": 731281
+}
+}
+},
+{
+"name": "Congo, Dem. Rep.",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 578.78,
+"lifeExpectancy": 31.6,
+"population": 10336092
+},
+"1950": {
+"income": 665.38,
+"lifeExpectancy": 38.46,
+"population": 13568762
+},
+"1980": {
+"income": 698.67,
+"lifeExpectancy": 46.49,
+"population": 29010717
+},
+"2008": {
+"income": 359.38,
+"lifeExpectancy": 47.68,
+"population": 66604314
+}
+}
+},
+{
+"name": "Congo, Rep.",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 569.01,
+"lifeExpectancy": 32.7,
+"population": 629445
+},
+"1950": {
+"income": 2045.71,
+"lifeExpectancy": 41.21,
+"population": 826308
+},
+"1980": {
+"income": 3968.45,
+"lifeExpectancy": 59.6,
+"population": 1674005
+},
+"2008": {
+"income": 3668.41,
+"lifeExpectancy": 53.59,
+"population": 3903318
+}
+}
+},
+{
+"name": "Cote d'Ivoire",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 806.69,
+"lifeExpectancy": 31.9,
+"population": 2178843
+},
+"1950": {
+"income": 1344.43,
+"lifeExpectancy": 36.64,
+"population": 2860288
+},
+"1980": {
+"income": 2704.73,
+"lifeExpectancy": 55.66,
+"population": 8375546
+},
+"2008": {
+"income": 1509.24,
+"lifeExpectancy": 57.34,
+"population": 18373060
+}
+}
+},
+{
+"name": "Equatorial Guinea",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 364.0,
+"lifeExpectancy": 29.8,
+"population": 105675
+},
+"1950": {
+"income": 354.77,
+"lifeExpectancy": 33.88,
+"population": 211204
+},
+"1980": {
+"income": 970.46,
+"lifeExpectancy": 42.81,
+"population": 256009
+},
+"2008": {
+"income": 14988.85,
+"lifeExpectancy": 50.25,
+"population": 562339
+}
+}
+},
+{
+"name": "Eritrea",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 409.48,
+"lifeExpectancy": 30.2,
+"population": 941933
+},
+"1950": {
+"income": 321.62,
+"lifeExpectancy": 35.08,
+"population": 1402510
+},
+"1980": {
+"income": 534.43,
+"lifeExpectancy": 44.05,
+"population": 2568741
+},
+"2008": {
+"income": 545.79,
+"lifeExpectancy": 59.62,
+"population": 5028475
+}
+}
+},
+{
+"name": "Ethiopia",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 443.67,
+"lifeExpectancy": 29.7,
+"population": 13549342
+},
+"1950": {
+"income": 354.09,
+"lifeExpectancy": 33.3,
+"population": 20174562
+},
+"1980": {
+"income": 588.38,
+"lifeExpectancy": 43.9,
+"population": 36036457
+},
+"2008": {
+"income": 757.88,
+"lifeExpectancy": 55.22,
+"population": 78254090
+}
+}
+},
+{
+"name": "Gabon",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 554.56,
+"lifeExpectancy": 30.6,
+"population": 316713
+},
+"1950": {
+"income": 4041.34,
+"lifeExpectancy": 35.97,
+"population": 415767
+},
+"1980": {
+"income": 15696.83,
+"lifeExpectancy": 54.43,
+"population": 713502
+},
+"2008": {
+"income": 13075.4,
+"lifeExpectancy": 60.46,
+"population": 1484149
+}
+}
+},
+{
+"name": "Ghana",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 741.99,
+"lifeExpectancy": 28.0,
+"population": 1902721
+},
+"1950": {
+"income": 943.1,
+"lifeExpectancy": 42.81,
+"population": 5297454
+},
+"1980": {
+"income": 972.84,
+"lifeExpectancy": 53.03,
+"population": 11015630
+},
+"2008": {
+"income": 1370.14,
+"lifeExpectancy": 56.62,
+"population": 23336661
+}
+}
+},
+{
+"name": "Guinea",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 438.3,
+"lifeExpectancy": 29.5,
+"population": 1969528
+},
+"1950": {
+"income": 481,
+"lifeExpectancy": 34.62,
+"population": 2585509
+},
+"1980": {
+"income": 873.69,
+"lifeExpectancy": 43.54,
+"population": 4508009
+},
+"2008": {
+"income": 940.88,
+"lifeExpectancy": 57.84,
+"population": 10211437
+}
+}
+},
+{
+"name": "Guinea-Bissau",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 363.81,
+"lifeExpectancy": 29.3,
+"population": 436691
+},
+"1950": {
+"income": 375.95,
+"lifeExpectancy": 31.97,
+"population": 573268
+},
+"1980": {
+"income": 700.4,
+"lifeExpectancy": 40.17,
+"population": 789053
+},
+"2008": {
+"income": 564.6,
+"lifeExpectancy": 47.84,
+"population": 1502442
+}
+}
+},
+{
+"name": "Kenya",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 753.43,
+"lifeExpectancy": 25.5,
+"population": 2574000
+},
+"1950": {
+"income": 832.27,
+"lifeExpectancy": 41.57,
+"population": 6121184
+},
+"1980": {
+"income": 1344.17,
+"lifeExpectancy": 57.69,
+"population": 16331401
+},
+"2008": {
+"income": 1488.42,
+"lifeExpectancy": 54.3,
+"population": 36529155
+}
+}
+},
+{
+"name": "Lesotho",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 312.37,
+"lifeExpectancy": 32.8,
+"population": 553174
+},
+"1950": {
+"income": 282.95,
+"lifeExpectancy": 41.01,
+"population": 726182
+},
+"1980": {
+"income": 800.51,
+"lifeExpectancy": 53.79,
+"population": 1344218
+},
+"2008": {
+"income": 1527.28,
+"lifeExpectancy": 45.22,
+"population": 2002749
+}
+}
+},
+{
+"name": "Liberia",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 550.04,
+"lifeExpectancy": 31.1,
+"population": 627600
+},
+"1950": {
+"income": 553.44,
+"lifeExpectancy": 35.89,
+"population": 823885
+},
+"1980": {
+"income": 609.85,
+"lifeExpectancy": 47.59,
+"population": 1848979
+},
+"2008": {
+"income": 476.2,
+"lifeExpectancy": 58.31,
+"population": 3332483
+}
+}
+},
+{
+"name": "Madagascar",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 637.7,
+"lifeExpectancy": 30.5,
+"population": 3490654
+},
+"1950": {
+"income": 1383.73,
+"lifeExpectancy": 35.75,
+"population": 4620437
+},
+"1980": {
+"income": 1535.57,
+"lifeExpectancy": 48.13,
+"population": 8676821
+},
+"2008": {
+"income": 1088.44,
+"lifeExpectancy": 60.36,
+"population": 19757525
+}
+}
+},
+{
+"name": "Malawi",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 355.35,
+"lifeExpectancy": 30.3,
+"population": 737000
+},
+"1950": {
+"income": 352.47,
+"lifeExpectancy": 35.96,
+"population": 2816600
+},
+"1980": {
+"income": 700.07,
+"lifeExpectancy": 44.81,
+"population": 6129035
+},
+"2008": {
+"income": 818.38,
+"lifeExpectancy": 53.12,
+"population": 13647273
+}
+}
+},
+{
+"name": "Mali",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 433.88,
+"lifeExpectancy": 29.6,
+"population": 2809094
+},
+"1950": {
+"income": 437.95,
+"lifeExpectancy": 35.3,
+"population": 3687654
+},
+"1980": {
+"income": 700.86,
+"lifeExpectancy": 40.03,
+"population": 6774767
+},
+"2008": {
+"income": 1112.71,
+"lifeExpectancy": 48.46,
+"population": 12360306
+}
+}
+},
+{
+"name": "Mauritania",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 549.92,
+"lifeExpectancy": 32.0,
+"population": 766018
+},
+"1950": {
+"income": 702.93,
+"lifeExpectancy": 41.32,
+"population": 1005595
+},
+"1980": {
+"income": 1524.95,
+"lifeExpectancy": 52.68,
+"population": 1549589
+},
+"2008": {
+"income": 1838.06,
+"lifeExpectancy": 56.75,
+"population": 3364940
+}
+}
+},
+{
+"name": "Mauritius",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 1174.53,
+"lifeExpectancy": 31.22,
+"population": 371000
+},
+"1950": {
+"income": 1937.84,
+"lifeExpectancy": 46.86,
+"population": 481270
+},
+"1980": {
+"income": 3398.74,
+"lifeExpectancy": 65.82,
+"population": 963701
+},
+"2008": {
+"income": 11330.3,
+"lifeExpectancy": 72.1,
+"population": 1260781
+}
+}
+},
+{
+"name": "Mayotte",
+"region": "Sub-Saharan Africa",
+"readings": {}
+},
+{
+"name": "Mozambique",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 413.18,
+"lifeExpectancy": 30.28,
+"population": 4652580
+},
+"1950": {
+"income": 450.75,
+"lifeExpectancy": 30.28,
+"population": 6250443
+},
+"1980": {
+"income": 485.37,
+"lifeExpectancy": 42.8,
+"population": 12102619
+},
+"2008": {
+"income": 852.43,
+"lifeExpectancy": 47.94,
+"population": 20203186
+}
+}
+},
+{
+"name": "Namibia",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 1238.48,
+"lifeExpectancy": 32.4,
+"population": 229000
+},
+"1950": {
+"income": 2388.81,
+"lifeExpectancy": 40.25,
+"population": 463729
+},
+"1980": {
+"income": 4167.1,
+"lifeExpectancy": 57.88,
+"population": 1058021
+},
+"2008": {
+"income": 5029.66,
+"lifeExpectancy": 61.15,
+"population": 2063927
+}
+}
+},
+{
+"name": "Niger",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 545.34,
+"lifeExpectancy": 30.8,
+"population": 2491761
+},
+"1950": {
+"income": 732.21,
+"lifeExpectancy": 37.1,
+"population": 3271073
+},
+"1980": {
+"income": 957.49,
+"lifeExpectancy": 39.42,
+"population": 6118518
+},
+"2008": {
+"income": 669.12,
+"lifeExpectancy": 51.4,
+"population": 13272679
+}
+}
+},
+{
+"name": "Nigeria",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 846.63,
+"lifeExpectancy": 30.4,
+"population": 17273247
+},
+"1950": {
+"income": 974.02,
+"lifeExpectancy": 35.59,
+"population": 31796939
+},
+"1980": {
+"income": 1843.34,
+"lifeExpectancy": 44.76,
+"population": 68550274
+},
+"2008": {
+"income": 2100.11,
+"lifeExpectancy": 47.93,
+"population": 138283240
+}
+}
+},
+{
+"name": "Reunion",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1950": {
+"income": 2637.69,
+"lifeExpectancy": 51.83,
+"population": 243700
+},
+"1980": {
+"income": 4887.45,
+"lifeExpectancy": 68.51,
+"population": 507015
+}
+}
+},
+{
+"name": "Rwanda",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 429.15,
+"lifeExpectancy": 31.8,
+"population": 1858255
+},
+"1950": {
+"income": 470.31,
+"lifeExpectancy": 39.41,
+"population": 2439435
+},
+"1980": {
+"income": 818.71,
+"lifeExpectancy": 45.88,
+"population": 5138689
+},
+"2008": {
+"income": 975.75,
+"lifeExpectancy": 50.23,
+"population": 9077425
+}
+}
+},
+{
+"name": "Sao Tome and Principe",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1950": {
+"income": 883.72,
+"lifeExpectancy": 45.62,
+"population": 59730
+},
+"1980": {
+"income": 2164.3,
+"lifeExpectancy": 59.51,
+"population": 94071
+},
+"2008": {
+"income": 1664.3,
+"lifeExpectancy": 65.63,
+"population": 205901
+}
+}
+},
+{
+"name": "Senegal",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 618.0,
+"lifeExpectancy": 25.2,
+"population": 2021425
+},
+"1950": {
+"income": 1401,
+"lifeExpectancy": 37.87,
+"population": 2653637
+},
+"1980": {
+"income": 1414.11,
+"lifeExpectancy": 47.39,
+"population": 5776012
+},
+"2008": {
+"income": 1714.35,
+"lifeExpectancy": 55.62,
+"population": 12548243
+}
+}
+},
+{
+"name": "Sierra Leone",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 746.77,
+"lifeExpectancy": 25.1,
+"population": 1589828
+},
+"1950": {
+"income": 828.88,
+"lifeExpectancy": 31.71,
+"population": 2087055
+},
+"1980": {
+"income": 1412.69,
+"lifeExpectancy": 41.76,
+"population": 3327118
+},
+"2008": {
+"income": 881.48,
+"lifeExpectancy": 47.63,
+"population": 6286617
+}
+}
+},
+{
+"name": "Somalia",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 732.72,
+"lifeExpectancy": 29.4,
+"population": 1884881
+},
+"1950": {
+"income": 1079.21,
+"lifeExpectancy": 32.18,
+"population": 2437932
+},
+"1980": {
+"income": 1059.16,
+"lifeExpectancy": 42.9,
+"population": 5790705
+},
+"2008": {
+"income": 943.04,
+"lifeExpectancy": 49.86,
+"population": 9379907
+}
+}
+},
+{
+"name": "South Africa",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 2540.06,
+"lifeExpectancy": 33.5,
+"population": 5062814
+},
+"1950": {
+"income": 4575.12,
+"lifeExpectancy": 43.55,
+"population": 13595840
+},
+"1980": {
+"income": 8577.42,
+"lifeExpectancy": 56.79,
+"population": 29251588
+},
+"2008": {
+"income": 9428.79,
+"lifeExpectancy": 51.56,
+"population": 43786115
+}
+}
+},
+{
+"name": "Sudan",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 712.02,
+"lifeExpectancy": 31.4,
+"population": 6937631
+},
+"1950": {
+"income": 1551.84,
+"lifeExpectancy": 41.06,
+"population": 8051151
+},
+"1980": {
+"income": 1760.99,
+"lifeExpectancy": 49.49,
+"population": 19063992
+},
+"2008": {
+"income": 2727.56,
+"lifeExpectancy": 58.16,
+"population": 43354411
+}
+}
+},
+{
+"name": "Swaziland",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 608.17,
+"lifeExpectancy": 32.3,
+"population": 86000
+},
+"1950": {
+"income": 1102.4,
+"lifeExpectancy": 40.5,
+"population": 277384
+},
+"1980": {
+"income": 3664.77,
+"lifeExpectancy": 54.33,
+"population": 611447
+},
+"2008": {
+"income": 4726.06,
+"lifeExpectancy": 45.8,
+"population": 1128814
+}
+}
+},
+{
+"name": "Tanzania",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 578.2,
+"lifeExpectancy": 32.2,
+"population": 4045165
+},
+"1950": {
+"income": 654.21,
+"lifeExpectancy": 40.39,
+"population": 7934924
+},
+"1980": {
+"income": 925.32,
+"lifeExpectancy": 50.21,
+"population": 18715307
+},
+"2008": {
+"income": 1180.24,
+"lifeExpectancy": 55.7,
+"population": 38858276
+}
+}
+},
+{
+"name": "Togo",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 786.71,
+"lifeExpectancy": 31.3,
+"population": 892700
+},
+"1950": {
+"income": 832.05,
+"lifeExpectancy": 40.13,
+"population": 1171897
+},
+"1980": {
+"income": 1589.51,
+"lifeExpectancy": 54.82,
+"population": 2481375
+},
+"2008": {
+"income": 888.41,
+"lifeExpectancy": 62.57,
+"population": 5858673
+}
+}
+},
+{
+"name": "Uganda",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 677.27,
+"lifeExpectancy": 25.3,
+"population": 2753356
+},
+"1950": {
+"income": 759.88,
+"lifeExpectancy": 39,
+"population": 5521758
+},
+"1980": {
+"income": 638.77,
+"lifeExpectancy": 50.04,
+"population": 12296592
+},
+"2008": {
+"income": 1163.64,
+"lifeExpectancy": 52.73,
+"population": 30214531
+}
+}
+},
+{
+"name": "Zambia",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 535.35,
+"lifeExpectancy": 32.6,
+"population": 747000
+},
+"1950": {
+"income": 1060.84,
+"lifeExpectancy": 41.22,
+"population": 2553000
+},
+"1980": {
+"income": 1461.6,
+"lifeExpectancy": 51.93,
+"population": 5699777
+},
+"2008": {
+"income": 1382.47,
+"lifeExpectancy": 45.47,
+"population": 11993403
+}
+}
+},
+{
+"name": "Zimbabwe",
+"region": "Sub-Saharan Africa",
+"readings": {
+"1900": {
+"income": 385.57,
+"lifeExpectancy": 33.7,
+"population": 2173406
+},
+"1950": {
+"income": 393.7,
+"lifeExpectancy": 47.65,
+"population": 2853151
+},
+"1980": {
+"income": 727.55,
+"lifeExpectancy": 58.96,
+"population": 7169968
+},
+"2008": {
+"income": 426.62,
+"lifeExpectancy": 44.49,
+"population": 12382920
+}
+}
+},
+{
+"name": "Afghanistan",
+"region": "South Asia",
+"readings": {
+"1900": {
+"income": 615.13,
+"lifeExpectancy": 28.21,
+"population": 5269558
+},
+"1950": {
+"income": 757.32,
+"lifeExpectancy": 28.21,
+"population": 8150368
+},
+"1980": {
+"income": 810.43,
+"lifeExpectancy": 39.25,
+"population": 15112149
+},
+"2008": {
+"income": 1019.36,
+"lifeExpectancy": 43.94,
+"population": 32738376
+}
+}
+},
+{
+"name": "Bangladesh",
+"region": "South Asia",
+"readings": {
+"1900": {
+"income": 681,
+"lifeExpectancy": 21.8,
+"population": 29650070
+},
+"1950": {
+"income": 673,
+"lifeExpectancy": 36.75,
+"population": 45645964
+},
+"1980": {
+"income": 684,
+"lifeExpectancy": 47.67,
+"population": 88076996
+},
+"2008": {
+"income": 1441,
+"lifeExpectancy": 66.14,
+"population": 153546901
+}
+}
+},
+{
+"name": "Bhutan",
+"region": "South Asia",
+"readings": {
+"1950": {
+"income": 683.5,
+"lifeExpectancy": 36.04,
+"population": 734000
+},
+"1980": {
+"income": 874.57,
+"lifeExpectancy": 46.29,
+"population": 1281000
+},
+"2008": {
+"income": 4670.97,
+"lifeExpectancy": 66.05,
+"population": 2376680
+}
+}
+},
+{
+"name": "India",
+"region": "South Asia",
+"readings": {
+"1900": {
+"income": 604,
+"lifeExpectancy": 23.57,
+"population": 239898535
+},
+"1950": {
+"income": 580,
+"lifeExpectancy": 36.8,
+"population": 359000000
+},
+"1980": {
+"income": 844,
+"lifeExpectancy": 55.11,
+"population": 679000000
+},
+"2008": {
+"income": 2622,
+"lifeExpectancy": 63.68,
+"population": 1125368288
+}
+}
+},
+{
+"name": "Maldives",
+"region": "South Asia",
+"readings": {
+"1950": {
+"income": 457.04,
+"lifeExpectancy": 37.63,
+"population": 79293
+},
+"1980": {
+"income": 963.7,
+"lifeExpectancy": 55.91,
+"population": 153957
+},
+"2008": {
+"income": 5240.39,
+"lifeExpectancy": 71.52,
+"population": 379174
+}
+}
+},
+{
+"name": "Nepal",
+"region": "South Asia",
+"readings": {
+"1900": {
+"income": 523.64,
+"lifeExpectancy": 32.8,
+"population": 5283000
+},
+"1950": {
+"income": 523.98,
+"lifeExpectancy": 35.6,
+"population": 8989915
+},
+"1980": {
+"income": 672.3,
+"lifeExpectancy": 48.11,
+"population": 15016477
+},
+"2008": {
+"income": 1181.59,
+"lifeExpectancy": 66.74,
+"population": 29519114
+}
+}
+},
+{
+"name": "Pakistan",
+"region": "South Asia",
+"readings": {
+"1900": {
+"income": 744,
+"lifeExpectancy": 25.9,
+"population": 18823488
+},
+"1950": {
+"income": 739,
+"lifeExpectancy": 45.63,
+"population": 39448232
+},
+"1980": {
+"income": 1334,
+"lifeExpectancy": 57.71,
+"population": 85219117
+},
+"2008": {
+"income": 2598,
+"lifeExpectancy": 66.52,
+"population": 172730891
+}
+}
+},
+{
+"name": "Sri Lanka",
+"region": "South Asia",
+"readings": {
+"1900": {
+"income": 1064.45,
+"lifeExpectancy": 32.6,
+"population": 3912000
+},
+"1950": {
+"income": 1033.5,
+"lifeExpectancy": 51.36,
+"population": 7533097
+},
+"1980": {
+"income": 1525.22,
+"lifeExpectancy": 67.8,
+"population": 14900181
+},
+"2008": {
+"income": 4142.53,
+"lifeExpectancy": 74.1,
+"population": 20532150
+}
+}
+},
+{
+"name": "Algeria",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 1829.5,
+"lifeExpectancy": 28.82,
+"population": 4976698
+},
+"1950": {
+"income": 2429.21,
+"lifeExpectancy": 42.02,
+"population": 8892718
+},
+"1980": {
+"income": 5610.2,
+"lifeExpectancy": 59.63,
+"population": 18806061
+},
+"2008": {
+"income": 6175.1,
+"lifeExpectancy": 72.44,
+"population": 33739635
+}
+}
+},
+{
+"name": "Bahrain",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 1313.32,
+"lifeExpectancy": 30.3,
+"population": 76619
+},
+"1950": {
+"income": 9158.27,
+"lifeExpectancy": 49.84,
+"population": 114840
+},
+"1980": {
+"income": 19096.98,
+"lifeExpectancy": 67.35,
+"population": 347568
+},
+"2008": {
+"income": 31391.38,
+"lifeExpectancy": 75.73,
+"population": 718306
+}
+}
+},
+{
+"name": "Djibouti",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 559.25,
+"lifeExpectancy": 29.9,
+"population": 45733
+},
+"1950": {
+"income": 2576.1,
+"lifeExpectancy": 33.76,
+"population": 60036
+},
+"1980": {
+"income": 2853.84,
+"lifeExpectancy": 47.58,
+"population": 279149
+},
+"2008": {
+"income": 2125.61,
+"lifeExpectancy": 55.42,
+"population": 506221
+}
+}
+},
+{
+"name": "Iraq",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 1679.95,
+"lifeExpectancy": 31.2,
+"population": 2300698
+},
+"1950": {
+"income": 3341.89,
+"lifeExpectancy": 40.04,
+"population": 5163443
+},
+"1980": {
+"income": 18465.74,
+"lifeExpectancy": 61,
+"population": 13232839
+},
+"2008": {
+"income": 3467.12,
+"lifeExpectancy": 67.86,
+"population": 28221181
+}
+}
+},
+{
+"name": "Israel",
+"region": "Middle East & North Africa",
+"readings": {
+"1950": {
+"income": 3800.93,
+"lifeExpectancy": 64.17,
+"population": 1286131
+},
+"1980": {
+"income": 14819.26,
+"lifeExpectancy": 73.77,
+"population": 3737473
+},
+"2008": {
+"income": 25839.31,
+"lifeExpectancy": 80.84,
+"population": 6500389
+}
+}
+},
+{
+"name": "Jordan",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 819.89,
+"lifeExpectancy": 31.7,
+"population": 323209
+},
+"1950": {
+"income": 1490.67,
+"lifeExpectancy": 42.12,
+"population": 561254
+},
+"1980": {
+"income": 4015.32,
+"lifeExpectancy": 62.63,
+"population": 2162807
+},
+"2008": {
+"income": 5086.65,
+"lifeExpectancy": 72.65,
+"population": 6198677
+}
+}
+},
+{
+"name": "Kuwait",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 1074.53,
+"lifeExpectancy": 26.0,
+"population": 96591
+},
+"1950": {
+"income": 104248.05,
+"lifeExpectancy": 54.5,
+"population": 144774
+},
+"1980": {
+"income": 47907.19,
+"lifeExpectancy": 70.25,
+"population": 1369769
+},
+"2008": {
+"income": 44783.08,
+"lifeExpectancy": 77.66,
+"population": 2596799
+}
+}
+},
+{
+"name": "Lebanon",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 2250.9,
+"lifeExpectancy": 29.7,
+"population": 596698
+},
+"1950": {
+"income": 5318.45,
+"lifeExpectancy": 54.28,
+"population": 1364030
+},
+"1980": {
+"income": 8532.76,
+"lifeExpectancy": 66.52,
+"population": 3085876
+},
+"2008": {
+"income": 11864.38,
+"lifeExpectancy": 72.08,
+"population": 3967467
+}
+}
+},
+{
+"name": "Libya",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 1501.86,
+"lifeExpectancy": 33.0,
+"population": 798495
+},
+"1950": {
+"income": 2084.28,
+"lifeExpectancy": 41.69,
+"population": 961305
+},
+"1980": {
+"income": 23661.27,
+"lifeExpectancy": 59.83,
+"population": 3065365
+},
+"2008": {
+"income": 12079.02,
+"lifeExpectancy": 74.06,
+"population": 6173579
+}
+}
+},
+{
+"name": "Morocco",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 769.9,
+"lifeExpectancy": 33.1,
+"population": 4707395
+},
+"1950": {
+"income": 1683.1,
+"lifeExpectancy": 41.85,
+"population": 9343384
+},
+"1980": {
+"income": 2627.7,
+"lifeExpectancy": 57.68,
+"population": 19487272
+},
+"2008": {
+"income": 3990.75,
+"lifeExpectancy": 71.31,
+"population": 34272968
+}
+}
+},
+{
+"name": "Oman",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 1432.71,
+"lifeExpectancy": 32.3,
+"population": 420721
+},
+"1950": {
+"income": 1681.63,
+"lifeExpectancy": 36.72,
+"population": 488588
+},
+"1980": {
+"income": 10989.43,
+"lifeExpectancy": 60.07,
+"population": 1174857
+},
+"2008": {
+"income": 22789.62,
+"lifeExpectancy": 75.72,
+"population": 3309440
+}
+}
+},
+{
+"name": "Qatar",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 955.14,
+"lifeExpectancy": 30.8,
+"population": 16747
+},
+"1950": {
+"income": 29234.85,
+"lifeExpectancy": 47.03,
+"population": 25101
+},
+"1980": {
+"income": 67344.1,
+"lifeExpectancy": 66.12,
+"population": 230640
+},
+"2008": {
+"income": 75474.32,
+"lifeExpectancy": 75.65,
+"population": 928635
+}
+}
+},
+{
+"name": "Saudi Arabia",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 716.36,
+"lifeExpectancy": 32.1,
+"population": 2573814
+},
+"1950": {
+"income": 5834.36,
+"lifeExpectancy": 38.66,
+"population": 3859801
+},
+"1980": {
+"income": 34568.06,
+"lifeExpectancy": 61.02,
+"population": 9999161
+},
+"2008": {
+"income": 21635.15,
+"lifeExpectancy": 72.88,
+"population": 28161417
+}
+}
+},
+{
+"name": "Tunisia",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 971.8,
+"lifeExpectancy": 28.8,
+"population": 1660186
+},
+"1950": {
+"income": 1341.82,
+"lifeExpectancy": 43.61,
+"population": 3517210
+},
+"1980": {
+"income": 3543.72,
+"lifeExpectancy": 62.05,
+"population": 6443183
+},
+"2008": {
+"income": 7356.75,
+"lifeExpectancy": 73.98,
+"population": 10378140
+}
+}
+},
+{
+"name": "United Arab Emirates",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 1373.01,
+"lifeExpectancy": 30.7,
+"population": 47717
+},
+"1950": {
+"income": 4452.54,
+"lifeExpectancy": 46.99,
+"population": 71520
+},
+"1980": {
+"income": 58179.45,
+"lifeExpectancy": 67.53,
+"population": 1000285
+},
+"2008": {
+"income": 34981.22,
+"lifeExpectancy": 77.45,
+"population": 2682747
+}
+}
+},
+{
+"name": "West Bank and Gaza",
+"region": "Middle East & North Africa",
+"readings": {
+"1950": {
+"income": 1405.45,
+"lifeExpectancy": 42.12,
+"population": 1016540
+},
+"1980": {
+"income": 4062.85,
+"lifeExpectancy": 62.71,
+"population": 1359954
+},
+"2008": {
+"income": 3084.56,
+"lifeExpectancy": 73.54,
+"population": 4149173
+}
+}
+},
+{
+"name": "Yemen, Rep.",
+"region": "Middle East & North Africa",
+"readings": {
+"1900": {
+"income": 730.43,
+"lifeExpectancy": 33.0,
+"population": 3149767
+},
+"1950": {
+"income": 771.3,
+"lifeExpectancy": 31.91,
+"population": 4777089
+},
+"1980": {
+"income": 1938.74,
+"lifeExpectancy": 46.68,
+"population": 9132545
+},
+"2008": {
+"income": 2295.8,
+"lifeExpectancy": 62.93,
+"population": 22993911
+}
+}
+},
+{
+"name": "Argentina",
+"region": "America",
+"readings": {
+"1900": {
+"income": 3419.66,
+"lifeExpectancy": 36.8,
+"population": 4693000
+},
+"1950": {
+"income": 6252.86,
+"lifeExpectancy": 61.61,
+"population": 17150336
+},
+"1980": {
+"income": 10126.5,
+"lifeExpectancy": 69.53,
+"population": 28369799
+},
+"2008": {
+"income": 13515.18,
+"lifeExpectancy": 75.33,
+"population": 40677348
+}
+}
+},
+{
+"name": "Aruba",
+"region": "America",
+"readings": {
+"1950": {
+"income": 3114.59,
+"lifeExpectancy": 58.43,
+"population": 49712
+},
+"1980": {
+"income": 9409.56,
+"lifeExpectancy": 72.3,
+"population": 60266
+},
+"2008": {
+"income": 25351.09,
+"lifeExpectancy": 74.77,
+"population": 72480
+}
+}
+},
+{
+"name": "Barbados",
+"region": "America",
+"readings": {
+"1950": {
+"income": 3245.07,
+"lifeExpectancy": 54.59,
+"population": 210666
+},
+"1980": {
+"income": 13858.9,
+"lifeExpectancy": 72.09,
+"population": 251966
+},
+"2008": {
+"income": 16783.85,
+"lifeExpectancy": 77.28,
+"population": 281968
+}
+}
+},
+{
+"name": "Belize",
+"region": "America",
+"readings": {
+"1950": {
+"income": 1731.13,
+"lifeExpectancy": 56.67,
+"population": 65797
+},
+"1980": {
+"income": 3893.63,
+"lifeExpectancy": 70.69,
+"population": 144416
+},
+"2008": {
+"income": 7297.77,
+"lifeExpectancy": 76.33,
+"population": 301022
+}
+}
+},
+{
+"name": "Bolivia",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1676.11,
+"lifeExpectancy": 33.0,
+"population": 1696000
+},
+"1950": {
+"income": 2530.6,
+"lifeExpectancy": 39.87,
+"population": 2766028
+},
+"1980": {
+"income": 3391.07,
+"lifeExpectancy": 51.96,
+"population": 5441298
+},
+"2008": {
+"income": 3956.4,
+"lifeExpectancy": 65.68,
+"population": 9247816
+}
+}
+},
+{
+"name": "Brazil",
+"region": "America",
+"readings": {
+"1900": {
+"income": 575.07,
+"lifeExpectancy": 31.98,
+"population": 17984000
+},
+"1950": {
+"income": 1979.81,
+"lifeExpectancy": 49.97,
+"population": 53443075
+},
+"1980": {
+"income": 7623.18,
+"lifeExpectancy": 62.46,
+"population": 122958132
+},
+"2008": {
+"income": 9682,
+"lifeExpectancy": 72.44,
+"population": 191908598
+}
+}
+},
+{
+"name": "Canada",
+"region": "America",
+"readings": {
+"1900": {
+"income": 4224.78,
+"lifeExpectancy": 48.28,
+"population": 5457000
+},
+"1950": {
+"income": 10581.27,
+"lifeExpectancy": 68.28,
+"population": 14011422
+},
+"1980": {
+"income": 23473.9,
+"lifeExpectancy": 75.14,
+"population": 24593300
+},
+"2008": {
+"income": 35950.08,
+"lifeExpectancy": 80.74,
+"population": 33679263
+}
+}
+},
+{
+"name": "Chile",
+"region": "America",
+"readings": {
+"1900": {
+"income": 2220.49,
+"lifeExpectancy": 32.0,
+"population": 2958986
+},
+"1950": {
+"income": 3714,
+"lifeExpectancy": 54.34,
+"population": 6090833
+},
+"1980": {
+"income": 5748.92,
+"lifeExpectancy": 69.07,
+"population": 11093718
+},
+"2008": {
+"income": 13474.41,
+"lifeExpectancy": 78.56,
+"population": 16432536
+}
+}
+},
+{
+"name": "Colombia",
+"region": "America",
+"readings": {
+"1900": {
+"income": 636.04,
+"lifeExpectancy": 32.0,
+"population": 3998000
+},
+"1950": {
+"income": 2087.95,
+"lifeExpectancy": 48.37,
+"population": 11591658
+},
+"1980": {
+"income": 4379.58,
+"lifeExpectancy": 65.48,
+"population": 26582811
+},
+"2008": {
+"income": 7168.15,
+"lifeExpectancy": 72.96,
+"population": 44858264
+}
+}
+},
+{
+"name": "Costa Rica",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1748.5,
+"lifeExpectancy": 34.7,
+"population": 297000
+},
+"1950": {
+"income": 2439.82,
+"lifeExpectancy": 56.11,
+"population": 866982
+},
+"1980": {
+"income": 6102.95,
+"lifeExpectancy": 72.56,
+"population": 2299124
+},
+"2008": {
+"income": 9840.79,
+"lifeExpectancy": 78.86,
+"population": 4191948
+}
+}
+},
+{
+"name": "Cuba",
+"region": "America",
+"readings": {
+"1900": {
+"income": 3343.92,
+"lifeExpectancy": 33.11,
+"population": 1658000
+},
+"1950": {
+"income": 5180.44,
+"lifeExpectancy": 58.31,
+"population": 5784797
+},
+"1980": {
+"income": 6695.01,
+"lifeExpectancy": 73.82,
+"population": 9652975
+},
+"2008": {
+"income": 9277.96,
+"lifeExpectancy": 78.67,
+"population": 11449006
+}
+}
+},
+{
+"name": "Ecuador",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1888.59,
+"lifeExpectancy": 32.9,
+"population": 1400000
+},
+"1950": {
+"income": 3266.23,
+"lifeExpectancy": 47.27,
+"population": 3369955
+},
+"1980": {
+"income": 7239.77,
+"lifeExpectancy": 62.92,
+"population": 7920499
+},
+"2008": {
+"income": 7108.36,
+"lifeExpectancy": 75.12,
+"population": 13927650
+}
+}
+},
+{
+"name": "El Salvador",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1628.15,
+"lifeExpectancy": 28.7,
+"population": 766000
+},
+"1950": {
+"income": 2928.38,
+"lifeExpectancy": 43.24,
+"population": 1939800
+},
+"1980": {
+"income": 4629.77,
+"lifeExpectancy": 56.34,
+"population": 4566199
+},
+"2008": {
+"income": 5894.67,
+"lifeExpectancy": 71.5,
+"population": 7057131
+}
+}
+},
+{
+"name": "French Guiana",
+"region": "America",
+"readings": {
+"1950": {
+"income": 2612.06,
+"lifeExpectancy": 52.21,
+"population": 25516
+},
+"1980": {
+"income": 7211.88,
+"lifeExpectancy": 67.84,
+"population": 67762
+}
+}
+},
+{
+"name": "Grenada",
+"region": "America",
+"readings": {
+"1950": {
+"income": 1320.46,
+"lifeExpectancy": 62.44,
+"population": 75806
+},
+"1980": {
+"income": 3865.76,
+"lifeExpectancy": 65.16,
+"population": 90164
+},
+"2008": {
+"income": 9558.52,
+"lifeExpectancy": 75.45,
+"population": 90303
+}
+}
+},
+{
+"name": "Guadeloupe",
+"region": "America",
+"readings": {
+"1950": {
+"income": 2426.2,
+"lifeExpectancy": 54.06,
+"population": 208080
+},
+"1980": {
+"income": 3737.94,
+"lifeExpectancy": 71.26,
+"population": 336846
+}
+}
+},
+{
+"name": "Guatemala",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1350.19,
+"lifeExpectancy": 25.82,
+"population": 1300000
+},
+"1950": {
+"income": 2485.79,
+"lifeExpectancy": 41.36,
+"population": 2968976
+},
+"1980": {
+"income": 5236.1,
+"lifeExpectancy": 57.2,
+"population": 6064228
+},
+"2008": {
+"income": 5261.46,
+"lifeExpectancy": 70.33,
+"population": 12851647
+}
+}
+},
+{
+"name": "Guyana",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1572.69,
+"lifeExpectancy": 31.12,
+"population": 327226
+},
+"1950": {
+"income": 2903.52,
+"lifeExpectancy": 51.32,
+"population": 427971
+},
+"1980": {
+"income": 2653.79,
+"lifeExpectancy": 60.8,
+"population": 759352
+},
+"2008": {
+"income": 3667.37,
+"lifeExpectancy": 66.97,
+"population": 770794
+}
+}
+},
+{
+"name": "Haiti",
+"region": "America",
+"readings": {
+"1950": {
+"income": 1774.19,
+"lifeExpectancy": 36.27,
+"population": 3097220
+},
+"1980": {
+"income": 2212.9,
+"lifeExpectancy": 50.63,
+"population": 5029725
+},
+"2008": {
+"income": 1185.24,
+"lifeExpectancy": 61.26,
+"population": 8704413
+}
+}
+},
+{
+"name": "Honduras",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1765.74,
+"lifeExpectancy": 33.9,
+"population": 500000
+},
+"1950": {
+"income": 2125.56,
+"lifeExpectancy": 40.94,
+"population": 1431447
+},
+"1980": {
+"income": 3336.79,
+"lifeExpectancy": 59.44,
+"population": 3401940
+},
+"2008": {
+"income": 3615.09,
+"lifeExpectancy": 72.2,
+"population": 7639327
+}
+}
+},
+{
+"name": "Jamaica",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1129.34,
+"lifeExpectancy": 37.8,
+"population": 720000
+},
+"1950": {
+"income": 2556.82,
+"lifeExpectancy": 56.65,
+"population": 1384550
+},
+"1980": {
+"income": 6015.19,
+"lifeExpectancy": 70.38,
+"population": 2228803
+},
+"2008": {
+"income": 7261.39,
+"lifeExpectancy": 71.89,
+"population": 2801544
+}
+}
+},
+{
+"name": "Martinique",
+"region": "America",
+"readings": {
+"1950": {
+"income": 3009.89,
+"lifeExpectancy": 54.74,
+"population": 216618
+},
+"1980": {
+"income": 10750.56,
+"lifeExpectancy": 72.81,
+"population": 339365
+}
+}
+},
+{
+"name": "Mexico",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1709.31,
+"lifeExpectancy": 27.58,
+"population": 13607000
+},
+"1950": {
+"income": 3293.78,
+"lifeExpectancy": 48.56,
+"population": 28485180
+},
+"1980": {
+"income": 9319.56,
+"lifeExpectancy": 66.56,
+"population": 68347479
+},
+"2008": {
+"income": 12135.33,
+"lifeExpectancy": 76.23,
+"population": 109955400
+}
+}
+},
+{
+"name": "Netherlands Antilles",
+"region": "America",
+"readings": {
+"1950": {
+"income": 7019.58,
+"lifeExpectancy": 58.45,
+"population": 109641
+},
+"1980": {
+"income": 20507.69,
+"lifeExpectancy": 73.01,
+"population": 172534
+},
+"2008": {
+"income": 23178.37,
+"lifeExpectancy": 76.23,
+"population": 225168
+}
+}
+},
+{
+"name": "Nicaragua",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1801.91,
+"lifeExpectancy": 25.4,
+"population": 478000
+},
+"1950": {
+"income": 2646.8,
+"lifeExpectancy": 41.06,
+"population": 1097916
+},
+"1980": {
+"income": 3528.64,
+"lifeExpectancy": 58.5,
+"population": 2805321
+},
+"2008": {
+"income": 2688.74,
+"lifeExpectancy": 73.09,
+"population": 5780586
+}
+}
+},
+{
+"name": "Panama",
+"region": "America",
+"readings": {
+"1900": {
+"income": 2011.36,
+"lifeExpectancy": 32.9,
+"population": 263000
+},
+"1950": {
+"income": 2500.03,
+"lifeExpectancy": 53.26,
+"population": 892502
+},
+"1980": {
+"income": 6643.42,
+"lifeExpectancy": 70,
+"population": 1956454
+},
+"2008": {
+"income": 10733.83,
+"lifeExpectancy": 75.65,
+"population": 3292693
+}
+}
+},
+{
+"name": "Paraguay",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1835.71,
+"lifeExpectancy": 35.5,
+"population": 440000
+},
+"1950": {
+"income": 2054.03,
+"lifeExpectancy": 62.58,
+"population": 1475669
+},
+"1980": {
+"income": 4283.09,
+"lifeExpectancy": 66.77,
+"population": 3193047
+},
+"2008": {
+"income": 4332.38,
+"lifeExpectancy": 71.88,
+"population": 6829969
+}
+}
+},
+{
+"name": "Peru",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1036.35,
+"lifeExpectancy": 35.7,
+"population": 3648000
+},
+"1950": {
+"income": 3486.91,
+"lifeExpectancy": 43.11,
+"population": 7632500
+},
+"1980": {
+"income": 6441.29,
+"lifeExpectancy": 60.06,
+"population": 17295298
+},
+"2008": {
+"income": 7912.56,
+"lifeExpectancy": 73.25,
+"population": 29041593
+}
+}
+},
+{
+"name": "Puerto Rico",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1197.02,
+"lifeExpectancy": 32.58,
+"population": 959000
+},
+"1950": {
+"income": 2822.05,
+"lifeExpectancy": 61.71,
+"population": 2218000
+},
+"1980": {
+"income": 10771.18,
+"lifeExpectancy": 73.63,
+"population": 3209648
+},
+"2008": {
+"income": 18970.51,
+"lifeExpectancy": 78.84,
+"population": 3957169
+}
+}
+},
+{
+"name": "Suriname",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1734.06,
+"lifeExpectancy": 32.9,
+"population": 159088
+},
+"1950": {
+"income": 3201.44,
+"lifeExpectancy": 54.7,
+"population": 208068
+},
+"1980": {
+"income": 6045.94,
+"lifeExpectancy": 65.83,
+"population": 354860
+},
+"2008": {
+"income": 8091.8,
+"lifeExpectancy": 68.96,
+"population": 440486
+}
+}
+},
+{
+"name": "Trinidad and Tobago",
+"region": "America",
+"readings": {
+"1900": {
+"income": 1195.64,
+"lifeExpectancy": 38.8,
+"population": 268000
+},
+"1950": {
+"income": 2818.8,
+"lifeExpectancy": 58.22,
+"population": 632000
+},
+"1980": {
+"income": 9498.49,
+"lifeExpectancy": 67.36,
+"population": 1090513
+},
+"2008": {
+"income": 18511.09,
+"lifeExpectancy": 69.46,
+"population": 1047366
+}
+}
+},
+{
+"name": "United States",
+"region": "America",
+"readings": {
+"1900": {
+"income": 6624.3,
+"lifeExpectancy": 48.93,
+"population": 76391000
+},
+"1950": {
+"income": 15855.86,
+"lifeExpectancy": 68.12,
+"population": 152271000
+},
+"1980": {
+"income": 27838.11,
+"lifeExpectancy": 73.93,
+"population": 227726463
+},
+"2008": {
+"income": 42656.49,
+"lifeExpectancy": 79.27,
+"population": 303824646
+}
+}
+},
+{
+"name": "Uruguay",
+"region": "America",
+"readings": {
+"1900": {
+"income": 2558.84,
+"lifeExpectancy": 32.9,
+"population": 915000
+},
+"1950": {
+"income": 5374.01,
+"lifeExpectancy": 65.98,
+"population": 2194275
+},
+"1980": {
+"income": 7586.16,
+"lifeExpectancy": 70.28,
+"population": 2919851
+},
+"2008": {
+"income": 11178.99,
+"lifeExpectancy": 76.31,
+"population": 3462531
+}
+}
+},
+{
+"name": "Albania",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1048.26,
+"lifeExpectancy": 35.4,
+"population": 800000
+},
+"1950": {
+"income": 1532.35,
+"lifeExpectancy": 54.16,
+"population": 1227156
+},
+"1980": {
+"income": 3591.76,
+"lifeExpectancy": 69.66,
+"population": 2671412
+},
+"2008": {
+"income": 6399.81,
+"lifeExpectancy": 76.62,
+"population": 3619778
+}
+}
+},
+{
+"name": "Armenia",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 2241.72,
+"lifeExpectancy": 61.94,
+"population": 1355269
+},
+"1980": {
+"income": 2832.61,
+"lifeExpectancy": 70.93,
+"population": 3115289
+},
+"2008": {
+"income": 5338.64,
+"lifeExpectancy": 73.82,
+"population": 2968586
+}
+}
+},
+{
+"name": "Austria",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 4362.27,
+"lifeExpectancy": 41.53,
+"population": 5973000
+},
+"1950": {
+"income": 5733.1,
+"lifeExpectancy": 64.88,
+"population": 6935100
+},
+"1980": {
+"income": 21284.71,
+"lifeExpectancy": 72.7,
+"population": 7549433
+},
+"2008": {
+"income": 37032.76,
+"lifeExpectancy": 80.51,
+"population": 8205533
+}
+}
+},
+{
+"name": "Azerbaijan",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 2854.15,
+"lifeExpectancy": 57.15,
+"population": 2885332
+},
+"1980": {
+"income": 4509.48,
+"lifeExpectancy": 64.92,
+"population": 6173361
+},
+"2008": {
+"income": 8381.63,
+"lifeExpectancy": 70.33,
+"population": 8079043
+}
+}
+},
+{
+"name": "Belarus",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1506.22,
+"lifeExpectancy": 36.2,
+"population": 5657896
+},
+"1950": {
+"income": 3197.98,
+"lifeExpectancy": 65.02,
+"population": 7722155
+},
+"1980": {
+"income": 5720.03,
+"lifeExpectancy": 71.08,
+"population": 9643706
+},
+"2008": {
+"income": 11322.27,
+"lifeExpectancy": 69.19,
+"population": 10287955
+}
+}
+},
+{
+"name": "Belgium",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 4456.85,
+"lifeExpectancy": 46.59,
+"population": 6719000
+},
+"1950": {
+"income": 7990.47,
+"lifeExpectancy": 66.35,
+"population": 8639369
+},
+"1980": {
+"income": 20969.62,
+"lifeExpectancy": 73.29,
+"population": 9846800
+},
+"2008": {
+"income": 33490.47,
+"lifeExpectancy": 79.78,
+"population": 10403951
+}
+}
+},
+{
+"name": "Bosnia and Herzegovina",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 606.28,
+"lifeExpectancy": 35.1,
+"population": 1965772
+},
+"1950": {
+"income": 1042.5,
+"lifeExpectancy": 51.68,
+"population": 2662000
+},
+"1980": {
+"income": 4075.45,
+"lifeExpectancy": 70.45,
+"population": 4092000
+},
+"2008": {
+"income": 7619.54,
+"lifeExpectancy": 75.2,
+"population": 4590310
+}
+}
+},
+{
+"name": "Bulgaria",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1578.95,
+"lifeExpectancy": 40.2,
+"population": 4000000
+},
+"1950": {
+"income": 2131.56,
+"lifeExpectancy": 61.39,
+"population": 7250500
+},
+"1980": {
+"income": 7802.85,
+"lifeExpectancy": 71.1,
+"population": 8843528
+},
+"2008": {
+"income": 11357.63,
+"lifeExpectancy": 73.32,
+"population": 7262675
+}
+}
+},
+{
+"name": "Croatia",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1942.56,
+"lifeExpectancy": 36.1,
+"population": 2833677
+},
+"1950": {
+"income": 3340.19,
+"lifeExpectancy": 59.5,
+"population": 3837297
+},
+"1980": {
+"income": 13057.9,
+"lifeExpectancy": 70.55,
+"population": 4383000
+},
+"2008": {
+"income": 14981.18,
+"lifeExpectancy": 76.27,
+"population": 4491543
+}
+}
+},
+{
+"name": "Cyprus",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1590.68,
+"lifeExpectancy": 41.75,
+"population": 234200
+},
+"1950": {
+"income": 2920.87,
+"lifeExpectancy": 66.55,
+"population": 494000
+},
+"1980": {
+"income": 10904.71,
+"lifeExpectancy": 74.44,
+"population": 611000
+},
+"2008": {
+"income": 26349.47,
+"lifeExpectancy": 79.74,
+"population": 792604
+}
+}
+},
+{
+"name": "Denmark",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 3658.24,
+"lifeExpectancy": 51.95,
+"population": 2561000
+},
+"1950": {
+"income": 8996.05,
+"lifeExpectancy": 70.33,
+"population": 4271000
+},
+"1980": {
+"income": 20529.08,
+"lifeExpectancy": 74.16,
+"population": 5123027
+},
+"2008": {
+"income": 34636.39,
+"lifeExpectancy": 78.41,
+"population": 5484723
+}
+}
+},
+{
+"name": "Estonia",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1903.96,
+"lifeExpectancy": 43.1,
+"population": 802735
+},
+"1950": {
+"income": 4042.45,
+"lifeExpectancy": 64.36,
+"population": 1095610
+},
+"1980": {
+"income": 9168.23,
+"lifeExpectancy": 69.59,
+"population": 1482196
+},
+"2008": {
+"income": 18993.59,
+"lifeExpectancy": 73.23,
+"population": 1307605
+}
+}
+},
+{
+"name": "Finland",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2293.12,
+"lifeExpectancy": 41.8,
+"population": 2646000
+},
+"1950": {
+"income": 5845.63,
+"lifeExpectancy": 64.24,
+"population": 4008900
+},
+"1980": {
+"income": 17796.77,
+"lifeExpectancy": 73.66,
+"population": 4779535
+},
+"2008": {
+"income": 33339.32,
+"lifeExpectancy": 79.7,
+"population": 5244749
+}
+}
+},
+{
+"name": "France",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 4120.2,
+"lifeExpectancy": 45.08,
+"population": 40598000
+},
+"1950": {
+"income": 7104.01,
+"lifeExpectancy": 66.39,
+"population": 41828673
+},
+"1980": {
+"income": 20334.47,
+"lifeExpectancy": 74.35,
+"population": 53869743
+},
+"2008": {
+"income": 30598.37,
+"lifeExpectancy": 81.25,
+"population": 61279972
+}
+}
+},
+{
+"name": "Georgia",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 2304.28,
+"lifeExpectancy": 59.8,
+"population": 3515602
+},
+"1980": {
+"income": 6014.45,
+"lifeExpectancy": 69.69,
+"population": 5045697
+},
+"2008": {
+"income": 4345.66,
+"lifeExpectancy": 71.72,
+"population": 4630841
+}
+}
+},
+{
+"name": "Germany",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 4683.8,
+"lifeExpectancy": 43.92,
+"population": 54388000
+},
+"1950": {
+"income": 6090.03,
+"lifeExpectancy": 66.78,
+"population": 68374572
+},
+"1980": {
+"income": 22148.27,
+"lifeExpectancy": 73.18,
+"population": 78297904
+},
+"2008": {
+"income": 32785.53,
+"lifeExpectancy": 80.06,
+"population": 82369548
+}
+}
+},
+{
+"name": "Greece",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2032.92,
+"lifeExpectancy": 40.0,
+"population": 4962000
+},
+"1950": {
+"income": 3040.41,
+"lifeExpectancy": 64.97,
+"population": 7566028
+},
+"1980": {
+"income": 14877.19,
+"lifeExpectancy": 74.46,
+"population": 9642505
+},
+"2008": {
+"income": 28242.04,
+"lifeExpectancy": 79.3,
+"population": 10722816
+}
+}
+},
+{
+"name": "Hungary",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 3206.12,
+"lifeExpectancy": 37.34,
+"population": 7127000
+},
+"1950": {
+"income": 4726.19,
+"lifeExpectancy": 62.07,
+"population": 9338000
+},
+"1980": {
+"income": 12018.55,
+"lifeExpectancy": 69.11,
+"population": 10711122
+},
+"2008": {
+"income": 18068.58,
+"lifeExpectancy": 73.48,
+"population": 9930915
+}
+}
+},
+{
+"name": "Iceland",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2073.92,
+"lifeExpectancy": 46.64,
+"population": 111588
+},
+"1950": {
+"income": 7750.29,
+"lifeExpectancy": 71.01,
+"population": 142938
+},
+"1980": {
+"income": 22434.86,
+"lifeExpectancy": 76.66,
+"population": 228161
+},
+"2008": {
+"income": 37782.95,
+"lifeExpectancy": 81.85,
+"population": 304367
+}
+}
+},
+{
+"name": "Ireland",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 3433.9,
+"lifeExpectancy": 49.12,
+"population": 3179846
+},
+"1950": {
+"income": 4939.18,
+"lifeExpectancy": 65.61,
+"population": 2963018
+},
+"1980": {
+"income": 12217.02,
+"lifeExpectancy": 72.6,
+"population": 3401000
+},
+"2008": {
+"income": 38533.88,
+"lifeExpectancy": 79.94,
+"population": 4156119
+}
+}
+},
+{
+"name": "Italy",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2127.22,
+"lifeExpectancy": 41.66,
+"population": 33672000
+},
+"1950": {
+"income": 4461.07,
+"lifeExpectancy": 65.77,
+"population": 47105000
+},
+"1980": {
+"income": 16201.88,
+"lifeExpectancy": 74.12,
+"population": 56451247
+},
+"2008": {
+"income": 27753.8,
+"lifeExpectancy": 81.24,
+"population": 58145321
+}
+}
+},
+{
+"name": "Kazakhstan",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1228.92,
+"lifeExpectancy": 28.1,
+"population": 4904019
+},
+"1950": {
+"income": 2609.22,
+"lifeExpectancy": 54.16,
+"population": 6693230
+},
+"1980": {
+"income": 7178.85,
+"lifeExpectancy": 64.96,
+"population": 14966718
+},
+"2008": {
+"income": 10500.47,
+"lifeExpectancy": 65.03,
+"population": 15340533
+}
+}
+},
+{
+"name": "Latvia",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1817.41,
+"lifeExpectancy": 46.2,
+"population": 1418840
+},
+"1950": {
+"income": 3470.28,
+"lifeExpectancy": 64.53,
+"population": 1936498
+},
+"1980": {
+"income": 8278.29,
+"lifeExpectancy": 69.19,
+"population": 2524543
+},
+"2008": {
+"income": 15816.36,
+"lifeExpectancy": 72.52,
+"population": 2245423
+}
+}
+},
+{
+"name": "Lithuania",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2077.04,
+"lifeExpectancy": 41.7,
+"population": 1870657
+},
+"1950": {
+"income": 4409.94,
+"lifeExpectancy": 63.56,
+"population": 2553159
+},
+"1980": {
+"income": 12192.5,
+"lifeExpectancy": 70.68,
+"population": 3435289
+},
+"2008": {
+"income": 17432.25,
+"lifeExpectancy": 71.84,
+"population": 3565205
+}
+}
+},
+{
+"name": "Luxembourg",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 3181.35,
+"lifeExpectancy": 47.48,
+"population": 230757
+},
+"1950": {
+"income": 14554.96,
+"lifeExpectancy": 65.25,
+"population": 295587
+},
+"1980": {
+"income": 27021.65,
+"lifeExpectancy": 72.57,
+"population": 364400
+},
+"2008": {
+"income": 74985.91,
+"lifeExpectancy": 79.56,
+"population": 486006
+}
+}
+},
+{
+"name": "Macedonia, FYR",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 2040.95,
+"lifeExpectancy": 53.09,
+"population": 1224627
+},
+"1980": {
+"income": 7978.72,
+"lifeExpectancy": 69.64,
+"population": 1792000
+},
+"2008": {
+"income": 8449.03,
+"lifeExpectancy": 74.25,
+"population": 2061315
+}
+}
+},
+{
+"name": "Malta",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 1525.8,
+"lifeExpectancy": 64.7,
+"population": 311973
+},
+"1980": {
+"income": 9104.22,
+"lifeExpectancy": 72.86,
+"population": 364001
+},
+"2008": {
+"income": 21934.71,
+"lifeExpectancy": 79.77,
+"population": 403532
+}
+}
+},
+{
+"name": "Moldova",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 2752.3,
+"lifeExpectancy": 57.46,
+"population": 2336432
+},
+"1980": {
+"income": 4529.56,
+"lifeExpectancy": 64.62,
+"population": 3996278
+},
+"2008": {
+"income": 2769.37,
+"lifeExpectancy": 68.53,
+"population": 4496774
+}
+}
+},
+{
+"name": "Montenegro",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1648.83,
+"lifeExpectancy": 35.4,
+"population": 292124
+},
+"1950": {
+"income": 2835.13,
+"lifeExpectancy": 58.22,
+"population": 395587
+},
+"1980": {
+"income": 11083.46,
+"lifeExpectancy": 73.74,
+"population": 560000
+},
+"2008": {
+"income": 12257.79,
+"lifeExpectancy": 74.15,
+"population": 678177
+}
+}
+},
+{
+"name": "Netherlands",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 3713.31,
+"lifeExpectancy": 48.4,
+"population": 5142000
+},
+"1950": {
+"income": 7407.85,
+"lifeExpectancy": 71.45,
+"population": 10113527
+},
+"1980": {
+"income": 20372.21,
+"lifeExpectancy": 75.76,
+"population": 14143901
+},
+"2008": {
+"income": 37069.42,
+"lifeExpectancy": 80.02,
+"population": 16645313
+}
+}
+},
+{
+"name": "Norway",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2668,
+"lifeExpectancy": 53.47,
+"population": 2230000
+},
+"1950": {
+"income": 8490,
+"lifeExpectancy": 71.6,
+"population": 3265126
+},
+"1980": {
+"income": 24961,
+"lifeExpectancy": 75.65,
+"population": 4085620
+},
+"2008": {
+"income": 49221,
+"lifeExpectancy": 80.67,
+"population": 4644457
+}
+}
+},
+{
+"name": "Poland",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2454.79,
+"lifeExpectancy": 40.43,
+"population": 24750000
+},
+"1950": {
+"income": 3910.56,
+"lifeExpectancy": 59.05,
+"population": 24824000
+},
+"1980": {
+"income": 9173.32,
+"lifeExpectancy": 70.28,
+"population": 35578016
+},
+"2008": {
+"income": 16185.04,
+"lifeExpectancy": 75.68,
+"population": 38500696
+}
+}
+},
+{
+"name": "Portugal",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1848.6,
+"lifeExpectancy": 35.6,
+"population": 5404000
+},
+"1950": {
+"income": 2961.89,
+"lifeExpectancy": 58.53,
+"population": 8442750
+},
+"1980": {
+"income": 11419.72,
+"lifeExpectancy": 71.75,
+"population": 9777800
+},
+"2008": {
+"income": 20496.24,
+"lifeExpectancy": 78.77,
+"population": 10676910
+}
+}
+},
+{
+"name": "Romania",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 3337.87,
+"lifeExpectancy": 35.7,
+"population": 11000000
+},
+"1950": {
+"income": 2788.13,
+"lifeExpectancy": 59.86,
+"population": 16311000
+},
+"1980": {
+"income": 9755.08,
+"lifeExpectancy": 69.6,
+"population": 22130036
+},
+"2008": {
+"income": 11662.14,
+"lifeExpectancy": 72.76,
+"population": 22246862
+}
+}
+},
+{
+"name": "Serbia",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2230.41,
+"lifeExpectancy": 35.5,
+"population": 4955236
+},
+"1950": {
+"income": 3835.16,
+"lifeExpectancy": 56.31,
+"population": 6710261
+},
+"1980": {
+"income": 14992.89,
+"lifeExpectancy": 70.28,
+"population": 8955000
+},
+"2008": {
+"income": 10301.22,
+"lifeExpectancy": 74.08,
+"population": 10159046
+}
+}
+},
+{
+"name": "Slovak Republic",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2438.9,
+"lifeExpectancy": 37.9,
+"population": 2954679
+},
+"1950": {
+"income": 4937.84,
+"lifeExpectancy": 60.89,
+"population": 3463446
+},
+"1980": {
+"income": 11259.07,
+"lifeExpectancy": 70.44,
+"population": 4965958
+},
+"2008": {
+"income": 20143.88,
+"lifeExpectancy": 74.88,
+"population": 5455407
+}
+}
+},
+{
+"name": "Slovenia",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2624.99,
+"lifeExpectancy": 36.6,
+"population": 1083876
+},
+"1950": {
+"income": 4513.62,
+"lifeExpectancy": 64.45,
+"population": 1467759
+},
+"1980": {
+"income": 17645.22,
+"lifeExpectancy": 71.02,
+"population": 1833000
+},
+"2008": {
+"income": 26779.28,
+"lifeExpectancy": 78.41,
+"population": 2007711
+}
+}
+},
+{
+"name": "Spain",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2676.85,
+"lifeExpectancy": 34.8,
+"population": 18566000
+},
+"1950": {
+"income": 3280.32,
+"lifeExpectancy": 61.87,
+"population": 28062963
+},
+"1980": {
+"income": 13790.56,
+"lifeExpectancy": 75.6,
+"population": 37488360
+},
+"2008": {
+"income": 28159.21,
+"lifeExpectancy": 80.94,
+"population": 40491051
+}
+}
+},
+{
+"name": "Sweden",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 2897,
+"lifeExpectancy": 52.27,
+"population": 5117000
+},
+"1950": {
+"income": 9073,
+"lifeExpectancy": 71.14,
+"population": 7014005
+},
+"1980": {
+"income": 21179,
+"lifeExpectancy": 75.8,
+"population": 8310473
+},
+"2008": {
+"income": 33634,
+"lifeExpectancy": 80.97,
+"population": 9045389
+}
+}
+},
+{
+"name": "Switzerland",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 5864.6,
+"lifeExpectancy": 47.48,
+"population": 3300000
+},
+"1950": {
+"income": 13867.61,
+"lifeExpectancy": 68.94,
+"population": 4694000
+},
+"1980": {
+"income": 28732.37,
+"lifeExpectancy": 75.64,
+"population": 6385229
+},
+"2008": {
+"income": 38623.13,
+"lifeExpectancy": 81.9,
+"population": 7581520
+}
+}
+},
+{
+"name": "Tajikistan",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 1910.98,
+"lifeExpectancy": 52.31,
+"population": 1530047
+},
+"1980": {
+"income": 4122.44,
+"lifeExpectancy": 62.36,
+"population": 3969126
+},
+"2008": {
+"income": 1727.33,
+"lifeExpectancy": 66.78,
+"population": 7653394
+}
+}
+},
+{
+"name": "Turkey",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1437.19,
+"lifeExpectancy": 35.0,
+"population": 14030442
+},
+"1950": {
+"income": 1994.79,
+"lifeExpectancy": 41.73,
+"population": 21121639
+},
+"1980": {
+"income": 4436.96,
+"lifeExpectancy": 60.3,
+"population": 45120802
+},
+"2008": {
+"income": 8547.69,
+"lifeExpectancy": 71.9,
+"population": 71892807
+}
+}
+},
+{
+"name": "Turkmenistan",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 2289.5,
+"lifeExpectancy": 50.5,
+"population": 1204075
+},
+"1980": {
+"income": 6130.46,
+"lifeExpectancy": 60.96,
+"population": 2875133
+},
+"2008": {
+"income": 5563.05,
+"lifeExpectancy": 64.83,
+"population": 5232077
+}
+}
+},
+{
+"name": "Ukraine",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 1696.25,
+"lifeExpectancy": 36.6,
+"population": 26944329
+},
+"1950": {
+"income": 3601.45,
+"lifeExpectancy": 64.28,
+"population": 36774854
+},
+"1980": {
+"income": 7248.86,
+"lifeExpectancy": 69.7,
+"population": 50046649
+},
+"2008": {
+"income": 6716.38,
+"lifeExpectancy": 68.31,
+"population": 46170273
+}
+}
+},
+{
+"name": "United Kingdom",
+"region": "Europe & Central Asia",
+"readings": {
+"1900": {
+"income": 6321.8,
+"lifeExpectancy": 46.32,
+"population": 37975154
+},
+"1950": {
+"income": 9766.5,
+"lifeExpectancy": 68.7,
+"population": 50127000
+},
+"1980": {
+"income": 18199.83,
+"lifeExpectancy": 73.72,
+"population": 56314000
+},
+"2008": {
+"income": 32875.34,
+"lifeExpectancy": 79.5,
+"population": 60943912
+}
+}
+},
+{
+"name": "Uzbekistan",
+"region": "Europe & Central Asia",
+"readings": {
+"1950": {
+"income": 1545.05,
+"lifeExpectancy": 54.96,
+"population": 6292797
+},
+"1980": {
+"income": 2230.04,
+"lifeExpectancy": 65.45,
+"population": 16000074
+},
+"2008": {
+"income": 2424.23,
+"lifeExpectancy": 67.79,
+"population": 28268440
+}
+}
+},
+{
+"name": "Australia",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 5431.85,
+"lifeExpectancy": 49.93,
+"population": 3741000
+},
+"1950": {
+"income": 10031.12,
+"lifeExpectancy": 69.02,
+"population": 8267337
+},
+"1980": {
+"income": 19505.55,
+"lifeExpectancy": 74.6,
+"population": 14615900
+},
+"2008": {
+"income": 34239.63,
+"lifeExpectancy": 81.57,
+"population": 20600856
+}
+}
+},
+{
+"name": "Brunei",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 1317.94,
+"lifeExpectancy": 29.2,
+"population": 17689
+},
+"1950": {
+"income": 35554.36,
+"lifeExpectancy": 60,
+"population": 44983
+},
+"1980": {
+"income": 79534.57,
+"lifeExpectancy": 70.63,
+"population": 185220
+},
+"2008": {
+"income": 45859.75,
+"lifeExpectancy": 77.19,
+"population": 393551
+}
+}
+},
+{
+"name": "Cambodia",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 527.88,
+"lifeExpectancy": 35.0,
+"population": 2849302
+},
+"1950": {
+"income": 352.03,
+"lifeExpectancy": 38.59,
+"population": 4471170
+},
+"1980": {
+"income": 606.6,
+"lifeExpectancy": 40.02,
+"population": 6869171
+},
+"2008": {
+"income": 1914.75,
+"lifeExpectancy": 61.14,
+"population": 14387642
+}
+}
+},
+{
+"name": "China",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 802.28,
+"lifeExpectancy": 32.0,
+"population": 400000000
+},
+"1950": {
+"income": 394.49,
+"lifeExpectancy": 39.25,
+"population": 546815000
+},
+"1980": {
+"income": 934.27,
+"lifeExpectancy": 66.12,
+"population": 981235000
+},
+"2008": {
+"income": 6679.2,
+"lifeExpectancy": 73.1,
+"population": 1326856173
+}
+}
+},
+{
+"name": "Fiji",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 615.04,
+"lifeExpectancy": 26.1,
+"population": 120000
+},
+"1950": {
+"income": 1738.96,
+"lifeExpectancy": 51.57,
+"population": 287348
+},
+"1980": {
+"income": 3374.56,
+"lifeExpectancy": 63.69,
+"population": 634506
+},
+"2008": {
+"income": 4153.29,
+"lifeExpectancy": 68.87,
+"population": 931545
+}
+}
+},
+{
+"name": "French Polynesia",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 6931.99,
+"lifeExpectancy": 45.51,
+"population": 62100
+},
+"1980": {
+"income": 17487.1,
+"lifeExpectancy": 64.3,
+"population": 150896
+},
+"2008": {
+"income": 26733.88,
+"lifeExpectancy": 74.39,
+"population": 282645
+}
+}
+},
+{
+"name": "Hong Kong, China",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 2849.88,
+"lifeExpectancy": 59.22,
+"population": 2237000
+},
+"1980": {
+"income": 13494.1,
+"lifeExpectancy": 74.59,
+"population": 5063100
+},
+"2008": {
+"income": 40480.28,
+"lifeExpectancy": 82.29,
+"population": 7018636
+}
+}
+},
+{
+"name": "Indonesia",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 615.87,
+"lifeExpectancy": 30.0,
+"population": 42746000
+},
+"1950": {
+"income": 704.35,
+"lifeExpectancy": 36.5,
+"population": 79043000
+},
+"1980": {
+"income": 1549.1,
+"lifeExpectancy": 54.44,
+"population": 146995000
+},
+"2008": {
+"income": 3699.54,
+"lifeExpectancy": 70.83,
+"population": 226134000
+}
+}
+},
+{
+"name": "Japan",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 1736.39,
+"lifeExpectancy": 38.6,
+"population": 44103000
+},
+"1950": {
+"income": 2644.59,
+"lifeExpectancy": 59.3,
+"population": 83805000
+},
+"1980": {
+"income": 18488.26,
+"lifeExpectancy": 76.19,
+"population": 116807309
+},
+"2008": {
+"income": 31275.13,
+"lifeExpectancy": 82.81,
+"population": 127425722
+}
+}
+},
+{
+"name": "Korea, Dem. Rep.",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 788,
+"lifeExpectancy": 26.0,
+"population": 4780302
+},
+"1950": {
+"income": 870,
+"lifeExpectancy": 48.04,
+"population": 9471140
+},
+"1980": {
+"income": 3373,
+"lifeExpectancy": 68.27,
+"population": 17113626
+},
+"2008": {
+"income": 1582,
+"lifeExpectancy": 67.33,
+"population": 23479089
+}
+}
+},
+{
+"name": "Korea, Rep.",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 673,
+"lifeExpectancy": 25.8,
+"population": 9896000
+},
+"1950": {
+"income": 743,
+"lifeExpectancy": 45.52,
+"population": 20845771
+},
+"1980": {
+"income": 4331,
+"lifeExpectancy": 65.74,
+"population": 38124000
+},
+"2008": {
+"income": 23903,
+"lifeExpectancy": 79.46,
+"population": 49232844
+}
+}
+},
+{
+"name": "Macao, China",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 2170.05,
+"lifeExpectancy": 52.98,
+"population": 205442
+},
+"1980": {
+"income": 15216.44,
+"lifeExpectancy": 71.8,
+"population": 255773
+},
+"2008": {
+"income": 57436.68,
+"lifeExpectancy": 80.75,
+"population": 460823
+}
+}
+},
+{
+"name": "Malaysia",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 950.37,
+"lifeExpectancy": 30.6,
+"population": 2232000
+},
+"1950": {
+"income": 1940.39,
+"lifeExpectancy": 47.01,
+"population": 6433799
+},
+"1980": {
+"income": 4550.58,
+"lifeExpectancy": 66.69,
+"population": 13764352
+},
+"2008": {
+"income": 12818.9,
+"lifeExpectancy": 74.33,
+"population": 25259428
+}
+}
+},
+{
+"name": "Micronesia, Fed. Sts.",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 2487.66,
+"lifeExpectancy": 53.78,
+"population": 30715
+},
+"1980": {
+"income": 4748.19,
+"lifeExpectancy": 65.17,
+"population": 77080
+},
+"2008": {
+"income": 4994.56,
+"lifeExpectancy": 68.61,
+"population": 107673
+}
+}
+},
+{
+"name": "Mongolia",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 689.51,
+"lifeExpectancy": 31.8,
+"population": 707767
+},
+"1950": {
+"income": 741.13,
+"lifeExpectancy": 41.04,
+"population": 778555
+},
+"1980": {
+"income": 1800,
+"lifeExpectancy": 56.42,
+"population": 1662380
+},
+"2008": {
+"income": 3306.55,
+"lifeExpectancy": 66.58,
+"population": 2916865
+}
+}
+},
+{
+"name": "Myanmar",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 780.93,
+"lifeExpectancy": 30.8,
+"population": 10174000
+},
+"1950": {
+"income": 446.78,
+"lifeExpectancy": 33.43,
+"population": 19487657
+},
+"1980": {
+"income": 935.13,
+"lifeExpectancy": 57.48,
+"population": 33373316
+},
+"2008": {
+"income": 1255.33,
+"lifeExpectancy": 61.6,
+"population": 48133102
+}
+}
+},
+{
+"name": "New Caledonia",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 9374.16,
+"lifeExpectancy": 51.93,
+"population": 55069
+},
+"1980": {
+"income": 26965.06,
+"lifeExpectancy": 67.26,
+"population": 139400
+},
+"2008": {
+"income": 30959.74,
+"lifeExpectancy": 76.2,
+"population": 224585
+}
+}
+},
+{
+"name": "New Zealand",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 5819.9,
+"lifeExpectancy": 47.44,
+"population": 807000
+},
+"1950": {
+"income": 11449.38,
+"lifeExpectancy": 69.29,
+"population": 1908310
+},
+"1980": {
+"income": 16718.1,
+"lifeExpectancy": 72.95,
+"population": 3170150
+},
+"2008": {
+"income": 24656.53,
+"lifeExpectancy": 80.3,
+"population": 4154311
+}
+}
+},
+{
+"name": "Papua New Guinea",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 746.83,
+"lifeExpectancy": 31.5,
+"population": 1159554
+},
+"1950": {
+"income": 969.62,
+"lifeExpectancy": 33.67,
+"population": 1412466
+},
+"1980": {
+"income": 1809.71,
+"lifeExpectancy": 51.13,
+"population": 2991217
+},
+"2008": {
+"income": 1905.5,
+"lifeExpectancy": 60.98,
+"population": 5921144
+}
+}
+},
+{
+"name": "Philippines",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 718.86,
+"lifeExpectancy": 30.9,
+"population": 7324000
+},
+"1950": {
+"income": 1148.81,
+"lifeExpectancy": 46.36,
+"population": 21131264
+},
+"1980": {
+"income": 2549.91,
+"lifeExpectancy": 61.13,
+"population": 50940182
+},
+"2008": {
+"income": 3236.92,
+"lifeExpectancy": 71.85,
+"population": 92681453
+}
+}
+},
+{
+"name": "Samoa",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 2939.83,
+"lifeExpectancy": 44.9,
+"population": 81858
+},
+"1980": {
+"income": 3684.4,
+"lifeExpectancy": 59.92,
+"population": 155177
+},
+"2008": {
+"income": 5281.41,
+"lifeExpectancy": 71.65,
+"population": 176418
+}
+}
+},
+{
+"name": "Singapore",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 2181.19,
+"lifeExpectancy": 34.0,
+"population": 215000
+},
+"1950": {
+"income": 3533.04,
+"lifeExpectancy": 59.25,
+"population": 1022100
+},
+"1980": {
+"income": 14103.68,
+"lifeExpectancy": 71.24,
+"population": 2413900
+},
+"2008": {
+"income": 45196.46,
+"lifeExpectancy": 80.4,
+"population": 4608167
+}
+}
+},
+{
+"name": "Solomon Islands",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 510.61,
+"lifeExpectancy": 25.7,
+"population": 83666
+},
+"1950": {
+"income": 1060.92,
+"lifeExpectancy": 44.37,
+"population": 106647
+},
+"1980": {
+"income": 1348.15,
+"lifeExpectancy": 58.77,
+"population": 232452
+},
+"2008": {
+"income": 2001.01,
+"lifeExpectancy": 66.24,
+"population": 581208
+}
+}
+},
+{
+"name": "Taiwan",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 961,
+"lifeExpectancy": 28.3,
+"population": 2864000
+},
+"1950": {
+"income": 1304,
+"lifeExpectancy": 54.6,
+"population": 7981454
+},
+"1980": {
+"income": 7672,
+"lifeExpectancy": 71.54,
+"population": 17848320
+},
+"2008": {
+"income": 29004,
+"lifeExpectancy": 78.36,
+"population": 23308370
+}
+}
+},
+{
+"name": "Thailand",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 705.02,
+"lifeExpectancy": 30.4,
+"population": 7320000
+},
+"1950": {
+"income": 712.4,
+"lifeExpectancy": 51,
+"population": 20041628
+},
+"1980": {
+"income": 2227.1,
+"lifeExpectancy": 65.93,
+"population": 47025764
+},
+"2008": {
+"income": 7623.6,
+"lifeExpectancy": 68.88,
+"population": 65493298
+}
+}
+},
+{
+"name": "Timor-Leste",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 704.35,
+"lifeExpectancy": 28.97,
+"population": 435529
+},
+"1980": {
+"income": 1661.75,
+"lifeExpectancy": 34.65,
+"population": 557162
+},
+"2008": {
+"income": 2352.74,
+"lifeExpectancy": 61.14,
+"population": 1107432
+}
+}
+},
+{
+"name": "Tokelau",
+"region": "East Asia & Pacific",
+"readings": {}
+},
+{
+"name": "Tonga",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 1502.0,
+"lifeExpectancy": 57.91,
+"population": 45744
+},
+"1980": {
+"income": 2479.03,
+"lifeExpectancy": 67.5,
+"population": 91361
+},
+"2008": {
+"income": 5142.53,
+"lifeExpectancy": 71.83,
+"population": 118993
+}
+}
+},
+{
+"name": "Vietnam",
+"region": "East Asia & Pacific",
+"readings": {
+"1900": {
+"income": 575.71,
+"lifeExpectancy": 32.0,
+"population": 16675209
+},
+"1950": {
+"income": 573.94,
+"lifeExpectancy": 39.42,
+"population": 25348144
+},
+"1980": {
+"income": 660.36,
+"lifeExpectancy": 57.45,
+"population": 53715202
+},
+"2008": {
+"income": 2574.44,
+"lifeExpectancy": 74.5,
+"population": 86116559
+}
+}
+},
+{
+"name": "Vanuatu",
+"region": "East Asia & Pacific",
+"readings": {
+"1950": {
+"income": 1837.22,
+"lifeExpectancy": 40.8,
+"population": 52000
+},
+"1980": {
+"income": 2584.81,
+"lifeExpectancy": 58.58,
+"population": 116771
+},
+"2008": {
+"income": 3916.57,
+"lifeExpectancy": 70.2,
+"population": 215053
+}
+}
+}
+]
+}

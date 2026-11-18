@@ -1,0 +1,32 @@
+package:
+  name: hylograph-demo-force-downhill
+  description: "A dependency graph that flows downhill, and a simulation you can scrub"
+  dependencies:
+    - aff
+    - affjax
+    - affjax-web
+    - argonaut-core
+    - arrays
+    - console
+    - effect
+    - either
+    - foldable-traversable
+    - foreign-object
+    - hylograph-forces-pure
+    - hylograph-selection
+    - hylograph-simulation
+    - hylograph-transitions
+    - integers
+    - maybe
+    - nullable
+    - numbers
+    - ordered-collections
+    - prelude
+    - refs
+    - strings
+    - tuples
+
+  bundle:
+    module: Downhill.Main
+    outfile: public/bundle.js
+    platform: browser

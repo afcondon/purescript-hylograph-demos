@@ -1,0 +1,32 @@
+package:
+  name: hylograph-demo-force-labels
+  description: "Labels that never collide: a scatterplot whose labels are rectangles in a force simulation"
+  dependencies:
+    - aff
+    - affjax
+    - affjax-web
+    - argonaut-core
+    - arrays
+    - console
+    - effect
+    - either
+    - foldable-traversable
+    - foreign-object
+    - hylograph-forces-pure
+    - hylograph-selection
+    - hylograph-simulation
+    - hylograph-transitions
+    - integers
+    - maybe
+    - nullable
+    - numbers
+    - ordered-collections
+    - prelude
+    - refs
+    - strings
+    - tuples
+
+  bundle:
+    module: Labels.Main
+    outfile: public/bundle.js
+    platform: browser

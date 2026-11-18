@@ -1,0 +1,426 @@
+{
+ "library": "purescript-hylograph-selection",
+ "modules": [
+  "Data.DependencyGraph",
+  "Hylograph.Attribute",
+  "Hylograph.Behavior",
+  "Hylograph.Behavior.Types",
+  "Hylograph.Brush",
+  "Hylograph.Brush.FFI",
+  "Hylograph.Brush.Types",
+  "Hylograph.Classify",
+  "Hylograph.Data.Graph",
+  "Hylograph.Data.Graph.Algorithms",
+  "Hylograph.Data.Node",
+  "Hylograph.Data.Tree",
+  "Hylograph.Element.Types",
+  "Hylograph.Expr.Animation",
+  "Hylograph.Expr.Attr",
+  "Hylograph.Expr.Datum",
+  "Hylograph.Expr.Expr",
+  "Hylograph.Expr.Friendly",
+  "Hylograph.Expr.Integration",
+  "Hylograph.Expr.Interpreter.CodeGen",
+  "Hylograph.Expr.Interpreter.Eval",
+  "Hylograph.Expr.Interpreter.Meta",
+  "Hylograph.Expr.Interpreter.PureSVG",
+  "Hylograph.Expr.Interpreter.SVG",
+  "Hylograph.Expr.Path",
+  "Hylograph.Expr.Path.Generators",
+  "Hylograph.Expr.Sugar",
+  "Hylograph.Expr.Units",
+  "Hylograph.Foreign.Types",
+  "Hylograph.HATS",
+  "Hylograph.HATS.Friendly",
+  "Hylograph.HATS.InterpreterTick",
+  "Hylograph.HATS.Transitions",
+  "Hylograph.Interaction.Brush",
+  "Hylograph.Interaction.Coordinated",
+  "Hylograph.Interaction.Pointer",
+  "Hylograph.Interaction.Zoom",
+  "Hylograph.Internal.Attribute",
+  "Hylograph.Internal.Behavior.FFI",
+  "Hylograph.Internal.Behavior.Types",
+  "Hylograph.Internal.Element.Operations",
+  "Hylograph.Internal.Element.Types",
+  "Hylograph.Internal.FFI",
+  "Hylograph.Internal.Transition.FFI",
+  "Hylograph.Internal.Transition.Manager",
+  "Hylograph.Internal.Transition.Scene",
+  "Hylograph.Internal.Transition.Types",
+  "Hylograph.Internal.Types",
+  "Hylograph.Interpreter.English",
+  "Hylograph.Interpreter.Mermaid",
+  "Hylograph.Interpreter.MetaHATS",
+  "Hylograph.Interpreter.SemiQuine",
+  "Hylograph.Interpreter.SemiQuine.TreeToCode",
+  "Hylograph.Interpreter.SemiQuine.Types",
+  "Hylograph.Scale",
+  "Hylograph.Scale.ColorSchemes",
+  "Hylograph.Scale.FP",
+  "Hylograph.Scale.Interpolation",
+  "Hylograph.Scale.Pure",
+  "Hylograph.Scale.Sequential",
+  "Hylograph.Shape.Arc",
+  "Hylograph.Shape.Pie",
+  "Hylograph.Shape.Polygon",
+  "Hylograph.Tooltip",
+  "Hylograph.Transform",
+  "Hylograph.Transition.Types",
+  "Hylograph.Unified",
+  "Hylograph.Unified.Attribute",
+  "Hylograph.Unified.DataDSL",
+  "Hylograph.Unified.Display",
+  "Hylograph.Unified.Sugar"
+ ],
+ "imports": [
+  {
+   "from": "Hylograph.Behavior",
+   "to": "Hylograph.Behavior.Types"
+  },
+  {
+   "from": "Hylograph.Behavior",
+   "to": "Hylograph.Internal.Behavior.FFI"
+  },
+  {
+   "from": "Hylograph.Brush",
+   "to": "Hylograph.Brush.FFI"
+  },
+  {
+   "from": "Hylograph.Brush",
+   "to": "Hylograph.Brush.Types"
+  },
+  {
+   "from": "Hylograph.Data.Graph",
+   "to": "Hylograph.Data.Node"
+  },
+  {
+   "from": "Hylograph.Data.Graph.Algorithms",
+   "to": "Hylograph.Data.Graph"
+  },
+  {
+   "from": "Hylograph.Data.Graph.Algorithms",
+   "to": "Hylograph.Data.Node"
+  },
+  {
+   "from": "Hylograph.Data.Tree",
+   "to": "Hylograph.Data.Node"
+  },
+  {
+   "from": "Hylograph.Expr.Animation",
+   "to": "Hylograph.Attribute"
+  },
+  {
+   "from": "Hylograph.Expr.Animation",
+   "to": "Hylograph.Expr.Interpreter.Eval"
+  },
+  {
+   "from": "Hylograph.Expr.Attr",
+   "to": "Hylograph.Expr.Units"
+  },
+  {
+   "from": "Hylograph.Expr.Friendly",
+   "to": "Hylograph.Attribute"
+  },
+  {
+   "from": "Hylograph.Expr.Friendly",
+   "to": "Hylograph.Expr.Animation"
+  },
+  {
+   "from": "Hylograph.Expr.Friendly",
+   "to": "Hylograph.Expr.Datum"
+  },
+  {
+   "from": "Hylograph.Expr.Friendly",
+   "to": "Hylograph.Expr.Expr"
+  },
+  {
+   "from": "Hylograph.Expr.Friendly",
+   "to": "Hylograph.Expr.Interpreter.Eval"
+  },
+  {
+   "from": "Hylograph.Expr.Integration",
+   "to": "Hylograph.Attribute"
+  },
+  {
+   "from": "Hylograph.Expr.Integration",
+   "to": "Hylograph.Expr.Interpreter.Eval"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.CodeGen",
+   "to": "Hylograph.Expr.Datum"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.CodeGen",
+   "to": "Hylograph.Expr.Expr"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.CodeGen",
+   "to": "Hylograph.Expr.Path"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.CodeGen",
+   "to": "Hylograph.Expr.Units"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Eval",
+   "to": "Hylograph.Expr.Datum"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Eval",
+   "to": "Hylograph.Expr.Expr"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Eval",
+   "to": "Hylograph.Expr.Path"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Eval",
+   "to": "Hylograph.Expr.Path.Generators"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Eval",
+   "to": "Hylograph.Expr.Units"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Eval",
+   "to": "Hylograph.Unified.DataDSL"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Meta",
+   "to": "Hylograph.Attribute"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Meta",
+   "to": "Hylograph.Expr.Datum"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Meta",
+   "to": "Hylograph.Expr.Expr"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.Meta",
+   "to": "Hylograph.Expr.Interpreter.Eval"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.SVG",
+   "to": "Hylograph.Expr.Datum"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.SVG",
+   "to": "Hylograph.Expr.Expr"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.SVG",
+   "to": "Hylograph.Expr.Path"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.SVG",
+   "to": "Hylograph.Expr.Path.Generators"
+  },
+  {
+   "from": "Hylograph.Expr.Interpreter.SVG",
+   "to": "Hylograph.Expr.Units"
+  },
+  {
+   "from": "Hylograph.Expr.Sugar",
+   "to": "Hylograph.Expr.Expr"
+  },
+  {
+   "from": "Hylograph.Expr.Sugar",
+   "to": "Hylograph.Expr.Units"
+  },
+  {
+   "from": "Hylograph.HATS",
+   "to": "Hylograph.Behavior.Types"
+  },
+  {
+   "from": "Hylograph.HATS",
+   "to": "Hylograph.Element.Types"
+  },
+  {
+   "from": "Hylograph.HATS",
+   "to": "Hylograph.Interaction.Coordinated"
+  },
+  {
+   "from": "Hylograph.HATS",
+   "to": "Hylograph.Transition.Types"
+  },
+  {
+   "from": "Hylograph.HATS.Friendly",
+   "to": "Hylograph.HATS"
+  },
+  {
+   "from": "Hylograph.HATS.InterpreterTick",
+   "to": "Hylograph.Behavior.Types"
+  },
+  {
+   "from": "Hylograph.HATS.InterpreterTick",
+   "to": "Hylograph.Element.Types"
+  },
+  {
+   "from": "Hylograph.HATS.InterpreterTick",
+   "to": "Hylograph.HATS"
+  },
+  {
+   "from": "Hylograph.HATS.InterpreterTick",
+   "to": "Hylograph.HATS.Transitions"
+  },
+  {
+   "from": "Hylograph.HATS.InterpreterTick",
+   "to": "Hylograph.Interaction.Coordinated"
+  },
+  {
+   "from": "Hylograph.HATS.InterpreterTick",
+   "to": "Hylograph.Internal.Element.Operations"
+  },
+  {
+   "from": "Hylograph.HATS.Transitions",
+   "to": "Hylograph.Transition.Types"
+  },
+  {
+   "from": "Hylograph.Interaction.Brush",
+   "to": "Hylograph.Interaction.Coordinated"
+  },
+  {
+   "from": "Hylograph.Internal.Attribute",
+   "to": "Hylograph.Attribute"
+  },
+  {
+   "from": "Hylograph.Internal.Behavior.FFI",
+   "to": "Hylograph.Behavior.Types"
+  },
+  {
+   "from": "Hylograph.Internal.Behavior.FFI",
+   "to": "Hylograph.Foreign.Types"
+  },
+  {
+   "from": "Hylograph.Internal.Behavior.Types",
+   "to": "Hylograph.Behavior.Types"
+  },
+  {
+   "from": "Hylograph.Internal.Element.Operations",
+   "to": "Hylograph.Element.Types"
+  },
+  {
+   "from": "Hylograph.Internal.Element.Types",
+   "to": "Hylograph.Element.Types"
+  },
+  {
+   "from": "Hylograph.Internal.FFI",
+   "to": "Hylograph.Foreign.Types"
+  },
+  {
+   "from": "Hylograph.Internal.Transition.FFI",
+   "to": "Hylograph.Transition.Types"
+  },
+  {
+   "from": "Hylograph.Internal.Transition.Manager",
+   "to": "Hylograph.Attribute"
+  },
+  {
+   "from": "Hylograph.Internal.Transition.Types",
+   "to": "Hylograph.Transition.Types"
+  },
+  {
+   "from": "Hylograph.Internal.Types",
+   "to": "Hylograph.Foreign.Types"
+  },
+  {
+   "from": "Hylograph.Interpreter.English",
+   "to": "Hylograph.Element.Types"
+  },
+  {
+   "from": "Hylograph.Interpreter.English",
+   "to": "Hylograph.HATS"
+  },
+  {
+   "from": "Hylograph.Interpreter.Mermaid",
+   "to": "Hylograph.Element.Types"
+  },
+  {
+   "from": "Hylograph.Interpreter.Mermaid",
+   "to": "Hylograph.HATS"
+  },
+  {
+   "from": "Hylograph.Interpreter.MetaHATS",
+   "to": "Hylograph.Element.Types"
+  },
+  {
+   "from": "Hylograph.Interpreter.MetaHATS",
+   "to": "Hylograph.HATS"
+  },
+  {
+   "from": "Hylograph.Interpreter.MetaHATS",
+   "to": "Hylograph.HATS.Friendly"
+  },
+  {
+   "from": "Hylograph.Interpreter.SemiQuine",
+   "to": "Hylograph.Interpreter.SemiQuine.Types"
+  },
+  {
+   "from": "Hylograph.Interpreter.SemiQuine.TreeToCode",
+   "to": "Hylograph.Element.Types"
+  },
+  {
+   "from": "Hylograph.Interpreter.SemiQuine.TreeToCode",
+   "to": "Hylograph.HATS"
+  },
+  {
+   "from": "Hylograph.Scale",
+   "to": "Hylograph.Scale.ColorSchemes"
+  },
+  {
+   "from": "Hylograph.Scale",
+   "to": "Hylograph.Scale.Interpolation"
+  },
+  {
+   "from": "Hylograph.Scale",
+   "to": "Hylograph.Scale.Pure"
+  },
+  {
+   "from": "Hylograph.Scale",
+   "to": "Hylograph.Scale.Sequential"
+  },
+  {
+   "from": "Hylograph.Scale.FP",
+   "to": "Hylograph.Scale.Pure"
+  },
+  {
+   "from": "Hylograph.Tooltip",
+   "to": "Hylograph.Behavior.Types"
+  },
+  {
+   "from": "Hylograph.Unified",
+   "to": "Hylograph.Unified.Attribute"
+  },
+  {
+   "from": "Hylograph.Unified",
+   "to": "Hylograph.Unified.DataDSL"
+  },
+  {
+   "from": "Hylograph.Unified",
+   "to": "Hylograph.Unified.Display"
+  },
+  {
+   "from": "Hylograph.Unified",
+   "to": "Hylograph.Unified.Sugar"
+  },
+  {
+   "from": "Hylograph.Unified.Attribute",
+   "to": "Hylograph.Attribute"
+  },
+  {
+   "from": "Hylograph.Unified.Attribute",
+   "to": "Hylograph.Unified.Display"
+  },
+  {
+   "from": "Hylograph.Unified.DataDSL",
+   "to": "Hylograph.Expr.Expr"
+  },
+  {
+   "from": "Hylograph.Unified.Sugar",
+   "to": "Hylograph.Unified.DataDSL"
+  }
+ ]
+}
