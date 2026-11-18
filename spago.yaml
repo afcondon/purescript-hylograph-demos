@@ -26,6 +26,16 @@ workspace:
       path: ../purescript-glassbox/core
     glassbox-draw:
       path: ../purescript-glassbox/draw
+    # Local, because the force-attractors demo needs the Rust kernel's forces
+    # (towards, retarget, kineticEnergy), which are newer than the 0.6.0 that
+    # package set 80.8.0 carries. The version there is still 0.6.0, so the
+    # other demos' ranges hold.
+    hylograph-simulation:
+      path: ../purescript-hylograph-simulation
+    # Local for the keyed-join fix the film "A join is a fold" found, which the
+    # force-attractors demo re-renders through sixty times a second.
+    hylograph-selection:
+      path: ../purescript-hylograph-selection
     baskerville-core:
       path: ../../purescript-baskerville
     baskerville-sudoku:

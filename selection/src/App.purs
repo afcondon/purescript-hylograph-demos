@@ -22,7 +22,6 @@ import Chapters.Chapter4 as Ch4
 import Chapters.Chapter5 as Ch5
 import Chapters.Chapter6 as Ch6
 import Examples.MetaHATS as Meta
-import Hylograph.Interpreter.English (runEnglish)
 import TreePretty (prettyTree)
 
 -- =============================================================================
@@ -411,9 +410,7 @@ renderChapter5 =
         , HH.em_ [ HH.text "what" ]
         , HH.text " to build, not "
         , HH.em_ [ HH.text "how" ]
-        , HH.text ". Different interpreters can walk the same tree and produce entirely different outputs \x2014 an approach closely related to the "
-        , HH.em_ [ HH.text "Finally Tagless" ]
-        , HH.text " pattern in functional programming."
+        , HH.text ". Different interpreters can walk the same tree and produce entirely different outputs. The tree is an ordinary data type, and an interpreter is just a function over it."
         ]
     , HH.p [ HP.class_ (HH.ClassName "chapter-subtitle") ]
         [ HH.text "Here\x2019s the same tree interpreted two ways. The English interpreter is pure \x2014 no "
@@ -422,7 +419,7 @@ renderChapter5 =
         , HH.code_ [ HH.text "String" ]
         , HH.text ". The SVG interpreter runs in "
         , HH.code_ [ HH.text "Effect" ]
-        , HH.text " and writes to the DOM. Same tree, different worlds."
+        , HH.text " and writes to the DOM. Same tree, different worlds. Notice where both read-outs stop: the template inside a fold is a function, so an interpreter can run it but cannot describe it."
         ]
 
     -- Three columns: HATS input | English result | SVG result
@@ -430,8 +427,8 @@ renderChapter5 =
         [ -- HATS input
           HH.div [ HP.class_ (HH.ClassName "eq-panel") ]
             [ HH.div [ HP.class_ (HH.ClassName "eq-label") ] [ HH.text "HATS Tree" ]
-            , HH.pre [ HP.class_ (HH.ClassName "english-output") ]
-                [ HH.text (runEnglish Ch5.sampleTree) ]
+            , HH.pre [ HP.class_ (HH.ClassName "hats-code") ]
+                [ HH.text (prettyTree Ch5.sampleTree) ]
             ]
         , HH.div [ HP.class_ (HH.ClassName "eq-op") ] [ HH.text "\x2192" ]
         -- English result

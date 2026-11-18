@@ -23,3 +23,8 @@ state-machine/public/bundle.js
 state-machine/public/machines/
 .direnv/
 .psc-ide-port
+force-attractors/public/bundle.js
+# copied from purescript-hylograph-showcases/wasm-force-demo/pkg by `make sync-kernel`
+force-attractors/public/pkg/
+force-territories/public/bundle.js
+force-territories/public/pkg/

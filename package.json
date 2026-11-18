@@ -1,0 +1,16 @@
+{
+  "name": "purescript-hylograph-demos",
+  "version": "0.0.0",
+  "description": "Demos for the Hylograph libraries. The npm dependencies are what the force-simulation libraries import; nothing else here uses npm.",
+  "private": true,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afcondon/purescript-hylograph-demos.git"
+  },
+  "dependencies": {
+    "d3-drag": "^3.0.0",
+    "d3-force": "^3.0.0",
+    "d3-selection": "^3.0.0"
+  }
+}

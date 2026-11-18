@@ -1,0 +1,33 @@
+package:
+  name: hylograph-demo-force-attractors
+  description: "Layouts as attractors: one hierarchy flying, with momentum, between the positions five pure layouts give it"
+  dependencies:
+    - aff
+    - affjax
+    - affjax-web
+    - argonaut-core
+    - arrays
+    - console
+    - effect
+    - either
+    - foldable-traversable
+    - foreign-object
+    - hylograph-layout
+    - hylograph-selection
+    - hylograph-simulation
+    - hylograph-transitions
+    - integers
+    - lists
+    - maybe
+    - nullable
+    - numbers
+    - ordered-collections
+    - prelude
+    - refs
+    - tree-rose
+    - tuples
+
+  bundle:
+    module: Attractors.Main
+    outfile: public/bundle.js
+    platform: browser

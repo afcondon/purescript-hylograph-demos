@@ -1,4 +1,4 @@
-DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats components layout-components onion state-machine
+DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats components layout-components onion state-machine force-attractors force-territories
 
 .PHONY: all clean site $(DEMOS)
 
@@ -20,6 +20,17 @@ state-machine: sync-machines
 sync-machines:
 	rm -rf state-machine/public/machines
 	cp -r ../purescript-glassbox/core/machines state-machine/public/machines
+
+# The force kernel is built (wasm-pack, --target web) in the showcases repo;
+# the demo serves a copy, so that public/ is everything a server needs.
+FORCE_KERNEL = ../../purescript-hylograph-showcases/wasm-force-demo/pkg
+force-attractors force-territories: sync-kernel
+.PHONY: sync-kernel
+sync-kernel:
+	@for demo in force-attractors force-territories; do \
+		mkdir -p $$demo/public/pkg; \
+		cp $(FORCE_KERNEL)/force_kernel.js $(FORCE_KERNEL)/force_kernel_bg.wasm $$demo/public/pkg/; \
+	done
 
 # Rebuild ONE demo and refresh only its copy under docs/. The `site` target
 # below is the right thing for a release — it wipes docs/ and rebuilds all of

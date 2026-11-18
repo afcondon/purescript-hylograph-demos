@@ -1,6 +1,6 @@
 package:
   name: hylograph-demo-graph
-  description: "Honeycomb Puzzle: A* pathfinding on hexagonal graphs"
+  description: "Honeycomb Puzzle: breadth-first path search on hexagonal graphs"
   dependencies:
     - aff: ">=8.0.0 <9.0.0"
     - arrays: ">=7.3.0 <8.0.0"

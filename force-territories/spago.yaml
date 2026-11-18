@@ -1,0 +1,31 @@
+package:
+  name: hylograph-demo-force-territories
+  description: "Communities as territory: the Les Misérables graph with and without its block structure enforced"
+  dependencies:
+    - aff
+    - affjax
+    - affjax-web
+    - argonaut-core
+    - arrays
+    - console
+    - effect
+    - either
+    - foldable-traversable
+    - foreign-object
+    - hylograph-graph
+    - hylograph-selection
+    - hylograph-simulation
+    - hylograph-transitions
+    - integers
+    - maybe
+    - nullable
+    - numbers
+    - ordered-collections
+    - prelude
+    - refs
+    - tuples
+
+  bundle:
+    module: Territories.Main
+    outfile: public/bundle.js
+    platform: browser
