@@ -32,6 +32,11 @@ workspace:
     # other demos' ranges hold.
     hylograph-simulation:
       path: ../purescript-hylograph-simulation
+    # The simulation library's default kernel: d3-force's forces, and the
+    # Rust kernel's, in PureScript. Unpublished, so it comes from the sibling
+    # checkout, as hylograph-simulation above now requires.
+    hylograph-forces-pure:
+      path: ../purescript-hylograph-forces-pure
     # Local for the keyed-join fix the film "A join is a fold" found, which the
     # force-attractors demo re-renders through sixty times a second.
     hylograph-selection:
