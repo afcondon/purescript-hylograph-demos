@@ -3,10 +3,10 @@
 //   make graph        (from the demos root: builds and bundles)
 //   node graph/check.mjs [port]
 //
-// The Honeycomb's six simulations run on hylograph-d3-kernel (d3-force), not
-// on hylograph-simulation; it takes only the Halogen subscription
-// (hylograph-simulation-halogen) from the simulation side. The puzzle is
-// generated at random on every load, so there is no same-twice check.
+// The Honeycomb's six simulations are hylograph-simulation's stepped handles
+// (Hylograph.Simulation.Stepped, default engine), one per graph, stepped by
+// one animation loop for the page. The puzzle is generated at random on
+// every load, so there is no same-twice check.
 //
 // Serves public/ itself, drives headless Chrome, and reads the picture back
 // out of the DOM. Checks:
@@ -15,7 +15,8 @@
 //   2. each graph comes to rest: nothing moves for a second, every position
 //      is finite and every node is inside its graph's viewBox; and graphs
 //      with different edges are laid out differently ("each running its own
-//      force-directed simulation");
+//      force-directed simulation"), and each graph's layout reflects its
+//      own edges (joined nodes sit closer, on average, than unjoined ones);
 //   3. "Paths connected: k / 6" counts the graphs marked connected;
 //   4. clicking an edge in one graph toggles that edge in all six (each
 //      graph's edges, read from where the lines are drawn, gain or lose
@@ -74,6 +75,18 @@ const picture = (page) => page.evaluate(() => [...document.querySelectorAll('.he
   });
   return { box: { left: box[0], top: box[1], right: box[0] + box[2], bottom: box[1] + box[3] }, nodes, firstEdge: edges[0], edges: [...edges].sort(), connected: hex.querySelector('.hex-status').textContent === 'connected' };
 }));
+// Each graph's own edges shape its layout: joined pairs closer on average than unjoined ones.
+const reflectsEdges = (graphs, what) => {
+  const shaped = graphs.filter((graph) => {
+    const at = new Map(graph.nodes.map((n) => [n.label, { x: Number(n.cx), y: Number(n.cy) }]));
+    const joined = new Set(graph.edges);
+    const pairs = graph.nodes.flatMap((a, i) => graph.nodes.slice(i + 1).map((b) => [a.label, b.label].sort()));
+    const mean = (list) => list.reduce((sum, [a, b]) => sum + Math.hypot(at.get(a).x - at.get(b).x, at.get(a).y - at.get(b).y), 0) / list.length;
+    const near = pairs.filter((pair) => joined.has(pair.join('-'))), far = pairs.filter((pair) => !joined.has(pair.join('-')));
+    return near.length === 0 || far.length === 0 || mean(near) < mean(far);
+  }).length;
+  expect(shaped === graphs.length, `${what}: in ${shaped} of ${graphs.length} graphs joined nodes sit closer on average than unjoined ones`);
+};
 const status = (page) => page.$eval('.status-bar', (bar) => bar.textContent);
 const settle = async (page, what) => {
   const start = Date.now();
@@ -113,6 +126,7 @@ try {
   const edgeSets = new Set(opening.map((graph) => graph.edges.join(' '))).size;
   const layouts = new Set(opening.map(layout)).size;
   expect(layouts === edgeSets, `${edgeSets} different edge sets among the six graphs are laid out in ${layouts} different ways`);
+  reflectsEdges(opening, 'opening puzzle');
   const connected = opening.filter((graph) => graph.connected).length;
   expect((await status(page)).includes(`${connected} / 6`), `the status bar counts ${connected} connected: "${(await status(page)).trim()}"`);
   await shot(page, 'opening');
@@ -129,6 +143,7 @@ try {
   }).length;
   const moved = Math.max(...toggled.flatMap((graph, i) => graph.nodes.map((n, j) => Math.hypot(Number(n.cx) - Number(opening[i].nodes[j].cx), Number(n.cy) - Number(opening[i].nodes[j].cy)))));
   expect(moved > 0.5, `the toggle reheats the layout: a node moved ${moved.toFixed(2)} px`);
+  reflectsEdges(toggled, `edge ${edge} toggled`);
   expect(flipped === GRAPHS, `clicking ${edge} in graph ${graphIndex + 1}: ${flipped} of ${GRAPHS} graphs gained or lost exactly that edge`);
   expect((await status(page)).includes('Moves: 1'), `the move is counted: "${(await status(page)).trim()}"`);
   await shot(page, 'toggled');
@@ -137,6 +152,7 @@ try {
   await page.evaluate(() => [...document.querySelectorAll('.controls button')].find((b) => b.textContent === 'Solve').click());
   const solved = await settle(page, 'solved');
   expect(solved.every((graph) => graph.connected) && (await status(page)).includes('6 / 6'), `Solve: ${solved.filter((graph) => graph.connected).length} of ${GRAPHS} graphs connected; "${(await status(page)).trim()}"`);
+  reflectsEdges(solved, 'solved');
   await shot(page, 'solved');
   await page.close();
   expect(problems.length === 0, `the page reported nothing${problems.length ? `: ${[...new Set(problems)].join(' | ')}` : ''}`);
