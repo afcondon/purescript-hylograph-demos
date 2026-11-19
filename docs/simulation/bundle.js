@@ -41,8 +41,8 @@
   var semigroupoidFn = {
     compose: function(f) {
       return function(g) {
-        return function(x4) {
-          return f(g(x4));
+        return function(x3) {
+          return f(g(x3));
         };
       };
     }
@@ -53,8 +53,8 @@
     return dict.identity;
   };
   var categoryFn = {
-    identity: function(x4) {
-      return x4;
+    identity: function(x3) {
+      return x3;
     },
     Semigroupoid0: function() {
       return semigroupoidFn;
@@ -98,10 +98,10 @@
     return dict.map;
   };
   var mapFlipped = function(dictFunctor) {
-    var map112 = map(dictFunctor);
+    var map117 = map(dictFunctor);
     return function(fa) {
       return function(f) {
-        return map112(f)(fa);
+        return map117(f)(fa);
       };
     };
   };
@@ -109,10 +109,10 @@
     return map(dictFunctor)($$const(unit));
   };
   var voidLeft = function(dictFunctor) {
-    var map112 = map(dictFunctor);
+    var map117 = map(dictFunctor);
     return function(f) {
-      return function(x4) {
-        return map112($$const(x4))(f);
+      return function(x3) {
+        return map117($$const(x3))(f);
       };
     };
   };
@@ -133,10 +133,10 @@
   };
   var applySecond = function(dictApply) {
     var apply1 = apply(dictApply);
-    var map31 = map(dictApply.Functor0());
+    var map47 = map(dictApply.Functor0());
     return function(a3) {
       return function(b2) {
-        return apply1(map31($$const(identity2))(a3))(b2);
+        return apply1(map47($$const(identity2))(a3))(b2);
       };
     };
   };
@@ -146,7 +146,7 @@
     return dict.pure;
   };
   var unless = function(dictApplicative) {
-    var pure110 = pure(dictApplicative);
+    var pure112 = pure(dictApplicative);
     return function(v2) {
       return function(v1) {
         if (!v2) {
@@ -154,7 +154,7 @@
         }
         ;
         if (v2) {
-          return pure110(unit);
+          return pure112(unit);
         }
         ;
         throw new Error("Failed pattern match at Control.Applicative (line 68, column 1 - line 68, column 65): " + [v2.constructor.name, v1.constructor.name]);
@@ -162,7 +162,7 @@
     };
   };
   var when = function(dictApplicative) {
-    var pure110 = pure(dictApplicative);
+    var pure112 = pure(dictApplicative);
     return function(v2) {
       return function(v1) {
         if (v2) {
@@ -170,7 +170,7 @@
         }
         ;
         if (!v2) {
-          return pure110(unit);
+          return pure112(unit);
         }
         ;
         throw new Error("Failed pattern match at Control.Applicative (line 63, column 1 - line 63, column 63): " + [v2.constructor.name, v1.constructor.name]);
@@ -178,17 +178,17 @@
     };
   };
   var liftA1 = function(dictApplicative) {
-    var apply2 = apply(dictApplicative.Apply0());
-    var pure110 = pure(dictApplicative);
+    var apply14 = apply(dictApplicative.Apply0());
+    var pure112 = pure(dictApplicative);
     return function(f) {
       return function(a3) {
-        return apply2(pure110(f))(a3);
+        return apply14(pure112(f))(a3);
       };
     };
   };
   var applicativeArray = {
-    pure: function(x4) {
-      return [x4];
+    pure: function(x3) {
+      return [x3];
     },
     Apply0: function() {
       return applyArray;
@@ -1117,23 +1117,23 @@
   // output/Control.Monad/index.js
   var unlessM = function(dictMonad) {
     var bind9 = bind(dictMonad.Bind1());
-    var unless5 = unless(dictMonad.Applicative0());
+    var unless4 = unless(dictMonad.Applicative0());
     return function(mb) {
       return function(m2) {
         return bind9(mb)(function(b2) {
-          return unless5(b2)(m2);
+          return unless4(b2)(m2);
         });
       };
     };
   };
   var ap = function(dictMonad) {
     var bind9 = bind(dictMonad.Bind1());
-    var pure20 = pure(dictMonad.Applicative0());
+    var pure24 = pure(dictMonad.Applicative0());
     return function(f) {
       return function(a3) {
         return bind9(f)(function(f$prime) {
           return bind9(a3)(function(a$prime) {
-            return pure20(f$prime(a$prime));
+            return pure24(f$prime(a$prime));
           });
         });
       };
@@ -1177,9 +1177,9 @@
   var unsafeCompareImpl = function(lt) {
     return function(eq4) {
       return function(gt) {
-        return function(x4) {
-          return function(y4) {
-            return x4 < y4 ? lt : x4 === y4 ? eq4 : gt;
+        return function(x3) {
+          return function(y3) {
+            return x3 < y3 ? lt : x3 === y3 ? eq4 : gt;
           };
         };
       };
@@ -1219,9 +1219,9 @@
   var eq2 = /* @__PURE__ */ eq(eqBoolean);
   var notEq = function(dictEq) {
     var eq32 = eq(dictEq);
-    return function(x4) {
-      return function(y4) {
-        return eq2(eq32(x4)(y4))(false);
+    return function(x3) {
+      return function(y3) {
+        return eq2(eq32(x3)(y3))(false);
       };
     };
   };
@@ -1248,23 +1248,42 @@
     EQ2.value = new EQ2();
     return EQ2;
   })();
+  var eqOrdering = {
+    eq: function(v2) {
+      return function(v1) {
+        if (v2 instanceof LT && v1 instanceof LT) {
+          return true;
+        }
+        ;
+        if (v2 instanceof GT && v1 instanceof GT) {
+          return true;
+        }
+        ;
+        if (v2 instanceof EQ && v1 instanceof EQ) {
+          return true;
+        }
+        ;
+        return false;
+      };
+    }
+  };
 
   // output/Data.Ring/foreign.js
-  var intSub = function(x4) {
-    return function(y4) {
-      return x4 - y4 | 0;
+  var intSub = function(x3) {
+    return function(y3) {
+      return x3 - y3 | 0;
     };
   };
 
   // output/Data.Semiring/foreign.js
-  var intAdd = function(x4) {
-    return function(y4) {
-      return x4 + y4 | 0;
+  var intAdd = function(x3) {
+    return function(y3) {
+      return x3 + y3 | 0;
     };
   };
-  var intMul = function(x4) {
-    return function(y4) {
-      return x4 * y4 | 0;
+  var intMul = function(x3) {
+    return function(y3) {
+      return x3 * y3 | 0;
     };
   };
 
@@ -1274,6 +1293,9 @@
     zero: 0,
     mul: intMul,
     one: 1
+  };
+  var add = function(dict) {
+    return dict.add;
   };
 
   // output/Data.Ring/index.js
@@ -1315,28 +1337,28 @@
   var comparing = function(dictOrd) {
     var compare3 = compare(dictOrd);
     return function(f) {
-      return function(x4) {
-        return function(y4) {
-          return compare3(f(x4))(f(y4));
+      return function(x3) {
+        return function(y3) {
+          return compare3(f(x3))(f(y3));
         };
       };
     };
   };
   var max = function(dictOrd) {
     var compare3 = compare(dictOrd);
-    return function(x4) {
-      return function(y4) {
-        var v2 = compare3(x4)(y4);
+    return function(x3) {
+      return function(y3) {
+        var v2 = compare3(x3)(y3);
         if (v2 instanceof LT) {
-          return y4;
+          return y3;
         }
         ;
         if (v2 instanceof EQ) {
-          return x4;
+          return x3;
         }
         ;
         if (v2 instanceof GT) {
-          return x4;
+          return x3;
         }
         ;
         throw new Error("Failed pattern match at Data.Ord (line 181, column 3 - line 184, column 12): " + [v2.constructor.name]);
@@ -1345,19 +1367,19 @@
   };
   var min = function(dictOrd) {
     var compare3 = compare(dictOrd);
-    return function(x4) {
-      return function(y4) {
-        var v2 = compare3(x4)(y4);
+    return function(x3) {
+      return function(y3) {
+        var v2 = compare3(x3)(y3);
         if (v2 instanceof LT) {
-          return x4;
+          return x3;
         }
         ;
         if (v2 instanceof EQ) {
-          return x4;
+          return x3;
         }
         ;
         if (v2 instanceof GT) {
-          return y4;
+          return y3;
         }
         ;
         throw new Error("Failed pattern match at Data.Ord (line 172, column 3 - line 175, column 12): " + [v2.constructor.name]);
@@ -1388,51 +1410,8 @@
     var str = n.toString();
     return isNaN(str + ".0") ? str : str + ".0";
   };
-  var showStringImpl = function(s2) {
-    var l2 = s2.length;
-    return '"' + s2.replace(
-      /[\0-\x1F\x7F"\\]/g,
-      // eslint-disable-line no-control-regex
-      function(c2, i2) {
-        switch (c2) {
-          case '"':
-          case "\\":
-            return "\\" + c2;
-          case "\x07":
-            return "\\a";
-          case "\b":
-            return "\\b";
-          case "\f":
-            return "\\f";
-          case "\n":
-            return "\\n";
-          case "\r":
-            return "\\r";
-          case "	":
-            return "\\t";
-          case "\v":
-            return "\\v";
-        }
-        var k = i2 + 1;
-        var empty8 = k < l2 && s2[k] >= "0" && s2[k] <= "9" ? "\\&" : "";
-        return "\\" + c2.charCodeAt(0).toString(10) + empty8;
-      }
-    ) + '"';
-  };
-  var showArrayImpl = function(f) {
-    return function(xs) {
-      var ss = [];
-      for (var i2 = 0, l2 = xs.length; i2 < l2; i2++) {
-        ss[i2] = f(xs[i2]);
-      }
-      return "[" + ss.join(",") + "]";
-    };
-  };
 
   // output/Data.Show/index.js
-  var showString = {
-    show: showStringImpl
-  };
   var showNumber = {
     show: showNumberImpl
   };
@@ -1441,11 +1420,6 @@
   };
   var show = function(dict) {
     return dict.show;
-  };
-  var showArray = function(dictShow) {
-    return {
-      show: showArrayImpl(show(dictShow))
-    };
   };
 
   // output/Data.Maybe/index.js
@@ -1511,14 +1485,14 @@
   var eqMaybe = function(dictEq) {
     var eq4 = eq(dictEq);
     return {
-      eq: function(x4) {
-        return function(y4) {
-          if (x4 instanceof Nothing && y4 instanceof Nothing) {
+      eq: function(x3) {
+        return function(y3) {
+          if (x3 instanceof Nothing && y3 instanceof Nothing) {
             return true;
           }
           ;
-          if (x4 instanceof Just && y4 instanceof Just) {
-            return eq4(x4.value0)(y4.value0);
+          if (x3 instanceof Just && y3 instanceof Just) {
+            return eq4(x3.value0)(y3.value0);
           }
           ;
           return false;
@@ -1592,6 +1566,22 @@
     };
     return Right2;
   })();
+  var functorEither = {
+    map: function(f) {
+      return function(m2) {
+        if (m2 instanceof Left) {
+          return new Left(m2.value0);
+        }
+        ;
+        if (m2 instanceof Right) {
+          return new Right(f(m2.value0));
+        }
+        ;
+        throw new Error("Failed pattern match at Data.Either (line 0, column 0 - line 0, column 0): " + [m2.constructor.name]);
+      };
+    }
+  };
+  var map3 = /* @__PURE__ */ map(functorEither);
   var either = function(v2) {
     return function(v1) {
       return function(v22) {
@@ -1607,6 +1597,46 @@
       };
     };
   };
+  var applyEither = {
+    apply: function(v2) {
+      return function(v1) {
+        if (v2 instanceof Left) {
+          return new Left(v2.value0);
+        }
+        ;
+        if (v2 instanceof Right) {
+          return map3(v2.value0)(v1);
+        }
+        ;
+        throw new Error("Failed pattern match at Data.Either (line 70, column 1 - line 72, column 30): " + [v2.constructor.name, v1.constructor.name]);
+      };
+    },
+    Functor0: function() {
+      return functorEither;
+    }
+  };
+  var bindEither = {
+    bind: /* @__PURE__ */ either(function(e) {
+      return function(v2) {
+        return new Left(e);
+      };
+    })(function(a3) {
+      return function(f) {
+        return f(a3);
+      };
+    }),
+    Apply0: function() {
+      return applyEither;
+    }
+  };
+  var applicativeEither = /* @__PURE__ */ (function() {
+    return {
+      pure: Right.create,
+      Apply0: function() {
+        return applyEither;
+      }
+    };
+  })();
 
   // output/Effect/foreign.js
   var pureE = function(a3) {
@@ -1621,22 +1651,42 @@
       };
     };
   };
-
-  // output/Data.EuclideanRing/foreign.js
-  var intDegree = function(x4) {
-    return Math.min(Math.abs(x4), 2147483647);
-  };
-  var intDiv = function(x4) {
-    return function(y4) {
-      if (y4 === 0) return 0;
-      return y4 > 0 ? Math.floor(x4 / y4) : -Math.floor(x4 / -y4);
+  var forE = function(lo) {
+    return function(hi) {
+      return function(f) {
+        return function() {
+          for (var i2 = lo; i2 < hi; i2++) {
+            f(i2)();
+          }
+        };
+      };
     };
   };
-  var intMod = function(x4) {
-    return function(y4) {
-      if (y4 === 0) return 0;
-      var yy = Math.abs(y4);
-      return (x4 % yy + yy) % yy;
+  var foreachE = function(as) {
+    return function(f) {
+      return function() {
+        for (var i2 = 0, l2 = as.length; i2 < l2; i2++) {
+          f(as[i2])();
+        }
+      };
+    };
+  };
+
+  // output/Data.EuclideanRing/foreign.js
+  var intDegree = function(x3) {
+    return Math.min(Math.abs(x3), 2147483647);
+  };
+  var intDiv = function(x3) {
+    return function(y3) {
+      if (y3 === 0) return 0;
+      return y3 > 0 ? Math.floor(x3 / y3) : -Math.floor(x3 / -y3);
+    };
+  };
+  var intMod = function(x3) {
+    return function(y3) {
+      if (y3 === 0) return 0;
+      var yy = Math.abs(y3);
+      return (x3 % yy + yy) % yy;
     };
   };
 
@@ -1744,11 +1794,11 @@
   var $$try = function(dictMonadError) {
     var catchError1 = catchError(dictMonadError);
     var Monad0 = dictMonadError.MonadThrow0().Monad0();
-    var map31 = map(Monad0.Bind1().Apply0().Functor0());
-    var pure20 = pure(Monad0.Applicative0());
+    var map47 = map(Monad0.Bind1().Apply0().Functor0());
+    var pure24 = pure(Monad0.Applicative0());
     return function(a3) {
-      return catchError1(map31(Right.create)(a3))(function($52) {
-        return pure20(Left.create($52));
+      return catchError1(map47(Right.create)(a3))(function($52) {
+        return pure24(Left.create($52));
       });
     };
   };
@@ -1802,7 +1852,7 @@
 
   // output/Control.Monad.Rec.Class/index.js
   var bindFlipped2 = /* @__PURE__ */ bindFlipped(bindEffect);
-  var map3 = /* @__PURE__ */ map(functorEffect);
+  var map4 = /* @__PURE__ */ map(functorEffect);
   var Loop = /* @__PURE__ */ (function() {
     function Loop2(value0) {
       this.value0 = value0;
@@ -1857,7 +1907,7 @@
             ;
             return {};
           })();
-          return map3(fromDone)(read(r3))();
+          return map4(fromDone)(read(r3))();
         };
       };
     },
@@ -1867,8 +1917,8 @@
   };
 
   // output/Unsafe.Coerce/foreign.js
-  var unsafeCoerce2 = function(x4) {
-    return x4;
+  var unsafeCoerce2 = function(x3) {
+    return x3;
   };
 
   // output/Control.Monad.ST.Internal/foreign.js
@@ -1876,6 +1926,18 @@
     return function(a3) {
       return function() {
         return f(a3());
+      };
+    };
+  };
+  var pure_ = function(a3) {
+    return function() {
+      return a3;
+    };
+  };
+  var bind_ = function(a3) {
+    return function(f) {
+      return function() {
+        return f(a3())();
       };
     };
   };
@@ -1916,6 +1978,18 @@
   };
 
   // output/Control.Monad.ST.Internal/index.js
+  var $runtime_lazy2 = function(name15, moduleName, init3) {
+    var state3 = 0;
+    var val;
+    return function(lineNumber) {
+      if (state3 === 2) return val;
+      if (state3 === 1) throw new ReferenceError(name15 + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
+      state3 = 1;
+      val = init3();
+      state3 = 2;
+      return val;
+    };
+  };
   var modify$prime2 = modifyImpl2;
   var modify2 = function(f) {
     return modify$prime2(function(s2) {
@@ -1929,6 +2003,34 @@
   var functorST = {
     map: map_
   };
+  var monadST = {
+    Applicative0: function() {
+      return applicativeST;
+    },
+    Bind1: function() {
+      return bindST;
+    }
+  };
+  var bindST = {
+    bind: bind_,
+    Apply0: function() {
+      return $lazy_applyST(0);
+    }
+  };
+  var applicativeST = {
+    pure: pure_,
+    Apply0: function() {
+      return $lazy_applyST(0);
+    }
+  };
+  var $lazy_applyST = /* @__PURE__ */ $runtime_lazy2("applyST", "Control.Monad.ST.Internal", function() {
+    return {
+      apply: ap(monadST),
+      Functor0: function() {
+        return functorST;
+      }
+    };
+  });
 
   // output/Data.HeytingAlgebra/foreign.js
   var boolConj = function(b1) {
@@ -2051,9 +2153,9 @@
     return function(dictEq1) {
       var eq13 = eq(dictEq1);
       return {
-        eq: function(x4) {
-          return function(y4) {
-            return eq4(x4.value0)(y4.value0) && eq13(x4.value1)(y4.value1);
+        eq: function(x3) {
+          return function(y3) {
+            return eq4(x3.value0)(y3.value0) && eq13(x3.value1)(y3.value1);
           };
         }
       };
@@ -2066,9 +2168,9 @@
       var compare12 = compare(dictOrd1);
       var eqTuple2 = eqTuple1(dictOrd1.Eq0());
       return {
-        compare: function(x4) {
-          return function(y4) {
-            var v2 = compare2(x4.value0)(y4.value0);
+        compare: function(x3) {
+          return function(y3) {
+            var v2 = compare2(x3.value0)(y3.value0);
             if (v2 instanceof LT) {
               return LT.value;
             }
@@ -2077,7 +2179,7 @@
               return GT.value;
             }
             ;
-            return compare12(x4.value1)(y4.value1);
+            return compare12(x3.value1)(y3.value1);
           };
         },
         Eq0: function() {
@@ -2177,13 +2279,13 @@
   };
   var traverse_ = function(dictApplicative) {
     var applySecond2 = applySecond(dictApplicative.Apply0());
-    var pure20 = pure(dictApplicative);
+    var pure24 = pure(dictApplicative);
     return function(dictFoldable) {
       var foldr22 = foldr(dictFoldable);
       return function(f) {
         return foldr22(function($454) {
           return applySecond2(f($454));
-        })(pure20(unit));
+        })(pure24(unit));
       };
     };
   };
@@ -2199,7 +2301,7 @@
   var intercalate = function(dictFoldable) {
     var foldl22 = foldl(dictFoldable);
     return function(dictMonoid) {
-      var append10 = append(dictMonoid.Semigroup0());
+      var append11 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(sep) {
         return function(xs) {
@@ -2214,7 +2316,7 @@
               ;
               return {
                 init: false,
-                acc: append10(v2.acc)(append10(sep)(v1))
+                acc: append11(v2.acc)(append11(sep)(v1))
               };
             };
           };
@@ -2277,12 +2379,12 @@
   var foldMapDefaultR = function(dictFoldable) {
     var foldr22 = foldr(dictFoldable);
     return function(dictMonoid) {
-      var append10 = append(dictMonoid.Semigroup0());
+      var append11 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(f) {
-        return foldr22(function(x4) {
+        return foldr22(function(x3) {
           return function(acc) {
-            return append10(f(x4))(acc);
+            return append11(f(x3))(acc);
           };
         })(mempty2);
       };
@@ -2321,24 +2423,24 @@
         return xs.concat(ys);
       };
     }
-    return function(apply2) {
-      return function(map31) {
-        return function(pure20) {
+    return function(apply14) {
+      return function(map47) {
+        return function(pure24) {
           return function(f) {
             return function(array) {
               function go2(bot, top3) {
                 switch (top3 - bot) {
                   case 0:
-                    return pure20([]);
+                    return pure24([]);
                   case 1:
-                    return map31(array1)(f(array[bot]));
+                    return map47(array1)(f(array[bot]));
                   case 2:
-                    return apply2(map31(array2)(f(array[bot])))(f(array[bot + 1]));
+                    return apply14(map47(array2)(f(array[bot])))(f(array[bot + 1]));
                   case 3:
-                    return apply2(apply2(map31(array3)(f(array[bot])))(f(array[bot + 1])))(f(array[bot + 2]));
+                    return apply14(apply14(map47(array3)(f(array[bot])))(f(array[bot + 1])))(f(array[bot + 2]));
                   default:
                     var pivot = bot + Math.floor((top3 - bot) / 4) * 2;
-                    return apply2(map31(concat2)(go2(bot, pivot)))(go2(pivot, top3));
+                    return apply14(map47(concat2)(go2(bot, pivot)))(go2(pivot, top3));
                 }
               }
               return go2(0, array.length);
@@ -2381,9 +2483,9 @@
   var $$for = function(dictApplicative) {
     return function(dictTraversable) {
       var traverse22 = traverse(dictTraversable)(dictApplicative);
-      return function(x4) {
+      return function(x3) {
         return function(f) {
-          return traverse22(f)(x4);
+          return traverse22(f)(x3);
         };
       };
     };
@@ -2449,7 +2551,7 @@
   };
 
   // output/Effect.Aff/index.js
-  var $runtime_lazy2 = function(name15, moduleName, init3) {
+  var $runtime_lazy3 = function(name15, moduleName, init3) {
     var state3 = 0;
     var val;
     return function(lineNumber) {
@@ -2463,9 +2565,9 @@
   };
   var pure2 = /* @__PURE__ */ pure(applicativeEffect);
   var $$void3 = /* @__PURE__ */ $$void(functorEffect);
-  var map4 = /* @__PURE__ */ map(functorEffect);
-  var Canceler = function(x4) {
-    return x4;
+  var map5 = /* @__PURE__ */ map(functorEffect);
+  var Canceler = function(x3) {
+    return x3;
   };
   var suspendAff = /* @__PURE__ */ _fork(false);
   var functorParAff = {
@@ -2563,7 +2665,7 @@
       return $lazy_applyAff(0);
     }
   };
-  var $lazy_applyAff = /* @__PURE__ */ $runtime_lazy2("applyAff", "Effect.Aff", function() {
+  var $lazy_applyAff = /* @__PURE__ */ $runtime_lazy3("applyAff", "Effect.Aff", function() {
     return {
       apply: ap(monadAff),
       Functor0: function() {
@@ -2611,7 +2713,7 @@
   };
   var joinFiber = function(v2) {
     return makeAff(function(k) {
-      return map4(effectCanceler)(v2.join(k));
+      return map5(effectCanceler)(v2.join(k));
     });
   };
   var functorFiber = {
@@ -2629,7 +2731,7 @@
         }
         ;
         return makeAff(function(k) {
-          return map4(effectCanceler)(v2.kill(e, k));
+          return map5(effectCanceler)(v2.kill(e, k));
         });
       });
     };
@@ -2691,10 +2793,10 @@
   };
 
   // output/Data.Array/foreign.js
-  var rangeImpl = function(start4, end) {
-    var step3 = start4 > end ? -1 : 1;
-    var result = new Array(step3 * (end - start4) + 1);
-    var i2 = start4, n = 0;
+  var rangeImpl = function(start3, end) {
+    var step3 = start3 > end ? -1 : 1;
+    var result = new Array(step3 * (end - start3) + 1);
+    var i2 = start3, n = 0;
     while (i2 !== end) {
       result[n++] = i2;
       i2 += step3;
@@ -2793,8 +2895,8 @@
       var i2;
       var j;
       var k;
-      var x4;
-      var y4;
+      var x3;
+      var y3;
       var c2;
       mid = from3 + (to - from3 >> 1);
       if (mid - from3 > 1) mergeFromTo(compare2, fromOrdering, xs2, xs1, from3, mid);
@@ -2803,14 +2905,14 @@
       j = mid;
       k = from3;
       while (i2 < mid && j < to) {
-        x4 = xs2[i2];
-        y4 = xs2[j];
-        c2 = fromOrdering(compare2(x4)(y4));
+        x3 = xs2[i2];
+        y3 = xs2[j];
+        c2 = fromOrdering(compare2(x3)(y3));
         if (c2 > 0) {
-          xs1[k++] = y4;
+          xs1[k++] = y3;
           ++j;
         } else {
-          xs1[k++] = x4;
+          xs1[k++] = x3;
           ++i2;
         }
       }
@@ -2832,6 +2934,14 @@
   var sliceImpl = function(s2, e, l2) {
     return l2.slice(s2, e);
   };
+  var zipWithImpl = function(f, xs, ys) {
+    var l2 = xs.length < ys.length ? xs.length : ys.length;
+    var result = new Array(l2);
+    for (var i2 = 0; i2 < l2; i2++) {
+      result[i2] = f(xs[i2])(ys[i2]);
+    }
+    return result;
+  };
   var anyImpl = function(p2, xs) {
     var len = xs.length;
     for (var i2 = 0; i2 < len; i2++) {
@@ -2847,10 +2957,19 @@
   function newSTArray() {
     return [];
   }
+  var peekImpl = function(just, nothing, i2, xs) {
+    return i2 >= 0 && i2 < xs.length ? just(xs[i2]) : nothing;
+  };
+  var pokeImpl = function(i2, a3, xs) {
+    var ret = i2 >= 0 && i2 < xs.length;
+    if (ret) xs[i2] = a3;
+    return ret;
+  };
   function unsafeFreezeThawImpl(xs) {
     return xs;
   }
   var unsafeFreezeImpl = unsafeFreezeThawImpl;
+  var unsafeThawImpl = unsafeFreezeThawImpl;
   function copyImpl(xs) {
     return xs.slice();
   }
@@ -2876,8 +2995,33 @@
       };
     };
   };
+  var runSTFn3 = function runSTFn32(fn) {
+    return function(a3) {
+      return function(b2) {
+        return function(c2) {
+          return function() {
+            return fn(a3, b2, c2);
+          };
+        };
+      };
+    };
+  };
+  var runSTFn4 = function runSTFn42(fn) {
+    return function(a3) {
+      return function(b2) {
+        return function(c2) {
+          return function(d2) {
+            return function() {
+              return fn(a3, b2, c2, d2);
+            };
+          };
+        };
+      };
+    };
+  };
 
   // output/Data.Array.ST/index.js
+  var unsafeThaw = /* @__PURE__ */ runSTFn1(unsafeThawImpl);
   var unsafeFreeze = /* @__PURE__ */ runSTFn1(unsafeFreezeImpl);
   var thaw = /* @__PURE__ */ runSTFn1(thawImpl);
   var withArray = function(f) {
@@ -2890,9 +3034,31 @@
     };
   };
   var push = /* @__PURE__ */ runSTFn2(pushImpl);
+  var poke = /* @__PURE__ */ runSTFn3(pokeImpl);
+  var peek = /* @__PURE__ */ (function() {
+    return runSTFn4(peekImpl)(Just.create)(Nothing.value);
+  })();
+  var modify4 = function(i2) {
+    return function(f) {
+      return function(xs) {
+        return function __do5() {
+          var entry = peek(i2)(xs)();
+          if (entry instanceof Just) {
+            return poke(i2)(f(entry.value0))(xs)();
+          }
+          ;
+          if (entry instanceof Nothing) {
+            return false;
+          }
+          ;
+          throw new Error("Failed pattern match at Data.Array.ST (line 234, column 3 - line 236, column 26): " + [entry.constructor.name]);
+        };
+      };
+    };
+  };
 
   // output/Data.Array.ST.Iterator/index.js
-  var map5 = /* @__PURE__ */ map(functorST);
+  var map6 = /* @__PURE__ */ map(functorST);
   var not2 = /* @__PURE__ */ not(heytingAlgebraBoolean);
   var $$void4 = /* @__PURE__ */ $$void(functorST);
   var Iterator = /* @__PURE__ */ (function() {
@@ -2908,7 +3074,7 @@
     };
     return Iterator2;
   })();
-  var peek = function(v2) {
+  var peek2 = function(v2) {
     return function __do5() {
       var i2 = read2(v2.value1)();
       return v2.value0(i2);
@@ -2928,9 +3094,9 @@
       return function(array) {
         return function __do5() {
           var $$break = newSTRef(false)();
-          while (map5(not2)(read2($$break))()) {
+          while (map6(not2)(read2($$break))()) {
             (function __do6() {
-              var mx = peek(iter)();
+              var mx = peek2(iter)();
               if (mx instanceof Just && p2(mx.value0)) {
                 push(mx.value0)(array)();
                 return $$void4(next(iter))();
@@ -2946,13 +3112,13 @@
     };
   };
   var iterator = function(f) {
-    return map5(Iterator.create(f))(newSTRef(0));
+    return map6(Iterator.create(f))(newSTRef(0));
   };
   var iterate = function(iter) {
     return function(f) {
       return function __do5() {
         var $$break = newSTRef(false)();
-        while (map5(not2)(read2($$break))()) {
+        while (map6(not2)(read2($$break))()) {
           (function __do6() {
             var mx = next(iter)();
             if (mx instanceof Just) {
@@ -3091,17 +3257,22 @@
   // output/Data.Array/index.js
   var $$void5 = /* @__PURE__ */ $$void(functorST);
   var intercalate1 = /* @__PURE__ */ intercalate(foldableArray);
-  var map6 = /* @__PURE__ */ map(functorMaybe);
+  var map7 = /* @__PURE__ */ map(functorMaybe);
+  var map12 = /* @__PURE__ */ map(functorArray);
+  var map22 = /* @__PURE__ */ map(functorST);
   var fromJust4 = /* @__PURE__ */ fromJust();
+  var when2 = /* @__PURE__ */ when(applicativeST);
+  var notEq2 = /* @__PURE__ */ notEq(eqOrdering);
+  var zipWith = /* @__PURE__ */ runFn3(zipWithImpl);
   var unsafeIndex = function() {
     return runFn2(unsafeIndexImpl);
   };
   var unsafeIndex1 = /* @__PURE__ */ unsafeIndex();
   var uncons = /* @__PURE__ */ (function() {
-    return runFn3(unconsImpl)($$const(Nothing.value))(function(x4) {
+    return runFn3(unconsImpl)($$const(Nothing.value))(function(x3) {
       return function(xs) {
         return new Just({
-          head: x4,
+          head: x3,
           tail: xs
         });
       };
@@ -3125,14 +3296,15 @@
     });
   };
   var sortWith = function(dictOrd) {
-    var comparing2 = comparing(dictOrd);
+    var comparing3 = comparing(dictOrd);
     return function(f) {
-      return sortBy(comparing2(f));
+      return sortBy(comparing3(f));
     };
   };
+  var sortWith1 = /* @__PURE__ */ sortWith(ordInt);
   var snoc = function(xs) {
-    return function(x4) {
-      return withArray(push(x4))(xs)();
+    return function(x3) {
+      return withArray(push(x3))(xs)();
     };
   };
   var slice = /* @__PURE__ */ runFn3(sliceImpl);
@@ -3167,6 +3339,44 @@
   var head = function(xs) {
     return index(xs)(0);
   };
+  var nubBy = function(comp) {
+    return function(xs) {
+      var indexedAndSorted = sortBy(function(x3) {
+        return function(y3) {
+          return comp(snd(x3))(snd(y3));
+        };
+      })(mapWithIndex2(Tuple.create)(xs));
+      var v2 = head(indexedAndSorted);
+      if (v2 instanceof Nothing) {
+        return [];
+      }
+      ;
+      if (v2 instanceof Just) {
+        return map12(snd)(sortWith1(fst)((function __do5() {
+          var result = unsafeThaw(singleton2(v2.value0))();
+          foreach(indexedAndSorted)(function(v1) {
+            return function __do6() {
+              var lst = map22(/* @__PURE__ */ (function() {
+                var $183 = function($185) {
+                  return fromJust4(last($185));
+                };
+                return function($184) {
+                  return snd($183($184));
+                };
+              })())(unsafeFreeze(result))();
+              return when2(notEq2(comp(lst)(v1.value1))(EQ.value))($$void5(push(v1)(result)))();
+            };
+          })();
+          return unsafeFreeze(result)();
+        })()));
+      }
+      ;
+      throw new Error("Failed pattern match at Data.Array (line 1115, column 17 - line 1123, column 28): " + [v2.constructor.name]);
+    };
+  };
+  var nub = function(dictOrd) {
+    return nubBy(compare(dictOrd));
+  };
   var groupBy = function(op) {
     return function(xs) {
       return (function __do5() {
@@ -3174,11 +3384,11 @@
         var iter = iterator(function(v2) {
           return index(xs)(v2);
         })();
-        iterate(iter)(function(x4) {
+        iterate(iter)(function(x3) {
           return $$void5(function __do6() {
             var sub1 = newSTArray();
-            push(x4)(sub1)();
-            pushWhile(op(x4))(iter)(sub1)();
+            push(x3)(sub1)();
+            pushWhile(op(x3))(iter)(sub1)();
             var grp = unsafeFreeze(sub1)();
             return push(grp)(result)();
           });
@@ -3192,15 +3402,15 @@
   };
   var foldl2 = /* @__PURE__ */ foldl(foldableArray);
   var foldM = function(dictMonad) {
-    var pure110 = pure(dictMonad.Applicative0());
-    var bind16 = bind(dictMonad.Bind1());
+    var pure112 = pure(dictMonad.Applicative0());
+    var bind18 = bind(dictMonad.Bind1());
     return function(f) {
       return function(b2) {
         return runFn3(unconsImpl)(function(v2) {
-          return pure110(b2);
+          return pure112(b2);
         })(function(a3) {
           return function(as) {
-            return bind16(f(b2)(a3))(function(b$prime) {
+            return bind18(f(b2)(a3))(function(b$prime) {
               return foldM(dictMonad)(f)(b$prime)(as);
             });
           };
@@ -3216,15 +3426,15 @@
   })();
   var find2 = function(f) {
     return function(xs) {
-      return map6(unsafeIndex1(xs))(findIndex(f)(xs));
+      return map7(unsafeIndex1(xs))(findIndex(f)(xs));
     };
   };
   var filter = /* @__PURE__ */ runFn2(filterImpl);
   var elemIndex = function(dictEq) {
     var eq22 = eq(dictEq);
-    return function(x4) {
+    return function(x3) {
       return findIndex(function(v2) {
-        return eq22(v2)(x4);
+        return eq22(v2)(x3);
       });
     };
   };
@@ -3234,6 +3444,16 @@
       return function(arr) {
         return isJust(elemIndex1(a3)(arr));
       };
+    };
+  };
+  var drop = function(n) {
+    return function(xs) {
+      var $173 = n < 1;
+      if ($173) {
+        return xs;
+      }
+      ;
+      return slice(n)(length(xs))(xs);
     };
   };
   var deleteAt = /* @__PURE__ */ (function() {
@@ -3274,13 +3494,13 @@
   var foldMapWithIndexDefaultR = function(dictFoldableWithIndex) {
     var foldrWithIndex1 = foldrWithIndex(dictFoldableWithIndex);
     return function(dictMonoid) {
-      var append10 = append(dictMonoid.Semigroup0());
+      var append11 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(f) {
         return foldrWithIndex1(function(i2) {
-          return function(x4) {
+          return function(x3) {
             return function(acc) {
-              return append10(f(i2)(x4))(acc);
+              return append11(f(i2)(x3))(acc);
             };
           };
         })(mempty2);
@@ -3291,8 +3511,8 @@
     foldrWithIndex: function(f) {
       return function(z2) {
         var $291 = foldr8(function(v2) {
-          return function(y4) {
-            return f(v2.value0)(v2.value1)(y4);
+          return function(y3) {
+            return f(v2.value0)(v2.value1)(y3);
           };
         })(z2);
         var $292 = mapWithIndex3(Tuple.create);
@@ -3303,9 +3523,9 @@
     },
     foldlWithIndex: function(f) {
       return function(z2) {
-        var $294 = foldl8(function(y4) {
+        var $294 = foldl8(function(y3) {
           return function(v2) {
-            return f(v2.value0)(y4)(v2.value1);
+            return f(v2.value0)(y3)(v2.value1);
           };
         })(z2);
         var $295 = mapWithIndex3(Tuple.create);
@@ -3400,6 +3620,9 @@
   };
 
   // output/Data.Number/foreign.js
+  var nan = NaN;
+  var isNaNImpl = isNaN;
+  var infinity = Infinity;
   var isFiniteImpl = isFinite;
   function fromStringImpl(str, isFinite2, just, nothing) {
     var num = parseFloat(str);
@@ -3409,11 +3632,17 @@
       return nothing;
     }
   }
+  var abs = Math.abs;
   var cos = Math.cos;
   var floor = Math.floor;
   var pow = function(n) {
     return function(p2) {
       return Math.pow(n, p2);
+    };
+  };
+  var remainder = function(n) {
+    return function(m2) {
+      return n % m2;
     };
   };
   var sin = Math.sin;
@@ -3428,27 +3657,30 @@
   // output/Data.Int/index.js
   var top2 = /* @__PURE__ */ top(boundedInt);
   var bottom2 = /* @__PURE__ */ bottom(boundedInt);
+  var odd = function(x3) {
+    return (x3 & 1) !== 0;
+  };
   var fromNumber = /* @__PURE__ */ (function() {
     return fromNumberImpl(Just.create)(Nothing.value);
   })();
-  var unsafeClamp = function(x4) {
-    if (!isFiniteImpl(x4)) {
+  var unsafeClamp = function(x3) {
+    if (!isFiniteImpl(x3)) {
       return 0;
     }
     ;
-    if (x4 >= toNumber(top2)) {
+    if (x3 >= toNumber(top2)) {
       return top2;
     }
     ;
-    if (x4 <= toNumber(bottom2)) {
+    if (x3 <= toNumber(bottom2)) {
       return bottom2;
     }
     ;
     if (otherwise) {
-      return fromMaybe(0)(fromNumber(x4));
+      return fromMaybe(0)(fromNumber(x3));
     }
     ;
-    throw new Error("Failed pattern match at Data.Int (line 72, column 1 - line 72, column 29): " + [x4.constructor.name]);
+    throw new Error("Failed pattern match at Data.Int (line 72, column 1 - line 72, column 29): " + [x3.constructor.name]);
   };
   var floor2 = function($39) {
     return unsafeClamp(floor($39));
@@ -3475,8 +3707,8 @@
     };
     return Cons2;
   })();
-  var NonEmptyList = function(x4) {
-    return x4;
+  var NonEmptyList = function(x3) {
+    return x3;
   };
   var listMap = function(f) {
     var chunkedRevMap = function($copy_v) {
@@ -3648,7 +3880,7 @@
   })();
 
   // output/Data.Map.Internal/index.js
-  var $runtime_lazy3 = function(name15, moduleName, init3) {
+  var $runtime_lazy4 = function(name15, moduleName, init3) {
     var state3 = 0;
     var val;
     return function(lineNumber) {
@@ -3661,11 +3893,11 @@
     };
   };
   var Leaf = /* @__PURE__ */ (function() {
-    function Leaf2() {
+    function Leaf3() {
     }
     ;
-    Leaf2.value = new Leaf2();
-    return Leaf2;
+    Leaf3.value = new Leaf3();
+    return Leaf3;
   })();
   var Node = /* @__PURE__ */ (function() {
     function Node2(value0, value1, value22, value32, value42, value52) {
@@ -3898,7 +4130,7 @@
       throw new Error("Failed pattern match at Data.Map.Internal (line 717, column 40 - line 738, column 34): " + [l2.constructor.name]);
     };
   })();
-  var $lazy_unsafeSplit = /* @__PURE__ */ $runtime_lazy3("unsafeSplit", "Data.Map.Internal", function() {
+  var $lazy_unsafeSplit = /* @__PURE__ */ $runtime_lazy4("unsafeSplit", "Data.Map.Internal", function() {
     return function(comp, k, m2) {
       if (m2 instanceof Leaf) {
         return new Split(Nothing.value, Leaf.value, Leaf.value);
@@ -3927,7 +4159,7 @@
     };
   });
   var unsafeSplit = /* @__PURE__ */ $lazy_unsafeSplit(786);
-  var $lazy_unsafeSplitLast = /* @__PURE__ */ $runtime_lazy3("unsafeSplitLast", "Data.Map.Internal", function() {
+  var $lazy_unsafeSplitLast = /* @__PURE__ */ $runtime_lazy4("unsafeSplitLast", "Data.Map.Internal", function() {
     return function(k, v2, l2, r3) {
       if (r3 instanceof Leaf) {
         return new SplitLast(k, v2, l2);
@@ -3954,7 +4186,7 @@
     ;
     throw new Error("Failed pattern match at Data.Map.Internal (line 764, column 25 - line 768, column 38): " + [v2.constructor.name, v1.constructor.name]);
   };
-  var $lazy_unsafeDifference = /* @__PURE__ */ $runtime_lazy3("unsafeDifference", "Data.Map.Internal", function() {
+  var $lazy_unsafeDifference = /* @__PURE__ */ $runtime_lazy4("unsafeDifference", "Data.Map.Internal", function() {
     return function(comp, l2, r3) {
       if (l2 instanceof Leaf) {
         return Leaf.value;
@@ -3975,7 +4207,7 @@
     };
   });
   var unsafeDifference = /* @__PURE__ */ $lazy_unsafeDifference(835);
-  var $lazy_unsafeIntersectionWith = /* @__PURE__ */ $runtime_lazy3("unsafeIntersectionWith", "Data.Map.Internal", function() {
+  var $lazy_unsafeIntersectionWith = /* @__PURE__ */ $runtime_lazy4("unsafeIntersectionWith", "Data.Map.Internal", function() {
     return function(comp, app, l2, r3) {
       if (l2 instanceof Leaf) {
         return Leaf.value;
@@ -4004,7 +4236,7 @@
     };
   });
   var unsafeIntersectionWith = /* @__PURE__ */ $lazy_unsafeIntersectionWith(819);
-  var $lazy_unsafeUnionWith = /* @__PURE__ */ $runtime_lazy3("unsafeUnionWith", "Data.Map.Internal", function() {
+  var $lazy_unsafeUnionWith = /* @__PURE__ */ $runtime_lazy4("unsafeUnionWith", "Data.Map.Internal", function() {
     return function(comp, app, l2, r3) {
       if (l2 instanceof Leaf) {
         return r3;
@@ -4205,6 +4437,40 @@
   var intersection = function(dictOrd) {
     return intersectionWith(dictOrd)($$const);
   };
+  var insertWith = function(dictOrd) {
+    var compare2 = compare(dictOrd);
+    return function(app) {
+      return function(k) {
+        return function(v2) {
+          var go2 = function(v1) {
+            if (v1 instanceof Leaf) {
+              return singleton4(k)(v2);
+            }
+            ;
+            if (v1 instanceof Node) {
+              var v22 = compare2(k)(v1.value2);
+              if (v22 instanceof LT) {
+                return unsafeBalancedNode(v1.value2, v1.value3, go2(v1.value4), v1.value5);
+              }
+              ;
+              if (v22 instanceof GT) {
+                return unsafeBalancedNode(v1.value2, v1.value3, v1.value4, go2(v1.value5));
+              }
+              ;
+              if (v22 instanceof EQ) {
+                return new Node(v1.value0, v1.value1, k, app(v1.value3)(v2), v1.value4, v1.value5);
+              }
+              ;
+              throw new Error("Failed pattern match at Data.Map.Internal (line 486, column 7 - line 489, column 44): " + [v22.constructor.name]);
+            }
+            ;
+            throw new Error("Failed pattern match at Data.Map.Internal (line 483, column 8 - line 489, column 44): " + [v1.constructor.name]);
+          };
+          return go2;
+        };
+      };
+    };
+  };
   var insert2 = function(dictOrd) {
     var compare2 = compare(dictOrd);
     return function(k) {
@@ -4256,7 +4522,7 @@
   var foldableMap = {
     foldr: function(f) {
       return function(z2) {
-        var $lazy_go = $runtime_lazy3("go", "Data.Map.Internal", function() {
+        var $lazy_go = $runtime_lazy4("go", "Data.Map.Internal", function() {
           return function(m$prime, z$prime) {
             if (m$prime instanceof Leaf) {
               return z$prime;
@@ -4277,7 +4543,7 @@
     },
     foldl: function(f) {
       return function(z2) {
-        var $lazy_go = $runtime_lazy3("go", "Data.Map.Internal", function() {
+        var $lazy_go = $runtime_lazy4("go", "Data.Map.Internal", function() {
           return function(z$prime, m$prime) {
             if (m$prime instanceof Leaf) {
               return z$prime;
@@ -4318,7 +4584,7 @@
   var foldableWithIndexMap = {
     foldrWithIndex: function(f) {
       return function(z2) {
-        var $lazy_go = $runtime_lazy3("go", "Data.Map.Internal", function() {
+        var $lazy_go = $runtime_lazy4("go", "Data.Map.Internal", function() {
           return function(m$prime, z$prime) {
             if (m$prime instanceof Leaf) {
               return z$prime;
@@ -4339,7 +4605,7 @@
     },
     foldlWithIndex: function(f) {
       return function(z2) {
-        var $lazy_go = $runtime_lazy3("go", "Data.Map.Internal", function() {
+        var $lazy_go = $runtime_lazy4("go", "Data.Map.Internal", function() {
           return function(z$prime, m$prime) {
             if (m$prime instanceof Leaf) {
               return z$prime;
@@ -4434,6 +4700,20 @@
       })(empty2);
     };
   };
+  var fromFoldableWith = function(dictOrd) {
+    var insertWith1 = insertWith(dictOrd);
+    return function(dictFoldable) {
+      var foldl7 = foldl(dictFoldable);
+      return function(f) {
+        var f$prime = insertWith1(flip(f));
+        return foldl7(function(m2) {
+          return function(v2) {
+            return f$prime(v2.value0)(v2.value1)(m2);
+          };
+        })(empty2);
+      };
+    };
+  };
   var difference2 = function(dictOrd) {
     var compare2 = compare(dictOrd);
     return function(m1) {
@@ -4494,7 +4774,9 @@
   };
 
   // output/Data.List/index.js
-  var map7 = /* @__PURE__ */ map(functorMaybe);
+  var map8 = /* @__PURE__ */ map(functorMaybe);
+  var eq3 = /* @__PURE__ */ eq(eqOrdering);
+  var notEq3 = /* @__PURE__ */ notEq(eqOrdering);
   var uncons2 = function(v2) {
     if (v2 instanceof Nil) {
       return Nothing.value;
@@ -4511,10 +4793,140 @@
   };
   var toUnfoldable3 = function(dictUnfoldable) {
     return unfoldr(dictUnfoldable)(function(xs) {
-      return map7(function(rec) {
+      return map8(function(rec) {
         return new Tuple(rec.head, rec.tail);
       })(uncons2(xs));
     });
+  };
+  var singleton5 = function(a3) {
+    return new Cons(a3, Nil.value);
+  };
+  var sortBy2 = function(cmp) {
+    var merge = function(v2) {
+      return function(v1) {
+        if (v2 instanceof Cons && v1 instanceof Cons) {
+          if (eq3(cmp(v2.value0)(v1.value0))(GT.value)) {
+            return new Cons(v1.value0, merge(v2)(v1.value1));
+          }
+          ;
+          if (otherwise) {
+            return new Cons(v2.value0, merge(v2.value1)(v1));
+          }
+          ;
+        }
+        ;
+        if (v2 instanceof Nil) {
+          return v1;
+        }
+        ;
+        if (v1 instanceof Nil) {
+          return v2;
+        }
+        ;
+        throw new Error("Failed pattern match at Data.List (line 466, column 3 - line 466, column 38): " + [v2.constructor.name, v1.constructor.name]);
+      };
+    };
+    var mergePairs = function(v2) {
+      if (v2 instanceof Cons && v2.value1 instanceof Cons) {
+        return new Cons(merge(v2.value0)(v2.value1.value0), mergePairs(v2.value1.value1));
+      }
+      ;
+      return v2;
+    };
+    var mergeAll = function($copy_v) {
+      var $tco_done = false;
+      var $tco_result;
+      function $tco_loop(v2) {
+        if (v2 instanceof Cons && v2.value1 instanceof Nil) {
+          $tco_done = true;
+          return v2.value0;
+        }
+        ;
+        $copy_v = mergePairs(v2);
+        return;
+      }
+      ;
+      while (!$tco_done) {
+        $tco_result = $tco_loop($copy_v);
+      }
+      ;
+      return $tco_result;
+    };
+    var sequences = function(v2) {
+      if (v2 instanceof Cons && v2.value1 instanceof Cons) {
+        if (eq3(cmp(v2.value0)(v2.value1.value0))(GT.value)) {
+          return descending(v2.value1.value0)(singleton5(v2.value0))(v2.value1.value1);
+        }
+        ;
+        if (otherwise) {
+          return ascending(v2.value1.value0)(function(v1) {
+            return new Cons(v2.value0, v1);
+          })(v2.value1.value1);
+        }
+        ;
+      }
+      ;
+      return singleton5(v2);
+    };
+    var descending = function($copy_v) {
+      return function($copy_v1) {
+        return function($copy_v2) {
+          var $tco_var_v = $copy_v;
+          var $tco_var_v1 = $copy_v1;
+          var $tco_done1 = false;
+          var $tco_result;
+          function $tco_loop(v2, v1, v22) {
+            if (v22 instanceof Cons && eq3(cmp(v2)(v22.value0))(GT.value)) {
+              $tco_var_v = v22.value0;
+              $tco_var_v1 = new Cons(v2, v1);
+              $copy_v2 = v22.value1;
+              return;
+            }
+            ;
+            $tco_done1 = true;
+            return new Cons(new Cons(v2, v1), sequences(v22));
+          }
+          ;
+          while (!$tco_done1) {
+            $tco_result = $tco_loop($tco_var_v, $tco_var_v1, $copy_v2);
+          }
+          ;
+          return $tco_result;
+        };
+      };
+    };
+    var ascending = function($copy_v) {
+      return function($copy_v1) {
+        return function($copy_v2) {
+          var $tco_var_v = $copy_v;
+          var $tco_var_v1 = $copy_v1;
+          var $tco_done2 = false;
+          var $tco_result;
+          function $tco_loop(v2, v1, v22) {
+            if (v22 instanceof Cons && notEq3(cmp(v2)(v22.value0))(GT.value)) {
+              $tco_var_v = v22.value0;
+              $tco_var_v1 = function(ys) {
+                return v1(new Cons(v2, ys));
+              };
+              $copy_v2 = v22.value1;
+              return;
+            }
+            ;
+            $tco_done2 = true;
+            return new Cons(v1(singleton5(v2)), sequences(v22));
+          }
+          ;
+          while (!$tco_done2) {
+            $tco_result = $tco_loop($tco_var_v, $tco_var_v1, $copy_v2);
+          }
+          ;
+          return $tco_result;
+        };
+      };
+    };
+    return function($444) {
+      return mergeAll(sequences($444));
+    };
   };
   var reverse2 = /* @__PURE__ */ (function() {
     var go2 = function($copy_v) {
@@ -4553,14 +4965,17 @@
     ;
     return false;
   };
+  var fromFoldable3 = function(dictFoldable) {
+    return foldr(dictFoldable)(Cons.create)(Nil.value);
+  };
 
   // output/Data.Set/index.js
   var coerce3 = /* @__PURE__ */ coerce();
   var foldMap2 = /* @__PURE__ */ foldMap(foldableList);
   var foldl3 = /* @__PURE__ */ foldl(foldableList);
   var foldr3 = /* @__PURE__ */ foldr(foldableList);
-  var $$Set = function(x4) {
-    return x4;
+  var $$Set = function(x3) {
+    return x3;
   };
   var toList = function(v2) {
     return keys(v2);
@@ -4597,16 +5012,16 @@
       };
     },
     foldl: function(f) {
-      return function(x4) {
-        var $100 = foldl3(f)(x4);
+      return function(x3) {
+        var $100 = foldl3(f)(x3);
         return function($101) {
           return $100(toList($101));
         };
       };
     },
     foldr: function(f) {
-      return function(x4) {
-        var $102 = foldr3(f)(x4);
+      return function(x3) {
+        var $102 = foldr3(f)(x3);
         return function($103) {
           return $102(toList($103));
         };
@@ -4614,7 +5029,7 @@
     }
   };
   var empty3 = empty2;
-  var fromFoldable3 = function(dictFoldable) {
+  var fromFoldable4 = function(dictFoldable) {
     var foldl22 = foldl(dictFoldable);
     return function(dictOrd) {
       var insert13 = insert3(dictOrd);
@@ -4668,7 +5083,7 @@
   var bind12 = /* @__PURE__ */ bind(bindArray);
   var pure1 = /* @__PURE__ */ pure(applicativeArray);
   var foldl4 = /* @__PURE__ */ foldl(foldableArray);
-  var map8 = /* @__PURE__ */ map(functorArray);
+  var map9 = /* @__PURE__ */ map(functorArray);
   var pickBridgePairs = function(numSubgraphs) {
     return function(count) {
       return foldM2(function(acc) {
@@ -4854,9 +5269,9 @@
   var generateSubgraph = function(config) {
     return function(subgraphId) {
       return function __do5() {
-        var nodeCount = randomInt(config.minNodesPerSubgraph)(config.maxNodesPerSubgraph)();
+        var nodeCount2 = randomInt(config.minNodesPerSubgraph)(config.maxNodesPerSubgraph)();
         var dominantCategory = randomInt(0)(3)();
-        var nodes = generateNodes(nodeCount)(subgraphId)(dominantCategory)();
+        var nodes = generateNodes(nodeCount2)(subgraphId)(dominantCategory)();
         var links = generateInternalLinks(nodes)(config.internalConnectivity)();
         return {
           nodes,
@@ -4921,7 +5336,7 @@
           ;
           throw new Error("Failed pattern match at ForcePlayground.Generator (line 262, column 22 - line 264, column 26): " + [v2.constructor.name]);
         })();
-        return map8(function(n) {
+        return map9(function(n) {
           return {
             category: n.category,
             importance: n.importance,
@@ -4947,7 +5362,7 @@
           ;
           throw new Error("Failed pattern match at ForcePlayground.Generator (line 272, column 22 - line 274, column 26): " + [v2.constructor.name]);
         })();
-        return map8(function(l2) {
+        return map9(function(l2) {
           return {
             distance: l2.distance,
             linkType: l2.linkType,
@@ -4991,8 +5406,8 @@
   function nullable(a3, r3, f) {
     return a3 == null ? r3 : f(a3);
   }
-  function notNull(x4) {
-    return x4;
+  function notNull(x3) {
+    return x3;
   }
 
   // output/Data.Nullable/index.js
@@ -5002,7 +5417,7 @@
   };
 
   // output/ForcePlayground.Model/index.js
-  var map9 = /* @__PURE__ */ map(functorArray);
+  var map10 = /* @__PURE__ */ map(functorArray);
   var mkNodeFromGenerated = function(gen) {
     return {
       id: gen.id,
@@ -5030,8 +5445,8 @@
   };
   var fromGeneratedGraph = function(gen) {
     return {
-      nodes: map9(mkNodeFromGenerated)(gen.nodes),
-      links: map9(mkLinkFromGenerated)(gen.links)
+      nodes: map10(mkNodeFromGenerated)(gen.nodes),
+      links: map10(mkLinkFromGenerated)(gen.links)
     };
   };
 
@@ -5221,9 +5636,9 @@
           console.warn("[PointerDrag] No datum on element");
           return;
         }
-        const reheat4 = getSimulationReheat(simId);
-        if (reheat4) {
-          reheat4();
+        const reheat3 = getSimulationReheat(simId);
+        if (reheat3) {
+          reheat3();
         } else {
           console.warn(`[PointerDrag] No simulation registered with ID: ${simId}`);
         }
@@ -5290,9 +5705,9 @@
           console.warn("[PointerDragNested] No datum.node on element");
           return;
         }
-        const reheat4 = getSimulationReheat(simId);
-        if (reheat4) {
-          reheat4();
+        const reheat3 = getSimulationReheat(simId);
+        if (reheat3) {
+          reheat3();
         } else {
           console.warn(`[PointerDragNested] No simulation registered with ID: ${simId}`);
         }
@@ -5350,10 +5765,10 @@
 
   // output/Hylograph.Interaction.Zoom/foreign.js
   var ZoomTransform = class _ZoomTransform {
-    constructor(k, x4, y4) {
+    constructor(k, x3, y3) {
       this.k = k;
-      this.x = x4;
-      this.y = y4;
+      this.x = x3;
+      this.y = y3;
     }
     /**
      * Returns a new transform scaled by k
@@ -5364,8 +5779,8 @@
     /**
      * Returns a new transform translated by (x, y) in local coordinates
      */
-    translate(x4, y4) {
-      return x4 === 0 && y4 === 0 ? this : new _ZoomTransform(this.k, this.x + this.k * x4, this.y + this.k * y4);
+    translate(x3, y3) {
+      return x3 === 0 && y3 === 0 ? this : new _ZoomTransform(this.k, this.x + this.k * x3, this.y + this.k * y3);
     }
     /**
      * Apply transform to a point [x, y] -> [x', y']
@@ -5376,11 +5791,11 @@
     /**
      * Apply inverse transform to get original coordinates
      */
-    applyX(x4) {
-      return x4 * this.k + this.x;
+    applyX(x3) {
+      return x3 * this.k + this.x;
     }
-    applyY(y4) {
-      return y4 * this.k + this.y;
+    applyY(y3) {
+      return y3 * this.k + this.y;
     }
     /**
      * Invert: given transformed point, return original point
@@ -5388,20 +5803,20 @@
     invert(point) {
       return [(point[0] - this.x) / this.k, (point[1] - this.y) / this.k];
     }
-    invertX(x4) {
-      return (x4 - this.x) / this.k;
+    invertX(x3) {
+      return (x3 - this.x) / this.k;
     }
-    invertY(y4) {
-      return (y4 - this.y) / this.k;
+    invertY(y3) {
+      return (y3 - this.y) / this.k;
     }
     /**
      * Rescale a scale's domain according to this transform
      */
-    rescaleX(x4) {
-      return x4.copy().domain(x4.range().map(this.invertX, this).map(x4.invert, x4));
+    rescaleX(x3) {
+      return x3.copy().domain(x3.range().map(this.invertX, this).map(x3.invert, x3));
     }
-    rescaleY(y4) {
-      return y4.copy().domain(y4.range().map(this.invertY, this).map(y4.invert, y4));
+    rescaleY(y3) {
+      return y3.copy().domain(y3.range().map(this.invertY, this).map(y3.invert, y3));
     }
     toString() {
       return `translate(${this.x},${this.y}) scale(${this.k})`;
@@ -5413,23 +5828,23 @@
     const dx1 = transform.invertX(extent[1][0]) - translateExtent[1][0];
     const dy0 = transform.invertY(extent[0][1]) - translateExtent[0][1];
     const dy1 = transform.invertY(extent[1][1]) - translateExtent[1][1];
-    let x4 = transform.x;
-    let y4 = transform.y;
+    let x3 = transform.x;
+    let y3 = transform.y;
     if (dx1 > dx0) {
-      x4 += (dx0 + dx1) / 2 * transform.k;
+      x3 += (dx0 + dx1) / 2 * transform.k;
     } else if (dx0 < 0) {
-      x4 -= dx0 * transform.k;
+      x3 -= dx0 * transform.k;
     } else if (dx1 > 0) {
-      x4 -= dx1 * transform.k;
+      x3 -= dx1 * transform.k;
     }
     if (dy1 > dy0) {
-      y4 += (dy0 + dy1) / 2 * transform.k;
+      y3 += (dy0 + dy1) / 2 * transform.k;
     } else if (dy0 < 0) {
-      y4 -= dy0 * transform.k;
+      y3 -= dy0 * transform.k;
     } else if (dy1 > 0) {
-      y4 -= dy1 * transform.k;
+      y3 -= dy1 * transform.k;
     }
-    return x4 === transform.x && y4 === transform.y ? transform : new ZoomTransform(transform.k, x4, y4);
+    return x3 === transform.x && y3 === transform.y ? transform : new ZoomTransform(transform.k, x3, y3);
   }
   function zoomAround(transform, point, newK) {
     const p2 = transform.invert(point);
@@ -5458,12 +5873,12 @@
         }
         return extent;
       }
-      function toSVGCoords(clientX2, clientY2) {
+      function toSVGCoords(clientX, clientY) {
         const svg2 = element4.ownerSVGElement || element4;
         if (svg2.createSVGPoint) {
           const pt = svg2.createSVGPoint();
-          pt.x = clientX2;
-          pt.y = clientY2;
+          pt.x = clientX;
+          pt.y = clientY;
           const ctm = svg2.getScreenCTM();
           if (ctm) {
             const inv = ctm.inverse();
@@ -5472,7 +5887,7 @@
           }
         }
         const rect2 = element4.getBoundingClientRect();
-        return [clientX2 - rect2.left, clientY2 - rect2.top];
+        return [clientX - rect2.left, clientY - rect2.top];
       }
       function toSVGDelta(screenDx, screenDy) {
         const svg2 = element4.ownerSVGElement || element4;
@@ -5605,9 +6020,9 @@
           const rect2 = element4.getBoundingClientRect();
           const screenCenterX = rect2.left + rect2.width / 2;
           const screenCenterY = rect2.top + rect2.height / 2;
-          const center2 = toSVGCoords(screenCenterX, screenCenterY);
+          const center3 = toSVGCoords(screenCenterX, screenCenterY);
           const newK = transform.k * factor;
-          const newTransform = zoomAround(transform, center2, newK);
+          const newTransform = zoomAround(transform, center3, newK);
           setTransform(newTransform);
         },
         // Cleanup
@@ -5672,11 +6087,11 @@
     return HTMLContext2;
   })();
   var Circle = /* @__PURE__ */ (function() {
-    function Circle3() {
+    function Circle4() {
     }
     ;
-    Circle3.value = new Circle3();
-    return Circle3;
+    Circle4.value = new Circle4();
+    return Circle4;
   })();
   var Rect = /* @__PURE__ */ (function() {
     function Rect2() {
@@ -5700,11 +6115,11 @@
     return Line2;
   })();
   var Polygon = /* @__PURE__ */ (function() {
-    function Polygon2() {
+    function Polygon3() {
     }
     ;
-    Polygon2.value = new Polygon2();
-    return Polygon2;
+    Polygon3.value = new Polygon3();
+    return Polygon3;
   })();
   var Text = /* @__PURE__ */ (function() {
     function Text3() {
@@ -5951,6 +6366,27 @@
     Abbr2.value = new Abbr2();
     return Abbr2;
   })();
+  var Button = /* @__PURE__ */ (function() {
+    function Button2() {
+    }
+    ;
+    Button2.value = new Button2();
+    return Button2;
+  })();
+  var Input = /* @__PURE__ */ (function() {
+    function Input2() {
+    }
+    ;
+    Input2.value = new Input2();
+    return Input2;
+  })();
+  var Label = /* @__PURE__ */ (function() {
+    function Label2() {
+    }
+    ;
+    Label2.value = new Label2();
+    return Label2;
+  })();
   var elementContext = function(v2) {
     if (v2 instanceof Circle) {
       return SVGContext.value;
@@ -6112,942 +6548,3868 @@
       return HTMLContext.value;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.Element.Types (line 89, column 1 - line 89, column 47): " + [v2.constructor.name]);
+    if (v2 instanceof Button) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Input) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v2 instanceof Label) {
+      return HTMLContext.value;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Element.Types (line 93, column 1 - line 93, column 47): " + [v2.constructor.name]);
   };
 
-  // output/Data.Map/index.js
-  var keys2 = /* @__PURE__ */ (function() {
-    var $38 = $$void(functorMap);
-    return function($39) {
-      return fromMap($38($39));
-    };
-  })();
-
-  // ../../../../node_modules/d3-force/src/center.js
-  function center_default(x4, y4) {
-    var nodes, strength = 1;
-    if (x4 == null) x4 = 0;
-    if (y4 == null) y4 = 0;
-    function force2() {
-      var i2, n = nodes.length, node, sx = 0, sy = 0;
-      for (i2 = 0; i2 < n; ++i2) {
-        node = nodes[i2], sx += node.x, sy += node.y;
-      }
-      for (sx = (sx / n - x4) * strength, sy = (sy / n - y4) * strength, i2 = 0; i2 < n; ++i2) {
-        node = nodes[i2], node.x -= sx, node.y -= sy;
-      }
-    }
-    force2.initialize = function(_) {
-      nodes = _;
-    };
-    force2.x = function(_) {
-      return arguments.length ? (x4 = +_, force2) : x4;
-    };
-    force2.y = function(_) {
-      return arguments.length ? (y4 = +_, force2) : y4;
-    };
-    force2.strength = function(_) {
-      return arguments.length ? (strength = +_, force2) : strength;
-    };
-    return force2;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/add.js
-  function add_default(d2) {
-    const x4 = +this._x.call(null, d2), y4 = +this._y.call(null, d2);
-    return add2(this.cover(x4, y4), x4, y4, d2);
-  }
-  function add2(tree, x4, y4, d2) {
-    if (isNaN(x4) || isNaN(y4)) return tree;
-    var parent2, node = tree._root, leaf = { data: d2 }, x0 = tree._x0, y0 = tree._y0, x13 = tree._x1, y13 = tree._y1, xm, ym, xp, yp, right, bottom3, i2, j;
-    if (!node) return tree._root = leaf, tree;
-    while (node.length) {
-      if (right = x4 >= (xm = (x0 + x13) / 2)) x0 = xm;
-      else x13 = xm;
-      if (bottom3 = y4 >= (ym = (y0 + y13) / 2)) y0 = ym;
-      else y13 = ym;
-      if (parent2 = node, !(node = node[i2 = bottom3 << 1 | right])) return parent2[i2] = leaf, tree;
-    }
-    xp = +tree._x.call(null, node.data);
-    yp = +tree._y.call(null, node.data);
-    if (x4 === xp && y4 === yp) return leaf.next = node, parent2 ? parent2[i2] = leaf : tree._root = leaf, tree;
-    do {
-      parent2 = parent2 ? parent2[i2] = new Array(4) : tree._root = new Array(4);
-      if (right = x4 >= (xm = (x0 + x13) / 2)) x0 = xm;
-      else x13 = xm;
-      if (bottom3 = y4 >= (ym = (y0 + y13) / 2)) y0 = ym;
-      else y13 = ym;
-    } while ((i2 = bottom3 << 1 | right) === (j = (yp >= ym) << 1 | xp >= xm));
-    return parent2[j] = node, parent2[i2] = leaf, tree;
-  }
-  function addAll(data) {
-    var d2, i2, n = data.length, x4, y4, xz = new Array(n), yz = new Array(n), x0 = Infinity, y0 = Infinity, x13 = -Infinity, y13 = -Infinity;
-    for (i2 = 0; i2 < n; ++i2) {
-      if (isNaN(x4 = +this._x.call(null, d2 = data[i2])) || isNaN(y4 = +this._y.call(null, d2))) continue;
-      xz[i2] = x4;
-      yz[i2] = y4;
-      if (x4 < x0) x0 = x4;
-      if (x4 > x13) x13 = x4;
-      if (y4 < y0) y0 = y4;
-      if (y4 > y13) y13 = y4;
-    }
-    if (x0 > x13 || y0 > y13) return this;
-    this.cover(x0, y0).cover(x13, y13);
-    for (i2 = 0; i2 < n; ++i2) {
-      add2(this, xz[i2], yz[i2], data[i2]);
-    }
-    return this;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/cover.js
-  function cover_default(x4, y4) {
-    if (isNaN(x4 = +x4) || isNaN(y4 = +y4)) return this;
-    var x0 = this._x0, y0 = this._y0, x13 = this._x1, y13 = this._y1;
-    if (isNaN(x0)) {
-      x13 = (x0 = Math.floor(x4)) + 1;
-      y13 = (y0 = Math.floor(y4)) + 1;
-    } else {
-      var z2 = x13 - x0 || 1, node = this._root, parent2, i2;
-      while (x0 > x4 || x4 >= x13 || y0 > y4 || y4 >= y13) {
-        i2 = (y4 < y0) << 1 | x4 < x0;
-        parent2 = new Array(4), parent2[i2] = node, node = parent2, z2 *= 2;
-        switch (i2) {
-          case 0:
-            x13 = x0 + z2, y13 = y0 + z2;
-            break;
-          case 1:
-            x0 = x13 - z2, y13 = y0 + z2;
-            break;
-          case 2:
-            x13 = x0 + z2, y0 = y13 - z2;
-            break;
-          case 3:
-            x0 = x13 - z2, y0 = y13 - z2;
-            break;
-        }
-      }
-      if (this._root && this._root.length) this._root = node;
-    }
-    this._x0 = x0;
-    this._y0 = y0;
-    this._x1 = x13;
-    this._y1 = y13;
-    return this;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/data.js
-  function data_default() {
-    var data = [];
-    this.visit(function(node) {
-      if (!node.length) do
-        data.push(node.data);
-      while (node = node.next);
-    });
-    return data;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/extent.js
-  function extent_default(_) {
-    return arguments.length ? this.cover(+_[0][0], +_[0][1]).cover(+_[1][0], +_[1][1]) : isNaN(this._x0) ? void 0 : [[this._x0, this._y0], [this._x1, this._y1]];
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/quad.js
-  function quad_default(node, x0, y0, x13, y13) {
-    this.node = node;
-    this.x0 = x0;
-    this.y0 = y0;
-    this.x1 = x13;
-    this.y1 = y13;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/find.js
-  function find_default(x4, y4, radius) {
-    var data, x0 = this._x0, y0 = this._y0, x13, y13, x24, y24, x32 = this._x1, y32 = this._y1, quads = [], node = this._root, q3, i2;
-    if (node) quads.push(new quad_default(node, x0, y0, x32, y32));
-    if (radius == null) radius = Infinity;
-    else {
-      x0 = x4 - radius, y0 = y4 - radius;
-      x32 = x4 + radius, y32 = y4 + radius;
-      radius *= radius;
-    }
-    while (q3 = quads.pop()) {
-      if (!(node = q3.node) || (x13 = q3.x0) > x32 || (y13 = q3.y0) > y32 || (x24 = q3.x1) < x0 || (y24 = q3.y1) < y0) continue;
-      if (node.length) {
-        var xm = (x13 + x24) / 2, ym = (y13 + y24) / 2;
-        quads.push(
-          new quad_default(node[3], xm, ym, x24, y24),
-          new quad_default(node[2], x13, ym, xm, y24),
-          new quad_default(node[1], xm, y13, x24, ym),
-          new quad_default(node[0], x13, y13, xm, ym)
-        );
-        if (i2 = (y4 >= ym) << 1 | x4 >= xm) {
-          q3 = quads[quads.length - 1];
-          quads[quads.length - 1] = quads[quads.length - 1 - i2];
-          quads[quads.length - 1 - i2] = q3;
-        }
-      } else {
-        var dx = x4 - +this._x.call(null, node.data), dy = y4 - +this._y.call(null, node.data), d2 = dx * dx + dy * dy;
-        if (d2 < radius) {
-          var d3 = Math.sqrt(radius = d2);
-          x0 = x4 - d3, y0 = y4 - d3;
-          x32 = x4 + d3, y32 = y4 + d3;
-          data = node.data;
-        }
-      }
-    }
-    return data;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/remove.js
-  function remove_default(d2) {
-    if (isNaN(x4 = +this._x.call(null, d2)) || isNaN(y4 = +this._y.call(null, d2))) return this;
-    var parent2, node = this._root, retainer, previous, next2, x0 = this._x0, y0 = this._y0, x13 = this._x1, y13 = this._y1, x4, y4, xm, ym, right, bottom3, i2, j;
-    if (!node) return this;
-    if (node.length) while (true) {
-      if (right = x4 >= (xm = (x0 + x13) / 2)) x0 = xm;
-      else x13 = xm;
-      if (bottom3 = y4 >= (ym = (y0 + y13) / 2)) y0 = ym;
-      else y13 = ym;
-      if (!(parent2 = node, node = node[i2 = bottom3 << 1 | right])) return this;
-      if (!node.length) break;
-      if (parent2[i2 + 1 & 3] || parent2[i2 + 2 & 3] || parent2[i2 + 3 & 3]) retainer = parent2, j = i2;
-    }
-    while (node.data !== d2) if (!(previous = node, node = node.next)) return this;
-    if (next2 = node.next) delete node.next;
-    if (previous) return next2 ? previous.next = next2 : delete previous.next, this;
-    if (!parent2) return this._root = next2, this;
-    next2 ? parent2[i2] = next2 : delete parent2[i2];
-    if ((node = parent2[0] || parent2[1] || parent2[2] || parent2[3]) && node === (parent2[3] || parent2[2] || parent2[1] || parent2[0]) && !node.length) {
-      if (retainer) retainer[j] = node;
-      else this._root = node;
-    }
-    return this;
-  }
-  function removeAll(data) {
-    for (var i2 = 0, n = data.length; i2 < n; ++i2) this.remove(data[i2]);
-    return this;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/root.js
-  function root_default() {
-    return this._root;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/size.js
-  function size_default() {
-    var size6 = 0;
-    this.visit(function(node) {
-      if (!node.length) do
-        ++size6;
-      while (node = node.next);
-    });
-    return size6;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/visit.js
-  function visit_default(callback) {
-    var quads = [], q3, node = this._root, child, x0, y0, x13, y13;
-    if (node) quads.push(new quad_default(node, this._x0, this._y0, this._x1, this._y1));
-    while (q3 = quads.pop()) {
-      if (!callback(node = q3.node, x0 = q3.x0, y0 = q3.y0, x13 = q3.x1, y13 = q3.y1) && node.length) {
-        var xm = (x0 + x13) / 2, ym = (y0 + y13) / 2;
-        if (child = node[3]) quads.push(new quad_default(child, xm, ym, x13, y13));
-        if (child = node[2]) quads.push(new quad_default(child, x0, ym, xm, y13));
-        if (child = node[1]) quads.push(new quad_default(child, xm, y0, x13, ym));
-        if (child = node[0]) quads.push(new quad_default(child, x0, y0, xm, ym));
-      }
-    }
-    return this;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/visitAfter.js
-  function visitAfter_default(callback) {
-    var quads = [], next2 = [], q3;
-    if (this._root) quads.push(new quad_default(this._root, this._x0, this._y0, this._x1, this._y1));
-    while (q3 = quads.pop()) {
-      var node = q3.node;
-      if (node.length) {
-        var child, x0 = q3.x0, y0 = q3.y0, x13 = q3.x1, y13 = q3.y1, xm = (x0 + x13) / 2, ym = (y0 + y13) / 2;
-        if (child = node[0]) quads.push(new quad_default(child, x0, y0, xm, ym));
-        if (child = node[1]) quads.push(new quad_default(child, xm, y0, x13, ym));
-        if (child = node[2]) quads.push(new quad_default(child, x0, ym, xm, y13));
-        if (child = node[3]) quads.push(new quad_default(child, xm, ym, x13, y13));
-      }
-      next2.push(q3);
-    }
-    while (q3 = next2.pop()) {
-      callback(q3.node, q3.x0, q3.y0, q3.x1, q3.y1);
-    }
-    return this;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/x.js
-  function defaultX(d2) {
-    return d2[0];
-  }
-  function x_default(_) {
-    return arguments.length ? (this._x = _, this) : this._x;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/y.js
-  function defaultY(d2) {
-    return d2[1];
-  }
-  function y_default(_) {
-    return arguments.length ? (this._y = _, this) : this._y;
-  }
-
-  // ../../../../node_modules/d3-quadtree/src/quadtree.js
-  function quadtree(nodes, x4, y4) {
-    var tree = new Quadtree(x4 == null ? defaultX : x4, y4 == null ? defaultY : y4, NaN, NaN, NaN, NaN);
-    return nodes == null ? tree : tree.addAll(nodes);
-  }
-  function Quadtree(x4, y4, x0, y0, x13, y13) {
-    this._x = x4;
-    this._y = y4;
-    this._x0 = x0;
-    this._y0 = y0;
-    this._x1 = x13;
-    this._y1 = y13;
-    this._root = void 0;
-  }
-  function leaf_copy(leaf) {
-    var copy2 = { data: leaf.data }, next2 = copy2;
-    while (leaf = leaf.next) next2 = next2.next = { data: leaf.data };
-    return copy2;
-  }
-  var treeProto = quadtree.prototype = Quadtree.prototype;
-  treeProto.copy = function() {
-    var copy2 = new Quadtree(this._x, this._y, this._x0, this._y0, this._x1, this._y1), node = this._root, nodes, child;
-    if (!node) return copy2;
-    if (!node.length) return copy2._root = leaf_copy(node), copy2;
-    nodes = [{ source: node, target: copy2._root = new Array(4) }];
-    while (node = nodes.pop()) {
-      for (var i2 = 0; i2 < 4; ++i2) {
-        if (child = node.source[i2]) {
-          if (child.length) nodes.push({ source: child, target: node.target[i2] = new Array(4) });
-          else node.target[i2] = leaf_copy(child);
-        }
-      }
-    }
-    return copy2;
+  // output/Hylograph.Forces.Node/foreign.js
+  var writeVelocity = (node, vx, vy) => {
+    node.vx = vx;
+    node.vy = vy;
   };
-  treeProto.add = add_default;
-  treeProto.addAll = addAll;
-  treeProto.cover = cover_default;
-  treeProto.data = data_default;
-  treeProto.extent = extent_default;
-  treeProto.find = find_default;
-  treeProto.remove = remove_default;
-  treeProto.removeAll = removeAll;
-  treeProto.root = root_default;
-  treeProto.size = size_default;
-  treeProto.visit = visit_default;
-  treeProto.visitAfter = visitAfter_default;
-  treeProto.x = x_default;
-  treeProto.y = y_default;
+  var writePosition = (node, x3, y3) => {
+    node.x = x3;
+    node.y = y3;
+  };
+  var writeIndex = (node, index4) => {
+    node.index = index4;
+  };
 
-  // ../../../../node_modules/d3-force/src/constant.js
-  function constant_default(x4) {
-    return function() {
-      return x4;
-    };
-  }
+  // output/Hylograph.Forces.Node/index.js
+  var pinnedY = function(node) {
+    var v2 = toMaybe(node.fy);
+    if (v2 instanceof Just) {
+      return true;
+    }
+    ;
+    if (v2 instanceof Nothing) {
+      return false;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Forces.Node (line 63, column 16 - line 65, column 19): " + [v2.constructor.name]);
+  };
+  var pinnedX = function(node) {
+    var v2 = toMaybe(node.fx);
+    if (v2 instanceof Just) {
+      return true;
+    }
+    ;
+    if (v2 instanceof Nothing) {
+      return false;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Forces.Node (line 58, column 16 - line 60, column 19): " + [v2.constructor.name]);
+  };
 
-  // ../../../../node_modules/d3-force/src/jiggle.js
-  function jiggle_default(random2) {
-    return (random2() - 0.5) * 1e-6;
-  }
-
-  // ../../../../node_modules/d3-force/src/collide.js
-  function x(d2) {
-    return d2.x + d2.vx;
-  }
-  function y(d2) {
-    return d2.y + d2.vy;
-  }
-  function collide_default(radius) {
-    var nodes, radii, random2, strength = 1, iterations = 1;
-    if (typeof radius !== "function") radius = constant_default(radius == null ? 1 : +radius);
-    function force2() {
-      var i2, n = nodes.length, tree, node, xi, yi, ri, ri2;
-      for (var k = 0; k < iterations; ++k) {
-        tree = quadtree(nodes, x, y).visitAfter(prepare);
-        for (i2 = 0; i2 < n; ++i2) {
-          node = nodes[i2];
-          ri = radii[node.index], ri2 = ri * ri;
-          xi = node.x + node.vx;
-          yi = node.y + node.vy;
-          tree.visit(apply2);
-        }
-      }
-      function apply2(quad, x0, y0, x13, y13) {
-        var data = quad.data, rj = quad.r, r3 = ri + rj;
-        if (data) {
-          if (data.index > node.index) {
-            var x4 = xi - data.x - data.vx, y4 = yi - data.y - data.vy, l2 = x4 * x4 + y4 * y4;
-            if (l2 < r3 * r3) {
-              if (x4 === 0) x4 = jiggle_default(random2), l2 += x4 * x4;
-              if (y4 === 0) y4 = jiggle_default(random2), l2 += y4 * y4;
-              l2 = (r3 - (l2 = Math.sqrt(l2))) / l2 * strength;
-              node.vx += (x4 *= l2) * (r3 = (rj *= rj) / (ri2 + rj));
-              node.vy += (y4 *= l2) * r3;
-              data.vx -= x4 * (r3 = 1 - r3);
-              data.vy -= y4 * r3;
-            }
-          }
-          return;
-        }
-        return x0 > xi + r3 || x13 < xi - r3 || y0 > yi + r3 || y13 < yi - r3;
-      }
-    }
-    function prepare(quad) {
-      if (quad.data) return quad.r = radii[quad.data.index];
-      for (var i2 = quad.r = 0; i2 < 4; ++i2) {
-        if (quad[i2] && quad[i2].r > quad.r) {
-          quad.r = quad[i2].r;
-        }
-      }
-    }
-    function initialize() {
-      if (!nodes) return;
-      var i2, n = nodes.length, node;
-      radii = new Array(n);
-      for (i2 = 0; i2 < n; ++i2) node = nodes[i2], radii[node.index] = +radius(node, i2, nodes);
-    }
-    force2.initialize = function(_nodes, _random) {
-      nodes = _nodes;
-      random2 = _random;
-      initialize();
-    };
-    force2.iterations = function(_) {
-      return arguments.length ? (iterations = +_, force2) : iterations;
-    };
-    force2.strength = function(_) {
-      return arguments.length ? (strength = +_, force2) : strength;
-    };
-    force2.radius = function(_) {
-      return arguments.length ? (radius = typeof _ === "function" ? _ : constant_default(+_), initialize(), force2) : radius;
-    };
-    return force2;
-  }
-
-  // ../../../../node_modules/d3-force/src/link.js
-  function index2(d2) {
-    return d2.index;
-  }
-  function find3(nodeById, nodeId) {
-    var node = nodeById.get(nodeId);
-    if (!node) throw new Error("node not found: " + nodeId);
-    return node;
-  }
-  function link_default(links) {
-    var id3 = index2, strength = defaultStrength, strengths, distance = constant_default(30), distances, nodes, count, bias, random2, iterations = 1;
-    if (links == null) links = [];
-    function defaultStrength(link4) {
-      return 1 / Math.min(count[link4.source.index], count[link4.target.index]);
-    }
-    function force2(alpha) {
-      for (var k = 0, n = links.length; k < iterations; ++k) {
-        for (var i2 = 0, link4, source2, target6, x4, y4, l2, b2; i2 < n; ++i2) {
-          link4 = links[i2], source2 = link4.source, target6 = link4.target;
-          x4 = target6.x + target6.vx - source2.x - source2.vx || jiggle_default(random2);
-          y4 = target6.y + target6.vy - source2.y - source2.vy || jiggle_default(random2);
-          l2 = Math.sqrt(x4 * x4 + y4 * y4);
-          l2 = (l2 - distances[i2]) / l2 * alpha * strengths[i2];
-          x4 *= l2, y4 *= l2;
-          target6.vx -= x4 * (b2 = bias[i2]);
-          target6.vy -= y4 * b2;
-          source2.vx += x4 * (b2 = 1 - b2);
-          source2.vy += y4 * b2;
-        }
-      }
-    }
-    function initialize() {
-      if (!nodes) return;
-      var i2, n = nodes.length, m2 = links.length, nodeById = new Map(nodes.map((d2, i3) => [id3(d2, i3, nodes), d2])), link4;
-      for (i2 = 0, count = new Array(n); i2 < m2; ++i2) {
-        link4 = links[i2], link4.index = i2;
-        if (typeof link4.source !== "object") link4.source = find3(nodeById, link4.source);
-        if (typeof link4.target !== "object") link4.target = find3(nodeById, link4.target);
-        count[link4.source.index] = (count[link4.source.index] || 0) + 1;
-        count[link4.target.index] = (count[link4.target.index] || 0) + 1;
-      }
-      for (i2 = 0, bias = new Array(m2); i2 < m2; ++i2) {
-        link4 = links[i2], bias[i2] = count[link4.source.index] / (count[link4.source.index] + count[link4.target.index]);
-      }
-      strengths = new Array(m2), initializeStrength();
-      distances = new Array(m2), initializeDistance();
-    }
-    function initializeStrength() {
-      if (!nodes) return;
-      for (var i2 = 0, n = links.length; i2 < n; ++i2) {
-        strengths[i2] = +strength(links[i2], i2, links);
-      }
-    }
-    function initializeDistance() {
-      if (!nodes) return;
-      for (var i2 = 0, n = links.length; i2 < n; ++i2) {
-        distances[i2] = +distance(links[i2], i2, links);
-      }
-    }
-    force2.initialize = function(_nodes, _random) {
-      nodes = _nodes;
-      random2 = _random;
-      initialize();
-    };
-    force2.links = function(_) {
-      return arguments.length ? (links = _, initialize(), force2) : links;
-    };
-    force2.id = function(_) {
-      return arguments.length ? (id3 = _, force2) : id3;
-    };
-    force2.iterations = function(_) {
-      return arguments.length ? (iterations = +_, force2) : iterations;
-    };
-    force2.strength = function(_) {
-      return arguments.length ? (strength = typeof _ === "function" ? _ : constant_default(+_), initializeStrength(), force2) : strength;
-    };
-    force2.distance = function(_) {
-      return arguments.length ? (distance = typeof _ === "function" ? _ : constant_default(+_), initializeDistance(), force2) : distance;
-    };
-    return force2;
-  }
-
-  // ../../../../node_modules/d3-force/src/simulation.js
-  function x2(d2) {
-    return d2.x;
-  }
-  function y2(d2) {
-    return d2.y;
-  }
-  var initialAngle = Math.PI * (3 - Math.sqrt(5));
-
-  // ../../../../node_modules/d3-force/src/manyBody.js
-  function manyBody_default() {
-    var nodes, node, random2, alpha, strength = constant_default(-30), strengths, distanceMin2 = 1, distanceMax2 = Infinity, theta2 = 0.81;
-    function force2(_) {
-      var i2, n = nodes.length, tree = quadtree(nodes, x2, y2).visitAfter(accumulate);
-      for (alpha = _, i2 = 0; i2 < n; ++i2) node = nodes[i2], tree.visit(apply2);
-    }
-    function initialize() {
-      if (!nodes) return;
-      var i2, n = nodes.length, node2;
-      strengths = new Array(n);
-      for (i2 = 0; i2 < n; ++i2) node2 = nodes[i2], strengths[node2.index] = +strength(node2, i2, nodes);
-    }
-    function accumulate(quad) {
-      var strength2 = 0, q3, c2, weight = 0, x4, y4, i2;
-      if (quad.length) {
-        for (x4 = y4 = i2 = 0; i2 < 4; ++i2) {
-          if ((q3 = quad[i2]) && (c2 = Math.abs(q3.value))) {
-            strength2 += q3.value, weight += c2, x4 += c2 * q3.x, y4 += c2 * q3.y;
-          }
-        }
-        quad.x = x4 / weight;
-        quad.y = y4 / weight;
-      } else {
-        q3 = quad;
-        q3.x = q3.data.x;
-        q3.y = q3.data.y;
-        do
-          strength2 += strengths[q3.data.index];
-        while (q3 = q3.next);
-      }
-      quad.value = strength2;
-    }
-    function apply2(quad, x13, _, x24) {
-      if (!quad.value) return true;
-      var x4 = quad.x - node.x, y4 = quad.y - node.y, w = x24 - x13, l2 = x4 * x4 + y4 * y4;
-      if (w * w / theta2 < l2) {
-        if (l2 < distanceMax2) {
-          if (x4 === 0) x4 = jiggle_default(random2), l2 += x4 * x4;
-          if (y4 === 0) y4 = jiggle_default(random2), l2 += y4 * y4;
-          if (l2 < distanceMin2) l2 = Math.sqrt(distanceMin2 * l2);
-          node.vx += x4 * quad.value * alpha / l2;
-          node.vy += y4 * quad.value * alpha / l2;
-        }
-        return true;
-      } else if (quad.length || l2 >= distanceMax2) return;
-      if (quad.data !== node || quad.next) {
-        if (x4 === 0) x4 = jiggle_default(random2), l2 += x4 * x4;
-        if (y4 === 0) y4 = jiggle_default(random2), l2 += y4 * y4;
-        if (l2 < distanceMin2) l2 = Math.sqrt(distanceMin2 * l2);
-      }
-      do
-        if (quad.data !== node) {
-          w = strengths[quad.data.index] * alpha / l2;
-          node.vx += x4 * w;
-          node.vy += y4 * w;
-        }
-      while (quad = quad.next);
-    }
-    force2.initialize = function(_nodes, _random) {
-      nodes = _nodes;
-      random2 = _random;
-      initialize();
-    };
-    force2.strength = function(_) {
-      return arguments.length ? (strength = typeof _ === "function" ? _ : constant_default(+_), initialize(), force2) : strength;
-    };
-    force2.distanceMin = function(_) {
-      return arguments.length ? (distanceMin2 = _ * _, force2) : Math.sqrt(distanceMin2);
-    };
-    force2.distanceMax = function(_) {
-      return arguments.length ? (distanceMax2 = _ * _, force2) : Math.sqrt(distanceMax2);
-    };
-    force2.theta = function(_) {
-      return arguments.length ? (theta2 = _ * _, force2) : Math.sqrt(theta2);
-    };
-    return force2;
-  }
-
-  // ../../../../node_modules/d3-force/src/radial.js
-  function radial_default(radius, x4, y4) {
-    var nodes, strength = constant_default(0.1), strengths, radiuses;
-    if (typeof radius !== "function") radius = constant_default(+radius);
-    if (x4 == null) x4 = 0;
-    if (y4 == null) y4 = 0;
-    function force2(alpha) {
-      for (var i2 = 0, n = nodes.length; i2 < n; ++i2) {
-        var node = nodes[i2], dx = node.x - x4 || 1e-6, dy = node.y - y4 || 1e-6, r3 = Math.sqrt(dx * dx + dy * dy), k = (radiuses[i2] - r3) * strengths[i2] * alpha / r3;
-        node.vx += dx * k;
-        node.vy += dy * k;
-      }
-    }
-    function initialize() {
-      if (!nodes) return;
-      var i2, n = nodes.length;
-      strengths = new Array(n);
-      radiuses = new Array(n);
-      for (i2 = 0; i2 < n; ++i2) {
-        radiuses[i2] = +radius(nodes[i2], i2, nodes);
-        strengths[i2] = isNaN(radiuses[i2]) ? 0 : +strength(nodes[i2], i2, nodes);
-      }
-    }
-    force2.initialize = function(_) {
-      nodes = _, initialize();
-    };
-    force2.strength = function(_) {
-      return arguments.length ? (strength = typeof _ === "function" ? _ : constant_default(+_), initialize(), force2) : strength;
-    };
-    force2.radius = function(_) {
-      return arguments.length ? (radius = typeof _ === "function" ? _ : constant_default(+_), initialize(), force2) : radius;
-    };
-    force2.x = function(_) {
-      return arguments.length ? (x4 = +_, force2) : x4;
-    };
-    force2.y = function(_) {
-      return arguments.length ? (y4 = +_, force2) : y4;
-    };
-    return force2;
-  }
-
-  // ../../../../node_modules/d3-force/src/x.js
-  function x_default2(x4) {
-    var strength = constant_default(0.1), nodes, strengths, xz;
-    if (typeof x4 !== "function") x4 = constant_default(x4 == null ? 0 : +x4);
-    function force2(alpha) {
-      for (var i2 = 0, n = nodes.length, node; i2 < n; ++i2) {
-        node = nodes[i2], node.vx += (xz[i2] - node.x) * strengths[i2] * alpha;
-      }
-    }
-    function initialize() {
-      if (!nodes) return;
-      var i2, n = nodes.length;
-      strengths = new Array(n);
-      xz = new Array(n);
-      for (i2 = 0; i2 < n; ++i2) {
-        strengths[i2] = isNaN(xz[i2] = +x4(nodes[i2], i2, nodes)) ? 0 : +strength(nodes[i2], i2, nodes);
-      }
-    }
-    force2.initialize = function(_) {
-      nodes = _;
-      initialize();
-    };
-    force2.strength = function(_) {
-      return arguments.length ? (strength = typeof _ === "function" ? _ : constant_default(+_), initialize(), force2) : strength;
-    };
-    force2.x = function(_) {
-      return arguments.length ? (x4 = typeof _ === "function" ? _ : constant_default(+_), initialize(), force2) : x4;
-    };
-    return force2;
-  }
-
-  // ../../../../node_modules/d3-force/src/y.js
-  function y_default2(y4) {
-    var strength = constant_default(0.1), nodes, strengths, yz;
-    if (typeof y4 !== "function") y4 = constant_default(y4 == null ? 0 : +y4);
-    function force2(alpha) {
-      for (var i2 = 0, n = nodes.length, node; i2 < n; ++i2) {
-        node = nodes[i2], node.vy += (yz[i2] - node.y) * strengths[i2] * alpha;
-      }
-    }
-    function initialize() {
-      if (!nodes) return;
-      var i2, n = nodes.length;
-      strengths = new Array(n);
-      yz = new Array(n);
-      for (i2 = 0; i2 < n; ++i2) {
-        strengths[i2] = isNaN(yz[i2] = +y4(nodes[i2], i2, nodes)) ? 0 : +strength(nodes[i2], i2, nodes);
-      }
-    }
-    force2.initialize = function(_) {
-      nodes = _;
-      initialize();
-    };
-    force2.strength = function(_) {
-      return arguments.length ? (strength = typeof _ === "function" ? _ : constant_default(+_), initialize(), force2) : strength;
-    };
-    force2.y = function(_) {
-      return arguments.length ? (y4 = typeof _ === "function" ? _ : constant_default(+_), initialize(), force2) : y4;
-    };
-    return force2;
-  }
-
-  // output/Hylograph.ForceEngine.Core/foreign.js
-  function createManyBody_(config) {
-    const force2 = manyBody_default().strength(config.strength).theta(config.theta).distanceMin(config.distanceMin).distanceMax(config.distanceMax);
-    return force2;
-  }
-  function createCollide_(config) {
-    const force2 = collide_default().radius(config.radius).strength(config.strength).iterations(config.iterations);
-    return force2;
-  }
-  function createLink_(config) {
-    const force2 = link_default().id((d2) => d2.id).distance(config.distance).strength(config.strength).iterations(config.iterations);
-    return force2;
-  }
-  function createCenter_(config) {
-    const force2 = center_default(config.x, config.y).strength(config.strength);
-    return force2;
-  }
-  function createForceX_(config) {
-    const force2 = x_default2(config.x).strength(config.strength);
-    return force2;
-  }
-  function createForceY_(config) {
-    const force2 = y_default2(config.y).strength(config.strength);
-    return force2;
-  }
-  function createRadial_(config) {
-    const force2 = radial_default(config.radius, config.x, config.y).strength(config.strength);
-    return force2;
-  }
-  function createManyBodyFiltered_(config) {
-    const force2 = manyBody_default().strength(function(d2) {
-      return config.filter(d2) ? config.strength : 0;
-    }).theta(config.theta).distanceMin(config.distanceMin).distanceMax(config.distanceMax);
-    return force2;
-  }
-  function createRadialFiltered_(config) {
-    const force2 = radial_default(config.radius, config.x, config.y).strength(function(d2) {
-      return config.filter(d2) ? config.strength : 0;
-    });
-    return force2;
-  }
-  function createCollideDynamic_(config) {
-    const force2 = collide_default().radius(function(d2) {
-      return config.radiusAccessor(d2);
-    }).strength(config.strength).iterations(config.iterations);
-    return force2;
-  }
-  function createForceXDynamic_(config) {
-    const force2 = x_default2().x(function(d2) {
-      return config.xAccessor(d2);
-    }).strength(config.strength);
-    return force2;
-  }
-  function createForceYDynamic_(config) {
-    const force2 = y_default2().y(function(d2) {
-      return config.yAccessor(d2);
-    }).strength(config.strength);
-    return force2;
-  }
-  function initializeForce_(force2) {
+  // output/Hylograph.Forces.Center/index.js
+  var initialize = function(config) {
     return function(nodes) {
-      return function() {
-        if (force2.initialize) {
-          force2.initialize(nodes, Math.random);
-        }
-        return force2;
+      return {
+        nodes,
+        config
       };
     };
-  }
-  function initializeLinkForce_(force2) {
-    return function(nodes) {
-      return function(links) {
-        return function() {
-          if (force2.initialize) {
-            force2.initialize(nodes, Math.random);
-          }
-          const linksCopy = links.map((l2) => ({ ...l2 }));
-          force2.links(linksCopy);
-          return force2;
-        };
-      };
-    };
-  }
-  function applyForce_(force2) {
-    return function(alpha) {
-      return function() {
-        force2(alpha);
-      };
-    };
-  }
-  function integratePositions_(nodes) {
-    return function(velocityDecay) {
-      return function() {
-        for (let i2 = 0; i2 < nodes.length; i2++) {
-          const node = nodes[i2];
-          if (node.fx != null) {
-            node.x = node.fx;
-            node.vx = 0;
-          } else {
-            node.vx *= velocityDecay;
-            node.x += node.vx;
-          }
-          if (node.fy != null) {
-            node.y = node.fy;
-            node.vy = 0;
-          } else {
-            node.vy *= velocityDecay;
-            node.y += node.vy;
-          }
-        }
-      };
-    };
-  }
-  function decayAlpha_(alpha) {
-    return function(alphaMin) {
-      return function(alphaDecay) {
-        return function(alphaTarget) {
-          const newAlpha = alpha + (alphaTarget - alpha) * alphaDecay;
-          return newAlpha < alphaMin ? 0 : newAlpha;
-        };
-      };
-    };
-  }
-  function initializeNodes_(nodes) {
-    return function() {
-      for (let i2 = 0; i2 < nodes.length; i2++) {
-        const node = nodes[i2];
-        node.index = i2;
-        if (node.vx === void 0) node.vx = 0;
-        if (node.vy === void 0) node.vy = 0;
-        if (node.x === void 0) node.x = Math.random() * 100 - 50;
-        if (node.y === void 0) node.y = Math.random() * 100 - 50;
-      }
-    };
-  }
-  var USE_SETTIMEOUT = true;
-  var FRAME_TIME = 8;
-  function requestAnimationFrame_(callback) {
-    return function() {
-      let id3;
-      const handler3 = function(timestamp) {
-        callback(timestamp || performance.now())();
-      };
-      if (USE_SETTIMEOUT) {
-        id3 = setTimeout(handler3, FRAME_TIME);
-        return function() {
-          clearTimeout(id3);
-        };
-      } else {
-        id3 = requestAnimationFrame(handler3);
-        return function() {
-          cancelAnimationFrame(id3);
-        };
-      }
-    };
-  }
-  function newCancelRef() {
-    return function() {
-      return { cancel: function() {
-      } };
-    };
-  }
-  function setCancelRef(ref2) {
-    return function(cancel) {
-      return function() {
-        ref2.cancel = cancel;
-      };
-    };
-  }
-  function getCancelRef(ref2) {
-    return function() {
-      return ref2.cancel;
-    };
-  }
-
-  // output/Hylograph.ForceEngine.Core/index.js
-  var bind2 = /* @__PURE__ */ bind(bindEffect);
-  var when2 = /* @__PURE__ */ when(applicativeEffect);
-  var identity7 = /* @__PURE__ */ identity(categoryFn);
-  var for_2 = /* @__PURE__ */ for_(applicativeEffect)(foldableArray);
-  var startAnimation = function(onFrame) {
+  };
+  var apply2 = function(v2) {
     return function __do5() {
-      var cancelRef = newCancelRef();
-      var loop2 = function(timestamp) {
+      var sum2 = $$new({
+        x: 0,
+        y: 0
+      })();
+      foreachE(v2.nodes)(function(node) {
         return function __do6() {
-          var $$continue = onFrame(timestamp)();
-          return when2($$continue)(function __do7() {
-            var cancel2 = requestAnimationFrame_(loop2)();
-            return setCancelRef(cancelRef)(cancel2)();
+          var total2 = read(sum2)();
+          return write({
+            x: total2.x + node.x,
+            y: total2.y + node.y
+          })(sum2)();
+        };
+      })();
+      var total = read(sum2)();
+      var count = toNumber(length(v2.nodes));
+      var shiftX = (total.x / count - v2.config.x) * v2.config.strength;
+      var shiftY = (total.y / count - v2.config.y) * v2.config.strength;
+      return foreachE(v2.nodes)(function(node) {
+        return function() {
+          return writePosition(node, node.x - shiftX, node.y - shiftY);
+        };
+      })();
+    };
+  };
+
+  // output/Hylograph.Forces.Group/index.js
+  var alter2 = /* @__PURE__ */ alter(ordInt);
+  var fromFoldable5 = /* @__PURE__ */ fromFoldable(foldableList);
+  var foldl5 = /* @__PURE__ */ foldl(foldableArray);
+  var Ungrouped = /* @__PURE__ */ (function() {
+    function Ungrouped2() {
+    }
+    ;
+    Ungrouped2.value = new Ungrouped2();
+    return Ungrouped2;
+  })();
+  var InGroup = /* @__PURE__ */ (function() {
+    function InGroup2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    InGroup2.create = function(value0) {
+      return new InGroup2(value0);
+    };
+    return InGroup2;
+  })();
+  var ungrouped = /* @__PURE__ */ (function() {
+    return Ungrouped.value;
+  })();
+  var inGroup = /* @__PURE__ */ (function() {
+    return InGroup.create;
+  })();
+  var grouped = function(membership2) {
+    return function(items2) {
+      var add3 = function(item) {
+        return function(members) {
+          if (members instanceof Nothing) {
+            return new Just([item]);
+          }
+          ;
+          if (members instanceof Just) {
+            return new Just(snoc(members.value0)(item));
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.Group (line 37, column 22 - line 39, column 45): " + [members.constructor.name]);
+        };
+      };
+      var place = function(groups) {
+        return function(item) {
+          var v2 = membership2(item);
+          if (v2 instanceof Ungrouped) {
+            return groups;
+          }
+          ;
+          if (v2 instanceof InGroup) {
+            return alter2(add3(item))(v2.value0)(groups);
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.Group (line 33, column 23 - line 35, column 55): " + [v2.constructor.name]);
+        };
+      };
+      return fromFoldable5(values(foldl5(place)(empty2)(items2)));
+    };
+  };
+
+  // output/Hylograph.Forces.Cohesion/index.js
+  var map11 = /* @__PURE__ */ map(functorArray);
+  var when3 = /* @__PURE__ */ when(applicativeEffect);
+  var initialize2 = function(config) {
+    return function(nodes) {
+      var member6 = function(node) {
+        var strength = config.strength(node);
+        return {
+          node,
+          strength: (function() {
+            var $11 = isNaNImpl(strength);
+            if ($11) {
+              return 0;
+            }
+            ;
+            return strength;
+          })()
+        };
+      };
+      return map11(map11(member6))(grouped(config.group)(nodes));
+    };
+  };
+  var apply3 = function(v2) {
+    return function(alpha) {
+      return foreachE(v2)(function(members) {
+        return function __do5() {
+          var sum2 = $$new({
+            x: 0,
+            y: 0,
+            count: 0
+          })();
+          foreachE(members)(function(member6) {
+            return when3(isFiniteImpl(member6.node.x) && isFiniteImpl(member6.node.y))(function __do6() {
+              var total2 = read(sum2)();
+              return write({
+                x: total2.x + member6.node.x,
+                y: total2.y + member6.node.y,
+                count: total2.count + 1
+              })(sum2)();
+            });
+          })();
+          var total = read(sum2)();
+          var centroidY = total.y / total.count;
+          var centroidX = total.x / total.count;
+          return foreachE(members)(function(member6) {
+            return when3(isFiniteImpl(member6.node.x) && isFiniteImpl(member6.node.y))(function() {
+              return writeVelocity(member6.node, member6.node.vx + (centroidX - member6.node.x) * member6.strength * alpha, member6.node.vy + (centroidY - member6.node.y) * member6.strength * alpha);
+            });
+          })();
+        };
+      });
+    };
+  };
+
+  // output/Hylograph.Forces.Quadtree/index.js
+  var $runtime_lazy5 = function(name15, moduleName, init3) {
+    var state3 = 0;
+    var val;
+    return function(lineNumber) {
+      if (state3 === 2) return val;
+      if (state3 === 1) throw new ReferenceError(name15 + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
+      state3 = 1;
+      val = init3();
+      state3 = 2;
+      return val;
+    };
+  };
+  var Empty = /* @__PURE__ */ (function() {
+    function Empty4() {
+    }
+    ;
+    Empty4.value = new Empty4();
+    return Empty4;
+  })();
+  var Leaf2 = /* @__PURE__ */ (function() {
+    function Leaf3(value0, value1) {
+      this.value0 = value0;
+      this.value1 = value1;
+    }
+    ;
+    Leaf3.create = function(value0) {
+      return function(value1) {
+        return new Leaf3(value0, value1);
+      };
+    };
+    return Leaf3;
+  })();
+  var Branch = /* @__PURE__ */ (function() {
+    function Branch2(value0, value1, value22, value32) {
+      this.value0 = value0;
+      this.value1 = value1;
+      this.value2 = value22;
+      this.value3 = value32;
+    }
+    ;
+    Branch2.create = function(value0) {
+      return function(value1) {
+        return function(value22) {
+          return function(value32) {
+            return new Branch2(value0, value1, value22, value32);
+          };
+        };
+      };
+    };
+    return Branch2;
+  })();
+  var unitSquare = function(x3) {
+    return function(y3) {
+      var y0 = floor(y3);
+      var x0 = floor(x3);
+      return {
+        x0,
+        y0,
+        x1: x0 + 1,
+        y1: y0 + 1
+      };
+    };
+  };
+  var leaf = function(newestFirst) {
+    return function(first) {
+      return function(rest) {
+        if (rest instanceof Nil) {
+          return new Leaf2(first, Nil.value);
+        }
+        ;
+        if (newestFirst) {
+          return new Leaf2(first, rest);
+        }
+        ;
+        var v2 = reverse2(new Cons(first, rest));
+        if (v2 instanceof Cons) {
+          return new Leaf2(v2.value0, v2.value1);
+        }
+        ;
+        if (v2 instanceof Nil) {
+          return Empty.value;
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.Quadtree (line 168, column 10 - line 170, column 19): " + [v2.constructor.name]);
+      };
+    };
+  };
+  var elsewhere = function($copy_first) {
+    return function($copy_others) {
+      var $tco_var_first = $copy_first;
+      var $tco_done = false;
+      var $tco_result;
+      function $tco_loop(first, others) {
+        if (others instanceof Nil) {
+          $tco_done = true;
+          return Nil.value;
+        }
+        ;
+        if (others instanceof Cons) {
+          var $20 = others.value0.x === first.x && others.value0.y === first.y;
+          if ($20) {
+            $tco_var_first = first;
+            $copy_others = others.value1;
+            return;
+          }
+          ;
+          $tco_done = true;
+          return others;
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.Quadtree (line 156, column 26 - line 160, column 16): " + [others.constructor.name]);
+      }
+      ;
+      while (!$tco_done) {
+        $tco_result = $tco_loop($tco_var_first, $copy_others);
+      }
+      ;
+      return $tco_result;
+    };
+  };
+  var cover = function(extent) {
+    return function(x3) {
+      return function(y3) {
+        var width10 = extent.x1 - extent.x0;
+        var side = (function() {
+          var $23 = width10 < 0 || width10 > 0;
+          if ($23) {
+            return width10;
+          }
+          ;
+          return 1;
+        })();
+        var grow = function($copy_x0) {
+          return function($copy_y0) {
+            return function($copy_x1) {
+              return function($copy_y1) {
+                return function($copy_size) {
+                  var $tco_var_x0 = $copy_x0;
+                  var $tco_var_y0 = $copy_y0;
+                  var $tco_var_x1 = $copy_x1;
+                  var $tco_var_y1 = $copy_y1;
+                  var $tco_done = false;
+                  var $tco_result;
+                  function $tco_loop(x0, y0, x13, y13, size6) {
+                    var $24 = x0 > x3 || (x3 >= x13 || (y0 > y3 || y3 >= y13));
+                    if ($24) {
+                      var doubled = size6 * 2;
+                      var $25 = y3 < y0;
+                      if ($25) {
+                        var $26 = x3 < x0;
+                        if ($26) {
+                          $tco_var_x0 = x13 - doubled;
+                          $tco_var_y0 = y13 - doubled;
+                          $tco_var_x1 = x13;
+                          $tco_var_y1 = y13;
+                          $copy_size = doubled;
+                          return;
+                        }
+                        ;
+                        $tco_var_x0 = x0;
+                        $tco_var_y0 = y13 - doubled;
+                        $tco_var_x1 = x0 + doubled;
+                        $tco_var_y1 = y13;
+                        $copy_size = doubled;
+                        return;
+                      }
+                      ;
+                      var $27 = x3 < x0;
+                      if ($27) {
+                        $tco_var_x0 = x13 - doubled;
+                        $tco_var_y0 = y0;
+                        $tco_var_x1 = x13;
+                        $tco_var_y1 = y0 + doubled;
+                        $copy_size = doubled;
+                        return;
+                      }
+                      ;
+                      $tco_var_x0 = x0;
+                      $tco_var_y0 = y0;
+                      $tco_var_x1 = x0 + doubled;
+                      $tco_var_y1 = y0 + doubled;
+                      $copy_size = doubled;
+                      return;
+                    }
+                    ;
+                    $tco_done = true;
+                    return {
+                      x0,
+                      y0,
+                      x1: x13,
+                      y1: y13
+                    };
+                  }
+                  ;
+                  while (!$tco_done) {
+                    $tco_result = $tco_loop($tco_var_x0, $tco_var_y0, $tco_var_x1, $tco_var_y1, $copy_size);
+                  }
+                  ;
+                  return $tco_result;
+                };
+              };
+            };
+          };
+        };
+        return grow(extent.x0)(extent.y0)(extent.x1)(extent.y1)(side);
+      };
+    };
+  };
+  var coincident = function(first) {
+    return function(others) {
+      var v2 = elsewhere(first)(others);
+      if (v2 instanceof Nil) {
+        return true;
+      }
+      ;
+      return false;
+    };
+  };
+  var $lazy_cell = /* @__PURE__ */ $runtime_lazy5("cell", "Hylograph.Forces.Quadtree", function() {
+    return function(newestFirst, x0, y0, x13, y13, points2) {
+      var turned = !newestFirst;
+      var middleY = (y0 + y13) / 2;
+      var middleX = (x0 + x13) / 2;
+      var deal = function($copy_remaining) {
+        return function($copy_topLeft) {
+          return function($copy_topRight) {
+            return function($copy_bottomLeft) {
+              return function($copy_bottomRight) {
+                var $tco_var_remaining = $copy_remaining;
+                var $tco_var_topLeft = $copy_topLeft;
+                var $tco_var_topRight = $copy_topRight;
+                var $tco_var_bottomLeft = $copy_bottomLeft;
+                var $tco_done = false;
+                var $tco_result;
+                function $tco_loop(remaining, topLeft, topRight, bottomLeft, bottomRight) {
+                  if (remaining instanceof Nil) {
+                    $tco_done = true;
+                    return new Branch($lazy_cell(125)(turned, x0, y0, middleX, middleY, topLeft), $lazy_cell(126)(turned, middleX, y0, x13, middleY, topRight), $lazy_cell(127)(turned, x0, middleY, middleX, y13, bottomLeft), $lazy_cell(128)(turned, middleX, middleY, x13, y13, bottomRight));
+                  }
+                  ;
+                  if (remaining instanceof Cons) {
+                    var $30 = remaining.value0.y >= middleY;
+                    if ($30) {
+                      var $31 = remaining.value0.x >= middleX;
+                      if ($31) {
+                        $tco_var_remaining = remaining.value1;
+                        $tco_var_topLeft = topLeft;
+                        $tco_var_topRight = topRight;
+                        $tco_var_bottomLeft = bottomLeft;
+                        $copy_bottomRight = new Cons(remaining.value0, bottomRight);
+                        return;
+                      }
+                      ;
+                      $tco_var_remaining = remaining.value1;
+                      $tco_var_topLeft = topLeft;
+                      $tco_var_topRight = topRight;
+                      $tco_var_bottomLeft = new Cons(remaining.value0, bottomLeft);
+                      $copy_bottomRight = bottomRight;
+                      return;
+                    }
+                    ;
+                    var $32 = remaining.value0.x >= middleX;
+                    if ($32) {
+                      $tco_var_remaining = remaining.value1;
+                      $tco_var_topLeft = topLeft;
+                      $tco_var_topRight = new Cons(remaining.value0, topRight);
+                      $tco_var_bottomLeft = bottomLeft;
+                      $copy_bottomRight = bottomRight;
+                      return;
+                    }
+                    ;
+                    $tco_var_remaining = remaining.value1;
+                    $tco_var_topLeft = new Cons(remaining.value0, topLeft);
+                    $tco_var_topRight = topRight;
+                    $tco_var_bottomLeft = bottomLeft;
+                    $copy_bottomRight = bottomRight;
+                    return;
+                  }
+                  ;
+                  throw new Error("Failed pattern match at Hylograph.Forces.Quadtree (line 122, column 62 - line 135, column 78): " + [remaining.constructor.name]);
+                }
+                ;
+                while (!$tco_done) {
+                  $tco_result = $tco_loop($tco_var_remaining, $tco_var_topLeft, $tco_var_topRight, $tco_var_bottomLeft, $copy_bottomRight);
+                }
+                ;
+                return $tco_result;
+              };
+            };
+          };
+        };
+      };
+      if (points2 instanceof Nil) {
+        return Empty.value;
+      }
+      ;
+      if (points2 instanceof Cons) {
+        var $36 = coincident(points2.value0)(points2.value1);
+        if ($36) {
+          return leaf(newestFirst)(points2.value0)(points2.value1);
+        }
+        ;
+        return deal(points2)(Nil.value)(Nil.value)(Nil.value)(Nil.value);
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.Forces.Quadtree (line 137, column 5 - line 141, column 41): " + [points2.constructor.name]);
+    };
+  });
+  var cell = /* @__PURE__ */ $lazy_cell(115);
+  var build = function(newestFirst) {
+    var survey = function($copy_remaining) {
+      return function($copy_kept) {
+        return function($copy_x0) {
+          return function($copy_y0) {
+            return function($copy_x1) {
+              return function($copy_y1) {
+                var $tco_var_remaining = $copy_remaining;
+                var $tco_var_kept = $copy_kept;
+                var $tco_var_x0 = $copy_x0;
+                var $tco_var_y0 = $copy_y0;
+                var $tco_var_x1 = $copy_x1;
+                var $tco_done = false;
+                var $tco_result;
+                function $tco_loop(remaining, kept, x0, y0, x13, y13) {
+                  if (remaining instanceof Nil) {
+                    var $40 = x0 > x13 || y0 > y13;
+                    if ($40) {
+                      $tco_done = true;
+                      return {
+                        extent: {
+                          x0,
+                          y0,
+                          x1: x13,
+                          y1: y13
+                        },
+                        root: Empty.value
+                      };
+                    }
+                    ;
+                    var extent = cover(unitSquare(x0)(y0))(x13)(y13);
+                    $tco_done = true;
+                    return {
+                      extent,
+                      root: cell(false, extent.x0, extent.y0, extent.x1, extent.y1, kept)
+                    };
+                  }
+                  ;
+                  if (remaining instanceof Cons) {
+                    var $41 = isNaNImpl(remaining.value0.x) || isNaNImpl(remaining.value0.y);
+                    if ($41) {
+                      $tco_var_remaining = remaining.value1;
+                      $tco_var_kept = kept;
+                      $tco_var_x0 = x0;
+                      $tco_var_y0 = y0;
+                      $tco_var_x1 = x13;
+                      $copy_y1 = y13;
+                      return;
+                    }
+                    ;
+                    $tco_var_remaining = remaining.value1;
+                    $tco_var_kept = new Cons(remaining.value0, kept);
+                    $tco_var_x0 = (function() {
+                      var $42 = remaining.value0.x < x0;
+                      if ($42) {
+                        return remaining.value0.x;
+                      }
+                      ;
+                      return x0;
+                    })();
+                    $tco_var_y0 = (function() {
+                      var $43 = remaining.value0.y < y0;
+                      if ($43) {
+                        return remaining.value0.y;
+                      }
+                      ;
+                      return y0;
+                    })();
+                    $tco_var_x1 = (function() {
+                      var $44 = remaining.value0.x > x13;
+                      if ($44) {
+                        return remaining.value0.x;
+                      }
+                      ;
+                      return x13;
+                    })();
+                    $copy_y1 = (function() {
+                      var $45 = remaining.value0.y > y13;
+                      if ($45) {
+                        return remaining.value0.y;
+                      }
+                      ;
+                      return y13;
+                    })();
+                    return;
+                  }
+                  ;
+                  throw new Error("Failed pattern match at Hylograph.Forces.Quadtree (line 62, column 39 - line 76, column 47): " + [remaining.constructor.name]);
+                }
+                ;
+                while (!$tco_done) {
+                  $tco_result = $tco_loop($tco_var_remaining, $tco_var_kept, $tco_var_x0, $tco_var_y0, $tco_var_x1, $copy_y1);
+                }
+                ;
+                return $tco_result;
+              };
+            };
+          };
+        };
+      };
+    };
+    return survey(newestFirst)(Nil.value)(infinity)(infinity)(-infinity)(-infinity);
+  };
+
+  // output/Hylograph.Forces.Random/index.js
+  var multiplier = 1664525;
+  var modulus = 4294967296;
+  var jiggle = function(v2) {
+    return (v2 / modulus - 0.5) * 1e-6;
+  };
+  var initialSeed = 1;
+  var lcg = /* @__PURE__ */ $$new(initialSeed);
+  var increment = 1013904223;
+  var advance = function(v2) {
+    return remainder(multiplier * v2 + increment)(modulus);
+  };
+  var draw = function(source2) {
+    return function __do5() {
+      var seed = read(source2)();
+      var next2 = advance(seed);
+      write(next2)(source2)();
+      return jiggle(next2);
+    };
+  };
+
+  // output/Hylograph.Forces.Collide/index.js
+  var $runtime_lazy6 = function(name15, moduleName, init3) {
+    var state3 = 0;
+    var val;
+    return function(lineNumber) {
+      if (state3 === 2) return val;
+      if (state3 === 1) throw new ReferenceError(name15 + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
+      state3 = 1;
+      val = init3();
+      state3 = 2;
+      return val;
+    };
+  };
+  var pure4 = /* @__PURE__ */ pure(applicativeEffect);
+  var when4 = /* @__PURE__ */ when(applicativeEffect);
+  var NoPushes = /* @__PURE__ */ (function() {
+    function NoPushes2() {
+    }
+    ;
+    NoPushes2.value = new NoPushes2();
+    return NoPushes2;
+  })();
+  var Push = /* @__PURE__ */ (function() {
+    function Push2(value0, value1, value22, value32) {
+      this.value0 = value0;
+      this.value1 = value1;
+      this.value2 = value22;
+      this.value3 = value32;
+    }
+    ;
+    Push2.create = function(value0) {
+      return function(value1) {
+        return function(value22) {
+          return function(value32) {
+            return new Push2(value0, value1, value22, value32);
+          };
+        };
+      };
+    };
+    return Push2;
+  })();
+  var Unoccupied = /* @__PURE__ */ (function() {
+    function Unoccupied2() {
+    }
+    ;
+    Unoccupied2.value = new Unoccupied2();
+    return Unoccupied2;
+  })();
+  var Occupant = /* @__PURE__ */ (function() {
+    function Occupant2(value0, value1) {
+      this.value0 = value0;
+      this.value1 = value1;
+    }
+    ;
+    Occupant2.create = function(value0) {
+      return function(value1) {
+        return new Occupant2(value0, value1);
+      };
+    };
+    return Occupant2;
+  })();
+  var Region = /* @__PURE__ */ (function() {
+    function Region2(value0, value1, value22, value32, value42, value52, value62, value72) {
+      this.value0 = value0;
+      this.value1 = value1;
+      this.value2 = value22;
+      this.value3 = value32;
+      this.value4 = value42;
+      this.value5 = value52;
+      this.value6 = value62;
+      this.value7 = value72;
+    }
+    ;
+    Region2.create = function(value0) {
+      return function(value1) {
+        return function(value22) {
+          return function(value32) {
+            return function(value42) {
+              return function(value52) {
+                return function(value62) {
+                  return function(value72) {
+                    return new Region2(value0, value1, value22, value32, value42, value52, value62, value72);
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    return Region2;
+  })();
+  var Finished = /* @__PURE__ */ (function() {
+    function Finished4() {
+    }
+    ;
+    Finished4.value = new Finished4();
+    return Finished4;
+  })();
+  var seek = function(index4, radius, nodeX, nodeY, start3) {
+    var go2 = function($copy_region) {
+      var $tco_done = false;
+      var $tco_result;
+      function $tco_loop(region) {
+        if (region instanceof Region) {
+          var reach = radius + region.value0;
+          if (region.value7 instanceof Unoccupied) {
+            var $22 = region.value1 > nodeX + reach || (region.value3 < nodeX - reach || (region.value2 > nodeY + reach || region.value4 < nodeY - reach));
+            if ($22) {
+              $copy_region = region.value6;
+              return;
+            }
+            ;
+            $copy_region = region.value5;
+            return;
+          }
+          ;
+          if (region.value7 instanceof Occupant) {
+            var $23 = region.value7.value0 > index4;
+            if ($23) {
+              var y3 = nodeY - region.value7.value1.y - region.value7.value1.vy;
+              var x3 = nodeX - region.value7.value1.x - region.value7.value1.vx;
+              var $24 = x3 * x3 + y3 * y3 < reach * reach;
+              if ($24) {
+                $tco_done = true;
+                return region;
+              }
+              ;
+              $copy_region = region.value6;
+              return;
+            }
+            ;
+            $copy_region = region.value6;
+            return;
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.Collide (line 254, column 11 - line 266, column 28): " + [region.value7.constructor.name]);
+        }
+        ;
+        if (region instanceof Finished) {
+          $tco_done = true;
+          return Finished.value;
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.Collide (line 249, column 17 - line 267, column 27): " + [region.constructor.name]);
+      }
+      ;
+      while (!$tco_done) {
+        $tco_result = $tco_loop($copy_region);
+      }
+      ;
+      return $tco_result;
+    };
+    return go2(start3);
+  };
+  var regions = function(planted) {
+    var occupantOf = function(body2) {
+      return new Occupant((function() {
+        if (body2.included) {
+          return body2.index;
+        }
+        ;
+        return -1 | 0;
+      })(), body2.node);
+    };
+    var larger = function(quarter, region, radius) {
+      if (quarter instanceof Empty) {
+        return radius;
+      }
+      ;
+      if (region instanceof Region) {
+        var $38 = region.value0 > radius;
+        if ($38) {
+          return region.value0;
+        }
+        ;
+        return radius;
+      }
+      ;
+      if (region instanceof Finished) {
+        return radius;
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.Forces.Collide (line 187, column 10 - line 189, column 25): " + [region.constructor.name]);
+    };
+    var $lazy_thread = $runtime_lazy6("thread", "Hylograph.Forces.Collide", function() {
+      return function(tree, x0, y0, x13, y13, after) {
+        if (tree instanceof Empty) {
+          return after;
+        }
+        ;
+        if (tree instanceof Leaf2) {
+          return new Region(tree.value0.item.radius, x0, y0, x13, y13, after, after, occupantOf(tree.value0.item));
+        }
+        ;
+        if (tree instanceof Branch) {
+          var middleY = (y0 + y13) / 2;
+          var middleX = (x0 + x13) / 2;
+          var fourth = $lazy_thread(168)(tree.value3, middleX, middleY, x13, y13, after);
+          var third = $lazy_thread(169)(tree.value2, x0, middleY, middleX, y13, fourth);
+          var second = $lazy_thread(170)(tree.value1, middleX, y0, x13, middleY, third);
+          var first = $lazy_thread(171)(tree.value0, x0, y0, middleX, middleY, second);
+          var radius = larger(tree.value3, fourth, larger(tree.value2, third, larger(tree.value1, second, larger(tree.value0, first, 0))));
+          return new Region(radius, x0, y0, x13, y13, first, after, Unoccupied.value);
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.Collide (line 160, column 45 - line 176, column 57): " + [tree.constructor.name]);
+      };
+    });
+    var thread = $lazy_thread(159);
+    return thread(planted.root, planted.extent.x0, planted.extent.y0, planted.extent.x1, planted.extent.y1, Finished.value);
+  };
+  var rebound = function(strength) {
+    return function(radius) {
+      return function(otherRadius) {
+        return function(x3) {
+          return function(y3) {
+            return function(distance2) {
+              return function(seed) {
+                var seedX = (function() {
+                  var $54 = x3 === 0;
+                  if ($54) {
+                    return advance(seed);
+                  }
+                  ;
+                  return seed;
+                })();
+                var seedY = (function() {
+                  var $55 = y3 === 0;
+                  if ($55) {
+                    return advance(seedX);
+                  }
+                  ;
+                  return seedX;
+                })();
+                var otherRadius2 = otherRadius * otherRadius;
+                var apartY = (function() {
+                  var $56 = y3 === 0;
+                  if ($56) {
+                    return jiggle(seedY);
+                  }
+                  ;
+                  return y3;
+                })();
+                var apartX = (function() {
+                  var $57 = x3 === 0;
+                  if ($57) {
+                    return jiggle(seedX);
+                  }
+                  ;
+                  return x3;
+                })();
+                var lengthX = (function() {
+                  var $58 = x3 === 0;
+                  if ($58) {
+                    return distance2 + apartX * apartX;
+                  }
+                  ;
+                  return distance2;
+                })();
+                var lengthY = (function() {
+                  var $59 = y3 === 0;
+                  if ($59) {
+                    return lengthX + apartY * apartY;
+                  }
+                  ;
+                  return lengthX;
+                })();
+                var distance = sqrt(lengthY);
+                var scale = (radius + otherRadius - distance) / distance * strength;
+                return {
+                  x: apartX * scale,
+                  y: apartY * scale,
+                  share: otherRadius2 / (radius * radius + otherRadius2),
+                  seed: seedY
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+  var walk = function(strength, index4, radius, nodeX, nodeY, chain, startVx, startVy, startSeed, startPushes) {
+    var go2 = function($copy_start) {
+      return function($copy_vx) {
+        return function($copy_vy) {
+          return function($copy_seed) {
+            return function($copy_pushes) {
+              var $tco_var_start = $copy_start;
+              var $tco_var_vx = $copy_vx;
+              var $tco_var_vy = $copy_vy;
+              var $tco_var_seed = $copy_seed;
+              var $tco_done = false;
+              var $tco_result;
+              function $tco_loop(start3, vx, vy, seed, pushes) {
+                var v2 = seek(index4, radius, nodeX, nodeY, start3);
+                if (v2 instanceof Region && v2.value7 instanceof Occupant) {
+                  var y3 = nodeY - v2.value7.value1.y - v2.value7.value1.vy;
+                  var x3 = nodeX - v2.value7.value1.x - v2.value7.value1.vx;
+                  var bounce = rebound(strength)(radius)(v2.value0)(x3)(y3)(x3 * x3 + y3 * y3)(seed);
+                  $tco_var_start = v2.value6;
+                  $tco_var_vx = vx + bounce.x * bounce.share;
+                  $tco_var_vy = vy + bounce.y * bounce.share;
+                  $tco_var_seed = bounce.seed;
+                  $copy_pushes = new Push(v2.value7.value1, v2.value7.value1.vx - bounce.x * (1 - bounce.share), v2.value7.value1.vy - bounce.y * (1 - bounce.share), pushes);
+                  return;
+                }
+                ;
+                $tco_done = true;
+                return {
+                  vx,
+                  vy,
+                  seed,
+                  pushes
+                };
+              }
+              ;
+              while (!$tco_done) {
+                $tco_result = $tco_loop($tco_var_start, $tco_var_vx, $tco_var_vy, $tco_var_seed, $copy_pushes);
+              }
+              ;
+              return $tco_result;
+            };
+          };
+        };
+      };
+    };
+    return go2(chain)(startVx)(startVy)(startSeed)(startPushes);
+  };
+  var initialize3 = function(config) {
+    return function(random2) {
+      return function(nodes) {
+        return {
+          bodies: mapWithIndex2(function(index4) {
+            return function(node) {
+              return {
+                index: index4,
+                radius: config.radius(node),
+                included: config.include(node),
+                node
+              };
+            };
+          })(nodes),
+          strength: config.strength,
+          iterations: config.iterations,
+          alphaScaled: config.alphaScaled,
+          random: random2
+        };
+      };
+    };
+  };
+  var deliver = function(pushes) {
+    if (pushes instanceof NoPushes) {
+      return pure4(unit);
+    }
+    ;
+    return function __do5() {
+      var waiting = $$new(pushes)();
+      while (!(function __do6() {
+        var remaining = read(waiting)();
+        if (remaining instanceof NoPushes) {
+          return true;
+        }
+        ;
+        if (remaining instanceof Push) {
+          writeVelocity(remaining.value0, remaining.value1, remaining.value2);
+          write(remaining.value3)(waiting)();
+          return false;
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.Collide (line 313, column 7 - line 318, column 21): " + [remaining.constructor.name]);
+      })()) {
+      }
+      ;
+      return {};
+    };
+  };
+  var anticipate = function(bodies) {
+    return function __do5() {
+      var points2 = $$new(Nil.value)();
+      foreachE(bodies)(function(body2) {
+        return function __do6() {
+          var earlier = read(points2)();
+          return write(new Cons({
+            x: body2.node.x + body2.node.vx,
+            y: body2.node.y + body2.node.vy,
+            item: body2
+          }, earlier))(points2)();
+        };
+      })();
+      return read(points2)();
+    };
+  };
+  var apply4 = function(v2) {
+    return function(alpha) {
+      var strength = (function() {
+        if (v2.alphaScaled) {
+          return v2.strength * alpha;
+        }
+        ;
+        return v2.strength;
+      })();
+      return forE(0)(v2.iterations)(function(v1) {
+        return function __do5() {
+          var points2 = anticipate(v2.bodies)();
+          var chain = regions(build(points2));
+          return foreachE(v2.bodies)(function(body2) {
+            return when4(body2.included)(function __do6() {
+              var seed = read(v2.random)();
+              var moved = walk(strength, body2.index, body2.radius, body2.node.x + body2.node.vx, body2.node.y + body2.node.vy, chain, body2.node.vx, body2.node.vy, seed, NoPushes.value);
+              writeVelocity(body2.node, moved.vx, moved.vy);
+              write(moved.seed)(v2.random)();
+              return deliver(moved.pushes)();
+            });
+          })();
+        };
+      });
+    };
+  };
+
+  // output/Hylograph.Forces.Contain/index.js
+  var append3 = /* @__PURE__ */ append(semigroupArray);
+  var foldl6 = /* @__PURE__ */ foldl(foldableArray);
+  var map13 = /* @__PURE__ */ map(functorArray);
+  var fromFoldable6 = /* @__PURE__ */ fromFoldable3(foldableArray);
+  var when5 = /* @__PURE__ */ when(applicativeEffect);
+  var Rectangle = /* @__PURE__ */ (function() {
+    function Rectangle2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    Rectangle2.create = function(value0) {
+      return new Rectangle2(value0);
+    };
+    return Rectangle2;
+  })();
+  var Circle2 = /* @__PURE__ */ (function() {
+    function Circle4(value0) {
+      this.value0 = value0;
+    }
+    ;
+    Circle4.create = function(value0) {
+      return new Circle4(value0);
+    };
+    return Circle4;
+  })();
+  var Polygon2 = /* @__PURE__ */ (function() {
+    function Polygon3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    Polygon3.create = function(value0) {
+      return new Polygon3(value0);
+    };
+    return Polygon3;
+  })();
+  var Free = /* @__PURE__ */ (function() {
+    function Free3() {
+    }
+    ;
+    Free3.value = new Free3();
+    return Free3;
+  })();
+  var Within = /* @__PURE__ */ (function() {
+    function Within2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    Within2.create = function(value0) {
+      return new Within2(value0);
+    };
+    return Within2;
+  })();
+  var within = /* @__PURE__ */ (function() {
+    return Within.create;
+  })();
+  var rectangle = function(x0) {
+    return function(y0) {
+      return function(x13) {
+        return function(y13) {
+          return new Rectangle({
+            x0: (function() {
+              var $23 = x13 < x0;
+              if ($23) {
+                return x13;
+              }
+              ;
+              return x0;
+            })(),
+            y0: (function() {
+              var $24 = y13 < y0;
+              if ($24) {
+                return y13;
+              }
+              ;
+              return y0;
+            })(),
+            x1: (function() {
+              var $25 = x13 < x0;
+              if ($25) {
+                return x0;
+              }
+              ;
+              return x13;
+            })(),
+            y1: (function() {
+              var $26 = y13 < y0;
+              if ($26) {
+                return y0;
+              }
+              ;
+              return y13;
+            })()
+          });
+        };
+      };
+    };
+  };
+  var polygon = function(vertices) {
+    var sides = zipWith(function(from3) {
+      return function(to) {
+        return {
+          from: from3,
+          to
+        };
+      };
+    })(vertices)(append3(drop(1)(vertices))(take(1)(vertices)));
+    var doubleArea = foldl6(function(area2) {
+      return function(side) {
+        return area2 + (side.from.x * side.to.y - side.to.x * side.from.y);
+      };
+    })(0)(sides);
+    var sign2 = (function() {
+      var $27 = doubleArea > 0;
+      if ($27) {
+        return 1;
+      }
+      ;
+      return -1;
+    })();
+    var edge = function(side) {
+      var alongY = side.to.y - side.from.y;
+      var alongX = side.to.x - side.from.x;
+      var sideLength = sqrt(alongX * alongX + alongY * alongY);
+      var $28 = sideLength > 0;
+      if ($28) {
+        return new Just({
+          x: side.from.x,
+          y: side.from.y,
+          normalX: -alongY / sideLength * sign2,
+          normalY: alongX / sideLength * sign2
+        });
+      }
+      ;
+      return Nothing.value;
+    };
+    var count = length(vertices);
+    var edges = (function() {
+      var $29 = count >= 3 && (doubleArea !== 0 && isFiniteImpl(doubleArea));
+      if ($29) {
+        return catMaybes(map13(edge)(sides));
+      }
+      ;
+      return [];
+    })();
+    return new Polygon2(fromFoldable6(edges));
+  };
+  var pass2 = function($copy_edges) {
+    return function($copy_radius) {
+      return function($copy_halfWidth) {
+        return function($copy_halfHeight) {
+          return function($copy_x) {
+            return function($copy_y) {
+              return function($copy_moved) {
+                var $tco_var_edges = $copy_edges;
+                var $tco_var_radius = $copy_radius;
+                var $tco_var_halfWidth = $copy_halfWidth;
+                var $tco_var_halfHeight = $copy_halfHeight;
+                var $tco_var_x = $copy_x;
+                var $tco_var_y = $copy_y;
+                var $tco_done = false;
+                var $tco_result;
+                function $tco_loop(edges, radius, halfWidth, halfHeight, x3, y3, moved) {
+                  if (edges instanceof Nil) {
+                    $tco_done = true;
+                    return {
+                      x: x3,
+                      y: y3,
+                      moved
+                    };
+                  }
+                  ;
+                  if (edges instanceof Cons) {
+                    var reach = radius + abs(edges.value0.normalX) * halfWidth + abs(edges.value0.normalY) * halfHeight;
+                    var inside = (x3 - edges.value0.x) * edges.value0.normalX + (y3 - edges.value0.y) * edges.value0.normalY;
+                    var $31 = inside < reach;
+                    if ($31) {
+                      $tco_var_edges = edges.value1;
+                      $tco_var_radius = radius;
+                      $tco_var_halfWidth = halfWidth;
+                      $tco_var_halfHeight = halfHeight;
+                      $tco_var_x = x3 + edges.value0.normalX * (reach - inside);
+                      $tco_var_y = y3 + edges.value0.normalY * (reach - inside);
+                      $copy_moved = true;
+                      return;
+                    }
+                    ;
+                    $tco_var_edges = edges.value1;
+                    $tco_var_radius = radius;
+                    $tco_var_halfWidth = halfWidth;
+                    $tco_var_halfHeight = halfHeight;
+                    $tco_var_x = x3;
+                    $tco_var_y = y3;
+                    $copy_moved = moved;
+                    return;
+                  }
+                  ;
+                  throw new Error("Failed pattern match at Hylograph.Forces.Contain (line 171, column 52 - line 180, column 59): " + [edges.constructor.name]);
+                }
+                ;
+                while (!$tco_done) {
+                  $tco_result = $tco_loop($tco_var_edges, $tco_var_radius, $tco_var_halfWidth, $tco_var_halfHeight, $tco_var_x, $tco_var_y, $copy_moved);
+                }
+                ;
+                return $tco_result;
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+  var passes = function($copy_edges) {
+    return function($copy_radius) {
+      return function($copy_halfWidth) {
+        return function($copy_halfHeight) {
+          return function($copy_remaining) {
+            return function($copy_x) {
+              return function($copy_y) {
+                var $tco_var_edges = $copy_edges;
+                var $tco_var_radius = $copy_radius;
+                var $tco_var_halfWidth = $copy_halfWidth;
+                var $tco_var_halfHeight = $copy_halfHeight;
+                var $tco_var_remaining = $copy_remaining;
+                var $tco_var_x = $copy_x;
+                var $tco_done = false;
+                var $tco_result;
+                function $tco_loop(edges, radius, halfWidth, halfHeight, remaining, x3, y3) {
+                  var $34 = remaining <= 0;
+                  if ($34) {
+                    $tco_done = true;
+                    return {
+                      x: x3,
+                      y: y3
+                    };
+                  }
+                  ;
+                  var after = pass2(edges)(radius)(halfWidth)(halfHeight)(x3)(y3)(false);
+                  if (after.moved) {
+                    $tco_var_edges = edges;
+                    $tco_var_radius = radius;
+                    $tco_var_halfWidth = halfWidth;
+                    $tco_var_halfHeight = halfHeight;
+                    $tco_var_remaining = remaining - 1 | 0;
+                    $tco_var_x = after.x;
+                    $copy_y = after.y;
+                    return;
+                  }
+                  ;
+                  $tco_done = true;
+                  return {
+                    x: after.x,
+                    y: after.y
+                  };
+                }
+                ;
+                while (!$tco_done) {
+                  $tco_result = $tco_loop($tco_var_edges, $tco_var_radius, $tco_var_halfWidth, $tco_var_halfHeight, $tco_var_remaining, $tco_var_x, $copy_y);
+                }
+                ;
+                return $tco_result;
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+  var isHard = function(v2) {
+    return v2.hard;
+  };
+  var initialize4 = function(config) {
+    return function(nodes) {
+      var orZero = function(size6) {
+        var $37 = isNaNImpl(size6);
+        if ($37) {
+          return 0;
+        }
+        ;
+        return size6;
+      };
+      var kept = function(node) {
+        var v2 = config.region(node);
+        if (v2 instanceof Free) {
+          return Nothing.value;
+        }
+        ;
+        if (v2 instanceof Within) {
+          return new Just({
+            node,
+            region: v2.value0,
+            radius: orZero(config.radius(node)),
+            halfWidth: orZero(config.halfWidth(node)),
+            halfHeight: orZero(config.halfHeight(node))
+          });
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.Contain (line 221, column 15 - line 230, column 10): " + [v2.constructor.name]);
+      };
+      return {
+        kept: catMaybes(map13(kept)(nodes)),
+        strength: config.strength,
+        hard: config.hard
+      };
+    };
+  };
+  var free = /* @__PURE__ */ (function() {
+    return Free.value;
+  })();
+  var confine = function(inset) {
+    return function(low2) {
+      return function(high2) {
+        return function(value12) {
+          var most = high2 - inset;
+          var least = low2 + inset;
+          var $40 = least > most;
+          if ($40) {
+            return (low2 + high2) / 2;
+          }
+          ;
+          var $41 = value12 < least;
+          if ($41) {
+            return least;
+          }
+          ;
+          var $42 = value12 > most;
+          if ($42) {
+            return most;
+          }
+          ;
+          return value12;
+        };
+      };
+    };
+  };
+  var project = function(region) {
+    return function(radius) {
+      return function(halfWidth) {
+        return function(halfHeight) {
+          return function(x3) {
+            return function(y3) {
+              if (region instanceof Rectangle) {
+                return {
+                  x: confine(radius + halfWidth)(region.value0.x0)(region.value0.x1)(x3),
+                  y: confine(radius + halfHeight)(region.value0.y0)(region.value0.y1)(y3)
+                };
+              }
+              ;
+              if (region instanceof Circle2) {
+                var reach = region.value0.radius - radius - sqrt(halfWidth * halfWidth + halfHeight * halfHeight);
+                var offsetY = y3 - region.value0.y;
+                var offsetX = x3 - region.value0.x;
+                var inner = (function() {
+                  var $45 = reach > 0;
+                  if ($45) {
+                    return reach;
+                  }
+                  ;
+                  return 0;
+                })();
+                var distance2 = offsetX * offsetX + offsetY * offsetY;
+                var $46 = distance2 > inner * inner;
+                if ($46) {
+                  var scale = inner / sqrt(distance2);
+                  return {
+                    x: region.value0.x + offsetX * scale,
+                    y: region.value0.y + offsetY * scale
+                  };
+                }
+                ;
+                return {
+                  x: x3,
+                  y: y3
+                };
+              }
+              ;
+              if (region instanceof Polygon2) {
+                return passes(region.value0)(radius)(halfWidth)(halfHeight)(8)(x3)(y3);
+              }
+              ;
+              throw new Error("Failed pattern match at Hylograph.Forces.Contain (line 124, column 50 - line 141, column 66): " + [region.constructor.name]);
+            };
+          };
+        };
+      };
+    };
+  };
+  var constrain2 = function(v2) {
+    return when5(v2.hard)(foreachE(v2.kept)(function(kept) {
+      return when5(isFiniteImpl(kept.node.x) && isFiniteImpl(kept.node.y))((function() {
+        var allowed = project(kept.region)(kept.radius)(kept.halfWidth)(kept.halfHeight)(kept.node.x)(kept.node.y);
+        return function __do5() {
+          writeVelocity(kept.node, kept.node.vx + (allowed.x - kept.node.x), kept.node.vy + (allowed.y - kept.node.y));
+          return writePosition(kept.node, allowed.x, allowed.y);
+        };
+      })());
+    }));
+  };
+  var circle = function(x3) {
+    return function(y3) {
+      return function(radius) {
+        return new Circle2({
+          x: x3,
+          y: y3,
+          radius
+        });
+      };
+    };
+  };
+  var apply5 = function(v2) {
+    return foreachE(v2.kept)(function(kept) {
+      var aheadY = kept.node.y + kept.node.vy;
+      var aheadX = kept.node.x + kept.node.vx;
+      return when5(isFiniteImpl(aheadX) && isFiniteImpl(aheadY))((function() {
+        var allowed = project(kept.region)(kept.radius)(kept.halfWidth)(kept.halfHeight)(aheadX)(aheadY);
+        return function() {
+          return writeVelocity(kept.node, kept.node.vx + (allowed.x - aheadX) * v2.strength, kept.node.vy + (allowed.y - aheadY) * v2.strength);
+        };
+      })());
+    });
+  };
+
+  // output/Hylograph.Forces.Linkage/index.js
+  var when6 = /* @__PURE__ */ when(applicativeST);
+  var map14 = /* @__PURE__ */ map(functorArray);
+  var map15 = /* @__PURE__ */ map(functorEither);
+  var traverse2 = /* @__PURE__ */ traverse(traversableArray)(applicativeEither);
+  var joinPlaces = function(nodes) {
+    return function(links) {
+      var count = length(nodes);
+      var connected = function(link4) {
+        return link4.source >= 0 && (link4.source < count && (link4.target >= 0 && link4.target < count));
+      };
+      var degrees = (function __do5() {
+        var counts = thaw(replicate(count)(0))();
+        foreach(links)(function(link4) {
+          return when6(connected(link4))(function __do6() {
+            modify4(link4.source)(function(v2) {
+              return v2 + 1 | 0;
+            })(counts)();
+            modify4(link4.target)(function(v2) {
+              return v2 + 1 | 0;
+            })(counts)();
+            return unit;
+          });
+        })();
+        return unsafeFreeze(counts)();
+      })();
+      var degree2 = function(place) {
+        return toNumber(fromMaybe(0)(index(degrees)(place)));
+      };
+      var joined = function(link4) {
+        var v2 = index(nodes)(link4.target);
+        var v1 = index(nodes)(link4.source);
+        if (v1 instanceof Just && v2 instanceof Just) {
+          return new Just({
+            source: v1.value0,
+            target: v2.value0,
+            sourceDegree: degree2(link4.source),
+            targetDegree: degree2(link4.target),
+            bias: degree2(link4.source) / (degree2(link4.source) + degree2(link4.target)),
+            link: link4.link
+          });
+        }
+        ;
+        return Nothing.value;
+      };
+      return catMaybes(map14(joined)(links));
+    };
+  };
+  var joinById = function(dictOrd) {
+    var fromFoldable16 = fromFoldable2(dictOrd)(foldableArray);
+    var lookup9 = lookup(dictOrd);
+    return function(dictShow) {
+      var show10 = show(dictShow);
+      return function(identify) {
+        return function(nodes) {
+          return function(links) {
+            var places = fromFoldable16(mapWithIndex2(function(place) {
+              return function(node) {
+                return new Tuple(identify(node), place);
+              };
+            })(nodes));
+            var find3 = function(id3) {
+              var v2 = lookup9(id3)(places);
+              if (v2 instanceof Just) {
+                return new Right(v2.value0);
+              }
+              ;
+              if (v2 instanceof Nothing) {
+                return new Left("node not found: " + show10(id3));
+              }
+              ;
+              throw new Error("Failed pattern match at Hylograph.Forces.Linkage (line 72, column 13 - line 74, column 52): " + [v2.constructor.name]);
+            };
+            var placed = function(link4) {
+              var v2 = find3(link4.source);
+              if (v2 instanceof Left) {
+                return new Left(v2.value0);
+              }
+              ;
+              if (v2 instanceof Right) {
+                var v1 = find3(link4.target);
+                if (v1 instanceof Left) {
+                  return new Left(v1.value0);
+                }
+                ;
+                if (v1 instanceof Right) {
+                  return new Right({
+                    source: v2.value0,
+                    target: v1.value0,
+                    link: link4
+                  });
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.Forces.Linkage (line 78, column 21 - line 80, column 53): " + [v1.constructor.name]);
+              }
+              ;
+              throw new Error("Failed pattern match at Hylograph.Forces.Linkage (line 76, column 17 - line 80, column 53): " + [v2.constructor.name]);
+            };
+            return map15(joinPlaces(nodes))(traverse2(placed)(links));
+          };
+        };
+      };
+    };
+  };
+
+  // output/Hylograph.Forces.Directional/index.js
+  var map16 = /* @__PURE__ */ map(functorArray);
+  var map17 = /* @__PURE__ */ map(functorEither);
+  var when7 = /* @__PURE__ */ when(applicativeEffect);
+  var pure5 = /* @__PURE__ */ pure(applicativeEffect);
+  var passLimit = 32;
+  var ordered = function(config) {
+    return function(joined) {
+      var usable = function(candidate) {
+        return !(isNaNImpl(candidate.gap) || isNaNImpl(candidate.strength));
+      };
+      var link4 = function(end) {
+        return {
+          source: end.source,
+          target: end.target,
+          gap: config.gap(end.link),
+          strength: config.strength(end.link),
+          bias: end.bias
+        };
+      };
+      var axisLength = sqrt(config.axis.x * config.axis.x + config.axis.y * config.axis.y);
+      var proper = axisLength > 0 && isFiniteImpl(axisLength);
+      return {
+        links: filter(usable)(map16(link4)(joined)),
+        axisX: (function() {
+          if (proper) {
+            return config.axis.x / axisLength;
+          }
+          ;
+          return 0;
+        })(),
+        axisY: (function() {
+          if (proper) {
+            return config.axis.y / axisLength;
+          }
+          ;
+          return 1;
+        })(),
+        iterations: config.iterations,
+        hard: config.hard,
+        heldX: config.heldX,
+        heldY: config.heldY
+      };
+    };
+  };
+  var isHard2 = function(v2) {
+    return v2.hard;
+  };
+  var initializeById = function(dictOrd) {
+    var joinById2 = joinById(dictOrd);
+    return function(dictShow) {
+      var joinById1 = joinById2(dictShow);
+      return function(identify) {
+        return function(config) {
+          return function(nodes) {
+            return function(links) {
+              return map17(ordered(config))(joinById1(identify)(nodes)(links));
+            };
+          };
+        };
+      };
+    };
+  };
+  var constrain3 = function(v2) {
+    var held = function(node) {
+      return v2.axisX !== 0 && v2.heldX(node) || v2.axisY !== 0 && v2.heldY(node);
+    };
+    return when7(v2.hard)(function __do5() {
+      var moving = $$new(true)();
+      return forE(0)(passLimit)(function(v1) {
+        return function __do6() {
+          var wanted = read(moving)();
+          return when7(wanted)(function __do7() {
+            write(false)(moving)();
+            return foreachE(v2.links)(function(link4) {
+              var y3 = link4.target.y - link4.source.y;
+              var x3 = link4.target.x - link4.source.x;
+              var along = x3 * v2.axisX + y3 * v2.axisY;
+              return when7(isFiniteImpl(link4.target.x) && (isFiniteImpl(link4.target.y) && (isFiniteImpl(link4.source.x) && (isFiniteImpl(link4.source.y) && along < link4.gap))))((function() {
+                var $$short = link4.gap - along;
+                var stepX = v2.axisX * $$short;
+                var stepY = v2.axisY * $$short;
+                var $30 = !held(link4.target);
+                if ($30) {
+                  return function __do8() {
+                    writeVelocity(link4.target, link4.target.vx + stepX, link4.target.vy + stepY);
+                    writePosition(link4.target, link4.target.x + stepX, link4.target.y + stepY);
+                    return write(true)(moving)();
+                  };
+                }
+                ;
+                var $31 = !held(link4.source);
+                if ($31) {
+                  return function __do8() {
+                    writeVelocity(link4.source, link4.source.vx - stepX, link4.source.vy - stepY);
+                    writePosition(link4.source, link4.source.x - stepX, link4.source.y - stepY);
+                    return write(true)(moving)();
+                  };
+                }
+                ;
+                return pure5(unit);
+              })());
+            })();
+          })();
+        };
+      })();
+    });
+  };
+  var apply6 = function(v2) {
+    return function(alpha) {
+      return forE(0)(v2.iterations)(function(v1) {
+        return foreachE(v2.links)(function(link4) {
+          var y3 = link4.target.y + link4.target.vy - link4.source.y - link4.source.vy;
+          var x3 = link4.target.x + link4.target.vx - link4.source.x - link4.source.vx;
+          var along = x3 * v2.axisX + y3 * v2.axisY;
+          return when7(along < link4.gap)((function() {
+            var share = 1 - link4.bias;
+            var push2 = (link4.gap - along) * link4.strength * alpha;
+            return function __do5() {
+              writeVelocity(link4.target, link4.target.vx + v2.axisX * push2 * link4.bias, link4.target.vy + v2.axisY * push2 * link4.bias);
+              return writeVelocity(link4.source, link4.source.vx - v2.axisX * push2 * share, link4.source.vy - v2.axisY * push2 * share);
+            };
+          })());
+        });
+      });
+    };
+  };
+
+  // output/Hylograph.Forces.Link/index.js
+  var min4 = /* @__PURE__ */ min(ordNumber);
+  var map18 = /* @__PURE__ */ map(functorArray);
+  var pure6 = /* @__PURE__ */ pure(applicativeEffect);
+  var map19 = /* @__PURE__ */ map(functorEither);
+  var FromDegree = /* @__PURE__ */ (function() {
+    function FromDegree2() {
+    }
+    ;
+    FromDegree2.value = new FromDegree2();
+    return FromDegree2;
+  })();
+  var PerLink = /* @__PURE__ */ (function() {
+    function PerLink2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    PerLink2.create = function(value0) {
+      return new PerLink2(value0);
+    };
+    return PerLink2;
+  })();
+  var strengthPerLink = /* @__PURE__ */ (function() {
+    return PerLink.create;
+  })();
+  var strengthFromDegree = /* @__PURE__ */ (function() {
+    return FromDegree.value;
+  })();
+  var springs = function(config) {
+    return function(random2) {
+      return function(joined) {
+        var spring = function(end) {
+          return {
+            source: end.source,
+            target: end.target,
+            distance: config.distance(end.link),
+            strength: (function() {
+              if (config.strength instanceof FromDegree) {
+                return 1 / min4(end.sourceDegree)(end.targetDegree);
+              }
+              ;
+              if (config.strength instanceof PerLink) {
+                return config.strength.value0(end.link);
+              }
+              ;
+              throw new Error("Failed pattern match at Hylograph.Forces.Link (line 119, column 17 - line 121, column 46): " + [config.strength.constructor.name]);
+            })(),
+            bias: end.bias
+          };
+        };
+        return {
+          springs: map18(spring)(joined),
+          iterations: config.iterations,
+          random: random2
+        };
+      };
+    };
+  };
+  var pull = function(spring, alpha, x3, y3) {
+    var share = 1 - spring.bias;
+    var separation = sqrt(x3 * x3 + y3 * y3);
+    var scale = (separation - spring.distance) / separation * alpha * spring.strength;
+    var pullY = y3 * scale;
+    var pullX = x3 * scale;
+    writeVelocity(spring.target, spring.target.vx - pullX * spring.bias, spring.target.vy - pullY * spring.bias);
+    return writeVelocity(spring.source, spring.source.vx + pullX * share, spring.source.vy + pullY * share);
+  };
+  var orJiggle = function(random2) {
+    return function(value12) {
+      var $24 = value12 < 0 || value12 > 0;
+      if ($24) {
+        return pure6(value12);
+      }
+      ;
+      return draw(random2);
+    };
+  };
+  var initializeById2 = function(dictOrd) {
+    var joinById2 = joinById(dictOrd);
+    return function(dictShow) {
+      var joinById1 = joinById2(dictShow);
+      return function(identify) {
+        return function(config) {
+          return function(random2) {
+            return function(nodes) {
+              return function(links) {
+                return map19(springs(config)(random2))(joinById1(identify)(nodes)(links));
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+  var apply7 = function(v2) {
+    return function(alpha) {
+      return forE(0)(v2.iterations)(function(v1) {
+        return foreachE(v2.springs)(function(spring) {
+          var y3 = spring.target.y + spring.target.vy - spring.source.y - spring.source.vy;
+          var x3 = spring.target.x + spring.target.vx - spring.source.x - spring.source.vx;
+          var $27 = (x3 < 0 || x3 > 0) && (y3 < 0 || y3 > 0);
+          if ($27) {
+            return function() {
+              return pull(spring, alpha, x3, y3);
+            };
+          }
+          ;
+          return function __do5() {
+            var apartX = orJiggle(v2.random)(x3)();
+            var apartY = orJiggle(v2.random)(y3)();
+            return pull(spring, alpha, apartX, apartY);
+          };
+        });
+      });
+    };
+  };
+
+  // output/Hylograph.Forces.ManyBody/index.js
+  var $runtime_lazy7 = function(name15, moduleName, init3) {
+    var state3 = 0;
+    var val;
+    return function(lineNumber) {
+      if (state3 === 2) return val;
+      if (state3 === 1) throw new ReferenceError(name15 + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
+      state3 = 1;
+      val = init3();
+      state3 = 2;
+      return val;
+    };
+  };
+  var map20 = /* @__PURE__ */ map(functorArray);
+  var EveryPair = /* @__PURE__ */ (function() {
+    function EveryPair3() {
+    }
+    ;
+    EveryPair3.value = new EveryPair3();
+    return EveryPair3;
+  })();
+  var WithinGroups = /* @__PURE__ */ (function() {
+    function WithinGroups5() {
+    }
+    ;
+    WithinGroups5.value = new WithinGroups5();
+    return WithinGroups5;
+  })();
+  var BetweenGroups = /* @__PURE__ */ (function() {
+    function BetweenGroups5() {
+    }
+    ;
+    BetweenGroups5.value = new BetweenGroups5();
+    return BetweenGroups5;
+  })();
+  var NoMembers = /* @__PURE__ */ (function() {
+    function NoMembers2() {
+    }
+    ;
+    NoMembers2.value = new NoMembers2();
+    return NoMembers2;
+  })();
+  var Member = /* @__PURE__ */ (function() {
+    function Member2(value0, value1, value22) {
+      this.value0 = value0;
+      this.value1 = value1;
+      this.value2 = value22;
+    }
+    ;
+    Member2.create = function(value0) {
+      return function(value1) {
+        return function(value22) {
+          return new Member2(value0, value1, value22);
+        };
+      };
+    };
+    return Member2;
+  })();
+  var Cluster = /* @__PURE__ */ (function() {
+    function Cluster2(value0, value1, value22, value32, value42, value52, value62) {
+      this.value0 = value0;
+      this.value1 = value1;
+      this.value2 = value22;
+      this.value3 = value32;
+      this.value4 = value42;
+      this.value5 = value52;
+      this.value6 = value62;
+    }
+    ;
+    Cluster2.create = function(value0) {
+      return function(value1) {
+        return function(value22) {
+          return function(value32) {
+            return function(value42) {
+              return function(value52) {
+                return function(value62) {
+                  return new Cluster2(value0, value1, value22, value32, value42, value52, value62);
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    return Cluster2;
+  })();
+  var Finished2 = /* @__PURE__ */ (function() {
+    function Finished4() {
+    }
+    ;
+    Finished4.value = new Finished4();
+    return Finished4;
+  })();
+  var withinGroups = /* @__PURE__ */ (function() {
+    return WithinGroups.value;
+  })();
+  var weigh = function(cluster) {
+    if (cluster instanceof Cluster) {
+      var weight = abs(cluster.value0);
+      var $23 = weight > 0;
+      if ($23) {
+        return weight;
+      }
+      ;
+      return 0;
+    }
+    ;
+    if (cluster instanceof Finished2) {
+      return 0;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 275, column 17 - line 281, column 18): " + [cluster.constructor.name]);
+  };
+  var strengthOf = function(cluster) {
+    if (cluster instanceof Cluster) {
+      return cluster.value0;
+    }
+    ;
+    if (cluster instanceof Finished2) {
+      return 0;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 289, column 22 - line 291, column 18): " + [cluster.constructor.name]);
+  };
+  var snapshot = function(bodies) {
+    return function __do5() {
+      var points2 = $$new(Nil.value)();
+      foreachE(bodies)(function(body2) {
+        return function __do6() {
+          var earlier = read(points2)();
+          return write(new Cons({
+            x: body2.node.x,
+            y: body2.node.y,
+            item: body2
+          }, earlier))(points2)();
+        };
+      })();
+      return read(points2)();
+    };
+  };
+  var separate = function(limits) {
+    return function(x3) {
+      return function(y3) {
+        return function(distance2) {
+          return function(seed) {
+            var seedX = (function() {
+              var $39 = x3 === 0;
+              if ($39) {
+                return advance(seed);
+              }
+              ;
+              return seed;
+            })();
+            var seedY = (function() {
+              var $40 = y3 === 0;
+              if ($40) {
+                return advance(seedX);
+              }
+              ;
+              return seedX;
+            })();
+            var apartY = (function() {
+              var $41 = y3 === 0;
+              if ($41) {
+                return jiggle(seedY);
+              }
+              ;
+              return y3;
+            })();
+            var apartX = (function() {
+              var $42 = x3 === 0;
+              if ($42) {
+                return jiggle(seedX);
+              }
+              ;
+              return x3;
+            })();
+            var lengthX = (function() {
+              var $43 = x3 === 0;
+              if ($43) {
+                return distance2 + apartX * apartX;
+              }
+              ;
+              return distance2;
+            })();
+            var lengthY = (function() {
+              var $44 = y3 === 0;
+              if ($44) {
+                return lengthX + apartY * apartY;
+              }
+              ;
+              return lengthX;
+            })();
+            return {
+              x: apartX,
+              y: apartY,
+              distance2: (function() {
+                var $45 = lengthY < limits.distanceMin2;
+                if ($45) {
+                  return sqrt(limits.distanceMin2 * lengthY);
+                }
+                ;
+                return lengthY;
+              })(),
+              seed: seedY
+            };
+          };
+        };
+      };
+    };
+  };
+  var pushFrom = function(nodes) {
+    return function(index4) {
+      return function(alpha) {
+        return function(x3) {
+          return function(y3) {
+            return function(distance2) {
+              var go2 = function($copy_remaining) {
+                return function($copy_vx) {
+                  return function($copy_vy) {
+                    var $tco_var_remaining = $copy_remaining;
+                    var $tco_var_vx = $copy_vx;
+                    var $tco_done = false;
+                    var $tco_result;
+                    function $tco_loop(remaining, vx, vy) {
+                      if (remaining instanceof NoMembers) {
+                        $tco_done = true;
+                        return {
+                          vx,
+                          vy
+                        };
+                      }
+                      ;
+                      if (remaining instanceof Member) {
+                        var $47 = remaining.value0 === index4;
+                        if ($47) {
+                          $tco_var_remaining = remaining.value2;
+                          $tco_var_vx = vx;
+                          $copy_vy = vy;
+                          return;
+                        }
+                        ;
+                        var pull2 = remaining.value1 * alpha / distance2;
+                        $tco_var_remaining = remaining.value2;
+                        $tco_var_vx = vx + x3 * pull2;
+                        $copy_vy = vy + y3 * pull2;
+                        return;
+                      }
+                      ;
+                      throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 443, column 24 - line 451, column 50): " + [remaining.constructor.name]);
+                    }
+                    ;
+                    while (!$tco_done) {
+                      $tco_result = $tco_loop($tco_var_remaining, $tco_var_vx, $copy_vy);
+                    }
+                    ;
+                    return $tco_result;
+                  };
+                };
+              };
+              return go2(nodes);
+            };
+          };
+        };
+      };
+    };
+  };
+  var near = function(limits, alpha, index4, members, x3, y3, distance2, vx, vy, seed) {
+    if (members instanceof Member && (members.value2 instanceof NoMembers && members.value0 === index4)) {
+      return {
+        vx,
+        vy,
+        seed
+      };
+    }
+    ;
+    var apart = separate(limits)(x3)(y3)(distance2)(seed);
+    var pushed = pushFrom(members)(index4)(alpha)(apart.x)(apart.y)(apart.distance2)(vx)(vy);
+    return {
+      vx: pushed.vx,
+      vy: pushed.vy,
+      seed: apart.seed
+    };
+  };
+  var initialize5 = function(config) {
+    return function(random2) {
+      return function(nodes) {
+        var negated = function(body2) {
+          return {
+            index: body2.index,
+            node: body2.node,
+            strength: -1 * body2.strength
+          };
+        };
+        var bodies = mapWithIndex2(function(index4) {
+          return function(node) {
+            return {
+              index: index4,
+              strength: config.strength(node),
+              node
+            };
+          };
+        })(nodes);
+        return {
+          bodies,
+          groups: (function() {
+            if (config.scope instanceof EveryPair) {
+              return [];
+            }
+            ;
+            if (config.scope instanceof WithinGroups) {
+              return grouped(function(body2) {
+                return config.group(body2.node);
+              })(bodies);
+            }
+            ;
+            if (config.scope instanceof BetweenGroups) {
+              return grouped(function(body2) {
+                return config.group(body2.node);
+              })(map20(negated)(bodies));
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 127, column 13 - line 130, column 86): " + [config.scope.constructor.name]);
+          })(),
+          scope: config.scope,
+          limits: {
+            theta2: config.theta * config.theta,
+            distanceMin2: config.distanceMin * config.distanceMin,
+            distanceMax2: config.distanceMax * config.distanceMax
+          },
+          random: random2
+        };
+      };
+    };
+  };
+  var everyPair = /* @__PURE__ */ (function() {
+    return EveryPair.value;
+  })();
+  var distant = function(limits, alpha, strength, x3, y3, distance2, vx, vy, seed) {
+    var apart = separate(limits)(x3)(y3)(distance2)(seed);
+    return {
+      vx: vx + apart.x * strength * alpha / apart.distance2,
+      vy: vy + apart.y * strength * alpha / apart.distance2,
+      seed: apart.seed
+    };
+  };
+  var walk2 = function(limits, alpha, index4, nodeX, nodeY, chain, startVx, startVy, startSeed) {
+    var go2 = function($copy_cluster) {
+      return function($copy_vx) {
+        return function($copy_vy) {
+          return function($copy_seed) {
+            var $tco_var_cluster = $copy_cluster;
+            var $tco_var_vx = $copy_vx;
+            var $tco_var_vy = $copy_vy;
+            var $tco_done = false;
+            var $tco_result;
+            function $tco_loop(cluster, vx, vy, seed) {
+              if (cluster instanceof Cluster) {
+                var $57 = !(cluster.value0 < 0 || cluster.value0 > 0);
+                if ($57) {
+                  $tco_var_cluster = cluster.value5;
+                  $tco_var_vx = vx;
+                  $tco_var_vy = vy;
+                  $copy_seed = seed;
+                  return;
+                }
+                ;
+                var y3 = cluster.value2 - nodeY;
+                var x3 = cluster.value1 - nodeX;
+                var distance2 = x3 * x3 + y3 * y3;
+                var $58 = cluster.value3 < distance2;
+                if ($58) {
+                  var $59 = distance2 < limits.distanceMax2;
+                  if ($59) {
+                    var $60 = distance2 >= limits.distanceMin2 && (x3 !== 0 && y3 !== 0);
+                    if ($60) {
+                      $tco_var_cluster = cluster.value5;
+                      $tco_var_vx = vx + x3 * cluster.value0 * alpha / distance2;
+                      $tco_var_vy = vy + y3 * cluster.value0 * alpha / distance2;
+                      $copy_seed = seed;
+                      return;
+                    }
+                    ;
+                    var moved = distant(limits, alpha, cluster.value0, x3, y3, distance2, vx, vy, seed);
+                    $tco_var_cluster = cluster.value5;
+                    $tco_var_vx = moved.vx;
+                    $tco_var_vy = moved.vy;
+                    $copy_seed = moved.seed;
+                    return;
+                  }
+                  ;
+                  $tco_var_cluster = cluster.value5;
+                  $tco_var_vx = vx;
+                  $tco_var_vy = vy;
+                  $copy_seed = seed;
+                  return;
+                }
+                ;
+                if (cluster.value6 instanceof NoMembers) {
+                  $tco_var_cluster = cluster.value4;
+                  $tco_var_vx = vx;
+                  $tco_var_vy = vy;
+                  $copy_seed = seed;
+                  return;
+                }
+                ;
+                var $62 = distance2 >= limits.distanceMax2;
+                if ($62) {
+                  $tco_var_cluster = cluster.value5;
+                  $tco_var_vx = vx;
+                  $tco_var_vy = vy;
+                  $copy_seed = seed;
+                  return;
+                }
+                ;
+                var moved = near(limits, alpha, index4, cluster.value6, x3, y3, distance2, vx, vy, seed);
+                $tco_var_cluster = cluster.value5;
+                $tco_var_vx = moved.vx;
+                $tco_var_vy = moved.vy;
+                $copy_seed = moved.seed;
+                return;
+              }
+              ;
+              if (cluster instanceof Finished2) {
+                $tco_done = true;
+                return {
+                  vx,
+                  vy,
+                  seed
+                };
+              }
+              ;
+              throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 326, column 29 - line 357, column 35): " + [cluster.constructor.name]);
+            }
+            ;
+            while (!$tco_done) {
+              $tco_result = $tco_loop($tco_var_cluster, $tco_var_vx, $tco_var_vy, $copy_seed);
+            }
+            ;
+            return $tco_result;
+          };
+        };
+      };
+    };
+    return go2(chain)(startVx)(startVy)(startSeed);
+  };
+  var counting = function(weight, term, sum2) {
+    var $70 = weight > 0;
+    if ($70) {
+      return sum2 + term;
+    }
+    ;
+    return sum2;
+  };
+  var centreYOf = function(cluster) {
+    if (cluster instanceof Cluster) {
+      return cluster.value2;
+    }
+    ;
+    if (cluster instanceof Finished2) {
+      return 0;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 299, column 21 - line 301, column 18): " + [cluster.constructor.name]);
+  };
+  var centreXOf = function(cluster) {
+    if (cluster instanceof Cluster) {
+      return cluster.value1;
+    }
+    ;
+    if (cluster instanceof Finished2) {
+      return 0;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 294, column 21 - line 296, column 18): " + [cluster.constructor.name]);
+  };
+  var clusters = function(theta2) {
+    return function(planted) {
+      var total = function($copy_nodes) {
+        return function($copy_sum) {
+          var $tco_var_nodes = $copy_nodes;
+          var $tco_done = false;
+          var $tco_result;
+          function $tco_loop(nodes, sum2) {
+            if (nodes instanceof NoMembers) {
+              $tco_done = true;
+              return sum2;
+            }
+            ;
+            if (nodes instanceof Member) {
+              $tco_var_nodes = nodes.value2;
+              $copy_sum = sum2 + nodes.value1;
+              return;
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 268, column 21 - line 270, column 58): " + [nodes.constructor.name]);
+          }
+          ;
+          while (!$tco_done) {
+            $tco_result = $tco_loop($tco_var_nodes, $copy_sum);
+          }
+          ;
+          return $tco_result;
+        };
+      };
+      var present = function(quarter) {
+        return function(cluster) {
+          if (quarter instanceof Empty) {
+            return Finished2.value;
+          }
+          ;
+          return cluster;
+        };
+      };
+      var membersOf = function($copy_oldestFirst) {
+        return function($copy_newer) {
+          var $tco_var_oldestFirst = $copy_oldestFirst;
+          var $tco_done1 = false;
+          var $tco_result;
+          function $tco_loop(oldestFirst, newer) {
+            if (oldestFirst instanceof Nil) {
+              $tco_done1 = true;
+              return newer;
+            }
+            ;
+            if (oldestFirst instanceof Cons) {
+              $tco_var_oldestFirst = oldestFirst.value1;
+              $copy_newer = new Member(oldestFirst.value0.item.index, oldestFirst.value0.item.strength, newer);
+              return;
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 262, column 33 - line 264, column 90): " + [oldestFirst.constructor.name]);
+          }
+          ;
+          while (!$tco_done1) {
+            $tco_result = $tco_loop($tco_var_oldestFirst, $copy_newer);
+          }
+          ;
+          return $tco_result;
+        };
+      };
+      var $lazy_thread = $runtime_lazy7("thread", "Hylograph.Forces.ManyBody", function() {
+        return function(tree, x0, x13, after) {
+          if (tree instanceof Empty) {
+            return after;
+          }
+          ;
+          if (tree instanceof Leaf2) {
+            var nodes = membersOf(reverse2(new Cons(tree.value0, tree.value1)))(NoMembers.value);
+            return new Cluster(total(nodes)(0), tree.value0.x, tree.value0.y, (x13 - x0) * (x13 - x0) / theta2, after, after, nodes);
+          }
+          ;
+          if (tree instanceof Branch) {
+            var middle = (x0 + x13) / 2;
+            var fourth = $lazy_thread(215)(tree.value3, middle, x13, after);
+            var third = $lazy_thread(216)(tree.value2, x0, middle, fourth);
+            var second = $lazy_thread(217)(tree.value1, middle, x13, third);
+            var two = present(tree.value1)(second);
+            var weightTwo = weigh(two);
+            var three = present(tree.value2)(third);
+            var weightThree = weigh(three);
+            var four = present(tree.value3)(fourth);
+            var weightFour = weigh(four);
+            var first = $lazy_thread(218)(tree.value0, x0, middle, second);
+            var one2 = present(tree.value0)(first);
+            var weightOne = weigh(one2);
+            var strength = counting(weightFour, strengthOf(four), counting(weightThree, strengthOf(three), counting(weightTwo, strengthOf(two), counting(weightOne, strengthOf(one2), 0))));
+            var weight = 0 + weightOne + weightTwo + weightThree + weightFour;
+            var x3 = counting(weightFour, weightFour * centreXOf(four), counting(weightThree, weightThree * centreXOf(three), counting(weightTwo, weightTwo * centreXOf(two), counting(weightOne, weightOne * centreXOf(one2), 0))));
+            var y3 = counting(weightFour, weightFour * centreYOf(four), counting(weightThree, weightThree * centreYOf(three), counting(weightTwo, weightTwo * centreYOf(two), counting(weightOne, weightOne * centreYOf(one2), 0))));
+            return new Cluster(strength, x3 / weight, y3 / weight, (x13 - x0) * (x13 - x0) / theta2, first, after, NoMembers.value);
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 205, column 39 - line 249, column 106): " + [tree.constructor.name]);
+        };
+      });
+      var thread = $lazy_thread(204);
+      return thread(planted.root, planted.extent.x0, planted.extent.x1, Finished2.value);
+    };
+  };
+  var betweenGroups = /* @__PURE__ */ (function() {
+    return BetweenGroups.value;
+  })();
+  var apply8 = function(v2) {
+    return function(alpha) {
+      var among2 = function(bodies) {
+        return function __do5() {
+          var points2 = snapshot(bodies)();
+          var chain = clusters(v2.limits.theta2)(build(points2));
+          return foreachE(bodies)(function(body2) {
+            return function __do6() {
+              var seed = read(v2.random)();
+              var moved = walk2(v2.limits, alpha, body2.index, body2.node.x, body2.node.y, chain, body2.node.vx, body2.node.vy, seed);
+              writeVelocity(body2.node, moved.vx, moved.vy);
+              return write(moved.seed)(v2.random)();
+            };
           })();
         };
       };
-      var cancel = requestAnimationFrame_(loop2)();
-      setCancelRef(cancelRef)(cancel)();
-      return bind2(getCancelRef(cancelRef))(identity7);
+      if (v2.scope instanceof EveryPair) {
+        return among2(v2.bodies);
+      }
+      ;
+      if (v2.scope instanceof WithinGroups) {
+        return foreachE(v2.groups)(among2);
+      }
+      ;
+      if (v2.scope instanceof BetweenGroups) {
+        return function __do5() {
+          among2(v2.bodies)();
+          return foreachE(v2.groups)(among2)();
+        };
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.Forces.ManyBody (line 146, column 32 - line 151, column 32): " + [v2.scope.constructor.name]);
     };
   };
-  var integratePositions = integratePositions_;
-  var initializeNodes = initializeNodes_;
-  var initializeLinkForce = initializeLinkForce_;
-  var initializeForce = initializeForce_;
-  var decayAlpha = decayAlpha_;
-  var createRadialFiltered = createRadialFiltered_;
-  var createRadial = createRadial_;
-  var createManyBodyFiltered = createManyBodyFiltered_;
-  var createManyBody = createManyBody_;
-  var createLink = createLink_;
-  var createForceYDynamic = createForceYDynamic_;
-  var createForceY = createForceY_;
-  var createForceXDynamic = createForceXDynamic_;
-  var createForceX = createForceX_;
-  var createCollideDynamic = createCollideDynamic_;
-  var createCollide = createCollide_;
-  var createCenter = createCenter_;
-  var applyForce = applyForce_;
+
+  // output/Hylograph.Forces.Position/index.js
+  var map21 = /* @__PURE__ */ map(functorArray);
+  var initialize6 = function(config) {
+    return function(nodes) {
+      var pulled = function(node) {
+        var target6 = config.target(node);
+        return {
+          node,
+          target: target6,
+          strength: (function() {
+            var $8 = isNaNImpl(target6);
+            if ($8) {
+              return 0;
+            }
+            ;
+            return config.strength(node);
+          })()
+        };
+      };
+      return map21(pulled)(nodes);
+    };
+  };
+  var applyY = function(v2) {
+    return function(alpha) {
+      return foreachE(v2)(function(pulled) {
+        return function() {
+          return writeVelocity(pulled.node, pulled.node.vx, pulled.node.vy + (pulled.target - pulled.node.y) * pulled.strength * alpha);
+        };
+      });
+    };
+  };
+  var applyX = function(v2) {
+    return function(alpha) {
+      return foreachE(v2)(function(pulled) {
+        return function() {
+          return writeVelocity(pulled.node, pulled.node.vx + (pulled.target - pulled.node.x) * pulled.strength * alpha, pulled.node.vy);
+        };
+      });
+    };
+  };
+
+  // output/Hylograph.Forces.Radial/index.js
+  var map23 = /* @__PURE__ */ map(functorArray);
+  var orTiny = function(value12) {
+    var $11 = value12 < 0 || value12 > 0;
+    if ($11) {
+      return value12;
+    }
+    ;
+    return 1e-6;
+  };
+  var initialize7 = function(config) {
+    return function(nodes) {
+      var pulled = function(node) {
+        var radius = config.radius(node);
+        return {
+          node,
+          radius,
+          strength: (function() {
+            var $12 = isNaNImpl(radius);
+            if ($12) {
+              return 0;
+            }
+            ;
+            return config.strength(node);
+          })()
+        };
+      };
+      return {
+        nodes: map23(pulled)(nodes),
+        x: config.x,
+        y: config.y
+      };
+    };
+  };
+  var apply9 = function(v2) {
+    return function(alpha) {
+      return foreachE(v2.nodes)(function(pulled) {
+        var offsetY = orTiny(pulled.node.y - v2.y);
+        var offsetX = orTiny(pulled.node.x - v2.x);
+        var distance = sqrt(offsetX * offsetX + offsetY * offsetY);
+        var scale = (pulled.radius - distance) * pulled.strength * alpha / distance;
+        return function() {
+          return writeVelocity(pulled.node, pulled.node.vx + offsetX * scale, pulled.node.vy + offsetY * scale);
+        };
+      });
+    };
+  };
+
+  // output/Hylograph.Forces.RectCollide/index.js
+  var $runtime_lazy8 = function(name15, moduleName, init3) {
+    var state3 = 0;
+    var val;
+    return function(lineNumber) {
+      if (state3 === 2) return val;
+      if (state3 === 1) throw new ReferenceError(name15 + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
+      state3 = 1;
+      val = init3();
+      state3 = 2;
+      return val;
+    };
+  };
+  var comparing2 = /* @__PURE__ */ comparing(ordInt);
+  var pure7 = /* @__PURE__ */ pure(applicativeEffect);
+  var when8 = /* @__PURE__ */ when(applicativeEffect);
+  var StaysPut = /* @__PURE__ */ (function() {
+    function StaysPut2() {
+    }
+    ;
+    StaysPut2.value = new StaysPut2();
+    return StaysPut2;
+  })();
+  var GoesThrough = /* @__PURE__ */ (function() {
+    function GoesThrough2() {
+    }
+    ;
+    GoesThrough2.value = new GoesThrough2();
+    return GoesThrough2;
+  })();
+  var EveryPair2 = /* @__PURE__ */ (function() {
+    function EveryPair3() {
+    }
+    ;
+    EveryPair3.value = new EveryPair3();
+    return EveryPair3;
+  })();
+  var WithinGroups2 = /* @__PURE__ */ (function() {
+    function WithinGroups5() {
+    }
+    ;
+    WithinGroups5.value = new WithinGroups5();
+    return WithinGroups5;
+  })();
+  var BetweenGroups2 = /* @__PURE__ */ (function() {
+    function BetweenGroups5() {
+    }
+    ;
+    BetweenGroups5.value = new BetweenGroups5();
+    return BetweenGroups5;
+  })();
+  var Cell = /* @__PURE__ */ (function() {
+    function Cell2(value0, value1, value22, value32, value42, value52, value62, value72, value82) {
+      this.value0 = value0;
+      this.value1 = value1;
+      this.value2 = value22;
+      this.value3 = value32;
+      this.value4 = value42;
+      this.value5 = value52;
+      this.value6 = value62;
+      this.value7 = value72;
+      this.value8 = value82;
+    }
+    ;
+    Cell2.create = function(value0) {
+      return function(value1) {
+        return function(value22) {
+          return function(value32) {
+            return function(value42) {
+              return function(value52) {
+                return function(value62) {
+                  return function(value72) {
+                    return function(value82) {
+                      return new Cell2(value0, value1, value22, value32, value42, value52, value62, value72, value82);
+                    };
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    return Cell2;
+  })();
+  var Finished3 = /* @__PURE__ */ (function() {
+    function Finished4() {
+    }
+    ;
+    Finished4.value = new Finished4();
+    return Finished4;
+  })();
+  var withinGroups2 = /* @__PURE__ */ (function() {
+    return WithinGroups2.value;
+  })();
+  var staysPut = /* @__PURE__ */ (function() {
+    return StaysPut.value;
+  })();
+  var may = function(pairs) {
+    return function(box) {
+      return function(other) {
+        if (pairs instanceof EveryPair2) {
+          return true;
+        }
+        ;
+        if (pairs instanceof WithinGroups2) {
+          return box.group >= 0 && box.group === other.group;
+        }
+        ;
+        if (pairs instanceof BetweenGroups2) {
+          return !(box.group >= 0 && box.group === other.group);
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 358, column 23 - line 361, column 68): " + [pairs.constructor.name]);
+      };
+    };
+  };
+  var initialize8 = function(config) {
+    return function(nodes) {
+      var orZero = function(extent) {
+        var $37 = isNaNImpl(extent);
+        if ($37) {
+          return 0;
+        }
+        ;
+        return extent;
+      };
+      var box = function(index4) {
+        return function(node) {
+          return {
+            index: index4,
+            halfWidth: orZero(config.halfWidth(node)),
+            halfHeight: orZero(config.halfHeight(node)),
+            group: (function() {
+              var v2 = config.group(node);
+              if (v2 instanceof Ungrouped) {
+                return -1 | 0;
+              }
+              ;
+              if (v2 instanceof InGroup) {
+                return v2.value0;
+              }
+              ;
+              throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 210, column 14 - line 212, column 33): " + [v2.constructor.name]);
+            })(),
+            node
+          };
+        };
+      };
+      return {
+        boxes: filter(function(candidate) {
+          return config.include(candidate.node);
+        })(mapWithIndex2(box)(nodes)),
+        strength: config.strength,
+        iterations: config.iterations,
+        pairs: config.pairs,
+        heldX: config.heldX,
+        heldY: config.heldY,
+        squeezed: config.squeezed
+      };
+    };
+  };
+  var inIndexOrder = function(found) {
+    if (found instanceof Cons && found.value1 instanceof Nil) {
+      return found;
+    }
+    ;
+    return sortBy2(comparing2(function(v2) {
+      return v2.item.index;
+    }))(found);
+  };
+  var goesThrough = /* @__PURE__ */ (function() {
+    return GoesThrough.value;
+  })();
+  var everyPair2 = /* @__PURE__ */ (function() {
+    return EveryPair2.value;
+  })();
+  var direction = function(offset, tie, overlap) {
+    var $43 = offset > 0;
+    if ($43) {
+      return 1 * overlap;
+    }
+    ;
+    var $44 = offset < 0;
+    if ($44) {
+      return -1 * overlap;
+    }
+    ;
+    return tie * overlap;
+  };
+  var cells = function(planted) {
+    var widest = function($copy_occupants) {
+      return function($copy_most) {
+        var $tco_var_occupants = $copy_occupants;
+        var $tco_done = false;
+        var $tco_result;
+        function $tco_loop(occupants, most) {
+          if (occupants instanceof Nil) {
+            $tco_done = true;
+            return most;
+          }
+          ;
+          if (occupants instanceof Cons) {
+            $tco_var_occupants = occupants.value1;
+            $copy_most = (function() {
+              var $46 = occupants.value0.item.halfWidth > most;
+              if ($46) {
+                return occupants.value0.item.halfWidth;
+              }
+              ;
+              return most;
+            })();
+            return;
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 426, column 27 - line 428, column 104): " + [occupants.constructor.name]);
+        }
+        ;
+        while (!$tco_done) {
+          $tco_result = $tco_loop($tco_var_occupants, $copy_most);
+        }
+        ;
+        return $tco_result;
+      };
+    };
+    var wider = function(quarter, cell2, most) {
+      if (quarter instanceof Empty) {
+        return most;
+      }
+      ;
+      if (cell2 instanceof Cell) {
+        var $51 = cell2.value0 > most;
+        if ($51) {
+          return cell2.value0;
+        }
+        ;
+        return most;
+      }
+      ;
+      if (cell2 instanceof Finished3) {
+        return most;
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 438, column 10 - line 440, column 23): " + [cell2.constructor.name]);
+    };
+    var tallest = function($copy_occupants) {
+      return function($copy_most) {
+        var $tco_var_occupants = $copy_occupants;
+        var $tco_done1 = false;
+        var $tco_result;
+        function $tco_loop(occupants, most) {
+          if (occupants instanceof Nil) {
+            $tco_done1 = true;
+            return most;
+          }
+          ;
+          if (occupants instanceof Cons) {
+            $tco_var_occupants = occupants.value1;
+            $copy_most = (function() {
+              var $62 = occupants.value0.item.halfHeight > most;
+              if ($62) {
+                return occupants.value0.item.halfHeight;
+              }
+              ;
+              return most;
+            })();
+            return;
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 431, column 28 - line 433, column 107): " + [occupants.constructor.name]);
+        }
+        ;
+        while (!$tco_done1) {
+          $tco_result = $tco_loop($tco_var_occupants, $copy_most);
+        }
+        ;
+        return $tco_result;
+      };
+    };
+    var taller = function(quarter, cell2, most) {
+      if (quarter instanceof Empty) {
+        return most;
+      }
+      ;
+      if (cell2 instanceof Cell) {
+        var $67 = cell2.value1 > most;
+        if ($67) {
+          return cell2.value1;
+        }
+        ;
+        return most;
+      }
+      ;
+      if (cell2 instanceof Finished3) {
+        return most;
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 445, column 10 - line 447, column 23): " + [cell2.constructor.name]);
+    };
+    var $lazy_thread = $runtime_lazy8("thread", "Hylograph.Forces.RectCollide", function() {
+      return function(tree, x0, y0, x13, y13, after) {
+        if (tree instanceof Empty) {
+          return after;
+        }
+        ;
+        if (tree instanceof Leaf2) {
+          var occupants = new Cons(tree.value0, tree.value1);
+          return new Cell(widest(occupants)(0), tallest(occupants)(0), x0, y0, x13, y13, after, after, occupants);
+        }
+        ;
+        if (tree instanceof Branch) {
+          var middleY = (y0 + y13) / 2;
+          var middleX = (x0 + x13) / 2;
+          var fourth = $lazy_thread(412)(tree.value3, middleX, middleY, x13, y13, after);
+          var third = $lazy_thread(413)(tree.value2, x0, middleY, middleX, y13, fourth);
+          var second = $lazy_thread(414)(tree.value1, middleX, y0, x13, middleY, third);
+          var first = $lazy_thread(415)(tree.value0, x0, y0, middleX, middleY, second);
+          var height10 = taller(tree.value3, fourth, taller(tree.value2, third, taller(tree.value1, second, taller(tree.value0, first, 0))));
+          var width10 = wider(tree.value3, fourth, wider(tree.value2, third, wider(tree.value1, second, wider(tree.value0, first, 0))));
+          return new Cell(width10, height10, x0, y0, x13, y13, first, after, Nil.value);
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 401, column 45 - line 423, column 54): " + [tree.constructor.name]);
+      };
+    });
+    var thread = $lazy_thread(400);
+    return thread(planted.root, planted.extent.x0, planted.extent.y0, planted.extent.x1, planted.extent.y1, Finished3.value);
+  };
+  var betweenGroups2 = /* @__PURE__ */ (function() {
+    return BetweenGroups2.value;
+  })();
+  var anticipate2 = function(boxes) {
+    return function __do5() {
+      var points2 = $$new(Nil.value)();
+      foreachE(boxes)(function(box) {
+        return function __do6() {
+          var earlier = read(points2)();
+          return write(new Cons({
+            x: box.node.x + box.node.vx,
+            y: box.node.y + box.node.vy,
+            item: box
+          }, earlier))(points2)();
+        };
+      })();
+      return read(points2)();
+    };
+  };
+  var among = function(allowed, halfWidth, halfHeight, aheadX, aheadY, occupants, start3) {
+    var go2 = function($copy_remaining) {
+      return function($copy_found) {
+        var $tco_var_remaining = $copy_remaining;
+        var $tco_done = false;
+        var $tco_result;
+        function $tco_loop(remaining, found) {
+          if (remaining instanceof Nil) {
+            $tco_done = true;
+            return found;
+          }
+          ;
+          if (remaining instanceof Cons) {
+            var $85 = allowed(remaining.value0.item) && (halfWidth + remaining.value0.item.halfWidth - abs(aheadX - remaining.value0.x) > 0 && halfHeight + remaining.value0.item.halfHeight - abs(aheadY - remaining.value0.y) > 0);
+            if ($85) {
+              $tco_var_remaining = remaining.value1;
+              $copy_found = new Cons(remaining.value0, found);
+              return;
+            }
+            ;
+            $tco_var_remaining = remaining.value1;
+            $copy_found = found;
+            return;
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 477, column 26 - line 484, column 27): " + [remaining.constructor.name]);
+        }
+        ;
+        while (!$tco_done) {
+          $tco_result = $tco_loop($tco_var_remaining, $copy_found);
+        }
+        ;
+        return $tco_result;
+      };
+    };
+    return go2(occupants)(start3);
+  };
+  var overlapping = function(allowed, halfWidth, halfHeight, aheadX, aheadY, chain, start3) {
+    var go2 = function($copy_cell) {
+      return function($copy_found) {
+        var $tco_var_cell = $copy_cell;
+        var $tco_done = false;
+        var $tco_result;
+        function $tco_loop(cell2, found) {
+          if (cell2 instanceof Cell) {
+            if (cell2.value8 instanceof Nil) {
+              var $90 = cell2.value2 - aheadX > halfWidth + cell2.value0 || (aheadX - cell2.value4 > halfWidth + cell2.value0 || (cell2.value3 - aheadY > halfHeight + cell2.value1 || aheadY - cell2.value5 > halfHeight + cell2.value1));
+              if ($90) {
+                $tco_var_cell = cell2.value7;
+                $copy_found = found;
+                return;
+              }
+              ;
+              $tco_var_cell = cell2.value6;
+              $copy_found = found;
+              return;
+            }
+            ;
+            $tco_var_cell = cell2.value7;
+            $copy_found = among(allowed, halfWidth, halfHeight, aheadX, aheadY, cell2.value8, found);
+            return;
+          }
+          ;
+          if (cell2 instanceof Finished3) {
+            $tco_done = true;
+            return found;
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 458, column 21 - line 467, column 24): " + [cell2.constructor.name]);
+        }
+        ;
+        while (!$tco_done) {
+          $tco_result = $tco_loop($tco_var_cell, $copy_found);
+        }
+        ;
+        return $tco_result;
+      };
+    };
+    return go2(chain)(start3);
+  };
+  var apply10 = function(v2) {
+    var unpushed = {
+      startVx: 0,
+      startVy: 0,
+      upX: 0,
+      downX: 0,
+      upY: 0,
+      downY: 0
+    };
+    var through = function(index4) {
+      return function(startVelocity) {
+        return function(up) {
+          return function(down) {
+            var $101 = up > 0 && down > 0;
+            if ($101) {
+              var $102 = abs(startVelocity) > 1e-3 * (up + down);
+              if ($102) {
+                var $103 = startVelocity > 0;
+                if ($103) {
+                  return down;
+                }
+                ;
+                return -up;
+              }
+              ;
+              var $104 = up > down;
+              if ($104) {
+                return down;
+              }
+              ;
+              var $105 = up < down;
+              if ($105) {
+                return -up;
+              }
+              ;
+              var $106 = odd(index4);
+              if ($106) {
+                return down;
+              }
+              ;
+              return -up;
+            }
+            ;
+            return 0;
+          };
+        };
+      };
+    };
+    var starting = function(boxes) {
+      return function __do5() {
+        var gathered = $$new(Nil.value)();
+        foreachE(boxes)(function(box) {
+          return modify_(Cons.create({
+            startVx: box.node.vx,
+            startVy: box.node.vy,
+            upX: 0,
+            downX: 0,
+            upY: 0,
+            downY: 0
+          }))(gathered);
+        })();
+        var newestFirst = read(gathered)();
+        return reverse2(newestFirst);
+      };
+    };
+    var settle = function(strength, box, found, aheadX, aheadY, startVx, startVy, soFar) {
+      var heldY = v2.heldY(box.node);
+      var heldX = v2.heldX(box.node);
+      var area2 = box.halfWidth * box.halfHeight;
+      var go2 = function($copy_others) {
+        return function($copy_vx) {
+          return function($copy_vy) {
+            return function($copy_upX) {
+              return function($copy_downX) {
+                return function($copy_upY) {
+                  return function($copy_downY) {
+                    var $tco_var_others = $copy_others;
+                    var $tco_var_vx = $copy_vx;
+                    var $tco_var_vy = $copy_vy;
+                    var $tco_var_upX = $copy_upX;
+                    var $tco_var_downX = $copy_downX;
+                    var $tco_var_upY = $copy_upY;
+                    var $tco_done = false;
+                    var $tco_result;
+                    function $tco_loop(others, vx, vy, upX, downX, upY, downY) {
+                      if (others instanceof Nil) {
+                        $tco_done = true;
+                        return {
+                          vx,
+                          vy,
+                          pushed: {
+                            startVx: soFar.startVx,
+                            startVy: soFar.startVy,
+                            upX,
+                            downX,
+                            upY,
+                            downY
+                          }
+                        };
+                      }
+                      ;
+                      if (others instanceof Cons) {
+                        var tie = (function() {
+                          var $108 = box.index < others.value0.item.index;
+                          if ($108) {
+                            return -1;
+                          }
+                          ;
+                          return 1;
+                        })();
+                        var otherArea = others.value0.item.halfWidth * others.value0.item.halfHeight;
+                        var offsetY = aheadY - others.value0.y;
+                        var overlapY = box.halfHeight + others.value0.item.halfHeight - abs(offsetY);
+                        var offsetX = aheadX - others.value0.x;
+                        var overlapX = box.halfWidth + others.value0.item.halfWidth - abs(offsetX);
+                        var byArea = (function() {
+                          var $109 = area2 + otherArea > 0;
+                          if ($109) {
+                            return otherArea / (area2 + otherArea);
+                          }
+                          ;
+                          return 0.5;
+                        })();
+                        var $110 = overlapX <= overlapY;
+                        if ($110) {
+                          if (heldX) {
+                            $tco_var_others = others.value1;
+                            $tco_var_vx = vx;
+                            $tco_var_vy = vy;
+                            $tco_var_upX = upX;
+                            $tco_var_downX = downX;
+                            $tco_var_upY = upY;
+                            $copy_downY = downY;
+                            return;
+                          }
+                          ;
+                          var push2 = direction(offsetX, tie, overlapX) * strength * (function() {
+                            var $112 = v2.heldX(others.value0.item.node);
+                            if ($112) {
+                              return 1;
+                            }
+                            ;
+                            return byArea;
+                          })();
+                          var $113 = push2 > 0;
+                          if ($113) {
+                            $tco_var_others = others.value1;
+                            $tco_var_vx = vx + push2;
+                            $tco_var_vy = vy;
+                            $tco_var_upX = upX + push2;
+                            $tco_var_downX = downX;
+                            $tco_var_upY = upY;
+                            $copy_downY = downY;
+                            return;
+                          }
+                          ;
+                          var $114 = push2 < 0;
+                          if ($114) {
+                            $tco_var_others = others.value1;
+                            $tco_var_vx = vx + push2;
+                            $tco_var_vy = vy;
+                            $tco_var_upX = upX;
+                            $tco_var_downX = downX - push2;
+                            $tco_var_upY = upY;
+                            $copy_downY = downY;
+                            return;
+                          }
+                          ;
+                          $tco_var_others = others.value1;
+                          $tco_var_vx = vx + push2;
+                          $tco_var_vy = vy;
+                          $tco_var_upX = upX;
+                          $tco_var_downX = downX;
+                          $tco_var_upY = upY;
+                          $copy_downY = downY;
+                          return;
+                        }
+                        ;
+                        if (heldY) {
+                          $tco_var_others = others.value1;
+                          $tco_var_vx = vx;
+                          $tco_var_vy = vy;
+                          $tco_var_upX = upX;
+                          $tco_var_downX = downX;
+                          $tco_var_upY = upY;
+                          $copy_downY = downY;
+                          return;
+                        }
+                        ;
+                        var push2 = direction(offsetY, tie, overlapY) * strength * (function() {
+                          var $116 = v2.heldY(others.value0.item.node);
+                          if ($116) {
+                            return 1;
+                          }
+                          ;
+                          return byArea;
+                        })();
+                        var $117 = push2 > 0;
+                        if ($117) {
+                          $tco_var_others = others.value1;
+                          $tco_var_vx = vx;
+                          $tco_var_vy = vy + push2;
+                          $tco_var_upX = upX;
+                          $tco_var_downX = downX;
+                          $tco_var_upY = upY + push2;
+                          $copy_downY = downY;
+                          return;
+                        }
+                        ;
+                        var $118 = push2 < 0;
+                        if ($118) {
+                          $tco_var_others = others.value1;
+                          $tco_var_vx = vx;
+                          $tco_var_vy = vy + push2;
+                          $tco_var_upX = upX;
+                          $tco_var_downX = downX;
+                          $tco_var_upY = upY;
+                          $copy_downY = downY - push2;
+                          return;
+                        }
+                        ;
+                        $tco_var_others = others.value1;
+                        $tco_var_vx = vx;
+                        $tco_var_vy = vy + push2;
+                        $tco_var_upX = upX;
+                        $tco_var_downX = downX;
+                        $tco_var_upY = upY;
+                        $copy_downY = downY;
+                        return;
+                      }
+                      ;
+                      throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 312, column 45 - line 340, column 64): " + [others.constructor.name]);
+                    }
+                    ;
+                    while (!$tco_done) {
+                      $tco_result = $tco_loop($tco_var_others, $tco_var_vx, $tco_var_vy, $tco_var_upX, $tco_var_downX, $tco_var_upY, $copy_downY);
+                    }
+                    ;
+                    return $tco_result;
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+      return go2(inIndexOrder(found))(startVx)(startVy)(soFar.upX)(soFar.downX)(soFar.upY)(soFar.downY);
+    };
+    var partners = function(box) {
+      return function(other) {
+        return other.index !== box.index && may(v2.pairs)(box)(other);
+      };
+    };
+    if (v2.squeezed instanceof StaysPut) {
+      return forE(0)(v2.iterations)(function(v1) {
+        return function __do5() {
+          var points2 = anticipate2(v2.boxes)();
+          var chain = cells(build(points2));
+          return foreachE(v2.boxes)(function(box) {
+            var aheadY = box.node.y + box.node.vy;
+            var aheadX = box.node.x + box.node.vx;
+            return when8(isFiniteImpl(aheadX) && isFiniteImpl(aheadY))((function() {
+              var v22 = overlapping(partners(box), box.halfWidth, box.halfHeight, aheadX, aheadY, chain, Nil.value);
+              if (v22 instanceof Nil) {
+                return pure7(unit);
+              }
+              ;
+              var moved = settle(v2.strength, box, v22, aheadX, aheadY, box.node.vx, box.node.vy, unpushed);
+              return function() {
+                return writeVelocity(box.node, moved.vx, moved.vy);
+              };
+            })());
+          })();
+        };
+      });
+    }
+    ;
+    if (v2.squeezed instanceof GoesThrough) {
+      return function __do5() {
+        var start3 = starting(v2.boxes)();
+        var pushed = $$new(start3)();
+        forE(0)(v2.iterations)(function(v1) {
+          return function __do6() {
+            var points2 = anticipate2(v2.boxes)();
+            var chain = cells(build(points2));
+            var before = read(pushed)();
+            var waiting = $$new(before)();
+            var done = $$new(Nil.value)();
+            foreachE(v2.boxes)(function(box) {
+              return function __do7() {
+                var queue = read(waiting)();
+                if (queue instanceof Nil) {
+                  return unit;
+                }
+                ;
+                if (queue instanceof Cons) {
+                  write(queue.value1)(waiting)();
+                  var aheadY = box.node.y + box.node.vy;
+                  var aheadX = box.node.x + box.node.vx;
+                  var $124 = isFiniteImpl(aheadX) && isFiniteImpl(aheadY);
+                  if ($124) {
+                    var v22 = overlapping(partners(box), box.halfWidth, box.halfHeight, aheadX, aheadY, chain, Nil.value);
+                    if (v22 instanceof Nil) {
+                      return modify_(Cons.create(queue.value0))(done)();
+                    }
+                    ;
+                    var moved = settle(v2.strength, box, v22, aheadX, aheadY, box.node.vx, box.node.vy, queue.value0);
+                    writeVelocity(box.node, moved.vx, moved.vy);
+                    return modify_(Cons.create(moved.pushed))(done)();
+                  }
+                  ;
+                  return modify_(Cons.create(queue.value0))(done)();
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 258, column 9 - line 272, column 47): " + [queue.constructor.name]);
+              };
+            })();
+            var newestFirst = read(done)();
+            return write(reverse2(newestFirst))(pushed)();
+          };
+        })();
+        var sums = read(pushed)();
+        var remaining = $$new(sums)();
+        return foreachE(v2.boxes)(function(box) {
+          return function __do6() {
+            var queue = read(remaining)();
+            if (queue instanceof Nil) {
+              return unit;
+            }
+            ;
+            if (queue instanceof Cons) {
+              write(queue.value1)(remaining)();
+              var throughY = through(box.index)(queue.value0.startVy)(queue.value0.upY)(queue.value0.downY);
+              var throughX = through(box.index)(queue.value0.startVx)(queue.value0.upX)(queue.value0.downX);
+              return when8(throughX !== 0 || throughY !== 0)(function() {
+                return writeVelocity(box.node, box.node.vx + throughX, box.node.vy + throughY);
+              })();
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 280, column 7 - line 288, column 98): " + [queue.constructor.name]);
+          };
+        })();
+      };
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Forces.RectCollide (line 227, column 29 - line 288, column 98): " + [v2.squeezed.constructor.name]);
+  };
+
+  // output/Hylograph.Forces.Tick/index.js
+  var pure8 = /* @__PURE__ */ pure(applicativeEffect);
+  var when9 = /* @__PURE__ */ when(applicativeEffect);
+  var pin = function(nodes) {
+    return foreachE(nodes)(function(node) {
+      var v2 = toMaybe(node.fy);
+      var v1 = toMaybe(node.fx);
+      if (v1 instanceof Nothing && v2 instanceof Nothing) {
+        return pure8(unit);
+      }
+      ;
+      if (v1 instanceof Just && v2 instanceof Nothing) {
+        return function __do5() {
+          writePosition(node, v1.value0, node.y);
+          return writeVelocity(node, 0, node.vy);
+        };
+      }
+      ;
+      if (v1 instanceof Nothing && v2 instanceof Just) {
+        return function __do5() {
+          writePosition(node, node.x, v2.value0);
+          return writeVelocity(node, node.vx, 0);
+        };
+      }
+      ;
+      if (v1 instanceof Just && v2 instanceof Just) {
+        return function __do5() {
+          writePosition(node, v1.value0, v2.value0);
+          return writeVelocity(node, 0, 0);
+        };
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.Forces.Tick (line 125, column 27 - line 135, column 46): " + [v1.constructor.name, v2.constructor.name]);
+    });
+  };
+  var integrate = function(velocityRetention) {
+    return function(nodes) {
+      return foreachE(nodes)(function(node) {
+        var v2 = toMaybe(node.fy);
+        var v1 = toMaybe(node.fx);
+        if (v1 instanceof Nothing && v2 instanceof Nothing) {
+          return function __do5() {
+            writePosition(node, node.x + node.vx * velocityRetention, node.y + node.vy * velocityRetention);
+            return writeVelocity(node, node.vx * velocityRetention, node.vy * velocityRetention);
+          };
+        }
+        ;
+        if (v1 instanceof Just && v2 instanceof Nothing) {
+          return function __do5() {
+            writePosition(node, v1.value0, node.y + node.vy * velocityRetention);
+            return writeVelocity(node, 0, node.vy * velocityRetention);
+          };
+        }
+        ;
+        if (v1 instanceof Nothing && v2 instanceof Just) {
+          return function __do5() {
+            writePosition(node, node.x + node.vx * velocityRetention, v2.value0);
+            return writeVelocity(node, node.vx * velocityRetention, 0);
+          };
+        }
+        ;
+        if (v1 instanceof Just && v2 instanceof Just) {
+          return function __do5() {
+            writePosition(node, v1.value0, v2.value0);
+            return writeVelocity(node, 0, 0);
+          };
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.Forces.Tick (line 52, column 27 - line 64, column 46): " + [v1.constructor.name, v2.constructor.name]);
+      });
+    };
+  };
+  var initialAngle = /* @__PURE__ */ (function() {
+    return pi * (3 - sqrt(5));
+  })();
+  var initializeNodes = function(nodes) {
+    return foreachE(mapWithIndex2(function(index4) {
+      return function(node) {
+        return {
+          index: index4,
+          node
+        };
+      };
+    })(nodes))(function(placed) {
+      return function __do5() {
+        writeIndex(placed.node, placed.index);
+        writePosition(placed.node, (function() {
+          var v2 = toMaybe(placed.node.fx);
+          if (v2 instanceof Nothing) {
+            return placed.node.x;
+          }
+          ;
+          if (v2 instanceof Just) {
+            return v2.value0;
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.Tick (line 98, column 9 - line 100, column 24): " + [v2.constructor.name]);
+        })(), (function() {
+          var v2 = toMaybe(placed.node.fy);
+          if (v2 instanceof Nothing) {
+            return placed.node.y;
+          }
+          ;
+          if (v2 instanceof Just) {
+            return v2.value0;
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.Forces.Tick (line 102, column 9 - line 104, column 24): " + [v2.constructor.name]);
+        })());
+        when9(isNaNImpl(placed.node.x) || isNaNImpl(placed.node.y))((function() {
+          var radius = 10 * sqrt(0.5 + toNumber(placed.index));
+          var angle = toNumber(placed.index) * initialAngle;
+          return function() {
+            return writePosition(placed.node, radius * cos(angle), radius * sin(angle));
+          };
+        })())();
+        return when9(isNaNImpl(placed.node.vx) || isNaNImpl(placed.node.vy))(function() {
+          return writeVelocity(placed.node, 0, 0);
+        })();
+      };
+    });
+  };
+  var decay = function(settings) {
+    return function(alpha) {
+      var cooled = alpha + (settings.alphaTarget - alpha) * settings.alphaDecay;
+      var $32 = cooled < settings.alphaMin;
+      if ($32) {
+        return 0;
+      }
+      ;
+      return cooled;
+    };
+  };
+
+  // output/Hylograph.Forces.Towards/index.js
+  var map24 = /* @__PURE__ */ map(functorArray);
+  var initialize9 = function(config) {
+    return function(nodes) {
+      var pulled = function(node) {
+        var target6 = config.target(node);
+        var strength = config.strength(node);
+        return {
+          node,
+          x: target6.x,
+          y: target6.y,
+          strength: (function() {
+            var $7 = isNaNImpl(strength);
+            if ($7) {
+              return 0;
+            }
+            ;
+            return strength;
+          })()
+        };
+      };
+      var aimed = function(candidate) {
+        return !(isNaNImpl(candidate.x) || isNaNImpl(candidate.y));
+      };
+      return filter(aimed)(map24(pulled)(nodes));
+    };
+  };
+  var apply11 = function(v2) {
+    return function(alpha) {
+      return foreachE(v2)(function(pulled) {
+        return function() {
+          return writeVelocity(pulled.node, pulled.node.vx + (pulled.x - pulled.node.x) * pulled.strength * alpha, pulled.node.vy + (pulled.y - pulled.node.y) * pulled.strength * alpha);
+        };
+      });
+    };
+  };
+
+  // output/Hylograph.Forces/index.js
+  var map25 = /* @__PURE__ */ map(functorEither);
+  var when10 = /* @__PURE__ */ when(applicativeEffect);
+  var pure9 = /* @__PURE__ */ pure(applicativeEffect);
+  var ManyBodyForce = /* @__PURE__ */ (function() {
+    function ManyBodyForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    ManyBodyForce3.create = function(value0) {
+      return new ManyBodyForce3(value0);
+    };
+    return ManyBodyForce3;
+  })();
+  var LinkForce = /* @__PURE__ */ (function() {
+    function LinkForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    LinkForce3.create = function(value0) {
+      return new LinkForce3(value0);
+    };
+    return LinkForce3;
+  })();
+  var CollideForce = /* @__PURE__ */ (function() {
+    function CollideForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    CollideForce3.create = function(value0) {
+      return new CollideForce3(value0);
+    };
+    return CollideForce3;
+  })();
+  var CenterForce = /* @__PURE__ */ (function() {
+    function CenterForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    CenterForce3.create = function(value0) {
+      return new CenterForce3(value0);
+    };
+    return CenterForce3;
+  })();
+  var PositionXForce = /* @__PURE__ */ (function() {
+    function PositionXForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    PositionXForce3.create = function(value0) {
+      return new PositionXForce3(value0);
+    };
+    return PositionXForce3;
+  })();
+  var PositionYForce = /* @__PURE__ */ (function() {
+    function PositionYForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    PositionYForce3.create = function(value0) {
+      return new PositionYForce3(value0);
+    };
+    return PositionYForce3;
+  })();
+  var RadialForce = /* @__PURE__ */ (function() {
+    function RadialForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    RadialForce3.create = function(value0) {
+      return new RadialForce3(value0);
+    };
+    return RadialForce3;
+  })();
+  var TowardsForce = /* @__PURE__ */ (function() {
+    function TowardsForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    TowardsForce3.create = function(value0) {
+      return new TowardsForce3(value0);
+    };
+    return TowardsForce3;
+  })();
+  var RectCollideForce = /* @__PURE__ */ (function() {
+    function RectCollideForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    RectCollideForce3.create = function(value0) {
+      return new RectCollideForce3(value0);
+    };
+    return RectCollideForce3;
+  })();
+  var ContainForce = /* @__PURE__ */ (function() {
+    function ContainForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    ContainForce3.create = function(value0) {
+      return new ContainForce3(value0);
+    };
+    return ContainForce3;
+  })();
+  var CohesionForce = /* @__PURE__ */ (function() {
+    function CohesionForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    CohesionForce3.create = function(value0) {
+      return new CohesionForce3(value0);
+    };
+    return CohesionForce3;
+  })();
+  var DirectionalForce = /* @__PURE__ */ (function() {
+    function DirectionalForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    DirectionalForce3.create = function(value0) {
+      return new DirectionalForce3(value0);
+    };
+    return DirectionalForce3;
+  })();
+  var towards = function(config) {
+    return function(nodes) {
+      return new TowardsForce(initialize9(config)(nodes));
+    };
+  };
+  var rectCollide = function(config) {
+    return function(nodes) {
+      return new RectCollideForce(initialize8(config)(nodes));
+    };
+  };
+  var radial = function(config) {
+    return function(nodes) {
+      return new RadialForce(initialize7(config)(nodes));
+    };
+  };
+  var positionY = function(config) {
+    return function(nodes) {
+      return new PositionYForce(initialize6(config)(nodes));
+    };
+  };
+  var positionX = function(config) {
+    return function(nodes) {
+      return new PositionXForce(initialize6(config)(nodes));
+    };
+  };
+  var manyBody = function(config) {
+    return function(random2) {
+      return function(nodes) {
+        return new ManyBodyForce(initialize5(config)(random2)(nodes));
+      };
+    };
+  };
+  var linkById = function(dictOrd) {
+    var initializeById3 = initializeById2(dictOrd);
+    return function(dictShow) {
+      var initializeById1 = initializeById3(dictShow);
+      return function(identify) {
+        return function(config) {
+          return function(random2) {
+            return function(nodes) {
+              return function(links) {
+                return map25(LinkForce.create)(initializeById1(identify)(config)(random2)(nodes)(links));
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+  var directionalById = function(dictOrd) {
+    var initializeById3 = initializeById(dictOrd);
+    return function(dictShow) {
+      var initializeById1 = initializeById3(dictShow);
+      return function(identify) {
+        return function(config) {
+          return function(nodes) {
+            return function(links) {
+              return map25(DirectionalForce.create)(initializeById1(identify)(config)(nodes)(links));
+            };
+          };
+        };
+      };
+    };
+  };
+  var contain = function(config) {
+    return function(nodes) {
+      return new ContainForce(initialize4(config)(nodes));
+    };
+  };
+  var constrain4 = function(forces) {
+    return function(nodes) {
+      var hard = function(force2) {
+        if (force2 instanceof ContainForce) {
+          return isHard(force2.value0);
+        }
+        ;
+        if (force2 instanceof DirectionalForce) {
+          return isHard2(force2.value0);
+        }
+        ;
+        return false;
+      };
+      return when10(any2(hard)(forces))(function __do5() {
+        foreachE(forces)(function(force2) {
+          if (force2 instanceof ContainForce) {
+            return constrain2(force2.value0);
+          }
+          ;
+          if (force2 instanceof DirectionalForce) {
+            return constrain3(force2.value0);
+          }
+          ;
+          return pure9(unit);
+        })();
+        return pin(nodes)();
+      });
+    };
+  };
+  var collide = function(config) {
+    return function(random2) {
+      return function(nodes) {
+        return new CollideForce(initialize3(config)(random2)(nodes));
+      };
+    };
+  };
+  var cohesion = function(config) {
+    return function(nodes) {
+      return new CohesionForce(initialize2(config)(nodes));
+    };
+  };
+  var center = function(config) {
+    return function(nodes) {
+      return new CenterForce(initialize(config)(nodes));
+    };
+  };
+  var applyForce = function(alpha) {
+    return function(force2) {
+      if (force2 instanceof ManyBodyForce) {
+        return apply8(force2.value0)(alpha);
+      }
+      ;
+      if (force2 instanceof LinkForce) {
+        return apply7(force2.value0)(alpha);
+      }
+      ;
+      if (force2 instanceof CollideForce) {
+        return apply4(force2.value0)(alpha);
+      }
+      ;
+      if (force2 instanceof CenterForce) {
+        return apply2(force2.value0);
+      }
+      ;
+      if (force2 instanceof PositionXForce) {
+        return applyX(force2.value0)(alpha);
+      }
+      ;
+      if (force2 instanceof PositionYForce) {
+        return applyY(force2.value0)(alpha);
+      }
+      ;
+      if (force2 instanceof RadialForce) {
+        return apply9(force2.value0)(alpha);
+      }
+      ;
+      if (force2 instanceof TowardsForce) {
+        return apply11(force2.value0)(alpha);
+      }
+      ;
+      if (force2 instanceof RectCollideForce) {
+        return apply10(force2.value0);
+      }
+      ;
+      if (force2 instanceof ContainForce) {
+        return apply5(force2.value0);
+      }
+      ;
+      if (force2 instanceof CohesionForce) {
+        return apply3(force2.value0)(alpha);
+      }
+      ;
+      if (force2 instanceof DirectionalForce) {
+        return apply6(force2.value0)(alpha);
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.Forces (line 159, column 26 - line 171, column 58): " + [force2.constructor.name]);
+    };
+  };
+
+  // output/Hylograph.ForceEngine.Core/index.js
+  var map26 = /* @__PURE__ */ map(functorEither);
+  var map110 = /* @__PURE__ */ map(functorArray);
+  var for_2 = /* @__PURE__ */ for_(applicativeEffect)(foldableArray);
+  var randomSource = lcg;
+  var integratePositions = function(nodes) {
+    return function(velocityRetention) {
+      return integrate(velocityRetention)(nodes);
+    };
+  };
+  var initializeNodes2 = initializeNodes;
+  var initializeForce = function(random2) {
+    return function(nodes) {
+      return function(links) {
+        return function(recipe2) {
+          return map26(function(force2) {
+            return {
+              recipe: recipe2,
+              force: force2
+            };
+          })(recipe2(random2)(nodes)(links));
+        };
+      };
+    };
+  };
+  var decayAlpha = function(alpha) {
+    return function(alphaMin) {
+      return function(alphaDecay) {
+        return function(alphaTarget) {
+          return decay({
+            alphaMin,
+            alphaDecay,
+            alphaTarget
+          })(alpha);
+        };
+      };
+    };
+  };
+  var constrain5 = function(forces) {
+    return function(nodes) {
+      return constrain4(map110(function(v2) {
+        return v2.force;
+      })(forces))(nodes);
+    };
+  };
+  var applyForce2 = function(handle) {
+    return function(alpha) {
+      return applyForce(alpha)(handle.force);
+    };
+  };
   var applyForces = function(forces) {
     return function(alpha) {
-      return for_2(forces)(function(f) {
-        return applyForce(f)(alpha);
+      return for_2(forces)(function(force2) {
+        return applyForce2(force2)(alpha);
       });
     };
   };
 
   // output/Hylograph.ForceEngine.Setup/index.js
-  var map10 = /* @__PURE__ */ map(functorArray);
-  var $$delete4 = /* @__PURE__ */ $$delete2(ordString);
-  var pure4 = /* @__PURE__ */ pure(applicativeEffect);
-  var fromFoldable4 = /* @__PURE__ */ fromFoldable3(foldableArray);
-  var fromFoldable1 = /* @__PURE__ */ fromFoldable4(ordInt);
-  var member3 = /* @__PURE__ */ member2(ordInt);
-  var fromFoldable22 = /* @__PURE__ */ fromFoldable2(ordInt)(foldableArray);
+  var fromFoldable7 = /* @__PURE__ */ fromFoldable2(ordInt)(foldableArray);
+  var map27 = /* @__PURE__ */ map(functorArray);
   var lookup2 = /* @__PURE__ */ lookup(ordInt);
+  var show3 = /* @__PURE__ */ show(showInt);
+  var bind2 = /* @__PURE__ */ bind(bindEither);
+  var pure10 = /* @__PURE__ */ pure(applicativeEither);
+  var traverse3 = /* @__PURE__ */ traverse(traversableArray)(applicativeEither);
+  var apply12 = /* @__PURE__ */ apply(applyMaybe);
+  var map111 = /* @__PURE__ */ map(functorMaybe);
+  var fromFoldableWith2 = /* @__PURE__ */ fromFoldableWith(ordInt)(foldableArray);
+  var add2 = /* @__PURE__ */ add(semiringInt);
+  var min5 = /* @__PURE__ */ min(ordInt);
+  var linkById2 = /* @__PURE__ */ linkById(ordInt)(showInt);
+  var bind13 = /* @__PURE__ */ bind(bindMaybe);
+  var directionalById2 = /* @__PURE__ */ directionalById(ordInt)(showInt);
+  var map28 = /* @__PURE__ */ map(functorEither);
+  var fromFoldable1 = /* @__PURE__ */ fromFoldable2(ordString)(foldableArray);
+  var fromFoldable22 = /* @__PURE__ */ fromFoldable4(foldableArray);
+  var fromFoldable32 = /* @__PURE__ */ fromFoldable22(ordInt);
+  var member3 = /* @__PURE__ */ member2(ordInt);
   var ordTuple2 = /* @__PURE__ */ ordTuple(ordInt)(ordInt);
-  var fromFoldable32 = /* @__PURE__ */ fromFoldable4(ordTuple2);
+  var fromFoldable42 = /* @__PURE__ */ fromFoldable22(ordTuple2);
   var difference4 = /* @__PURE__ */ difference3(ordTuple2);
   var member1 = /* @__PURE__ */ member2(ordTuple2);
   var intersection3 = /* @__PURE__ */ intersection2(ordTuple2);
-  var fromFoldable42 = /* @__PURE__ */ fromFoldable4(ordString);
-  var fromFoldable5 = /* @__PURE__ */ fromFoldable3(foldableSet)(ordString);
-  var difference1 = /* @__PURE__ */ difference3(ordString);
-  var for_3 = /* @__PURE__ */ for_(applicativeEffect)(foldableArray);
-  var toUnfoldable5 = /* @__PURE__ */ toUnfoldable4(unfoldableArray);
-  var insert4 = /* @__PURE__ */ insert2(ordString);
   var Static = /* @__PURE__ */ (function() {
     function Static2(value0) {
       this.value0 = value0;
@@ -7068,143 +10430,295 @@
     };
     return Dynamic2;
   })();
-  var ForceManyBody = /* @__PURE__ */ (function() {
-    function ForceManyBody2() {
+  var RectRegion = /* @__PURE__ */ (function() {
+    function RectRegion2(value0) {
+      this.value0 = value0;
     }
     ;
-    ForceManyBody2.value = new ForceManyBody2();
-    return ForceManyBody2;
-  })();
-  var ForceCollide = /* @__PURE__ */ (function() {
-    function ForceCollide3() {
-    }
-    ;
-    ForceCollide3.value = new ForceCollide3();
-    return ForceCollide3;
-  })();
-  var ForceLink = /* @__PURE__ */ (function() {
-    function ForceLink3() {
-    }
-    ;
-    ForceLink3.value = new ForceLink3();
-    return ForceLink3;
-  })();
-  var ForceCenter = /* @__PURE__ */ (function() {
-    function ForceCenter2() {
-    }
-    ;
-    ForceCenter2.value = new ForceCenter2();
-    return ForceCenter2;
-  })();
-  var ForcePositionX = /* @__PURE__ */ (function() {
-    function ForcePositionX2() {
-    }
-    ;
-    ForcePositionX2.value = new ForcePositionX2();
-    return ForcePositionX2;
-  })();
-  var ForcePositionY = /* @__PURE__ */ (function() {
-    function ForcePositionY2() {
-    }
-    ;
-    ForcePositionY2.value = new ForcePositionY2();
-    return ForcePositionY2;
-  })();
-  var ForceRadial = /* @__PURE__ */ (function() {
-    function ForceRadial2() {
-    }
-    ;
-    ForceRadial2.value = new ForceRadial2();
-    return ForceRadial2;
-  })();
-  var withY = function(v2) {
-    return function(fc) {
-      return {
-        name: fc.name,
-        forceType: fc.forceType,
-        strength: fc.strength,
-        radius: fc.radius,
-        x: fc.x,
-        distance: fc.distance,
-        theta: fc.theta,
-        distanceMin: fc.distanceMin,
-        distanceMax: fc.distanceMax,
-        iterations: fc.iterations,
-        filter: fc.filter,
-        y: v2
-      };
+    RectRegion2.create = function(value0) {
+      return new RectRegion2(value0);
     };
-  };
-  var withX = function(v2) {
-    return function(fc) {
-      return {
-        name: fc.name,
-        forceType: fc.forceType,
-        strength: fc.strength,
-        radius: fc.radius,
-        y: fc.y,
-        distance: fc.distance,
-        theta: fc.theta,
-        distanceMin: fc.distanceMin,
-        distanceMax: fc.distanceMax,
-        iterations: fc.iterations,
-        filter: fc.filter,
-        x: v2
-      };
+    return RectRegion2;
+  })();
+  var CircleRegion = /* @__PURE__ */ (function() {
+    function CircleRegion2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    CircleRegion2.create = function(value0) {
+      return new CircleRegion2(value0);
     };
-  };
-  var withStrength = function(v2) {
-    return function(fc) {
-      return {
-        name: fc.name,
-        forceType: fc.forceType,
-        radius: fc.radius,
-        x: fc.x,
-        y: fc.y,
-        distance: fc.distance,
-        theta: fc.theta,
-        distanceMin: fc.distanceMin,
-        distanceMax: fc.distanceMax,
-        iterations: fc.iterations,
-        filter: fc.filter,
-        strength: v2
-      };
+    return CircleRegion2;
+  })();
+  var PolygonRegion = /* @__PURE__ */ (function() {
+    function PolygonRegion2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    PolygonRegion2.create = function(value0) {
+      return new PolygonRegion2(value0);
     };
-  };
+    return PolygonRegion2;
+  })();
+  var AllPairs = /* @__PURE__ */ (function() {
+    function AllPairs3() {
+    }
+    ;
+    AllPairs3.value = new AllPairs3();
+    return AllPairs3;
+  })();
+  var WithinGroups3 = /* @__PURE__ */ (function() {
+    function WithinGroups5(value0) {
+      this.value0 = value0;
+    }
+    ;
+    WithinGroups5.create = function(value0) {
+      return new WithinGroups5(value0);
+    };
+    return WithinGroups5;
+  })();
+  var BetweenGroups3 = /* @__PURE__ */ (function() {
+    function BetweenGroups5(value0) {
+      this.value0 = value0;
+    }
+    ;
+    BetweenGroups5.create = function(value0) {
+      return new BetweenGroups5(value0);
+    };
+    return BetweenGroups5;
+  })();
+  var LinkStrength = /* @__PURE__ */ (function() {
+    function LinkStrength2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    LinkStrength2.create = function(value0) {
+      return new LinkStrength2(value0);
+    };
+    return LinkStrength2;
+  })();
+  var ByDegree = /* @__PURE__ */ (function() {
+    function ByDegree2() {
+    }
+    ;
+    ByDegree2.value = new ByDegree2();
+    return ByDegree2;
+  })();
+  var ManyBodyForce2 = /* @__PURE__ */ (function() {
+    function ManyBodyForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    ManyBodyForce3.create = function(value0) {
+      return new ManyBodyForce3(value0);
+    };
+    return ManyBodyForce3;
+  })();
+  var CollideForce2 = /* @__PURE__ */ (function() {
+    function CollideForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    CollideForce3.create = function(value0) {
+      return new CollideForce3(value0);
+    };
+    return CollideForce3;
+  })();
+  var LinkForce2 = /* @__PURE__ */ (function() {
+    function LinkForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    LinkForce3.create = function(value0) {
+      return new LinkForce3(value0);
+    };
+    return LinkForce3;
+  })();
+  var CenterForce2 = /* @__PURE__ */ (function() {
+    function CenterForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    CenterForce3.create = function(value0) {
+      return new CenterForce3(value0);
+    };
+    return CenterForce3;
+  })();
+  var PositionXForce2 = /* @__PURE__ */ (function() {
+    function PositionXForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    PositionXForce3.create = function(value0) {
+      return new PositionXForce3(value0);
+    };
+    return PositionXForce3;
+  })();
+  var PositionYForce2 = /* @__PURE__ */ (function() {
+    function PositionYForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    PositionYForce3.create = function(value0) {
+      return new PositionYForce3(value0);
+    };
+    return PositionYForce3;
+  })();
+  var RadialForce2 = /* @__PURE__ */ (function() {
+    function RadialForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    RadialForce3.create = function(value0) {
+      return new RadialForce3(value0);
+    };
+    return RadialForce3;
+  })();
+  var TowardsForce2 = /* @__PURE__ */ (function() {
+    function TowardsForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    TowardsForce3.create = function(value0) {
+      return new TowardsForce3(value0);
+    };
+    return TowardsForce3;
+  })();
+  var RectCollideForce2 = /* @__PURE__ */ (function() {
+    function RectCollideForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    RectCollideForce3.create = function(value0) {
+      return new RectCollideForce3(value0);
+    };
+    return RectCollideForce3;
+  })();
+  var ContainForce2 = /* @__PURE__ */ (function() {
+    function ContainForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    ContainForce3.create = function(value0) {
+      return new ContainForce3(value0);
+    };
+    return ContainForce3;
+  })();
+  var CohesionForce2 = /* @__PURE__ */ (function() {
+    function CohesionForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    CohesionForce3.create = function(value0) {
+      return new CohesionForce3(value0);
+    };
+    return CohesionForce3;
+  })();
+  var DirectionalForce2 = /* @__PURE__ */ (function() {
+    function DirectionalForce3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    DirectionalForce3.create = function(value0) {
+      return new DirectionalForce3(value0);
+    };
+    return DirectionalForce3;
+  })();
   var withRadius = function(v2) {
-    return function(fc) {
-      return {
-        name: fc.name,
-        forceType: fc.forceType,
-        strength: fc.strength,
-        x: fc.x,
-        y: fc.y,
-        distance: fc.distance,
-        theta: fc.theta,
-        distanceMin: fc.distanceMin,
-        distanceMax: fc.distanceMax,
-        iterations: fc.iterations,
-        filter: fc.filter,
-        radius: v2
+    return function(v1) {
+      if (v1 instanceof CollideForce2) {
+        return new CollideForce2({
+          name: v1.value0.name,
+          strength: v1.value0.strength,
+          iterations: v1.value0.iterations,
+          filter: v1.value0.filter,
+          alphaScaled: v1.value0.alphaScaled,
+          radius: v2
+        });
+      }
+      ;
+      if (v1 instanceof RadialForce2) {
+        return new RadialForce2({
+          name: v1.value0.name,
+          x: v1.value0.x,
+          y: v1.value0.y,
+          strength: v1.value0.strength,
+          filter: v1.value0.filter,
+          radius: v2
+        });
+      }
+      ;
+      if (v1 instanceof ContainForce2) {
+        return new ContainForce2({
+          name: v1.value0.name,
+          regions: v1.value0.regions,
+          region: v1.value0.region,
+          halfWidth: v1.value0.halfWidth,
+          halfHeight: v1.value0.halfHeight,
+          strength: v1.value0.strength,
+          hard: v1.value0.hard,
+          radius: v2
+        });
+      }
+      ;
+      return v1;
+    };
+  };
+  var withEnds = function(nodes) {
+    return function(links) {
+      var byId = fromFoldable7(map27(function(node) {
+        return new Tuple(node.id, node);
+      })(nodes));
+      var find3 = function(id3) {
+        var v2 = lookup2(id3)(byId);
+        if (v2 instanceof Just) {
+          return new Right(v2.value0);
+        }
+        ;
+        if (v2 instanceof Nothing) {
+          return new Left("node not found: " + show3(id3));
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1178, column 13 - line 1180, column 52): " + [v2.constructor.name]);
       };
+      var ended2 = function(v2) {
+        return bind2(find3(v2.value1.source))(function(source2) {
+          return bind2(find3(v2.value1.target))(function(target6) {
+            return pure10({
+              source: v2.value1.source,
+              target: v2.value1.target,
+              ends: {
+                source: source2,
+                target: target6,
+                index: v2.value0
+              }
+            });
+          });
+        });
+      };
+      return traverse3(ended2)(mapWithIndex2(Tuple.create)(links));
     };
   };
   var withDistance = function(v2) {
-    return function(fc) {
-      return {
-        name: fc.name,
-        forceType: fc.forceType,
-        strength: fc.strength,
-        radius: fc.radius,
-        x: fc.x,
-        y: fc.y,
-        theta: fc.theta,
-        distanceMin: fc.distanceMin,
-        distanceMax: fc.distanceMax,
-        iterations: fc.iterations,
-        filter: fc.filter,
-        distance: v2
-      };
+    return function(v1) {
+      if (v1 instanceof LinkForce2) {
+        if (v2 instanceof Static) {
+          return new LinkForce2({
+            name: v1.value0.name,
+            strength: v1.value0.strength,
+            iterations: v1.value0.iterations,
+            distance: new Static(v2.value0)
+          });
+        }
+        ;
+        if (v2 instanceof Dynamic) {
+          return new LinkForce2(v1.value0);
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 608, column 18 - line 610, column 29): " + [v2.constructor.name]);
+      }
+      ;
+      return v1;
     };
   };
   var valueToNumber = function(v2) {
@@ -7216,40 +10730,426 @@
       return 0;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 127, column 1 - line 127, column 58): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 199, column 17 - line 201, column 19): " + [v2.constructor.name]);
+  };
+  var valueOf = function(v2) {
+    if (v2 instanceof Static) {
+      return function(v1) {
+        return v2.value0;
+      };
+    }
+    ;
+    if (v2 instanceof Dynamic) {
+      return v2.value0;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1124, column 11 - line 1126, column 17): " + [v2.constructor.name]);
+  };
+  var staticOr = function(fallback) {
+    return function(v2) {
+      if (v2 instanceof Static) {
+        return v2.value0;
+      }
+      ;
+      if (v2 instanceof Dynamic) {
+        return fallback;
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 574, column 21 - line 576, column 24): " + [v2.constructor.name]);
+    };
+  };
+  var withStrength = function(v2) {
+    return function(v1) {
+      if (v1 instanceof ManyBodyForce2) {
+        return new ManyBodyForce2({
+          name: v1.value0.name,
+          theta: v1.value0.theta,
+          distanceMin: v1.value0.distanceMin,
+          distanceMax: v1.value0.distanceMax,
+          filter: v1.value0.filter,
+          scope: v1.value0.scope,
+          strength: v2
+        });
+      }
+      ;
+      if (v1 instanceof PositionXForce2) {
+        return new PositionXForce2({
+          name: v1.value0.name,
+          target: v1.value0.target,
+          filter: v1.value0.filter,
+          strength: v2
+        });
+      }
+      ;
+      if (v1 instanceof PositionYForce2) {
+        return new PositionYForce2({
+          name: v1.value0.name,
+          target: v1.value0.target,
+          filter: v1.value0.filter,
+          strength: v2
+        });
+      }
+      ;
+      if (v1 instanceof RadialForce2) {
+        return new RadialForce2({
+          name: v1.value0.name,
+          radius: v1.value0.radius,
+          x: v1.value0.x,
+          y: v1.value0.y,
+          filter: v1.value0.filter,
+          strength: v2
+        });
+      }
+      ;
+      if (v1 instanceof TowardsForce2) {
+        return new TowardsForce2({
+          name: v1.value0.name,
+          target: v1.value0.target,
+          filter: v1.value0.filter,
+          strength: v2
+        });
+      }
+      ;
+      if (v1 instanceof CohesionForce2) {
+        return new CohesionForce2({
+          name: v1.value0.name,
+          group: v1.value0.group,
+          filter: v1.value0.filter,
+          strength: v2
+        });
+      }
+      ;
+      if (v1 instanceof CollideForce2) {
+        return new CollideForce2({
+          name: v1.value0.name,
+          radius: v1.value0.radius,
+          iterations: v1.value0.iterations,
+          filter: v1.value0.filter,
+          alphaScaled: v1.value0.alphaScaled,
+          strength: staticOr(v1.value0.strength)(v2)
+        });
+      }
+      ;
+      if (v1 instanceof CenterForce2) {
+        return new CenterForce2({
+          name: v1.value0.name,
+          x: v1.value0.x,
+          y: v1.value0.y,
+          strength: staticOr(v1.value0.strength)(v2)
+        });
+      }
+      ;
+      if (v1 instanceof RectCollideForce2) {
+        return new RectCollideForce2({
+          name: v1.value0.name,
+          halfWidth: v1.value0.halfWidth,
+          halfHeight: v1.value0.halfHeight,
+          iterations: v1.value0.iterations,
+          filter: v1.value0.filter,
+          scope: v1.value0.scope,
+          throughSqueeze: v1.value0.throughSqueeze,
+          strength: staticOr(v1.value0.strength)(v2)
+        });
+      }
+      ;
+      if (v1 instanceof ContainForce2) {
+        return new ContainForce2({
+          name: v1.value0.name,
+          regions: v1.value0.regions,
+          region: v1.value0.region,
+          radius: v1.value0.radius,
+          halfWidth: v1.value0.halfWidth,
+          halfHeight: v1.value0.halfHeight,
+          hard: v1.value0.hard,
+          strength: staticOr(v1.value0.strength)(v2)
+        });
+      }
+      ;
+      if (v1 instanceof LinkForce2) {
+        if (v2 instanceof Static) {
+          return new LinkForce2({
+            name: v1.value0.name,
+            distance: v1.value0.distance,
+            iterations: v1.value0.iterations,
+            strength: new LinkStrength(new Static(v2.value0))
+          });
+        }
+        ;
+        if (v2 instanceof Dynamic) {
+          return new LinkForce2(v1.value0);
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 565, column 18 - line 567, column 29): " + [v2.constructor.name]);
+      }
+      ;
+      if (v1 instanceof DirectionalForce2) {
+        if (v2 instanceof Static) {
+          return new DirectionalForce2({
+            name: v1.value0.name,
+            gap: v1.value0.gap,
+            axis: v1.value0.axis,
+            iterations: v1.value0.iterations,
+            hard: v1.value0.hard,
+            strength: new Static(v2.value0)
+          });
+        }
+        ;
+        if (v2 instanceof Dynamic) {
+          return new DirectionalForce2(v1.value0);
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 568, column 25 - line 570, column 36): " + [v2.constructor.name]);
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 554, column 18 - line 570, column 36): " + [v1.constructor.name]);
+    };
+  };
+  var withX = function(v2) {
+    return function(v1) {
+      if (v1 instanceof PositionXForce2) {
+        return new PositionXForce2({
+          name: v1.value0.name,
+          strength: v1.value0.strength,
+          filter: v1.value0.filter,
+          target: v2
+        });
+      }
+      ;
+      if (v1 instanceof CenterForce2) {
+        return new CenterForce2({
+          name: v1.value0.name,
+          y: v1.value0.y,
+          strength: v1.value0.strength,
+          x: staticOr(v1.value0.x)(v2)
+        });
+      }
+      ;
+      if (v1 instanceof RadialForce2) {
+        return new RadialForce2({
+          name: v1.value0.name,
+          radius: v1.value0.radius,
+          y: v1.value0.y,
+          strength: v1.value0.strength,
+          filter: v1.value0.filter,
+          x: staticOr(v1.value0.x)(v2)
+        });
+      }
+      ;
+      return v1;
+    };
+  };
+  var withY = function(v2) {
+    return function(v1) {
+      if (v1 instanceof PositionYForce2) {
+        return new PositionYForce2({
+          name: v1.value0.name,
+          strength: v1.value0.strength,
+          filter: v1.value0.filter,
+          target: v2
+        });
+      }
+      ;
+      if (v1 instanceof CenterForce2) {
+        return new CenterForce2({
+          name: v1.value0.name,
+          x: v1.value0.x,
+          strength: v1.value0.strength,
+          y: staticOr(v1.value0.y)(v2)
+        });
+      }
+      ;
+      if (v1 instanceof RadialForce2) {
+        return new RadialForce2({
+          name: v1.value0.name,
+          radius: v1.value0.radius,
+          x: v1.value0.x,
+          strength: v1.value0.strength,
+          filter: v1.value0.filter,
+          y: staticOr(v1.value0.y)(v2)
+        });
+      }
+      ;
+      return v1;
+    };
   };
   var $$static = /* @__PURE__ */ (function() {
     return Static.create;
   })();
-  var removeForce = function(name15) {
-    return function(s2) {
-      return {
-        name: s2.name,
-        params: s2.params,
-        forces: filter(function(fc) {
-          return fc.name !== name15;
-        })(s2.forces)
+  var resolveLinks = function(nodes) {
+    return function(links) {
+      var byId = fromFoldable7(map27(function(node) {
+        return new Tuple(node.id, node);
+      })(nodes));
+      var endsOf = function(l2) {
+        return apply12(map111(function(v2) {
+          return function(v1) {
+            return {
+              source: v2,
+              target: v1
+            };
+          };
+        })(lookup2(l2.source)(byId)))(lookup2(l2.target)(byId));
       };
+      return mapWithIndex2(function(index4) {
+        return function(ends) {
+          return {
+            source: ends.source,
+            target: ends.target,
+            index: index4
+          };
+        };
+      })(mapMaybe(endsOf)(links));
     };
+  };
+  var regionOf = function(v2) {
+    if (v2 instanceof RectRegion) {
+      return rectangle(v2.value0.x0)(v2.value0.y0)(v2.value0.x1)(v2.value0.y1);
+    }
+    ;
+    if (v2 instanceof CircleRegion) {
+      return circle(v2.value0.x)(v2.value0.y)(v2.value0.radius);
+    }
+    ;
+    if (v2 instanceof PolygonRegion) {
+      return polygon(v2.value0);
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1140, column 12 - line 1143, column 57): " + [v2.constructor.name]);
+  };
+  var positionY2 = function(name15) {
+    return new PositionYForce2({
+      name: name15,
+      target: new Static(0),
+      strength: new Static(0.1),
+      filter: Nothing.value
+    });
+  };
+  var positionX2 = function(name15) {
+    return new PositionXForce2({
+      name: name15,
+      target: new Static(0),
+      strength: new Static(0.1),
+      filter: Nothing.value
+    });
   };
   var mergeSimulationState = function(current) {
     return function(desired) {
-      var $74 = {};
-      for (var $75 in desired) {
-        if ({}.hasOwnProperty.call(desired, $75)) {
-          $74[$75] = desired[$75];
+      var $306 = {};
+      for (var $307 in desired) {
+        if ({}.hasOwnProperty.call(desired, $307)) {
+          $306[$307] = desired[$307];
         }
         ;
       }
       ;
-      $74.x = current.x;
-      $74.y = current.y;
-      $74.vx = current.vx;
-      $74.vy = current.vy;
-      $74.fx = current.fx;
-      $74.fy = current.fy;
-      return $74;
+      $306.x = current.x;
+      $306.y = current.y;
+      $306.vx = current.vx;
+      $306.vy = current.vy;
+      $306.fx = current.fx;
+      $306.fy = current.fy;
+      return $306;
     };
+  };
+  var membership = function(group4) {
+    return function(node) {
+      var v2 = group4(node);
+      if (v2 instanceof Just) {
+        return inGroup(v2.value0);
+      }
+      ;
+      if (v2 instanceof Nothing) {
+        return ungrouped;
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1135, column 25 - line 1137, column 33): " + [v2.constructor.name]);
+    };
+  };
+  var manyBody2 = function(name15) {
+    return new ManyBodyForce2({
+      name: name15,
+      strength: new Static(-30),
+      theta: 0.9,
+      distanceMin: 1,
+      distanceMax: 1e10,
+      filter: Nothing.value,
+      scope: AllPairs.value
+    });
+  };
+  var linkValues = function(value12) {
+    return function(ends) {
+      if (value12 instanceof Static) {
+        return map27($$const(value12.value0))(ends);
+      }
+      ;
+      if (value12 instanceof Dynamic) {
+        return map27(value12.value0)(ends);
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 794, column 25 - line 796, column 26): " + [value12.constructor.name]);
+    };
+  };
+  var linkStrengths = function(strength) {
+    return function(ends) {
+      var count = fromFoldableWith2(add2)(concatMap(function(e) {
+        return [new Tuple(e.source.id, 1), new Tuple(e.target.id, 1)];
+      })(ends));
+      var degree2 = function(id3) {
+        return fromMaybe(1)(lookup2(id3)(count));
+      };
+      var byDegree = function(e) {
+        return 1 / toNumber(min5(degree2(e.source.id))(degree2(e.target.id)));
+      };
+      if (strength instanceof LinkStrength) {
+        return linkValues(strength.value0)(ends);
+      }
+      ;
+      if (strength instanceof ByDegree) {
+        return map27(byDegree)(ends);
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 805, column 31 - line 807, column 32): " + [strength.constructor.name]);
+    };
+  };
+  var linkProblem = function(setupConfig) {
+    return function(nodes) {
+      return function(links) {
+        var alongLinks = function(v3) {
+          if (v3 instanceof LinkForce2) {
+            return true;
+          }
+          ;
+          if (v3 instanceof DirectionalForce2) {
+            return true;
+          }
+          ;
+          return false;
+        };
+        var $319 = any2(alongLinks)(setupConfig.forces);
+        if ($319) {
+          var v2 = withEnds(nodes)(links);
+          if (v2 instanceof Left) {
+            return new Just(v2.value0);
+          }
+          ;
+          if (v2 instanceof Right) {
+            return Nothing.value;
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1158, column 5 - line 1160, column 25): " + [v2.constructor.name]);
+        }
+        ;
+        return Nothing.value;
+      };
+    };
+  };
+  var link = function(name15) {
+    return new LinkForce2({
+      name: name15,
+      distance: new Static(30),
+      strength: new LinkStrength(new Static(1)),
+      iterations: 1
+    });
   };
   var getParams = function(s2) {
     return s2.params;
@@ -7257,47 +11157,428 @@
   var getForces = function(s2) {
     return s2.forces;
   };
-  var eqForceType = {
-    eq: function(x4) {
-      return function(y4) {
-        if (x4 instanceof ForceManyBody && y4 instanceof ForceManyBody) {
-          return true;
-        }
-        ;
-        if (x4 instanceof ForceCollide && y4 instanceof ForceCollide) {
-          return true;
-        }
-        ;
-        if (x4 instanceof ForceLink && y4 instanceof ForceLink) {
-          return true;
-        }
-        ;
-        if (x4 instanceof ForceCenter && y4 instanceof ForceCenter) {
-          return true;
-        }
-        ;
-        if (x4 instanceof ForcePositionX && y4 instanceof ForcePositionX) {
-          return true;
-        }
-        ;
-        if (x4 instanceof ForcePositionY && y4 instanceof ForcePositionY) {
-          return true;
-        }
-        ;
-        if (x4 instanceof ForceRadial && y4 instanceof ForceRadial) {
-          return true;
-        }
-        ;
-        return false;
+  var forceName = function(v2) {
+    if (v2 instanceof ManyBodyForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof CollideForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof LinkForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof CenterForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof PositionXForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof PositionYForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof RadialForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof TowardsForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof RectCollideForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof ContainForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof CohesionForce2) {
+      return v2.value0.name;
+    }
+    ;
+    if (v2 instanceof DirectionalForce2) {
+      return v2.value0.name;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 418, column 13 - line 430, column 31): " + [v2.constructor.name]);
+  };
+  var removeForce = function(name15) {
+    return function(s2) {
+      return {
+        name: s2.name,
+        params: s2.params,
+        forces: filter(function(fc) {
+          return forceName(fc) !== name15;
+        })(s2.forces)
+      };
+    };
+  };
+  var filtered = function(keep) {
+    return function(strength) {
+      if (keep instanceof Nothing) {
+        return strength;
+      }
+      ;
+      if (keep instanceof Just) {
+        return function(node) {
+          var $351 = keep.value0(node);
+          if ($351) {
+            return strength(node);
+          }
+          ;
+          return 0;
+        };
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1130, column 26 - line 1132, column 71): " + [keep.constructor.name]);
+    };
+  };
+  var recipe = function(v2) {
+    if (v2 instanceof ManyBodyForce2) {
+      return function(random2) {
+        return function(nodes) {
+          return function(v1) {
+            return new Right(manyBody({
+              strength: filtered(v2.value0.filter)(valueOf(v2.value0.strength)),
+              theta: v2.value0.theta,
+              distanceMin: v2.value0.distanceMin,
+              distanceMax: v2.value0.distanceMax,
+              scope: (function() {
+                if (v2.value0.scope instanceof AllPairs) {
+                  return everyPair;
+                }
+                ;
+                if (v2.value0.scope instanceof WithinGroups3) {
+                  return withinGroups;
+                }
+                ;
+                if (v2.value0.scope instanceof BetweenGroups3) {
+                  return betweenGroups;
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1009, column 16 - line 1012, column 56): " + [v2.value0.scope.constructor.name]);
+              })(),
+              group: (function() {
+                if (v2.value0.scope instanceof AllPairs) {
+                  return function(v22) {
+                    return ungrouped;
+                  };
+                }
+                ;
+                if (v2.value0.scope instanceof WithinGroups3) {
+                  return membership(v2.value0.scope.value0);
+                }
+                ;
+                if (v2.value0.scope instanceof BetweenGroups3) {
+                  return membership(v2.value0.scope.value0);
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1013, column 16 - line 1016, column 50): " + [v2.value0.scope.constructor.name]);
+              })()
+            })(random2)(nodes));
+          };
+        };
       };
     }
+    ;
+    if (v2 instanceof CollideForce2) {
+      return function(random2) {
+        return function(nodes) {
+          return function(v1) {
+            return new Right(collide({
+              radius: valueOf(v2.value0.radius),
+              strength: v2.value0.strength,
+              iterations: v2.value0.iterations,
+              include: fromMaybe(function(v22) {
+                return true;
+              })(v2.value0.filter),
+              alphaScaled: v2.value0.alphaScaled
+            })(random2)(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof LinkForce2) {
+      return function(random2) {
+        return function(nodes) {
+          return function(links) {
+            return bind2(withEnds(nodes)(links))(function(ended2) {
+              return linkById2(function(v1) {
+                return v1.id;
+              })({
+                distance: function(l2) {
+                  return valueOf(v2.value0.distance)(l2.ends);
+                },
+                strength: (function() {
+                  if (v2.value0.strength instanceof ByDegree) {
+                    return strengthFromDegree;
+                  }
+                  ;
+                  if (v2.value0.strength instanceof LinkStrength) {
+                    return strengthPerLink(function(l2) {
+                      return valueOf(v2.value0.strength.value0)(l2.ends);
+                    });
+                  }
+                  ;
+                  throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1036, column 19 - line 1038, column 84): " + [v2.value0.strength.constructor.name]);
+                })(),
+                iterations: v2.value0.iterations
+              })(random2)(nodes)(ended2);
+            });
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof CenterForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(v22) {
+            return new Right(center({
+              x: v2.value0.x,
+              y: v2.value0.y,
+              strength: v2.value0.strength
+            })(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof PositionXForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(v22) {
+            return new Right(positionX({
+              target: valueOf(v2.value0.target),
+              strength: filtered(v2.value0.filter)(valueOf(v2.value0.strength))
+            })(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof PositionYForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(v22) {
+            return new Right(positionY({
+              target: valueOf(v2.value0.target),
+              strength: filtered(v2.value0.filter)(valueOf(v2.value0.strength))
+            })(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof RadialForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(v22) {
+            return new Right(radial({
+              radius: valueOf(v2.value0.radius),
+              strength: filtered(v2.value0.filter)(valueOf(v2.value0.strength)),
+              x: v2.value0.x,
+              y: v2.value0.y
+            })(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof TowardsForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(v22) {
+            return new Right(towards({
+              target: function(node) {
+                return fromMaybe({
+                  x: nan,
+                  y: nan
+                })(v2.value0.target(node));
+              },
+              strength: filtered(v2.value0.filter)(valueOf(v2.value0.strength))
+            })(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof RectCollideForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(v22) {
+            return new Right(rectCollide({
+              halfWidth: valueOf(v2.value0.halfWidth),
+              halfHeight: valueOf(v2.value0.halfHeight),
+              strength: v2.value0.strength,
+              iterations: v2.value0.iterations,
+              include: fromMaybe(function(v3) {
+                return true;
+              })(v2.value0.filter),
+              pairs: (function() {
+                if (v2.value0.scope instanceof AllPairs) {
+                  return everyPair2;
+                }
+                ;
+                if (v2.value0.scope instanceof WithinGroups3) {
+                  return withinGroups2;
+                }
+                ;
+                if (v2.value0.scope instanceof BetweenGroups3) {
+                  return betweenGroups2;
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1073, column 16 - line 1076, column 59): " + [v2.value0.scope.constructor.name]);
+              })(),
+              group: (function() {
+                if (v2.value0.scope instanceof AllPairs) {
+                  return function(v3) {
+                    return ungrouped;
+                  };
+                }
+                ;
+                if (v2.value0.scope instanceof WithinGroups3) {
+                  return membership(v2.value0.scope.value0);
+                }
+                ;
+                if (v2.value0.scope instanceof BetweenGroups3) {
+                  return membership(v2.value0.scope.value0);
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1077, column 16 - line 1080, column 50): " + [v2.value0.scope.constructor.name]);
+              })(),
+              heldX: pinnedX,
+              heldY: pinnedY,
+              squeezed: (function() {
+                if (v2.value0.throughSqueeze) {
+                  return goesThrough;
+                }
+                ;
+                return staysPut;
+              })()
+            })(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof ContainForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(v22) {
+            var regions2 = map27(regionOf)(v2.value0.regions);
+            return new Right(contain({
+              region: function(node) {
+                var v3 = bind13(v2.value0.region(node))(index(regions2));
+                if (v3 instanceof Just) {
+                  return within(v3.value0);
+                }
+                ;
+                if (v3 instanceof Nothing) {
+                  return free;
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1092, column 28 - line 1094, column 40): " + [v3.constructor.name]);
+              },
+              radius: valueOf(v2.value0.radius),
+              halfWidth: valueOf(v2.value0.halfWidth),
+              halfHeight: valueOf(v2.value0.halfHeight),
+              strength: v2.value0.strength,
+              hard: v2.value0.hard
+            })(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof CohesionForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(v22) {
+            return new Right(cohesion({
+              group: membership(v2.value0.group),
+              strength: filtered(v2.value0.filter)(valueOf(v2.value0.strength))
+            })(nodes));
+          };
+        };
+      };
+    }
+    ;
+    if (v2 instanceof DirectionalForce2) {
+      return function(v1) {
+        return function(nodes) {
+          return function(links) {
+            return bind2(withEnds(nodes)(links))(function(ended2) {
+              return directionalById2(function(v22) {
+                return v22.id;
+              })({
+                gap: function(l2) {
+                  return valueOf(v2.value0.gap)(l2.ends);
+                },
+                strength: function(l2) {
+                  return valueOf(v2.value0.strength)(l2.ends);
+                },
+                axis: v2.value0.axis,
+                iterations: v2.value0.iterations,
+                hard: v2.value0.hard,
+                heldX: pinnedX,
+                heldY: pinnedY
+              })(nodes)(ended2);
+            });
+          };
+        };
+      };
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1002, column 10 - line 1120, column 12): " + [v2.constructor.name]);
+  };
+  var tryApplySetup = function(setupConfig) {
+    return function(sim) {
+      return function __do5() {
+        var nodes = read(sim.nodes)();
+        var links = read(sim.links)();
+        var ids2 = map27(function(l2) {
+          return {
+            source: l2.source,
+            target: l2.target
+          };
+        })(links);
+        var made = traverse3(function(fc) {
+          return map28(Tuple.create(forceName(fc)))(initializeForce(sim.random)(nodes)(ids2)(recipe(fc)));
+        })(setupConfig.forces);
+        if (made instanceof Left) {
+          return new Left(made.value0);
+        }
+        ;
+        if (made instanceof Right) {
+          write(fromFoldable1(made.value0))(sim.forces)();
+          write(setupConfig.params.alpha)(sim.alpha)();
+          write({
+            alphaMin: setupConfig.params.alphaMin,
+            alphaDecay: setupConfig.params.alphaDecay,
+            alphaTarget: setupConfig.params.alphaTarget,
+            velocityRetention: setupConfig.params.velocityRetention
+          })(sim.settings)();
+          return new Right(unit);
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 976, column 3 - line 992, column 24): " + [made.constructor.name]);
+      };
+    };
   };
   var defaultParams = {
     alpha: 1,
     alphaMin: 1e-3,
     alphaDecay: 0.01,
     alphaTarget: 0,
-    velocityDecay: 0.4
+    velocityRetention: 0.4
   };
   var setup = function(name15) {
     return function(forces) {
@@ -7308,210 +11589,15 @@
       };
     };
   };
-  var defaultForceConfig = function(name15) {
-    return function(forceType) {
-      return {
-        name: name15,
-        forceType,
-        strength: new Static(1),
-        radius: new Static(1),
-        x: new Static(0),
-        y: new Static(0),
-        distance: new Static(30),
-        theta: 0.9,
-        distanceMin: 1,
-        distanceMax: 1e10,
-        iterations: 1,
-        filter: Nothing.value
-      };
-    };
-  };
-  var link = function(name15) {
-    return defaultForceConfig(name15)(ForceLink.value);
-  };
-  var manyBody = function(name15) {
-    var v2 = defaultForceConfig(name15)(ForceManyBody.value);
-    return {
-      name: v2.name,
-      forceType: v2.forceType,
-      radius: v2.radius,
-      x: v2.x,
-      y: v2.y,
-      distance: v2.distance,
-      theta: v2.theta,
-      distanceMin: v2.distanceMin,
-      distanceMax: v2.distanceMax,
-      iterations: v2.iterations,
-      filter: v2.filter,
-      strength: new Static(-30)
-    };
-  };
-  var positionX = function(name15) {
-    var v2 = defaultForceConfig(name15)(ForcePositionX.value);
-    return {
-      name: v2.name,
-      forceType: v2.forceType,
-      radius: v2.radius,
-      y: v2.y,
-      distance: v2.distance,
-      theta: v2.theta,
-      distanceMin: v2.distanceMin,
-      distanceMax: v2.distanceMax,
-      iterations: v2.iterations,
-      filter: v2.filter,
-      strength: new Static(0.1),
-      x: new Static(0)
-    };
-  };
-  var positionY = function(name15) {
-    var v2 = defaultForceConfig(name15)(ForcePositionY.value);
-    return {
-      name: v2.name,
-      forceType: v2.forceType,
-      radius: v2.radius,
-      x: v2.x,
-      distance: v2.distance,
-      theta: v2.theta,
-      distanceMin: v2.distanceMin,
-      distanceMax: v2.distanceMax,
-      iterations: v2.iterations,
-      filter: v2.filter,
-      strength: new Static(0.1),
-      y: new Static(0)
-    };
-  };
-  var createForceHandle = function(fc) {
-    return pure4((function() {
-      if (fc.forceType instanceof ForceManyBody) {
-        if (fc.filter instanceof Just) {
-          return createManyBodyFiltered({
-            strength: valueToNumber(fc.strength),
-            theta: fc.theta,
-            distanceMin: fc.distanceMin,
-            distanceMax: fc.distanceMax,
-            filter: fc.filter.value0
-          });
-        }
-        ;
-        if (fc.filter instanceof Nothing) {
-          return createManyBody({
-            strength: valueToNumber(fc.strength),
-            theta: fc.theta,
-            distanceMin: fc.distanceMin,
-            distanceMax: fc.distanceMax
-          });
-        }
-        ;
-        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 439, column 20 - line 454, column 8): " + [fc.filter.constructor.name]);
-      }
-      ;
-      if (fc.forceType instanceof ForceCollide) {
-        if (fc.radius instanceof Static) {
-          return createCollide({
-            radius: fc.radius.value0,
-            strength: valueToNumber(fc.strength),
-            iterations: fc.iterations
-          });
-        }
-        ;
-        if (fc.radius instanceof Dynamic) {
-          return createCollideDynamic({
-            radiusAccessor: fc.radius.value0,
-            strength: valueToNumber(fc.strength),
-            iterations: fc.iterations
-          });
-        }
-        ;
-        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 456, column 19 - line 466, column 8): " + [fc.radius.constructor.name]);
-      }
-      ;
-      if (fc.forceType instanceof ForceLink) {
-        return createLink({
-          distance: valueToNumber(fc.distance),
-          strength: valueToNumber(fc.strength),
-          iterations: fc.iterations
-        });
-      }
-      ;
-      if (fc.forceType instanceof ForceCenter) {
-        return createCenter({
-          x: valueToNumber(fc.x),
-          y: valueToNumber(fc.y),
-          strength: valueToNumber(fc.strength)
-        });
-      }
-      ;
-      if (fc.forceType instanceof ForcePositionX) {
-        if (fc.x instanceof Static) {
-          return createForceX({
-            x: fc.x.value0,
-            strength: valueToNumber(fc.strength)
-          });
-        }
-        ;
-        if (fc.x instanceof Dynamic) {
-          return createForceXDynamic({
-            xAccessor: fc.x.value0,
-            strength: valueToNumber(fc.strength)
-          });
-        }
-        ;
-        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 482, column 21 - line 490, column 8): " + [fc.x.constructor.name]);
-      }
-      ;
-      if (fc.forceType instanceof ForcePositionY) {
-        if (fc.y instanceof Static) {
-          return createForceY({
-            y: fc.y.value0,
-            strength: valueToNumber(fc.strength)
-          });
-        }
-        ;
-        if (fc.y instanceof Dynamic) {
-          return createForceYDynamic({
-            yAccessor: fc.y.value0,
-            strength: valueToNumber(fc.strength)
-          });
-        }
-        ;
-        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 492, column 21 - line 500, column 8): " + [fc.y.constructor.name]);
-      }
-      ;
-      if (fc.forceType instanceof ForceRadial) {
-        if (fc.filter instanceof Just) {
-          return createRadialFiltered({
-            radius: valueToNumber(fc.radius),
-            x: valueToNumber(fc.x),
-            y: valueToNumber(fc.y),
-            strength: valueToNumber(fc.strength),
-            filter: fc.filter.value0
-          });
-        }
-        ;
-        if (fc.filter instanceof Nothing) {
-          return createRadial({
-            radius: valueToNumber(fc.radius),
-            x: valueToNumber(fc.x),
-            y: valueToNumber(fc.y),
-            strength: valueToNumber(fc.strength)
-          });
-        }
-        ;
-        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 502, column 18 - line 517, column 8): " + [fc.filter.constructor.name]);
-      }
-      ;
-      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 438, column 31 - line 517, column 8): " + [fc.forceType.constructor.name]);
-    })());
-  };
   var computeNodeGUP = function(currentNodes) {
     return function(desiredNodes) {
-      var desiredIds = fromFoldable1(map10(function(v2) {
+      var desiredIds = fromFoldable32(map27(function(v2) {
         return v2.id;
       })(desiredNodes));
       var exited = filter(function(n) {
         return !member3(n.id)(desiredIds);
       })(currentNodes);
-      var currentById = fromFoldable22(map10(function(n) {
+      var currentById = fromFoldable7(map27(function(n) {
         return new Tuple(n.id, n);
       })(currentNodes));
       var processDesired = function(desired) {
@@ -7530,23 +11616,23 @@
           };
         }
         ;
-        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 680, column 7 - line 686, column 73): " + [v2.constructor.name]);
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 1344, column 7 - line 1350, column 73): " + [v2.constructor.name]);
       };
-      var processed = map10(processDesired)(desiredNodes);
-      var entered = map10(function(v2) {
+      var processed = map27(processDesired)(desiredNodes);
+      var entered = map27(function(v2) {
         return v2.node;
       })(filter(function(v2) {
         return v2.isEnter;
       })(processed));
-      var merged = map10(function(v2) {
+      var merged = map27(function(v2) {
         return v2.node;
       })(processed);
-      var updated = map10(function(v2) {
+      var updated = map27(function(v2) {
         return v2.node;
-      })(filter(function($97) {
+      })(filter(function($399) {
         return !(function(v2) {
           return v2.isEnter;
-        })($97);
+        })($399);
       })(processed));
       return {
         entered,
@@ -7561,8 +11647,8 @@
       var linkKey = function(l2) {
         return new Tuple(l2.source, l2.target);
       };
-      var desiredKeys = fromFoldable32(map10(linkKey)(desiredLinks));
-      var currentKeys = fromFoldable32(map10(linkKey)(currentLinks));
+      var desiredKeys = fromFoldable42(map27(linkKey)(desiredLinks));
+      var currentKeys = fromFoldable42(map27(linkKey)(currentLinks));
       var enterKeys = difference4(desiredKeys)(currentKeys);
       var entered = filter(function(l2) {
         return member1(linkKey(l2))(enterKeys);
@@ -7582,37 +11668,29 @@
       };
     };
   };
-  var collide = function(name15) {
-    return defaultForceConfig(name15)(ForceCollide.value);
+  var collide2 = function(name15) {
+    return new CollideForce2({
+      name: name15,
+      radius: new Static(1),
+      strength: 1,
+      iterations: 1,
+      filter: Nothing.value,
+      alphaScaled: false
+    });
   };
   var applySetup = function(setupConfig) {
     return function(sim) {
       return function __do5() {
-        var nodes = read(sim.nodes)();
-        var links = read(sim.links)();
-        var currentForces = read(sim.forces)();
-        var desiredNames = fromFoldable42(map10(function(v2) {
-          return v2.name;
-        })(setupConfig.forces));
-        var currentNames = fromFoldable5(keys2(currentForces));
-        var toRemove = difference1(currentNames)(desiredNames);
-        for_3(toUnfoldable5(toRemove))(function(name15) {
-          return modify_($$delete4(name15))(sim.forces);
-        })();
-        for_3(setupConfig.forces)(function(fc) {
-          return function __do6() {
-            var handle = createForceHandle(fc)();
-            (function() {
-              if (fc.forceType instanceof ForceLink) {
-                return initializeLinkForce(handle)(nodes)(links)();
-              }
-              ;
-              return initializeForce(handle)(nodes)();
-            })();
-            return modify_(insert4(fc.name)(handle))(sim.forces)();
-          };
-        })();
-        return write(setupConfig.params.alpha)(sim.alpha)();
+        var outcome = tryApplySetup(setupConfig)(sim)();
+        if (outcome instanceof Left) {
+          return $$throw("Hylograph.ForceEngine.Setup: " + (outcome.value0 + ". Nothing was applied."))();
+        }
+        ;
+        if (outcome instanceof Right) {
+          return unit;
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup (line 956, column 3 - line 958, column 25): " + [outcome.constructor.name]);
       };
     };
   };
@@ -7625,7 +11703,7 @@
             var currentLinks = read(sim.links)();
             var nodeResult = computeNodeGUP(currentNodes)(desiredNodes);
             write(nodeResult.merged)(sim.nodes)();
-            initializeNodes(nodeResult.merged)();
+            initializeNodes2(nodeResult.merged)();
             var linkResult = computeLinkGUP(currentLinks)(desiredLinks);
             write(desiredLinks)(sim.links)();
             applySetup(setupConfig)(sim)();
@@ -7656,9 +11734,17 @@
     };
   };
 
+  // output/Data.Map/index.js
+  var keys2 = /* @__PURE__ */ (function() {
+    var $38 = $$void(functorMap);
+    return function($39) {
+      return fromMap($38($39));
+    };
+  })();
+
   // output/Hylograph.HATS/index.js
-  var show3 = /* @__PURE__ */ show(showNumber);
-  var append3 = /* @__PURE__ */ append(semigroupArray);
+  var show4 = /* @__PURE__ */ show(showNumber);
+  var append4 = /* @__PURE__ */ append(semigroupArray);
   var DepthFirst = /* @__PURE__ */ (function() {
     function DepthFirst2() {
     }
@@ -7776,6 +11862,16 @@
     };
     return ThunkedPointerDown2;
   })();
+  var ThunkedInput = /* @__PURE__ */ (function() {
+    function ThunkedInput2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    ThunkedInput2.create = function(value0) {
+      return new ThunkedInput2(value0);
+    };
+    return ThunkedInput2;
+  })();
   var FromArray = /* @__PURE__ */ (function() {
     function FromArray2(value0) {
       this.value0 = value0;
@@ -7859,12 +11955,12 @@
     };
     return MkFold2;
   })();
-  var Empty = /* @__PURE__ */ (function() {
-    function Empty3() {
+  var Empty2 = /* @__PURE__ */ (function() {
+    function Empty4() {
     }
     ;
-    Empty3.value = new Empty3();
-    return Empty3;
+    Empty4.value = new Empty4();
+    return Empty4;
   })();
   var staticStr = function(name15) {
     return function(value12) {
@@ -7873,7 +11969,7 @@
   };
   var staticNum = function(name15) {
     return function(value12) {
-      return new StaticAttr(name15, show3(value12));
+      return new StaticAttr(name15, show4(value12));
     };
   };
   var runSomeFold = function(v2) {
@@ -7896,7 +11992,7 @@
           elemType: v2.value0.elemType,
           attrs: v2.value0.attrs,
           children: v2.value0.children,
-          behaviors: append3(v2.value0.behaviors)(bs)
+          behaviors: append4(v2.value0.behaviors)(bs)
         });
       }
       ;
@@ -7916,11 +12012,11 @@
         });
       }
       ;
-      if (v2 instanceof Empty) {
-        return Empty.value;
+      if (v2 instanceof Empty2) {
+        return Empty2.value;
       }
       ;
-      throw new Error("Failed pattern match at Hylograph.HATS (line 500, column 20 - line 505, column 17): " + [v2.constructor.name]);
+      throw new Error("Failed pattern match at Hylograph.HATS (line 520, column 20 - line 525, column 17): " + [v2.constructor.name]);
     };
   };
   var forEach = function(name15) {
@@ -7956,17 +12052,17 @@
   };
 
   // output/Hylograph.HATS.Friendly/index.js
-  var show4 = /* @__PURE__ */ show(showNumber);
-  var y22 = /* @__PURE__ */ staticNum("y2");
+  var show5 = /* @__PURE__ */ show(showNumber);
+  var y2 = /* @__PURE__ */ staticNum("y2");
   var y1 = /* @__PURE__ */ staticNum("y1");
-  var x22 = /* @__PURE__ */ staticNum("x2");
+  var x2 = /* @__PURE__ */ staticNum("x2");
   var x1 = /* @__PURE__ */ staticNum("x1");
   var width = /* @__PURE__ */ staticNum("width");
   var viewBox = function(minX) {
     return function(minY) {
       return function(w) {
         return function(h7) {
-          return staticStr("viewBox")(show4(minX) + (" " + (show4(minY) + (" " + (show4(w) + (" " + show4(h7)))))));
+          return staticStr("viewBox")(show5(minX) + (" " + (show5(minY) + (" " + (show5(w) + (" " + show5(h7)))))));
         };
       };
     };
@@ -7997,6 +12093,7 @@
       el.setAttributeNS("http://www.w3.org/XML/1998/namespace", name15, value12);
     } else {
       el.setAttribute(name15, value12);
+      if (name15 === "value" && "value" in el && el.value !== value12) el.value = value12;
     }
   };
   var getAttribute = (el) => (name15) => () => {
@@ -8026,35 +12123,108 @@
       (el) => el.tagName.toLowerCase() === tagName2 && el.getAttribute("data-hats-fold") === foldName
     );
   };
+  var foldAnchor = (parent2) => (existing) => (domIdx) => () => {
+    if (existing.length > 0) return existing[existing.length - 1].nextSibling;
+    return parent2.children[domIdx] || null;
+  };
+  var placeInDataOrder = (parent2) => (elements) => (anchor) => () => {
+    let next2 = anchor;
+    for (let i2 = elements.length - 1; i2 >= 0; i2--) {
+      const el = elements[i2];
+      if (el === next2 || el.parentNode !== parent2) continue;
+      if (next2 && next2.parentNode === parent2) {
+        if (!(el.compareDocumentPosition(next2) & 4)) parent2.insertBefore(el, next2);
+      }
+      next2 = el;
+    }
+  };
   var removeElement = (el) => () => {
     if (el.parentNode) {
       el.parentNode.removeChild(el);
     }
   };
-  var setCursorPointer = (el) => () => {
-    el.style.cursor = "pointer";
+  var handlersOf = (el) => el.__hatsHandlers || (el.__hatsHandlers = /* @__PURE__ */ Object.create(null));
+  function addHandler(el, event, handler3) {
+    const handlers = handlersOf(el);
+    if (!(event in handlers)) {
+      handlers[event] = [];
+      el.addEventListener(event, function(e) {
+        for (const h7 of handlers[event].slice()) h7(e);
+      });
+    }
+    handlers[event].push(handler3);
+  }
+  var beginBehaviors = (el) => () => {
+    const handlers = el.__hatsHandlers;
+    if (handlers) for (const event in handlers) handlers[event] = [];
+    if (el.__hatsCursor) {
+      el.style.cursor = "";
+      el.__hatsCursor = false;
+    }
+    if (el.__hatsHighlight) el.__hatsHighlight.stale = true;
+    if (el.__hatsInteraction) el.__hatsInteraction.stale = true;
   };
+  var endBehaviors = (el) => () => {
+    const highlight = el.__hatsHighlight;
+    if (highlight && highlight.stale) {
+      removeEntry(getHatsHighlightGroup(highlight.group), highlight);
+      el.__hatsHighlight = null;
+    }
+    const interaction = el.__hatsInteraction;
+    if (interaction && interaction.stale) {
+      removeEntry(getCoordInteractionGroup(interaction.group), interaction);
+      el.__hatsInteraction = null;
+    }
+  };
+  function removeEntry(entries, entry) {
+    const at = entries.indexOf(entry);
+    if (at >= 0) entries.splice(at, 1);
+  }
+  var attachOnce = (el) => (kind2) => (attach) => () => {
+    const attached = el.__hatsAttached || (el.__hatsAttached = /* @__PURE__ */ Object.create(null));
+    if (!attached[kind2]) {
+      attached[kind2] = true;
+      attach();
+    }
+  };
+  function pointerCursor(el) {
+    el.style.cursor = "pointer";
+    el.__hatsCursor = true;
+  }
   var attachMouseEnterThunked = (el) => (handler3) => () => {
-    el.addEventListener("mouseenter", function(event) {
+    addHandler(el, "mouseenter", function(event) {
       handler3()();
     });
   };
   var attachMouseLeaveThunked = (el) => (handler3) => () => {
-    el.addEventListener("mouseleave", function(event) {
+    addHandler(el, "mouseleave", function(event) {
       handler3()();
     });
   };
   var attachClickThunked = (el) => (handler3) => () => {
-    el.addEventListener("click", function(event) {
+    addHandler(el, "click", function(event) {
       event.stopPropagation();
       handler3()();
     });
-    el.style.cursor = "pointer";
+    pointerCursor(el);
+  };
+  var attachClickWithModifierThunked = (el) => (plainHandler) => (modifierHandler) => () => {
+    addHandler(el, "click", function(event) {
+      event.stopPropagation();
+      const hasModifier = event.metaKey || event.ctrlKey || event.shiftKey;
+      (hasModifier ? modifierHandler : plainHandler)()();
+    });
+    pointerCursor(el);
   };
   var attachPointerDownThunked = (el) => (handler3) => () => {
-    el.addEventListener("pointerdown", function(event) {
+    addHandler(el, "pointerdown", function(event) {
       event.stopPropagation();
       handler3()();
+    });
+  };
+  var attachInputThunked = (el) => (handler3) => () => {
+    addHandler(el, "input", function(event) {
+      handler3(el.value)();
     });
   };
   var attachZoom = (el) => (scaleMin) => (scaleMax) => (targetSelector) => () => {
@@ -8135,17 +12305,17 @@
     const vh = window.innerHeight;
     const tooltipWidth = tooltip.offsetWidth || 300;
     const tooltipHeight = tooltip.offsetHeight || 40;
-    let x4 = event.clientX + 15;
-    if (x4 + tooltipWidth > vw - 10) {
-      x4 = event.clientX - tooltipWidth - 15;
+    let x3 = event.clientX + 15;
+    if (x3 + tooltipWidth > vw - 10) {
+      x3 = event.clientX - tooltipWidth - 15;
     }
-    let y4 = event.clientY - 10;
-    if (y4 + tooltipHeight > vh - 10) {
-      y4 = vh - tooltipHeight - 10;
+    let y3 = event.clientY - 10;
+    if (y3 + tooltipHeight > vh - 10) {
+      y3 = vh - tooltipHeight - 10;
     }
-    if (y4 < 10) y4 = 10;
-    tooltip.style.left = `${x4}px`;
-    tooltip.style.top = `${y4}px`;
+    if (y3 < 10) y3 = 10;
+    tooltip.style.left = `${x3}px`;
+    tooltip.style.top = `${y3}px`;
   }
   function showHatsTooltip(tooltip, content3) {
     tooltip.textContent = content3;
@@ -8158,14 +12328,30 @@
   }
   var attachCoordinatedHighlightThunked = (element4) => (identifyThunk) => (classifyFn) => (groupName) => (tooltipContentThunk) => (tooltipTrigger) => (tooltipBorderColor) => () => {
     const group4 = groupName;
-    const entry = { element: element4, identifyThunk, classifyFn, tooltipContentThunk, tooltipTrigger, tooltipBorderColor };
-    getHatsHighlightGroup(group4).push(entry);
+    const fields = { element: element4, identifyThunk, classifyFn, tooltipContentThunk, tooltipTrigger, tooltipBorderColor, group: group4, stale: false };
+    const existing = element4.__hatsHighlight;
+    if (existing) {
+      if (existing.group !== group4) {
+        removeEntry(getHatsHighlightGroup(existing.group), existing);
+        getHatsHighlightGroup(group4).push(existing);
+      }
+      Object.assign(existing, fields);
+      return;
+    }
+    element4.__hatsHighlight = fields;
+    getHatsHighlightGroup(group4).push(fields);
+    if (element4.__hatsHighlightListening) return;
+    element4.__hatsHighlightListening = true;
     element4.addEventListener("mouseenter", function(event) {
-      const hoveredId = identifyThunk();
-      applyHatsHighlightsWithTooltips(group4, hoveredId, element4, event);
+      const entry = element4.__hatsHighlight;
+      if (!entry) return;
+      const hoveredId = entry.identifyThunk();
+      applyHatsHighlightsWithTooltips(entry.group, hoveredId, element4, event);
     });
     element4.addEventListener("mouseleave", function(event) {
-      clearHatsHighlightsInGroupWithTooltips(group4);
+      const entry = element4.__hatsHighlight;
+      if (!entry) return;
+      clearHatsHighlightsInGroupWithTooltips(entry.group);
     });
   };
   function applyHatsHighlightsWithTooltips(groupName, hoveredId, triggerElement, event) {
@@ -8314,14 +12500,29 @@
   var attachCoordinatedInteractionThunked = (element4) => (identifyThunk) => (respondToHover) => (respondToBrush) => (respondToClear) => (positionThunk) => (groupName) => () => {
     const group4 = groupName;
     const getPosition = positionThunk && positionThunk.value0 ? positionThunk.value0 : null;
-    const entry = { element: element4, identifyThunk, respondToHover, respondToBrush, respondToClear, getPosition };
-    getCoordInteractionGroup(group4).push(entry);
+    const fields = { element: element4, identifyThunk, respondToHover, respondToBrush, respondToClear, getPosition, group: group4, stale: false };
+    const existing = element4.__hatsInteraction;
+    if (existing) {
+      if (existing.group !== group4) {
+        removeEntry(getCoordInteractionGroup(existing.group), existing);
+        getCoordInteractionGroup(group4).push(existing);
+      }
+      Object.assign(existing, fields);
+      return;
+    }
+    element4.__hatsInteraction = fields;
+    getCoordInteractionGroup(group4).push(fields);
+    if (element4.__hatsInteractionListening) return;
+    element4.__hatsInteractionListening = true;
     element4.addEventListener("mouseenter", function(event) {
-      const hoveredId = identifyThunk();
-      applyHoverInteraction(group4, hoveredId);
+      const entry = element4.__hatsInteraction;
+      if (!entry) return;
+      applyHoverInteraction(entry.group, entry.identifyThunk());
     });
     element4.addEventListener("mouseleave", function(event) {
-      applyClearInteraction(group4);
+      const entry = element4.__hatsInteraction;
+      if (!entry) return;
+      applyClearInteraction(entry.group);
     });
   };
   var activeBrushes = /* @__PURE__ */ new Map();
@@ -8390,15 +12591,15 @@
       const coords2 = getLocalCoords(event);
       const currentX = Math.max(extent.x0, Math.min(extent.x1, coords2.x));
       const currentY = Math.max(extent.y0, Math.min(extent.y1, coords2.y));
-      const x4 = Math.min(startX, currentX);
-      const y4 = Math.min(startY, currentY);
+      const x3 = Math.min(startX, currentX);
+      const y3 = Math.min(startY, currentY);
       const width10 = Math.abs(currentX - startX);
       const height10 = Math.abs(currentY - startY);
-      selectionRect.setAttribute("x", x4);
-      selectionRect.setAttribute("y", y4);
+      selectionRect.setAttribute("x", x3);
+      selectionRect.setAttribute("y", y3);
       selectionRect.setAttribute("width", width10);
       selectionRect.setAttribute("height", height10);
-      const box = { x0: x4, y0: y4, x1: x4 + width10, y1: y4 + height10 };
+      const box = { x0: x3, y0: y3, x1: x3 + width10, y1: y3 + height10 };
       const sourceCell = element4.closest('g[id^="cell-"]');
       const now = performance.now();
       if (now - lastBrushTime >= BRUSH_THROTTLE_MS) {
@@ -8750,12 +12951,12 @@
     ExpInOut2.value = new ExpInOut2();
     return ExpInOut2;
   })();
-  var Circle2 = /* @__PURE__ */ (function() {
-    function Circle3() {
+  var Circle3 = /* @__PURE__ */ (function() {
+    function Circle4() {
     }
     ;
-    Circle3.value = new Circle3();
-    return Circle3;
+    Circle4.value = new Circle4();
+    return Circle4;
   })();
   var CircleIn = /* @__PURE__ */ (function() {
     function CircleIn2() {
@@ -8938,7 +13139,7 @@
         return easeInOutExp;
       }
       ;
-      if (v2.value0 instanceof Circle2) {
+      if (v2.value0 instanceof Circle3) {
         return easeOutCircle;
       }
       ;
@@ -9103,35 +13304,6 @@
       };
     };
   }
-
-  // output/Web.Internal.FFI/foreign.js
-  function _unsafeReadProtoTagged(nothing, just, name15, value12) {
-    if (typeof window !== "undefined") {
-      var ty = window[name15];
-      if (ty != null && value12 instanceof ty) {
-        return just(value12);
-      }
-    }
-    var obj = value12;
-    while (obj != null) {
-      var proto = Object.getPrototypeOf(obj);
-      var constructorName = proto.constructor.name;
-      if (constructorName === name15) {
-        return just(value12);
-      } else if (constructorName === "Object") {
-        return nothing;
-      }
-      obj = proto;
-    }
-    return nothing;
-  }
-
-  // output/Web.Internal.FFI/index.js
-  var unsafeReadProtoTagged = function(name15) {
-    return function(value12) {
-      return _unsafeReadProtoTagged(Nothing.value, Just.create, name15, value12);
-    };
-  };
 
   // output/Web.DOM.Document/index.js
   var createElementNS = function($6) {
@@ -9300,6 +13472,18 @@
       return "abbr";
     }
     ;
+    if (v2 instanceof Button) {
+      return "button";
+    }
+    ;
+    if (v2 instanceof Input) {
+      return "input";
+    }
+    ;
+    if (v2 instanceof Label) {
+      return "label";
+    }
+    ;
     throw new Error("Failed pattern match at Hylograph.Internal.Element.Operations (line 31, column 1 - line 31, column 45): " + [v2.constructor.name]);
   };
   var createElementWithNS = function(elemType) {
@@ -9349,9 +13533,9 @@
   }
 
   // output/Web.DOM.ParentNode/index.js
-  var map11 = /* @__PURE__ */ map(functorEffect);
+  var map29 = /* @__PURE__ */ map(functorEffect);
   var querySelector = function(qs) {
-    var $2 = map11(toMaybe);
+    var $2 = map29(toMaybe);
     var $3 = _querySelector(qs);
     return function($4) {
       return $2($3($4));
@@ -9360,7 +13544,6 @@
 
   // output/Web.DOM.Element/index.js
   var toNode = unsafeCoerce2;
-  var toEventTarget = unsafeCoerce2;
 
   // output/Web.DOM.Node/foreign.js
   var getEffProp3 = function(name15) {
@@ -9406,57 +13589,19 @@
   }
 
   // output/Web.DOM.Node/index.js
-  var map12 = /* @__PURE__ */ map(functorEffect);
+  var map30 = /* @__PURE__ */ map(functorEffect);
   var parentNode = /* @__PURE__ */ (function() {
-    var $6 = map12(toMaybe);
+    var $6 = map30(toMaybe);
     return function($7) {
       return $6(_parentNode($7));
     };
   })();
   var nextSibling = /* @__PURE__ */ (function() {
-    var $15 = map12(toMaybe);
+    var $15 = map30(toMaybe);
     return function($16) {
       return $15(_nextSibling($16));
     };
   })();
-
-  // output/Web.Event.Event/foreign.js
-  function stopPropagation(e) {
-    return function() {
-      return e.stopPropagation();
-    };
-  }
-
-  // output/Web.Event.EventTarget/foreign.js
-  function eventListener(fn) {
-    return function() {
-      return function(event) {
-        return fn(event)();
-      };
-    };
-  }
-  function addEventListener(type) {
-    return function(listener) {
-      return function(useCapture) {
-        return function(target6) {
-          return function() {
-            return target6.addEventListener(type, listener, useCapture);
-          };
-        };
-      };
-    };
-  }
-  function removeEventListener(type) {
-    return function(listener) {
-      return function(useCapture) {
-        return function(target6) {
-          return function() {
-            return target6.removeEventListener(type, listener, useCapture);
-          };
-        };
-      };
-    };
-  }
 
   // output/Web.HTML/foreign.js
   var windowImpl = function() {
@@ -9507,11 +13652,11 @@
   };
 
   // output/Web.HTML.HTMLDocument/index.js
-  var map13 = /* @__PURE__ */ map(functorEffect);
+  var map31 = /* @__PURE__ */ map(functorEffect);
   var toParentNode = unsafeCoerce2;
   var toDocument = unsafeCoerce2;
   var readyState = function(doc) {
-    return map13((function() {
+    return map31((function() {
       var $4 = fromMaybe(Loading.value);
       return function($5) {
         return $4(parse($5));
@@ -9533,8 +13678,37 @@
 
   // output/Web.HTML.HTMLElement/index.js
   var toNode2 = unsafeCoerce2;
-  var fromElement = function(x4) {
-    return _read(Nothing.value, Just.create, x4);
+  var fromElement = function(x3) {
+    return _read(Nothing.value, Just.create, x3);
+  };
+
+  // output/Effect.Uncurried/foreign.js
+  var runEffectFn1 = function runEffectFn12(fn) {
+    return function(a3) {
+      return function() {
+        return fn(a3);
+      };
+    };
+  };
+  var runEffectFn2 = function runEffectFn22(fn) {
+    return function(a3) {
+      return function(b2) {
+        return function() {
+          return fn(a3, b2);
+        };
+      };
+    };
+  };
+  var runEffectFn3 = function runEffectFn32(fn) {
+    return function(a3) {
+      return function(b2) {
+        return function(c2) {
+          return function() {
+            return fn(a3, b2, c2);
+          };
+        };
+      };
+    };
   };
 
   // output/Web.HTML.Window/foreign.js
@@ -9545,41 +13719,29 @@
   }
 
   // output/Web.HTML.Window/index.js
-  var toEventTarget2 = unsafeCoerce2;
-
-  // output/Web.UIEvent.MouseEvent/foreign.js
-  function ctrlKey(e) {
-    return e.ctrlKey;
-  }
-  function shiftKey(e) {
-    return e.shiftKey;
-  }
-  function metaKey(e) {
-    return e.metaKey;
-  }
-
-  // output/Web.UIEvent.MouseEvent/index.js
-  var fromEvent = /* @__PURE__ */ unsafeReadProtoTagged("MouseEvent");
+  var toEventTarget = unsafeCoerce2;
 
   // output/Hylograph.HATS.InterpreterTick/index.js
-  var append4 = /* @__PURE__ */ append(semigroupArray);
-  var map14 = /* @__PURE__ */ map(functorArray);
+  var append5 = /* @__PURE__ */ append(semigroupArray);
+  var map32 = /* @__PURE__ */ map(functorArray);
   var bind3 = /* @__PURE__ */ bind(bindEffect);
   var traverse_2 = /* @__PURE__ */ traverse_(applicativeEffect)(foldableArray);
-  var pure5 = /* @__PURE__ */ pure(applicativeEffect);
+  var pure11 = /* @__PURE__ */ pure(applicativeEffect);
   var unwrap2 = /* @__PURE__ */ unwrap();
-  var map15 = /* @__PURE__ */ map(functorMaybe);
-  var map22 = /* @__PURE__ */ map(functorEffect);
-  var traverse2 = /* @__PURE__ */ traverse(traversableArray)(applicativeEffect);
+  var map112 = /* @__PURE__ */ map(functorMaybe);
+  var map210 = /* @__PURE__ */ map(functorEffect);
+  var traverse4 = /* @__PURE__ */ traverse(traversableArray)(applicativeEffect);
   var union2 = /* @__PURE__ */ union(ordString);
   var $$void6 = /* @__PURE__ */ $$void(functorEffect);
   var traverseWithIndex2 = /* @__PURE__ */ traverseWithIndex(traversableWithIndexArray)(applicativeEffect);
-  var insert5 = /* @__PURE__ */ insert2(ordString);
+  var insert4 = /* @__PURE__ */ insert2(ordString);
   var foldM3 = /* @__PURE__ */ foldM(monadEffect);
-  var fromFoldable6 = /* @__PURE__ */ fromFoldable3(foldableArray)(ordString);
+  var fromFoldable8 = /* @__PURE__ */ fromFoldable4(foldableArray)(ordString);
   var difference5 = /* @__PURE__ */ difference3(ordString);
   var intersection4 = /* @__PURE__ */ intersection2(ordString);
   var member4 = /* @__PURE__ */ member2(ordString);
+  var fromFoldable12 = /* @__PURE__ */ fromFoldable2(ordString)(foldableArray);
+  var lookup3 = /* @__PURE__ */ lookup(ordString);
   var tooltipTriggerToInt = function(v2) {
     if (v2 instanceof OnHover) {
       return 0;
@@ -9593,7 +13755,7 @@
       return 2;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 718, column 23 - line 721, column 19): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 762, column 23 - line 765, column 19): " + [v2.constructor.name]);
   };
   var interactionStateToInt = function(v2) {
     if (v2 instanceof Primary2) {
@@ -9616,7 +13778,7 @@
       return 4;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 725, column 25 - line 730, column 18): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 769, column 25 - line 774, column 18): " + [v2.constructor.name]);
   };
   var highlightClassToInt = function(v2) {
     if (v2 instanceof Primary) {
@@ -9643,7 +13805,7 @@
       return 5;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 707, column 23 - line 713, column 21): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 751, column 23 - line 757, column 21): " + [v2.constructor.name]);
   };
   var enumerateDFS = function(root) {
     return function(getChildren) {
@@ -9652,9 +13814,9 @@
           var children2 = getChildren(node);
           var isLeaf = $$null(children2);
           var childResults = concatMap(go2)(children2);
-          var $77 = isLeaf || includeInternal;
-          if ($77) {
-            return append4([node])(childResults);
+          var $80 = isLeaf || includeInternal;
+          if ($80) {
+            return append5([node])(childResults);
           }
           ;
           return childResults;
@@ -9683,10 +13845,10 @@
               ;
               return [];
             })();
-            return append4(thisNode)(go2(append4(v2.value0.tail)(children2)));
+            return append5(thisNode)(go2(append5(v2.value0.tail)(children2)));
           }
           ;
-          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 556, column 14 - line 563, column 43): " + [v2.constructor.name]);
+          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 594, column 14 - line 601, column 43): " + [v2.constructor.name]);
         };
         return go2([root]);
       };
@@ -9706,16 +13868,16 @@
         return enumerateBFS(v2.value0.root)(v2.value0.children)(v2.value0.includeInternal);
       }
       ;
-      throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 537, column 5 - line 539, column 80): " + [v2.value0.order.constructor.name]);
+      throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 575, column 5 - line 577, column 80): " + [v2.value0.order.constructor.name]);
     }
     ;
     if (v2 instanceof WithContext) {
-      return map14(function(v1) {
+      return map32(function(v1) {
         return v1.datum;
       })(v2.value0);
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 534, column 18 - line 540, column 41): " + [v2.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 572, column 18 - line 578, column 41): " + [v2.constructor.name]);
   };
   var elementTypeToTagName = function(v2) {
     if (v2 instanceof Circle) {
@@ -9878,7 +14040,19 @@
       return "abbr";
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 593, column 24 - line 633, column 17): " + [v2.constructor.name]);
+    if (v2 instanceof Button) {
+      return "button";
+    }
+    ;
+    if (v2 instanceof Input) {
+      return "input";
+    }
+    ;
+    if (v2 instanceof Label) {
+      return "label";
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 636, column 24 - line 679, column 19): " + [v2.constructor.name]);
   };
   var clearChildren = function(el) {
     return function __do5() {
@@ -9886,36 +14060,7 @@
       return traverse_2(removeElement)(children2)();
     };
   };
-  var attachClickWithModifierPurs = function(el) {
-    return function(plainHandler) {
-      return function(modifierHandler) {
-        return function __do5() {
-          var listener = eventListener(function(event) {
-            return function __do6() {
-              stopPropagation(event)();
-              var v2 = fromEvent(event);
-              if (v2 instanceof Just) {
-                var hasModifier = metaKey(v2.value0) || (ctrlKey(v2.value0) || shiftKey(v2.value0));
-                if (hasModifier) {
-                  return modifierHandler(unit)();
-                }
-                ;
-                return plainHandler(unit)();
-              }
-              ;
-              if (v2 instanceof Nothing) {
-                return plainHandler(unit)();
-              }
-              ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 691, column 5 - line 700, column 26): " + [v2.constructor.name]);
-            };
-          })();
-          addEventListener("click")(listener)(false)(toEventTarget(el))();
-          return setCursorPointer(el)();
-        };
-      };
-    };
-  };
+  var attachClickWithModifierPurs = attachClickWithModifierThunked;
   var appendTo = function(p2) {
     return function(child) {
       return function __do5() {
@@ -9979,7 +14124,7 @@
                     };
                   }
                   ;
-                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 464, column 49 - line 477, column 26): " + [v2.constructor.name]);
+                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 502, column 49 - line 515, column 26): " + [v2.constructor.name]);
                 };
               };
             };
@@ -10037,7 +14182,7 @@
                     };
                   }
                   ;
-                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 497, column 47 - line 510, column 26): " + [v2.constructor.name]);
+                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 535, column 47 - line 548, column 26): " + [v2.constructor.name]);
                 };
               };
             };
@@ -10073,7 +14218,7 @@
                       to: toVal
                     };
                     if ($128.from instanceof Just && $128.to instanceof Just) {
-                      return pure5(new Just({
+                      return pure11(new Just({
                         attrName: v2.value0,
                         from: $128.from.value0,
                         to: $128.to.value0,
@@ -10084,7 +14229,7 @@
                       }));
                     }
                     ;
-                    return pure5(Nothing.value);
+                    return pure11(Nothing.value);
                   }
                   ;
                   if (v2 instanceof ThunkedAttr) {
@@ -10095,7 +14240,7 @@
                       to: toVal
                     };
                     if ($135.from instanceof Just && $135.to instanceof Just) {
-                      return pure5(new Just({
+                      return pure11(new Just({
                         attrName: v2.value0,
                         from: $135.from.value0,
                         to: $135.to.value0,
@@ -10106,10 +14251,10 @@
                       }));
                     }
                     ;
-                    return pure5(Nothing.value);
+                    return pure11(Nothing.value);
                   }
                   ;
-                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 430, column 59 - line 443, column 26): " + [v2.constructor.name]);
+                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 468, column 59 - line 481, column 26): " + [v2.constructor.name]);
                 };
               };
             };
@@ -10126,19 +14271,19 @@
             return function(phaseSpec) {
               return function(idx) {
                 if (phaseSpec.transition instanceof Nothing) {
-                  return pure5([]);
+                  return pure11([]);
                 }
                 ;
                 if (phaseSpec.transition instanceof Just) {
                   var duration2 = unwrap2(phaseSpec.transition.value0.duration);
-                  var baseDelay = fromMaybe(0)(map15(unwrap2)(phaseSpec.transition.value0.delay));
+                  var baseDelay = fromMaybe(0)(map112(unwrap2)(phaseSpec.transition.value0.delay));
                   var staggerDelay = fromMaybe(0)(phaseSpec.transition.value0.staggerDelay);
                   var delay = baseDelay + staggerDelay * toNumber(idx);
                   var easing = toTickEasing(phaseSpec.transition.value0.easing);
-                  return map22(catMaybes)(traverse2(mkUpdateTransition(el)(duration2)(delay)(easing))(templateAttrs));
+                  return map210(catMaybes)(traverse4(mkUpdateTransition(el)(duration2)(delay)(easing))(templateAttrs));
                 }
                 ;
-                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 452, column 5 - line 460, column 97): " + [phaseSpec.transition.constructor.name]);
+                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 490, column 5 - line 498, column 97): " + [phaseSpec.transition.constructor.name]);
               };
             };
           };
@@ -10147,19 +14292,19 @@
           return function(phaseSpec) {
             return function(idx) {
               if (phaseSpec.transition instanceof Nothing) {
-                return pure5([]);
+                return pure11([]);
               }
               ;
               if (phaseSpec.transition instanceof Just) {
                 var duration2 = unwrap2(phaseSpec.transition.value0.duration);
-                var baseDelay = fromMaybe(0)(map15(unwrap2)(phaseSpec.transition.value0.delay));
+                var baseDelay = fromMaybe(0)(map112(unwrap2)(phaseSpec.transition.value0.delay));
                 var staggerDelay = fromMaybe(0)(phaseSpec.transition.value0.staggerDelay);
                 var delay = baseDelay + staggerDelay * toNumber(idx);
                 var easing = toTickEasing(phaseSpec.transition.value0.easing);
-                return map22(catMaybes)(traverse2(mkExitTransition(el)(duration2)(delay)(easing))(phaseSpec.attrs));
+                return map210(catMaybes)(traverse4(mkExitTransition(el)(duration2)(delay)(easing))(phaseSpec.attrs));
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 485, column 5 - line 493, column 97): " + [phaseSpec.transition.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 523, column 5 - line 531, column 97): " + [phaseSpec.transition.constructor.name]);
             };
           };
         };
@@ -10168,19 +14313,19 @@
             return function(phaseSpec) {
               return function(idx) {
                 if (phaseSpec.transition instanceof Nothing) {
-                  return pure5([]);
+                  return pure11([]);
                 }
                 ;
                 if (phaseSpec.transition instanceof Just) {
                   var duration2 = unwrap2(phaseSpec.transition.value0.duration);
-                  var baseDelay = fromMaybe(0)(map15(unwrap2)(phaseSpec.transition.value0.delay));
+                  var baseDelay = fromMaybe(0)(map112(unwrap2)(phaseSpec.transition.value0.delay));
                   var staggerDelay = fromMaybe(0)(phaseSpec.transition.value0.staggerDelay);
                   var delay = baseDelay + staggerDelay * toNumber(idx);
                   var easing = toTickEasing(phaseSpec.transition.value0.easing);
-                  return map22(catMaybes)(traverse2(mkEnterTransition(duration2)(delay)(easing)(templateAttrs))(phaseSpec.attrs));
+                  return map210(catMaybes)(traverse4(mkEnterTransition(duration2)(delay)(easing)(templateAttrs))(phaseSpec.attrs));
                 }
                 ;
-                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 418, column 5 - line 426, column 109): " + [phaseSpec.transition.constructor.name]);
+                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 456, column 5 - line 464, column 109): " + [phaseSpec.transition.constructor.name]);
               };
             };
           };
@@ -10189,9 +14334,9 @@
           return function(b2) {
             return {
               selections: union2(a3.selections)(b2.selections),
-              entering: append4(a3.entering)(b2.entering),
-              updating: append4(a3.updating)(b2.updating),
-              exiting: append4(a3.exiting)(b2.exiting)
+              entering: append5(a3.entering)(b2.entering),
+              updating: append5(a3.updating)(b2.updating),
+              exiting: append5(a3.exiting)(b2.exiting)
             };
           };
         };
@@ -10200,37 +14345,37 @@
             if (v2 instanceof StaticAttr) {
               var v1 = fromString(v2.value1);
               if (v1 instanceof Just) {
-                return pure5(unit);
+                return pure11(unit);
               }
               ;
               if (v1 instanceof Nothing) {
                 return setAttribute(el)(v2.value0)(v2.value1);
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 350, column 7 - line 352, column 46): " + [v1.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 379, column 7 - line 381, column 46): " + [v1.constructor.name]);
             }
             ;
             if (v2 instanceof ThunkedAttr) {
               var value12 = v2.value1(unit);
               var v1 = fromString(value12);
               if (v1 instanceof Just) {
-                return pure5(unit);
+                return pure11(unit);
               }
               ;
               if (v1 instanceof Nothing) {
                 return setAttribute(el)(v2.value0)(value12);
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 355, column 10 - line 357, column 46): " + [v1.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 384, column 10 - line 386, column 46): " + [v1.constructor.name]);
             }
             ;
-            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 348, column 26 - line 357, column 46): " + [v2.constructor.name]);
+            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 377, column 26 - line 386, column 46): " + [v2.constructor.name]);
           };
         };
         var applyNonNumericAttrs = function(el) {
           return function(attrs) {
             return function __do5() {
-              traverse2(applyIfNonNumeric(el))(attrs)();
+              traverse4(applyIfNonNumeric(el))(attrs)();
               return unit;
             };
           };
@@ -10254,19 +14399,19 @@
             }
             ;
             if (v2 instanceof ThunkedDrag && v2.value0 instanceof SimpleDrag) {
-              return attachSimpleDrag(el);
+              return attachOnce(el)("drag")(attachSimpleDrag(el));
             }
             ;
             if (v2 instanceof ThunkedDrag && v2.value0 instanceof SimulationDrag) {
-              return attachSimulationDragById(el)(v2.value0.value0);
+              return attachOnce(el)("drag")(attachSimulationDragById(el)(v2.value0.value0));
             }
             ;
             if (v2 instanceof ThunkedDrag && v2.value0 instanceof SimulationDragNested) {
-              return attachSimulationDragNestedById(el)(v2.value0.value0);
+              return attachOnce(el)("drag")(attachSimulationDragNestedById(el)(v2.value0.value0));
             }
             ;
             if (v2 instanceof ThunkedZoom) {
-              return attachZoom(el)(v2.value0.scaleExtent.value0)(v2.value0.scaleExtent.value1)(v2.value0.targetSelector);
+              return attachOnce(el)("zoom")(attachZoom(el)(v2.value0.scaleExtent.value0)(v2.value0.scaleExtent.value1)(v2.value0.targetSelector));
             }
             ;
             if (v2 instanceof ThunkedCoordinatedHighlight) {
@@ -10291,21 +14436,26 @@
             }
             ;
             if (v2 instanceof ThunkedBrush) {
-              return $$void6(attachCoordinatedBrushThunked(el)(v2.value0.extent)(toNullable(v2.value0.group)));
+              return attachOnce(el)("brush")($$void6(attachCoordinatedBrushThunked(el)(v2.value0.extent)(toNullable(v2.value0.group))));
             }
             ;
             if (v2 instanceof ThunkedPointerDown) {
               return attachPointerDownThunked(el)(v2.value0);
             }
             ;
-            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 369, column 22 - line 405, column 70): " + [v2.constructor.name]);
+            if (v2 instanceof ThunkedInput) {
+              return attachInputThunked(el)(v2.value0);
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 404, column 22 - line 443, column 58): " + [v2.constructor.name]);
           };
         };
         var applyBehaviors = function(el) {
           return function(behaviors) {
             return function __do5() {
-              traverse2(applyBehavior(el))(behaviors)();
-              return unit;
+              beginBehaviors(el)();
+              traverse_2(applyBehavior(el))(behaviors)();
+              return endBehaviors(el)();
             };
           };
         };
@@ -10319,13 +14469,13 @@
               return setAttribute(el)(v2.value0)(v2.value1(unit));
             }
             ;
-            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 338, column 18 - line 340, column 64): " + [v2.constructor.name]);
+            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 367, column 18 - line 369, column 64): " + [v2.constructor.name]);
           };
         };
         var applyAttrs = function(el) {
           return function(attrs) {
             return function __do5() {
-              traverse2(applyAttr(el))(attrs)();
+              traverse4(applyAttr(el))(attrs)();
               return unit;
             };
           };
@@ -10362,20 +14512,20 @@
                                 return Nothing.value;
                               }
                               ;
-                              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 285, column 22 - line 290, column 36): " + [gupSpec.value0.enter.constructor.name]);
+                              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 314, column 22 - line 319, column 36): " + [gupSpec.value0.enter.constructor.name]);
                             }
                             ;
                             if (gupSpec instanceof Nothing) {
                               return Nothing.value;
                             }
                             ;
-                            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 284, column 24 - line 291, column 34): " + [gupSpec.constructor.name]);
+                            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 313, column 24 - line 320, column 34): " + [gupSpec.constructor.name]);
                           })();
                           applyBehaviors(el)(itemTree.value0.behaviors)();
-                          var childMaps = traverse2(goWithDatum(el))(itemTree.value0.children)();
+                          var childMaps = traverse4(goWithDatum(el))(itemTree.value0.children)();
                           return {
                             element: el,
-                            childSelections: foldl2(union2)(empty2)(map14(function(v2) {
+                            childSelections: foldl2(union2)(empty2)(map32(function(v2) {
                               return v2.selections;
                             })(childMaps)),
                             transitions
@@ -10400,8 +14550,8 @@
         };
         var goWithDatum = function(p2) {
           return function(v2) {
-            if (v2 instanceof Empty) {
-              return pure5(emptyResult);
+            if (v2 instanceof Empty2) {
+              return pure11(emptyResult);
             }
             ;
             if (v2 instanceof Elem) {
@@ -10410,7 +14560,7 @@
                 appendTo(p2)(el)();
                 applyAttrs(el)(v2.value0.attrs)();
                 applyBehaviors(el)(v2.value0.behaviors)();
-                var childResults = traverse2(goWithDatum(el))(v2.value0.children)();
+                var childResults = traverse4(goWithDatum(el))(v2.value0.children)();
                 return foldl2(combineResults)(emptyResult)(childResults);
               };
             }
@@ -10420,15 +14570,15 @@
                 var items2 = runEnumeration(foldSpec.enumerate);
                 return function __do5() {
                   var results = traverseWithIndex2(renderEnteringItem(p2)(foldSpec.name)(foldSpec.keyFn)(foldSpec.template)(foldSpec.gup))(items2)();
-                  var elements = map14(function(v1) {
+                  var elements = map32(function(v1) {
                     return v1.element;
                   })(results);
-                  var childMaps = foldl2(union2)(empty2)(map14(function(v1) {
+                  var childMaps = foldl2(union2)(empty2)(map32(function(v1) {
                     return v1.childSelections;
                   })(results));
                   return {
-                    selections: insert5(foldSpec.name)(elements)(childMaps),
-                    entering: [catMaybes(map14(function(v1) {
+                    selections: insert4(foldSpec.name)(elements)(childMaps),
+                    entering: [catMaybes(map32(function(v1) {
                       return v1.transitions;
                     })(results))],
                     updating: [],
@@ -10438,7 +14588,7 @@
               });
             }
             ;
-            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 307, column 19 - line 326, column 10): " + [v2.constructor.name]);
+            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 336, column 19 - line 355, column 10): " + [v2.constructor.name]);
           };
         };
         var processChildren = function(p2) {
@@ -10466,8 +14616,8 @@
         var goWithDomIdx = function(p2) {
           return function(domIdx) {
             return function(v2) {
-              if (v2 instanceof Empty) {
-                return pure5({
+              if (v2 instanceof Empty2) {
+                return pure11({
                   result: emptyResult,
                   elementsCreated: 0
                 });
@@ -10492,7 +14642,7 @@
                       return el2;
                     }
                     ;
-                    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 140, column 13 - line 150, column 18): " + [v1.constructor.name]);
+                    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 137, column 13 - line 147, column 18): " + [v1.constructor.name]);
                   })();
                   var childResult = processChildren(el)(v2.value0.children)();
                   return {
@@ -10505,11 +14655,11 @@
               if (v2 instanceof MkFold) {
                 return runSomeFold(v2.value0)(function(spec) {
                   var items2 = runEnumeration(spec.enumerate);
-                  var newKeys = fromFoldable6(map14(spec.keyFn)(items2));
+                  var newKeys = fromFoldable8(map32(spec.keyFn)(items2));
                   var tagName2 = elementTypeToTagName(spec.elementType);
                   return function __do5() {
                     var existingEls = getChildElementsForFold(p2)(tagName2)(spec.name)();
-                    var existingKeysAndEls = traverse2(function(el) {
+                    var existingKeysAndEls = traverse4(function(el) {
                       return function __do6() {
                         var k = getKey(el)();
                         return {
@@ -10518,7 +14668,8 @@
                         };
                       };
                     })(existingEls)();
-                    var existingKeys = fromFoldable6(map14(function(v1) {
+                    var anchor = foldAnchor(p2)(existingEls)(domIdx)();
+                    var existingKeys = fromFoldable8(map32(function(v1) {
                       return v1.key;
                     })(existingKeysAndEls));
                     var enterKeys = difference5(newKeys)(existingKeys);
@@ -10526,8 +14677,8 @@
                     var exitKeys = difference5(existingKeys)(newKeys);
                     var exitTransitions = traverseWithIndex2(function(exitIdx) {
                       return function(v1) {
-                        var $204 = member4(v1.key)(exitKeys);
-                        if ($204) {
+                        var $205 = member4(v1.key)(exitKeys);
+                        if ($205) {
                           if (spec.gup instanceof Just) {
                             if (spec.gup.value0.exit instanceof Just) {
                               return function __do6() {
@@ -10547,7 +14698,7 @@
                               };
                             }
                             ;
-                            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 175, column 29 - line 184, column 29): " + [spec.gup.value0.exit.constructor.name]);
+                            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 177, column 29 - line 186, column 29): " + [spec.gup.value0.exit.constructor.name]);
                           }
                           ;
                           if (spec.gup instanceof Nothing) {
@@ -10557,16 +14708,16 @@
                             };
                           }
                           ;
-                          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 174, column 16 - line 187, column 27): " + [spec.gup.constructor.name]);
+                          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 176, column 16 - line 189, column 27): " + [spec.gup.constructor.name]);
                         }
                         ;
-                        return pure5(Nothing.value);
+                        return pure11(Nothing.value);
                       };
                     })(existingKeysAndEls)();
                     var updateTransitions = traverseWithIndex2(function(updateIdx) {
                       return function(v1) {
-                        var $212 = member4(v1.key)(updateKeys);
-                        if ($212) {
+                        var $213 = member4(v1.key)(updateKeys);
+                        if ($213) {
                           var v22 = find2(function(d2) {
                             return spec.keyFn(d2) === v1.key;
                           })(items2);
@@ -10588,12 +14739,19 @@
                                 ;
                                 return [];
                               })();
+                              (function() {
+                                if (templateTree instanceof Elem) {
+                                  return applyBehaviors(v1.element)(templateTree.value0.behaviors)();
+                                }
+                                ;
+                                return unit;
+                              })();
                               if (spec.gup instanceof Just) {
                                 if (spec.gup.value0.update instanceof Just) {
                                   applyNonNumericAttrs(v1.element)(templateAttrs)();
                                   var transitions = createUpdateTransitions(v1.element)(templateAttrs)(spec.gup.value0.update.value0)(updateIdx)();
                                   clearChildren(v1.element)();
-                                  traverse2(goWithDatum(v1.element))(templateChildren)();
+                                  traverse4(goWithDatum(v1.element))(templateChildren)();
                                   return new Just({
                                     element: v1.element,
                                     attrs: transitions
@@ -10603,55 +14761,77 @@
                                 if (spec.gup.value0.update instanceof Nothing) {
                                   applyAttrs(v1.element)(templateAttrs)();
                                   clearChildren(v1.element)();
-                                  traverse2(goWithDatum(v1.element))(templateChildren)();
+                                  traverse4(goWithDatum(v1.element))(templateChildren)();
                                   return Nothing.value;
                                 }
                                 ;
-                                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 207, column 33 - line 220, column 33): " + [spec.gup.value0.update.constructor.name]);
+                                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 214, column 33 - line 227, column 33): " + [spec.gup.value0.update.constructor.name]);
                               }
                               ;
                               if (spec.gup instanceof Nothing) {
                                 applyAttrs(v1.element)(templateAttrs)();
                                 clearChildren(v1.element)();
-                                traverse2(goWithDatum(v1.element))(templateChildren)();
+                                traverse4(goWithDatum(v1.element))(templateChildren)();
                                 return Nothing.value;
                               }
                               ;
-                              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 206, column 15 - line 226, column 31): " + [spec.gup.constructor.name]);
+                              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 213, column 15 - line 233, column 31): " + [spec.gup.constructor.name]);
                             };
                           }
                           ;
                           if (v22 instanceof Nothing) {
-                            return pure5(Nothing.value);
+                            return pure11(Nothing.value);
                           }
                           ;
-                          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 194, column 16 - line 227, column 36): " + [v22.constructor.name]);
+                          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 196, column 16 - line 234, column 36): " + [v22.constructor.name]);
                         }
                         ;
-                        return pure5(Nothing.value);
+                        return pure11(Nothing.value);
                       };
                     })(existingKeysAndEls)();
                     var enterItems = filter(function(d2) {
                       return member4(spec.keyFn(d2))(enterKeys);
                     })(items2);
                     var enterResults = traverseWithIndex2(renderEnteringItem(p2)(spec.name)(spec.keyFn)(spec.template)(spec.gup))(enterItems)();
-                    var updateElements = map14(function(v1) {
-                      return v1.element;
-                    })(filter(function(v1) {
+                    var updateKeysAndEls = filter(function(v1) {
                       return member4(v1.key)(updateKeys);
-                    })(existingKeysAndEls));
-                    var enterElements = map14(function(v1) {
+                    })(existingKeysAndEls);
+                    var updateElements = map32(function(v1) {
+                      return v1.element;
+                    })(updateKeysAndEls);
+                    var enterElements = map32(function(v1) {
                       return v1.element;
                     })(enterResults);
-                    var childMaps = foldl2(union2)(empty2)(map14(function(v1) {
+                    var childMaps = foldl2(union2)(empty2)(map32(function(v1) {
                       return v1.childSelections;
                     })(enterResults));
-                    var selections = insert5(spec.name)(append4(updateElements)(enterElements))(childMaps);
-                    var totalElements = length(updateElements) + length(enterElements) | 0;
+                    var elementByKey = fromFoldable12(append5(map32(function(v1) {
+                      return new Tuple(v1.key, v1.element);
+                    })(updateKeysAndEls))(zipWith(function(d2) {
+                      return function(r3) {
+                        return new Tuple(spec.keyFn(d2), r3.element);
+                      };
+                    })(enterItems)(enterResults)));
+                    var inDataOrder = mapMaybe(function(d2) {
+                      return lookup3(spec.keyFn(d2))(elementByKey);
+                    })(items2);
+                    placeInDataOrder(p2)(inDataOrder)(anchor)();
+                    var lingering = length(catMaybes(exitTransitions));
+                    var liveElements = length(updateElements) + length(enterElements) | 0;
+                    var totalElements = liveElements + lingering | 0;
+                    var selected2 = (function() {
+                      var $233 = length(inDataOrder) === liveElements;
+                      if ($233) {
+                        return inDataOrder;
+                      }
+                      ;
+                      return append5(updateElements)(enterElements);
+                    })();
+                    var selections = insert4(spec.name)(selected2)(childMaps);
                     return {
                       result: {
                         selections,
-                        entering: [catMaybes(map14(function(v1) {
+                        entering: [catMaybes(map32(function(v1) {
                           return v1.transitions;
                         })(enterResults))],
                         updating: [catMaybes(updateTransitions)],
@@ -10663,7 +14843,7 @@
                 });
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 135, column 27 - line 251, column 10): " + [v2.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 132, column 27 - line 280, column 10): " + [v2.constructor.name]);
             };
           };
         };
@@ -10695,8 +14875,8 @@
     return function(tree) {
       return function __do5() {
         var doc = (function __do6() {
-          var $235 = bind3(windowImpl)(document2)();
-          return toDocument($235);
+          var $242 = bind3(windowImpl)(document2)();
+          return toDocument($242);
         })();
         var container = selectElement(selector)(doc)();
         return rerenderTree(doc)(container)(tree)();
@@ -10708,19 +14888,19 @@
   var buildIntSet = (arr) => new Set(arr);
   var intSetMember = (key) => (set) => set.has(key);
   var buildIntMap_ = (pairs) => {
-    const map31 = /* @__PURE__ */ new Map();
+    const map47 = /* @__PURE__ */ new Map();
     for (let i2 = 0; i2 < pairs.length; i2++) {
-      map31.set(pairs[i2].key, pairs[i2].value);
+      map47.set(pairs[i2].key, pairs[i2].value);
     }
-    return map31;
+    return map47;
   };
-  var intMapLookup_ = (key) => (map31) => map31.get(key);
-  var isNull = (x4) => x4 == null;
+  var intMapLookup_ = (key) => (map47) => map47.get(key);
+  var isNull = (x3) => x3 == null;
 
   // output/Hylograph.Kernel.D3.Links/index.js
   var bind4 = /* @__PURE__ */ bind(bindMaybe);
-  var pure6 = /* @__PURE__ */ pure(applicativeMaybe);
-  var map16 = /* @__PURE__ */ map(functorArray);
+  var pure12 = /* @__PURE__ */ pure(applicativeMaybe);
+  var map33 = /* @__PURE__ */ map(functorArray);
   var intMapLookup = function(key) {
     return function(m2) {
       var result = intMapLookup_(key)(m2);
@@ -10735,7 +14915,7 @@
   var filterLinksToSubset = function(getIndex) {
     return function(nodes) {
       return function(links) {
-        var nodeIndices = buildIntSet(map16(getIndex)(nodes));
+        var nodeIndices = buildIntSet(map33(getIndex)(nodes));
         return filter(function(l2) {
           return intSetMember(l2.source)(nodeIndices) && intSetMember(l2.target)(nodeIndices);
         })(links);
@@ -10744,7 +14924,7 @@
   };
   var buildIntMap = function(getIndex) {
     return function(nodes) {
-      return buildIntMap_(map16(function(n) {
+      return buildIntMap_(map33(function(n) {
         return {
           key: getIndex(n),
           value: n
@@ -10760,7 +14940,7 @@
             return function(link4) {
               return bind4(intMapLookup(link4.source)(nodeMap2))(function(srcNode) {
                 return bind4(intMapLookup(link4.target)(nodeMap2))(function(tgtNode) {
-                  return pure6({
+                  return pure12({
                     src: srcNode,
                     tgt: tgtNode,
                     link: link4
@@ -10791,11 +14971,11 @@
             for (let i2 = 0; i2 < nodes.length; i2++) {
               const node = nodes[i2];
               const key = String(node.id);
-              const start4 = startPositions[key];
+              const start3 = startPositions[key];
               const target6 = targetPositions[key];
-              if (start4 && target6) {
-                node.x = start4.x + (target6.x - start4.x) * progress2;
-                node.y = start4.y + (target6.y - start4.y) * progress2;
+              if (start3 && target6) {
+                node.x = start3.x + (target6.x - start3.x) * progress2;
+                node.y = start3.y + (target6.y - start3.y) * progress2;
               }
             }
           };
@@ -10830,19 +15010,15 @@
     alphaMin: 1e-3,
     alphaDecay: 0.01,
     alphaTarget: 0,
-    velocityDecay: 0.4
+    velocityRetention: 0.4
   };
 
   // output/Hylograph.ForceEngine.Simulation/index.js
-  var for_4 = /* @__PURE__ */ for_(applicativeEffect);
-  var for_1 = /* @__PURE__ */ for_4(foldableArray);
-  var pure7 = /* @__PURE__ */ pure(applicativeEffect);
-  var when3 = /* @__PURE__ */ when(applicativeEffect);
-  var fromFoldable7 = /* @__PURE__ */ fromFoldable(foldableList);
-  var fromFoldable12 = /* @__PURE__ */ fromFoldable(foldableSet);
-  var show5 = /* @__PURE__ */ show(showInt);
-  var show1 = /* @__PURE__ */ show(/* @__PURE__ */ showArray(showString));
-  var unless2 = /* @__PURE__ */ unless(applicativeEffect);
+  var pure13 = /* @__PURE__ */ pure(applicativeEffect);
+  var for_3 = /* @__PURE__ */ for_(applicativeEffect);
+  var for_1 = /* @__PURE__ */ for_3(foldableArray);
+  var when11 = /* @__PURE__ */ when(applicativeEffect);
+  var fromFoldable9 = /* @__PURE__ */ fromFoldable(foldableList);
   var unpinNodesInPlace = function(sim) {
     return unpinNodesInPlace_(sim.nodes);
   };
@@ -10851,7 +15027,7 @@
   };
   var invokeTickCallback = function(sim) {
     if (sim.callbacks instanceof Nothing) {
-      return pure7(unit);
+      return pure13(unit);
     }
     ;
     if (sim.callbacks instanceof Just) {
@@ -10861,35 +15037,7 @@
       };
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.ForceEngine.Simulation (line 518, column 26 - line 522, column 13): " + [sim.callbacks.constructor.name]);
-  };
-  var invokeStopCallback = function(sim) {
-    if (sim.callbacks instanceof Nothing) {
-      return pure7(unit);
-    }
-    ;
-    if (sim.callbacks instanceof Just) {
-      return function __do5() {
-        var callback = read(sim.callbacks.value0.onStop)();
-        return callback();
-      };
-    }
-    ;
-    throw new Error("Failed pattern match at Hylograph.ForceEngine.Simulation (line 508, column 26 - line 512, column 13): " + [sim.callbacks.constructor.name]);
-  };
-  var invokeStartCallback = function(sim) {
-    if (sim.callbacks instanceof Nothing) {
-      return pure7(unit);
-    }
-    ;
-    if (sim.callbacks instanceof Just) {
-      return function __do5() {
-        var callback = read(sim.callbacks.value0.onStart)();
-        return callback();
-      };
-    }
-    ;
-    throw new Error("Failed pattern match at Hylograph.ForceEngine.Simulation (line 498, column 27 - line 502, column 13): " + [sim.callbacks.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.ForceEngine.Simulation (line 520, column 26 - line 524, column 13): " + [sim.callbacks.constructor.name]);
   };
   var interpolatePositionsInPlace = function(startPos) {
     return function(targetPos) {
@@ -10908,7 +15056,7 @@
       alphaMin: defaultSimParams.alphaMin,
       alphaDecay: defaultSimParams.alphaDecay,
       alphaTarget: defaultSimParams.alphaTarget,
-      velocityDecay: defaultSimParams.velocityDecay
+      velocityRetention: defaultSimParams.velocityRetention
     };
   })();
   var create3 = function(config) {
@@ -10919,15 +15067,19 @@
       var alphaRef = $$new(1)();
       var prevAlphaRef = $$new(1)();
       var runningRef = $$new(false)();
-      var cancelRef = $$new(pure7(unit))();
-      var tickRef = $$new(pure7(unit))();
+      var cancelRef = $$new(pure13(unit))();
+      var tickRef = $$new(pure13(unit))();
+      var random2 = randomSource();
+      var settings = $$new(config)();
       return {
         nodes: nodesRef,
         links: linksRef,
         forces: forcesRef,
+        random: random2,
         alpha: alphaRef,
         prevAlpha: prevAlphaRef,
         config,
+        settings,
         running: runningRef,
         cancelAnimation: cancelRef,
         tickCallback: tickRef,
@@ -10947,19 +15099,19 @@
         };
         var alphaThresholds = [0.5, 0.1, 0.01];
         if (sim.callbacks instanceof Nothing) {
-          return pure7(unit);
+          return pure13(unit);
         }
         ;
         if (sim.callbacks instanceof Just) {
           return for_1(alphaThresholds)(function(threshold) {
-            return when3(crossedThreshold(prevAlpha)(newAlpha)(threshold))(function __do5() {
+            return when11(crossedThreshold(prevAlpha)(newAlpha)(threshold))(function __do5() {
               var callback = read(sim.callbacks.value0.onAlphaThreshold)();
               return callback(newAlpha)();
             });
           });
         }
         ;
-        throw new Error("Failed pattern match at Hylograph.ForceEngine.Simulation (line 531, column 47 - line 538, column 26): " + [sim.callbacks.constructor.name]);
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Simulation (line 533, column 47 - line 540, column 26): " + [sim.callbacks.constructor.name]);
       };
     };
   };
@@ -10969,12 +15121,12 @@
       var forces = read(sim.forces)();
       var alpha = read(sim.alpha)();
       var prevAlpha = read(sim.prevAlpha)();
-      var forceHandles = fromFoldable7(values(forces));
-      var forceNames = fromFoldable12(keys2(forces));
-      when3(alpha > 0.99)(log2("[tick] Forces in sim: " + (show5(length(forceHandles)) + (" - " + show1(forceNames)))))();
+      var settings = read(sim.settings)();
+      var forceHandles = fromFoldable9(values(forces));
       applyForces(forceHandles)(alpha)();
-      integratePositions(nodes)(sim.config.velocityDecay)();
-      var newAlpha = decayAlpha(alpha)(sim.config.alphaMin)(sim.config.alphaDecay)(sim.config.alphaTarget);
+      integratePositions(nodes)(settings.velocityRetention)();
+      constrain5(forceHandles)(nodes)();
+      var newAlpha = decayAlpha(alpha)(settings.alphaMin)(settings.alphaDecay)(settings.alphaTarget);
       write(newAlpha)(sim.alpha)();
       write(alpha)(sim.prevAlpha)();
       var legacyCallback = read(sim.tickCallback)();
@@ -10984,48 +15136,15 @@
       return newAlpha;
     };
   };
-  var start2 = function(sim) {
-    return function __do5() {
-      var alreadyRunning = read(sim.running)();
-      return unless2(alreadyRunning)(function __do6() {
-        write(true)(sim.running)();
-        invokeStartCallback(sim)();
-        var cancel = startAnimation(function(v2) {
-          return function __do7() {
-            var running = read(sim.running)();
-            if (running) {
-              var newAlpha = tick(sim)();
-              var shouldContinue = newAlpha > 0;
-              unless2(shouldContinue)(function __do8() {
-                write(false)(sim.running)();
-                return invokeStopCallback(sim)();
-              })();
-              return shouldContinue;
-            }
-            ;
-            return false;
-          };
-        })();
-        return write(cancel)(sim.cancelAnimation)();
-      })();
-    };
-  };
-  var reheat = function(sim) {
-    return function __do5() {
-      write(1)(sim.alpha)();
-      var running = read(sim.running)();
-      return unless2(running)(start2(sim))();
-    };
-  };
 
   // output/Hylograph.ForceEngine.WASM/foreign.js
   var WasmSimulation = null;
-  function createSimulation_(nodeCount) {
+  function createSimulation_(nodeCount2) {
     return function() {
       if (!WasmSimulation) {
         throw new Error("WASM not initialized. Call initWasm first.");
       }
-      return new WasmSimulation(nodeCount);
+      return new WasmSimulation(nodeCount2);
     };
   }
   function setNodeCount_(sim) {
@@ -11042,47 +15161,6 @@
       };
     };
   }
-  function configureManyBody_(sim) {
-    return function(config) {
-      return function() {
-        sim.configure_many_body(
-          config.strength,
-          config.theta,
-          config.distanceMin,
-          config.distanceMax
-        );
-      };
-    };
-  }
-  function configureLinks_(sim) {
-    return function(config) {
-      return function() {
-        sim.configure_links(
-          config.distance,
-          config.strength,
-          config.iterations
-        );
-      };
-    };
-  }
-  function configureCenter_(sim) {
-    return function(config) {
-      return function() {
-        sim.configure_center(config.x, config.y, config.strength);
-      };
-    };
-  }
-  function enableForces_(sim) {
-    return function(manyBody2) {
-      return function(links) {
-        return function(center2) {
-          return function() {
-            sim.enable_force(manyBody2, links, center2);
-          };
-        };
-      };
-    };
-  }
   function setAlpha_(sim) {
     return function(alpha) {
       return function() {
@@ -11091,16 +15169,16 @@
     };
   }
   function setAlphaDecay_(sim) {
-    return function(decay) {
+    return function(decay2) {
       return function() {
-        sim.set_alpha_decay(decay);
+        sim.set_alpha_decay(decay2);
       };
     };
   }
-  function setVelocityDecay_(sim) {
-    return function(decay) {
+  function setVelocityRetention_(sim) {
+    return function(retention) {
       return function() {
-        sim.set_velocity_decay(decay);
+        sim.set_velocity_retention(retention);
       };
     };
   }
@@ -11114,240 +15192,866 @@
       return sim.tick();
     };
   }
-  function syncPositionsToWasm_(sim) {
-    return function(nodes) {
-      return function() {
-        for (let i2 = 0; i2 < nodes.length; i2++) {
-          const node = nodes[i2];
-          sim.set_position(i2, node.x, node.y);
-        }
-      };
-    };
+  function clearForces_(sim) {
+    sim.clear_forces();
   }
-  function syncPositionsFromWasm_(sim) {
-    return function(nodes) {
-      return function() {
-        const positions = sim.get_positions();
-        for (let i2 = 0; i2 < nodes.length; i2++) {
-          nodes[i2].x = positions[i2 * 2];
-          nodes[i2].y = positions[i2 * 2 + 1];
-          nodes[i2].vx = 0;
-          nodes[i2].vy = 0;
-        }
-        return nodes;
+  function addManyBody_(sim, strength, theta, distanceMin, distanceMax) {
+    return sim.add_many_body(strength, theta, distanceMin, distanceMax);
+  }
+  function addLinks_(sim, distance, strength, iterations) {
+    return sim.add_links(distance, strength, iterations);
+  }
+  function addCenter_(sim, x3, y3, strength) {
+    return sim.add_center(x3, y3, strength);
+  }
+  function addForceX_(sim, target6, strength) {
+    return sim.add_force_x(target6, strength);
+  }
+  function addForceY_(sim, target6, strength) {
+    return sim.add_force_y(target6, strength);
+  }
+  function addCollide_(sim, radius, strength, iterations) {
+    return sim.add_collide(radius, strength, iterations);
+  }
+  function addRadial_(sim, radius, x3, y3, strength) {
+    return sim.add_radial(radius, x3, y3, strength);
+  }
+  function setForceStrengths_(sim, force2, strengths) {
+    return sim.set_force_strengths(force2, Float32Array.from(strengths));
+  }
+  function setForceRadii_(sim, force2, radii) {
+    return sim.set_force_radii(force2, Float32Array.from(radii));
+  }
+  function setForceTargets_(sim, force2, targets) {
+    return sim.set_force_targets(force2, Float32Array.from(targets));
+  }
+  function setForceDistances_(sim, force2, distances) {
+    return sim.set_force_distances(force2, Float32Array.from(distances));
+  }
+  function setForceMask_(sim, force2, mask) {
+    return sim.set_force_mask(force2, Uint8Array.from(mask, (keep) => keep ? 1 : 0));
+  }
+  function enableForcesAll_(sim, manyBody3, links, center3, forceX, forceY, collide3) {
+    sim.enable_forces_all(manyBody3, links, center3, forceX, forceY, collide3);
+  }
+  function setAlphaMin_(sim, alphaMin) {
+    sim.set_alpha_min(alphaMin);
+  }
+  function setAlphaTarget_(sim, alphaTarget) {
+    sim.set_alpha_target(alphaTarget);
+  }
+  function syncNodesToWasm_(sim, nodes) {
+    const n = nodes.length;
+    const positions = new Float32Array(n * 2);
+    const velocities = new Float32Array(n * 2);
+    const fixed = new Float32Array(n * 2);
+    for (let i2 = 0; i2 < n; i2++) {
+      const node = nodes[i2];
+      positions[i2 * 2] = node.x;
+      positions[i2 * 2 + 1] = node.y;
+      velocities[i2 * 2] = node.vx;
+      velocities[i2 * 2 + 1] = node.vy;
+      fixed[i2 * 2] = node.fx == null ? NaN : node.fx;
+      fixed[i2 * 2 + 1] = node.fy == null ? NaN : node.fy;
+    }
+    sim.set_positions(positions);
+    sim.set_velocities(velocities);
+    sim.set_fixed(fixed);
+  }
+  function syncPinsToWasm_(sim, nodes) {
+    const n = nodes.length;
+    const fixed = new Float32Array(n * 2);
+    for (let i2 = 0; i2 < n; i2++) {
+      const node = nodes[i2];
+      fixed[i2 * 2] = node.fx == null ? NaN : node.fx;
+      fixed[i2 * 2 + 1] = node.fy == null ? NaN : node.fy;
+    }
+    sim.set_fixed(fixed);
+  }
+  function syncNodesFromWasm_(sim, nodes) {
+    const positions = sim.get_positions();
+    const velocities = sim.get_velocities();
+    const updated = new Array(nodes.length);
+    for (let i2 = 0; i2 < nodes.length; i2++) {
+      updated[i2] = {
+        ...nodes[i2],
+        x: positions[i2 * 2],
+        y: positions[i2 * 2 + 1],
+        vx: velocities[i2 * 2],
+        vy: velocities[i2 * 2 + 1]
       };
-    };
+    }
+    return updated;
+  }
+  var ids = (values2) => Uint32Array.from(values2, (v2) => v2 < 0 ? 4294967295 : v2);
+  function addTowards_(sim, strength) {
+    return sim.add_towards(strength);
+  }
+  function setForceTargetsXY_(sim, force2, targets) {
+    return sim.set_force_targets_xy(force2, Float32Array.from(targets));
+  }
+  function addRectCollide_(sim, halfWidth, halfHeight, strength, iterations) {
+    return sim.add_rect_collide(halfWidth, halfHeight, strength, iterations);
+  }
+  function setForceHalfWidths_(sim, force2, halfWidths) {
+    return sim.set_force_half_widths(force2, Float32Array.from(halfWidths));
+  }
+  function setForceHalfHeights_(sim, force2, halfHeights) {
+    return sim.set_force_half_heights(force2, Float32Array.from(halfHeights));
+  }
+  function addContainment_(sim, strength, hard) {
+    return sim.add_containment(strength, hard);
+  }
+  function containmentAddRect_(sim, force2, x0, y0, x13, y13) {
+    return sim.containment_add_rect(force2, x0, y0, x13, y13);
+  }
+  function containmentAddCircle_(sim, force2, x3, y3, radius) {
+    return sim.containment_add_circle(force2, x3, y3, radius);
+  }
+  function containmentAddPolygon_(sim, force2, vertices) {
+    return sim.containment_add_polygon(force2, Float32Array.from(vertices));
+  }
+  function setForceRegions_(sim, force2, regions2) {
+    return sim.set_force_regions(force2, ids(regions2));
+  }
+  function addCohesion_(sim, strength) {
+    return sim.add_cohesion(strength);
+  }
+  function setForceGroups_(sim, force2, groups) {
+    return sim.set_force_groups(force2, ids(groups));
+  }
+  function setManyBodyScope_(sim, force2, scope2) {
+    return sim.set_many_body_scope(force2, scope2);
+  }
+  function setRectCollidePairs_(sim, force2, pairs) {
+    return sim.set_rect_collide_pairs(force2, pairs);
+  }
+  function setRectCollideThrough_(sim, force2, through) {
+    return sim.set_rect_collide_through(force2, through);
+  }
+  function setDirectionalHard_(sim, force2, hard) {
+    return sim.set_directional_hard(force2, hard);
+  }
+  function addDirectional_(sim, gap, axisX, axisY, strength, iterations) {
+    return sim.add_directional(gap, axisX, axisY, strength, iterations);
+  }
+  function setForceGaps_(sim, force2, gaps) {
+    return sim.set_force_gaps(force2, Float32Array.from(gaps));
+  }
+  function setCollideAlphaScaled_(sim, force2, scaled) {
+    return sim.set_collide_alpha_scaled(force2, scaled);
+  }
+  function setCollideFilter_(sim, force2, mask) {
+    return sim.set_collide_filter(force2, Uint8Array.from(mask, (keep) => keep ? 1 : 0));
   }
 
   // output/Hylograph.ForceEngine.WASM/index.js
+  var map34 = /* @__PURE__ */ map(functorArray);
+  var AllPairs2 = /* @__PURE__ */ (function() {
+    function AllPairs3() {
+    }
+    ;
+    AllPairs3.value = new AllPairs3();
+    return AllPairs3;
+  })();
+  var WithinGroups4 = /* @__PURE__ */ (function() {
+    function WithinGroups5() {
+    }
+    ;
+    WithinGroups5.value = new WithinGroups5();
+    return WithinGroups5;
+  })();
+  var BetweenGroups4 = /* @__PURE__ */ (function() {
+    function BetweenGroups5() {
+    }
+    ;
+    BetweenGroups5.value = new BetweenGroups5();
+    return BetweenGroups5;
+  })();
   var tick2 = tick_;
-  var syncPositionsToWasm = syncPositionsToWasm_;
-  var syncPositionsFromWasm = syncPositionsFromWasm_;
-  var setVelocityDecay = setVelocityDecay_;
-  var setNodeCount = setNodeCount_;
-  var setLinksFromRecords = function(sim) {
-    return function(links) {
-      var flatLinks = concatMap(function(l2) {
-        return [l2.source, l2.target];
-      })(links);
-      return setLinks_(sim)(flatLinks);
+  var syncPinsToWasm = /* @__PURE__ */ runEffectFn2(syncPinsToWasm_);
+  var syncNodesToWasm = /* @__PURE__ */ runEffectFn2(syncNodesToWasm_);
+  var syncNodesFromWasm = /* @__PURE__ */ runEffectFn2(syncNodesFromWasm_);
+  var setVelocityRetention = setVelocityRetention_;
+  var setRectCollideThrough = /* @__PURE__ */ runEffectFn3(setRectCollideThrough_);
+  var setRectCollidePairs = function(sim) {
+    return function(force2) {
+      return function(scope2) {
+        return function() {
+          return setRectCollidePairs_(sim, force2, (function() {
+            if (scope2 instanceof AllPairs2) {
+              return 0;
+            }
+            ;
+            if (scope2 instanceof WithinGroups4) {
+              return 1;
+            }
+            ;
+            if (scope2 instanceof BetweenGroups4) {
+              return 2;
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.ForceEngine.WASM (line 590, column 83 - line 593, column 21): " + [scope2.constructor.name]);
+          })());
+        };
+      };
     };
   };
+  var setNodeCount = setNodeCount_;
+  var setManyBodyScope = function(sim) {
+    return function(force2) {
+      return function(scope2) {
+        return function() {
+          return setManyBodyScope_(sim, force2, (function() {
+            if (scope2 instanceof AllPairs2) {
+              return 0;
+            }
+            ;
+            if (scope2 instanceof WithinGroups4) {
+              return 1;
+            }
+            ;
+            if (scope2 instanceof BetweenGroups4) {
+              return 2;
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.ForceEngine.WASM (line 581, column 77 - line 584, column 21): " + [scope2.constructor.name]);
+          })());
+        };
+      };
+    };
+  };
+  var setLinks = setLinks_;
+  var setForceTargetsXY = /* @__PURE__ */ runEffectFn3(setForceTargetsXY_);
+  var setForceTargets = /* @__PURE__ */ runEffectFn3(setForceTargets_);
+  var setForceStrengths = /* @__PURE__ */ runEffectFn3(setForceStrengths_);
+  var setForceRadii = /* @__PURE__ */ runEffectFn3(setForceRadii_);
+  var setForceMask = /* @__PURE__ */ runEffectFn3(setForceMask_);
+  var setForceHalfWidths = /* @__PURE__ */ runEffectFn3(setForceHalfWidths_);
+  var setForceHalfHeights = /* @__PURE__ */ runEffectFn3(setForceHalfHeights_);
+  var setForceGaps = /* @__PURE__ */ runEffectFn3(setForceGaps_);
+  var setForceDistances = /* @__PURE__ */ runEffectFn3(setForceDistances_);
+  var setDirectionalHard = /* @__PURE__ */ runEffectFn3(setDirectionalHard_);
+  var setCollideFilter = /* @__PURE__ */ runEffectFn3(setCollideFilter_);
+  var setCollideAlphaScaled = /* @__PURE__ */ runEffectFn3(setCollideAlphaScaled_);
+  var setAlphaTarget = /* @__PURE__ */ runEffectFn2(setAlphaTarget_);
+  var setAlphaMin = /* @__PURE__ */ runEffectFn2(setAlphaMin_);
   var setAlphaDecay = setAlphaDecay_;
   var setAlpha = setAlpha_;
-  var reheat2 = reheat_;
-  var enableForces = function(sim) {
+  var reheat = reheat_;
+  var orNone = function(v2) {
+    if (v2 instanceof Just && v2.value0 >= 0) {
+      return v2.value0;
+    }
+    ;
+    return -1 | 0;
+  };
+  var setForceGroups = function(sim) {
+    return function(force2) {
+      return function(groups) {
+        return function() {
+          return setForceGroups_(sim, force2, map34(orNone)(groups));
+        };
+      };
+    };
+  };
+  var setForceRegions = function(sim) {
+    return function(force2) {
+      return function(regions2) {
+        return function() {
+          return setForceRegions_(sim, force2, map34(orNone)(regions2));
+        };
+      };
+    };
+  };
+  var enableForcesAll = function(sim) {
     return function(cfg) {
-      return enableForces_(sim)(cfg.manyBody)(cfg.links)(cfg.center);
+      return function() {
+        return enableForcesAll_(sim, cfg.manyBody, cfg.links, cfg.center, cfg.forceX, cfg.forceY, cfg.collide);
+      };
     };
   };
   var create4 = createSimulation_;
-  var configureManyBody = configureManyBody_;
-  var configureLinks = configureLinks_;
-  var configureCenter = configureCenter_;
-
-  // output/Hylograph.ForceEngine.Setup.WASM/index.js
-  var pure8 = /* @__PURE__ */ pure(applicativeEffect);
-  var eq3 = /* @__PURE__ */ eq(eqForceType);
-  var for_5 = /* @__PURE__ */ for_(applicativeEffect)(foldableMaybe);
-  var when4 = /* @__PURE__ */ when(applicativeEffect);
-  var warnIfFiltered = function(fc) {
-    return function(name15) {
-      if (fc.filter instanceof Just) {
-        return warn("WASM Setup: " + (name15 + " filter is ignored by WASM kernel"));
-      }
-      ;
-      if (fc.filter instanceof Nothing) {
-        return pure8(unit);
-      }
-      ;
-      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 285, column 26 - line 287, column 23): " + [fc.filter.constructor.name]);
+  var containmentAddRect = function(sim) {
+    return function(force2) {
+      return function(r3) {
+        return function() {
+          return containmentAddRect_(sim, force2, r3.x0, r3.y0, r3.x1, r3.y1);
+        };
+      };
     };
   };
-  var warnIfDynamic = function(v2) {
-    return function(v1) {
-      if (v2 instanceof Dynamic) {
-        return warn("WASM Setup: " + (v1 + " uses dynamic value, falling back to static"));
-      }
-      ;
-      if (v2 instanceof Static) {
-        return pure8(unit);
-      }
-      ;
-      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 278, column 1 - line 278, column 70): " + [v2.constructor.name, v1.constructor.name]);
+  var containmentAddPolygon = function(sim) {
+    return function(force2) {
+      return function(vertices) {
+        return function() {
+          return containmentAddPolygon_(sim, force2, concatMap(function(v2) {
+            return [v2.x, v2.y];
+          })(vertices));
+        };
+      };
+    };
+  };
+  var containmentAddCircle = function(sim) {
+    return function(force2) {
+      return function(c2) {
+        return function() {
+          return containmentAddCircle_(sim, force2, c2.x, c2.y, c2.radius);
+        };
+      };
+    };
+  };
+  var clearForces = /* @__PURE__ */ runEffectFn1(clearForces_);
+  var addTowards = /* @__PURE__ */ runEffectFn2(addTowards_);
+  var addRectCollide = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addRectCollide_(sim, cfg.halfWidth, cfg.halfHeight, cfg.strength, cfg.iterations);
+      };
+    };
+  };
+  var addRadial = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addRadial_(sim, cfg.radius, cfg.x, cfg.y, cfg.strength);
+      };
+    };
+  };
+  var addManyBody = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addManyBody_(sim, cfg.strength, cfg.theta, cfg.distanceMin, cfg.distanceMax);
+      };
+    };
+  };
+  var addLinks = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addLinks_(sim, cfg.distance, cfg.strength, cfg.iterations);
+      };
+    };
+  };
+  var addForceY = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addForceY_(sim, cfg.target, cfg.strength);
+      };
+    };
+  };
+  var addForceX = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addForceX_(sim, cfg.target, cfg.strength);
+      };
+    };
+  };
+  var addDirectional = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addDirectional_(sim, cfg.gap, cfg.axis.x, cfg.axis.y, cfg.strength, cfg.iterations);
+      };
+    };
+  };
+  var addContainment = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addContainment_(sim, cfg.strength, cfg.hard);
+      };
+    };
+  };
+  var addCollide = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addCollide_(sim, cfg.radius, cfg.strength, cfg.iterations);
+      };
+    };
+  };
+  var addCohesion = /* @__PURE__ */ runEffectFn2(addCohesion_);
+  var addCenter = function(sim) {
+    return function(cfg) {
+      return function() {
+        return addCenter_(sim, cfg.x, cfg.y, cfg.strength);
+      };
+    };
+  };
+
+  // output/Hylograph.ForceEngine.Setup.WASM/index.js
+  var pure14 = /* @__PURE__ */ pure(applicativeEffect);
+  var fromFoldable10 = /* @__PURE__ */ fromFoldable2(ordInt)(foldableArray);
+  var apply13 = /* @__PURE__ */ apply(applyMaybe);
+  var map35 = /* @__PURE__ */ map(functorMaybe);
+  var lookup4 = /* @__PURE__ */ lookup(ordInt);
+  var $$void7 = /* @__PURE__ */ $$void(functorEffect);
+  var map113 = /* @__PURE__ */ map(functorArray);
+  var fromFoldable13 = /* @__PURE__ */ fromFoldable(foldableList);
+  var fromFoldable23 = /* @__PURE__ */ fromFoldable2(ordString)(foldableArray);
+  var nub2 = /* @__PURE__ */ nub(ordInt);
+  var bind14 = /* @__PURE__ */ bind(bindMaybe);
+  var for_4 = /* @__PURE__ */ for_(applicativeEffect);
+  var for_12 = /* @__PURE__ */ for_4(foldableMaybe);
+  var when12 = /* @__PURE__ */ when(applicativeEffect);
+  var for_22 = /* @__PURE__ */ for_4(foldableArray);
+  var traverse5 = /* @__PURE__ */ traverse(traversableArray)(applicativeEffect);
+  var map211 = /* @__PURE__ */ map(functorEffect);
+  var unpinNodes = function(sim) {
+    return function __do5() {
+      unpinNodesInPlace_(sim.nodesRef)();
+      var nodes = read(sim.nodesRef)();
+      return syncPinsToWasm(sim.wasmSim)(nodes)();
     };
   };
   var tick3 = function(sim) {
     return function __do5() {
-      var alpha = tick2(sim.wasmSim)();
       var nodes = read(sim.nodesRef)();
-      var updatedNodes = syncPositionsFromWasm(sim.wasmSim)(nodes)();
+      syncPinsToWasm(sim.wasmSim)(nodes)();
+      var alpha = tick2(sim.wasmSim)();
+      var updatedNodes = syncNodesFromWasm(sim.wasmSim)(nodes)();
       write(updatedNodes)(sim.nodesRef)();
       return alpha;
     };
   };
-  var reheat3 = function(sim) {
-    return reheat2(sim.wasmSim);
+  var setLinks2 = function(wasmSim) {
+    return function(nodes) {
+      return function(links) {
+        var indexOfId = fromFoldable10(mapWithIndex2(function(index4) {
+          return function(node) {
+            return new Tuple(node.id, index4);
+          };
+        })(nodes));
+        var endpoints = function(link4) {
+          return apply13(map35(function(v2) {
+            return function(v1) {
+              return [v2, v1];
+            };
+          })(lookup4(link4.source)(indexOfId)))(lookup4(link4.target)(indexOfId));
+        };
+        var resolved = mapMaybe(endpoints)(links);
+        return setLinks(wasmSim)(concat(resolved));
+      };
+    };
+  };
+  var reheat2 = function(sim) {
+    return reheat(sim.wasmSim);
+  };
+  var pinNodes = function(sim) {
+    return function __do5() {
+      pinNodesInPlace_(sim.nodesRef)();
+      var nodes = read(sim.nodesRef)();
+      return syncPinsToWasm(sim.wasmSim)(nodes)();
+    };
+  };
+  var interpolatePositions = function(start3) {
+    return function(target6) {
+      return function(progress2) {
+        return function(sim) {
+          return function __do5() {
+            interpolatePositionsInPlace_(start3)(target6)(progress2)(sim.nodesRef)();
+            var nodes = read(sim.nodesRef)();
+            return syncNodesToWasm(sim.wasmSim)(nodes)();
+          };
+        };
+      };
+    };
+  };
+  var inApplicationOrder = function(forces) {
+    return fromFoldable13(values(fromFoldable23(map113(function(fc) {
+      return new Tuple(forceName(fc), fc);
+    })(forces))));
   };
   var getNodes2 = function(sim) {
-    return function __do5() {
-      var nodes = read(sim.nodesRef)();
-      return syncPositionsFromWasm(sim.wasmSim)(nodes)();
-    };
+    return read(sim.nodesRef);
+  };
+  var flatTargets = function(target6) {
+    return concatMap(function(node) {
+      var v2 = target6(node);
+      if (v2 instanceof Just) {
+        return [v2.value0.x, v2.value0.y];
+      }
+      ;
+      if (v2 instanceof Nothing) {
+        return [nan, nan];
+      }
+      ;
+      throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 479, column 47 - line 481, column 26): " + [v2.constructor.name]);
+    });
   };
   var create5 = function(nodes) {
     return function(links) {
       return function __do5() {
         var wasmSim = create4(length(nodes))();
-        syncPositionsToWasm(wasmSim)(nodes)();
-        setLinksFromRecords(wasmSim)(links)();
+        initializeNodes2(nodes)();
+        syncNodesToWasm(wasmSim)(nodes)();
+        setLinks2(wasmSim)(nodes)(links)();
         var nodesRef = $$new(nodes)();
         var linksRef = $$new(links)();
+        var forceIds = $$new(empty2)();
         return {
           wasmSim,
           nodesRef,
-          linksRef
+          linksRef,
+          forceIds
         };
       };
     };
   };
-  var configureManyBody2 = function(wasmSim) {
-    return function(fc) {
+  var addForce2 = function(wasmSim) {
+    return function(nodes) {
+      return function(ends) {
+        var perNode = function(value12) {
+          return function(send) {
+            if (value12 instanceof Static) {
+              return pure14(unit);
+            }
+            ;
+            if (value12 instanceof Dynamic) {
+              return $$void7(send(map113(value12.value0)(nodes)));
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 452, column 24 - line 454, column 43): " + [value12.constructor.name]);
+          };
+        };
+        var perLink = function(value12) {
+          return function(send) {
+            if (value12 instanceof Static) {
+              return pure14(unit);
+            }
+            ;
+            if (value12 instanceof Dynamic) {
+              return $$void7(send(linkValues(value12)(ends)));
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 458, column 24 - line 460, column 53): " + [value12.constructor.name]);
+          };
+        };
+        var groupsOf = function(group4) {
+          var given = map113(group4)(nodes);
+          var numbering = fromFoldable10(mapWithIndex2(function(index4) {
+            return function(g) {
+              return new Tuple(g, index4);
+            };
+          })(nub2(catMaybes(given))));
+          return map113(function(v2) {
+            return bind14(v2)(function(g) {
+              return lookup4(g)(numbering);
+            });
+          })(given);
+        };
+        var filtered2 = function(filter4) {
+          return function(force2) {
+            return for_12(filter4)(function(keep) {
+              return $$void7(setForceMask(wasmSim)(force2)(map113(keep)(nodes)));
+            });
+          };
+        };
+        return function(v2) {
+          if (v2 instanceof ManyBodyForce2) {
+            return function __do5() {
+              var force2 = addManyBody(wasmSim)({
+                strength: valueToNumber(v2.value0.strength),
+                theta: v2.value0.theta,
+                distanceMin: v2.value0.distanceMin,
+                distanceMax: v2.value0.distanceMax
+              })();
+              perNode(v2.value0.strength)(setForceStrengths(wasmSim)(force2))();
+              filtered2(v2.value0.filter)(force2)();
+              (function() {
+                if (v2.value0.scope instanceof AllPairs) {
+                  return unit;
+                }
+                ;
+                if (v2.value0.scope instanceof WithinGroups3) {
+                  $$void7(setForceGroups(wasmSim)(force2)(groupsOf(v2.value0.scope.value0)))();
+                  return $$void7(setManyBodyScope(wasmSim)(force2)(WithinGroups4.value))();
+                }
+                ;
+                if (v2.value0.scope instanceof BetweenGroups3) {
+                  $$void7(setForceGroups(wasmSim)(force2)(groupsOf(v2.value0.scope.value0)))();
+                  return $$void7(setManyBodyScope(wasmSim)(force2)(BetweenGroups4.value))();
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 314, column 5 - line 321, column 68): " + [v2.value0.scope.constructor.name]);
+              })();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof CollideForce2) {
+            return function __do5() {
+              var force2 = addCollide(wasmSim)({
+                radius: valueToNumber(v2.value0.radius),
+                strength: v2.value0.strength,
+                iterations: v2.value0.iterations
+              })();
+              perNode(v2.value0.radius)(setForceRadii(wasmSim)(force2))();
+              for_12(v2.value0.filter)(function(keep) {
+                return $$void7(setCollideFilter(wasmSim)(force2)(map113(keep)(nodes)));
+              })();
+              when12(v2.value0.alphaScaled)($$void7(setCollideAlphaScaled(wasmSim)(force2)(true)))();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof LinkForce2) {
+            return function __do5() {
+              var force2 = addLinks(wasmSim)({
+                distance: valueToNumber(v2.value0.distance),
+                strength: 1,
+                iterations: v2.value0.iterations
+              })();
+              perLink(v2.value0.distance)(setForceDistances(wasmSim)(force2))();
+              (function() {
+                if (v2.value0.strength instanceof LinkStrength && v2.value0.strength.value0 instanceof Static) {
+                  return $$void7(setForceStrengths(wasmSim)(force2)(map113($$const(v2.value0.strength.value0.value0))(ends)))();
+                }
+                ;
+                return $$void7(setForceStrengths(wasmSim)(force2)(linkStrengths(v2.value0.strength)(ends)))();
+              })();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof CenterForce2) {
+            return addCenter(wasmSim)({
+              x: v2.value0.x,
+              y: v2.value0.y,
+              strength: v2.value0.strength
+            });
+          }
+          ;
+          if (v2 instanceof PositionXForce2) {
+            return function __do5() {
+              var force2 = addForceX(wasmSim)({
+                target: valueToNumber(v2.value0.target),
+                strength: valueToNumber(v2.value0.strength)
+              })();
+              perNode(v2.value0.target)(setForceTargets(wasmSim)(force2))();
+              perNode(v2.value0.strength)(setForceStrengths(wasmSim)(force2))();
+              filtered2(v2.value0.filter)(force2)();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof PositionYForce2) {
+            return function __do5() {
+              var force2 = addForceY(wasmSim)({
+                target: valueToNumber(v2.value0.target),
+                strength: valueToNumber(v2.value0.strength)
+              })();
+              perNode(v2.value0.target)(setForceTargets(wasmSim)(force2))();
+              perNode(v2.value0.strength)(setForceStrengths(wasmSim)(force2))();
+              filtered2(v2.value0.filter)(force2)();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof RadialForce2) {
+            return function __do5() {
+              var force2 = addRadial(wasmSim)({
+                radius: valueToNumber(v2.value0.radius),
+                x: v2.value0.x,
+                y: v2.value0.y,
+                strength: valueToNumber(v2.value0.strength)
+              })();
+              perNode(v2.value0.radius)(setForceRadii(wasmSim)(force2))();
+              perNode(v2.value0.strength)(setForceStrengths(wasmSim)(force2))();
+              filtered2(v2.value0.filter)(force2)();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof TowardsForce2) {
+            return function __do5() {
+              var force2 = addTowards(wasmSim)(valueToNumber(v2.value0.strength))();
+              $$void7(setForceTargetsXY(wasmSim)(force2)(flatTargets(v2.value0.target)(nodes)))();
+              perNode(v2.value0.strength)(setForceStrengths(wasmSim)(force2))();
+              filtered2(v2.value0.filter)(force2)();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof RectCollideForce2) {
+            return function __do5() {
+              var force2 = addRectCollide(wasmSim)({
+                halfWidth: valueToNumber(v2.value0.halfWidth),
+                halfHeight: valueToNumber(v2.value0.halfHeight),
+                strength: v2.value0.strength,
+                iterations: v2.value0.iterations
+              })();
+              perNode(v2.value0.halfWidth)(setForceHalfWidths(wasmSim)(force2))();
+              perNode(v2.value0.halfHeight)(setForceHalfHeights(wasmSim)(force2))();
+              for_12(v2.value0.filter)(function(keep) {
+                return $$void7(setCollideFilter(wasmSim)(force2)(map113(keep)(nodes)));
+              })();
+              (function() {
+                if (v2.value0.scope instanceof AllPairs) {
+                  return unit;
+                }
+                ;
+                if (v2.value0.scope instanceof WithinGroups3) {
+                  $$void7(setForceGroups(wasmSim)(force2)(groupsOf(v2.value0.scope.value0)))();
+                  return $$void7(setRectCollidePairs(wasmSim)(force2)(WithinGroups4.value))();
+                }
+                ;
+                if (v2.value0.scope instanceof BetweenGroups3) {
+                  $$void7(setForceGroups(wasmSim)(force2)(groupsOf(v2.value0.scope.value0)))();
+                  return $$void7(setRectCollidePairs(wasmSim)(force2)(BetweenGroups4.value))();
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 401, column 5 - line 408, column 71): " + [v2.value0.scope.constructor.name]);
+              })();
+              when12(v2.value0.throughSqueeze)($$void7(setRectCollideThrough(wasmSim)(force2)(true)))();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof ContainForce2) {
+            return function __do5() {
+              var force2 = addContainment(wasmSim)({
+                strength: v2.value0.strength,
+                hard: v2.value0.hard
+              })();
+              for_22(v2.value0.regions)(function(v1) {
+                if (v1 instanceof RectRegion) {
+                  return $$void7(containmentAddRect(wasmSim)(force2)(v1.value0));
+                }
+                ;
+                if (v1 instanceof CircleRegion) {
+                  return $$void7(containmentAddCircle(wasmSim)(force2)(v1.value0));
+                }
+                ;
+                if (v1 instanceof PolygonRegion) {
+                  return $$void7(containmentAddPolygon(wasmSim)(force2)(v1.value0));
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 414, column 20 - line 417, column 88): " + [v1.constructor.name]);
+              })();
+              $$void7(setForceRegions(wasmSim)(force2)(map113(v2.value0.region)(nodes)))();
+              $$void7(setForceRadii(wasmSim)(force2)((function() {
+                if (v2.value0.radius instanceof Static) {
+                  return map113($$const(v2.value0.radius.value0))(nodes);
+                }
+                ;
+                if (v2.value0.radius instanceof Dynamic) {
+                  return map113(v2.value0.radius.value0)(nodes);
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 419, column 45 - line 421, column 31): " + [v2.value0.radius.constructor.name]);
+              })()))();
+              $$void7(setForceHalfWidths(wasmSim)(force2)((function() {
+                if (v2.value0.halfWidth instanceof Static) {
+                  return map113($$const(v2.value0.halfWidth.value0))(nodes);
+                }
+                ;
+                if (v2.value0.halfWidth instanceof Dynamic) {
+                  return map113(v2.value0.halfWidth.value0)(nodes);
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 422, column 50 - line 424, column 31): " + [v2.value0.halfWidth.constructor.name]);
+              })()))();
+              $$void7(setForceHalfHeights(wasmSim)(force2)((function() {
+                if (v2.value0.halfHeight instanceof Static) {
+                  return map113($$const(v2.value0.halfHeight.value0))(nodes);
+                }
+                ;
+                if (v2.value0.halfHeight instanceof Dynamic) {
+                  return map113(v2.value0.halfHeight.value0)(nodes);
+                }
+                ;
+                throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 425, column 51 - line 427, column 31): " + [v2.value0.halfHeight.constructor.name]);
+              })()))();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof CohesionForce2) {
+            return function __do5() {
+              var force2 = addCohesion(wasmSim)(valueToNumber(v2.value0.strength))();
+              $$void7(setForceGroups(wasmSim)(force2)(groupsOf(v2.value0.group)))();
+              perNode(v2.value0.strength)(setForceStrengths(wasmSim)(force2))();
+              filtered2(v2.value0.filter)(force2)();
+              return force2;
+            };
+          }
+          ;
+          if (v2 instanceof DirectionalForce2) {
+            return function __do5() {
+              var force2 = addDirectional(wasmSim)({
+                gap: valueToNumber(v2.value0.gap),
+                axis: v2.value0.axis,
+                strength: valueToNumber(v2.value0.strength),
+                iterations: v2.value0.iterations
+              })();
+              perLink(v2.value0.gap)(setForceGaps(wasmSim)(force2))();
+              perLink(v2.value0.strength)(setForceStrengths(wasmSim)(force2))();
+              when12(v2.value0.hard)($$void7(setDirectionalHard(wasmSim)(force2)(true)))();
+              return force2;
+            };
+          }
+          ;
+          throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 304, column 31 - line 447, column 15): " + [v2.constructor.name]);
+        };
+      };
+    };
+  };
+  var applyChecked = function(setupConfig) {
+    return function(sim) {
       return function __do5() {
-        warnIfDynamic(fc.strength)("ManyBody strength")();
-        warnIfFiltered(fc)("ManyBody")();
-        return configureManyBody(wasmSim)({
-          strength: valueToNumber(fc.strength),
-          theta: fc.theta,
-          distanceMin: fc.distanceMin,
-          distanceMax: fc.distanceMax
+        var nodes = read(sim.nodesRef)();
+        var links = read(sim.linksRef)();
+        var ends = resolveLinks(nodes)(links);
+        enableForcesAll(sim.wasmSim)({
+          manyBody: false,
+          links: false,
+          center: false,
+          forceX: false,
+          forceY: false,
+          collide: false
         })();
+        clearForces(sim.wasmSim)();
+        var ids2 = traverse5(function(fc) {
+          return map211(Tuple.create(forceName(fc)))(addForce2(sim.wasmSim)(nodes)(ends)(fc));
+        })(inApplicationOrder(getForces(setupConfig)))();
+        write(fromFoldable23(ids2))(sim.forceIds)();
+        var params = getParams(setupConfig);
+        setAlpha(sim.wasmSim)(params.alpha)();
+        setAlphaMin(sim.wasmSim)(params.alphaMin)();
+        setAlphaDecay(sim.wasmSim)(params.alphaDecay)();
+        setAlphaTarget(sim.wasmSim)(params.alphaTarget)();
+        return setVelocityRetention(sim.wasmSim)(params.velocityRetention)();
       };
     };
   };
-  var configureLinks2 = function(wasmSim) {
-    return function(fc) {
+  var tryApplySetup2 = function(setupConfig) {
+    return function(sim) {
       return function __do5() {
-        warnIfDynamic(fc.distance)("Link distance")();
-        warnIfDynamic(fc.strength)("Link strength")();
-        return configureLinks(wasmSim)({
-          distance: valueToNumber(fc.distance),
-          strength: valueToNumber(fc.strength),
-          iterations: fc.iterations
-        })();
-      };
-    };
-  };
-  var configureForceY = function(_wasmSim) {
-    return function(fc) {
-      return function __do5() {
-        warnIfDynamic(fc.y)("ForceY target")();
-        warnIfDynamic(fc.strength)("ForceY strength")();
-        return unit;
-      };
-    };
-  };
-  var configureForceX = function(_wasmSim) {
-    return function(fc) {
-      return function __do5() {
-        warnIfDynamic(fc.x)("ForceX target")();
-        warnIfDynamic(fc.strength)("ForceX strength")();
-        return unit;
-      };
-    };
-  };
-  var configureCollide = function(_wasmSim) {
-    return function(fc) {
-      return function __do5() {
-        warnIfDynamic(fc.radius)("Collide radius")();
-        warnIfDynamic(fc.strength)("Collide strength")();
-        return warn("WASM Setup: Collide force not yet implemented in FFI")();
-      };
-    };
-  };
-  var configureCenter2 = function(wasmSim) {
-    return function(fc) {
-      return function __do5() {
-        warnIfDynamic(fc.x)("Center x")();
-        warnIfDynamic(fc.y)("Center y")();
-        warnIfDynamic(fc.strength)("Center strength")();
-        return configureCenter(wasmSim)({
-          x: valueToNumber(fc.x),
-          y: valueToNumber(fc.y),
-          strength: valueToNumber(fc.strength)
-        })();
+        var nodes = read(sim.nodesRef)();
+        var links = read(sim.linksRef)();
+        var v2 = linkProblem(setupConfig)(nodes)(links);
+        if (v2 instanceof Just) {
+          return new Left(v2.value0);
+        }
+        ;
+        if (v2 instanceof Nothing) {
+          return map211(Right.create)(applyChecked(setupConfig)(sim))();
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 256, column 3 - line 258, column 54): " + [v2.constructor.name]);
       };
     };
   };
   var applySetup2 = function(setupConfig) {
     return function(sim) {
-      var forces = getForces(setupConfig);
-      var manyBodyForce = find2(function(f) {
-        return eq3(f.forceType)(ForceManyBody.value);
-      })(forces);
-      var collideForce = find2(function(f) {
-        return eq3(f.forceType)(ForceCollide.value);
-      })(forces);
-      var linkForce = find2(function(f) {
-        return eq3(f.forceType)(ForceLink.value);
-      })(forces);
-      var centerForce = find2(function(f) {
-        return eq3(f.forceType)(ForceCenter.value);
-      })(forces);
-      var posXForce = find2(function(f) {
-        return eq3(f.forceType)(ForcePositionX.value);
-      })(forces);
-      var posYForce = find2(function(f) {
-        return eq3(f.forceType)(ForcePositionY.value);
-      })(forces);
-      var radialForce = find2(function(f) {
-        return eq3(f.forceType)(ForceRadial.value);
-      })(forces);
       return function __do5() {
-        for_5(radialForce)(function(v2) {
-          return warn("WASM Setup: ForceRadial is not supported by WASM kernel");
-        })();
-        for_5(manyBodyForce)(configureManyBody2(sim.wasmSim))();
-        for_5(collideForce)(configureCollide(sim.wasmSim))();
-        for_5(linkForce)(configureLinks2(sim.wasmSim))();
-        for_5(centerForce)(configureCenter2(sim.wasmSim))();
-        for_5(posXForce)(configureForceX(sim.wasmSim))();
-        for_5(posYForce)(configureForceY(sim.wasmSim))();
-        enableForces(sim.wasmSim)({
-          manyBody: any2(function(f) {
-            return eq3(f.forceType)(ForceManyBody.value);
-          })(forces),
-          links: any2(function(f) {
-            return eq3(f.forceType)(ForceLink.value);
-          })(forces),
-          center: any2(function(f) {
-            return eq3(f.forceType)(ForceCenter.value);
-          })(forces)
-        })();
-        var params = getParams(setupConfig);
-        setAlpha(sim.wasmSim)(params.alpha)();
-        setAlphaDecay(sim.wasmSim)(params.alphaDecay)();
-        return setVelocityDecay(sim.wasmSim)(params.velocityDecay)();
+        var outcome = tryApplySetup2(setupConfig)(sim)();
+        if (outcome instanceof Left) {
+          return $$throw("Hylograph.ForceEngine.Setup: " + (outcome.value0 + ". Nothing was applied."))();
+        }
+        ;
+        if (outcome instanceof Right) {
+          return unit;
+        }
+        ;
+        throw new Error("Failed pattern match at Hylograph.ForceEngine.Setup.WASM (line 240, column 3 - line 242, column 25): " + [outcome.constructor.name]);
       };
     };
   };
@@ -11362,11 +16066,12 @@
             write(nodeResult.merged)(sim.nodesRef)();
             var currentCount = length(currentNodes);
             var newCount = length(nodeResult.merged);
-            when4(currentCount !== newCount)(setNodeCount(sim.wasmSim)(newCount))();
-            syncPositionsToWasm(sim.wasmSim)(nodeResult.merged)();
+            when12(currentCount !== newCount)(setNodeCount(sim.wasmSim)(newCount))();
+            initializeNodes2(nodeResult.merged)();
+            syncNodesToWasm(sim.wasmSim)(nodeResult.merged)();
             var linkResult = computeLinkGUP(currentLinks)(desiredLinks);
             write(desiredLinks)(sim.linksRef)();
-            setLinksFromRecords(sim.wasmSim)(desiredLinks)();
+            setLinks2(sim.wasmSim)(nodeResult.merged)(desiredLinks)();
             applySetup2(setupConfig)(sim)();
             return {
               nodes: {
@@ -11488,13 +16193,13 @@
   var cancelAnimationFrame3 = cancelAnimationFrame_;
 
   // output/Hylograph.Transition.Coordinator/index.js
-  var when5 = /* @__PURE__ */ when(applicativeEffect);
-  var for_6 = /* @__PURE__ */ for_(applicativeEffect);
-  var for_12 = /* @__PURE__ */ for_6(foldableMaybe);
-  var append5 = /* @__PURE__ */ append(semigroupArray);
+  var when13 = /* @__PURE__ */ when(applicativeEffect);
+  var for_5 = /* @__PURE__ */ for_(applicativeEffect);
+  var for_13 = /* @__PURE__ */ for_5(foldableMaybe);
+  var append6 = /* @__PURE__ */ append(semigroupArray);
   var $$for2 = /* @__PURE__ */ $$for(applicativeEffect)(traversableArray);
-  var for_22 = /* @__PURE__ */ for_6(foldableArray);
-  var unless3 = /* @__PURE__ */ unless(applicativeEffect);
+  var for_23 = /* @__PURE__ */ for_5(foldableArray);
+  var unless2 = /* @__PURE__ */ unless(applicativeEffect);
   var Completed2 = /* @__PURE__ */ (function() {
     function Completed3() {
     }
@@ -11513,13 +16218,13 @@
     return Converged2;
   })();
   var eqConsumerId = {
-    eq: function(x4) {
-      return function(y4) {
-        return x4 === y4;
+    eq: function(x3) {
+      return function(y3) {
+        return x3 === y3;
       };
     }
   };
-  var notEq2 = /* @__PURE__ */ notEq(eqConsumerId);
+  var notEq4 = /* @__PURE__ */ notEq(eqConsumerId);
   var unregister = function(v2) {
     return function(consumerId) {
       return modify_(function(s2) {
@@ -11529,7 +16234,7 @@
           nextId: s2.nextId,
           running: s2.running,
           consumers: filter(function(c2) {
-            return notEq2(c2.id)(consumerId);
+            return notEq4(c2.id)(consumerId);
           })(s2.consumers)
         };
       })(v2);
@@ -11538,8 +16243,8 @@
   var stop = function(v2) {
     return function __do5() {
       var state3 = read(v2)();
-      return when5(state3.running)(function __do6() {
-        for_12(state3.frameId)(cancelAnimationFrame3)();
+      return when13(state3.running)(function __do6() {
+        for_13(state3.frameId)(cancelAnimationFrame3)();
         return modify_(function(v1) {
           return {
             consumers: v1.consumers,
@@ -11565,7 +16270,7 @@
           frameId: state3.frameId,
           lastTimestamp: state3.lastTimestamp,
           running: state3.running,
-          consumers: append5(state3.consumers)([consumer]),
+          consumers: append6(state3.consumers)([consumer]),
           nextId: state3.nextId + 1 | 0
         })(v2)();
         return state3.nextId;
@@ -11597,7 +16302,7 @@
     return function(timestamp) {
       return function __do5() {
         var state3 = read(v2)();
-        return when5(state3.running)((function() {
+        return when13(state3.running)((function() {
           var deltaMs = timestamp - state3.lastTimestamp;
           return function __do6() {
             modify_(function(v1) {
@@ -11621,7 +16326,7 @@
             var completed = filter(function(r3) {
               return isCompleted(r3.result);
             })(results);
-            for_22(completed)(function(r3) {
+            for_23(completed)(function(r3) {
               return function __do7() {
                 r3.consumer.onComplete();
                 return unregister(v2)(r3.consumer.id)();
@@ -11639,10 +16344,10 @@
       };
     };
   };
-  var start3 = function(v2) {
+  var start2 = function(v2) {
     return function __do5() {
       var state3 = read(v2)();
-      return unless3(state3.running)(function __do6() {
+      return unless2(state3.running)(function __do6() {
         var now = performanceNow();
         modify_(function(v1) {
           return {
@@ -11669,15 +16374,14 @@
   };
 
   // output/Hylograph.Simulation/index.js
-  var pure9 = /* @__PURE__ */ pure(applicativeEffect);
-  var unless4 = /* @__PURE__ */ unless(applicativeEffect);
-  var when6 = /* @__PURE__ */ when(applicativeEffect);
-  var D3 = /* @__PURE__ */ (function() {
-    function D32() {
+  var unless3 = /* @__PURE__ */ unless(applicativeEffect);
+  var when14 = /* @__PURE__ */ when(applicativeEffect);
+  var Pure = /* @__PURE__ */ (function() {
+    function Pure3() {
     }
     ;
-    D32.value = new D32();
-    return D32;
+    Pure3.value = new Pure3();
+    return Pure3;
   })();
   var WASM = /* @__PURE__ */ (function() {
     function WASM2() {
@@ -11685,6 +16389,13 @@
     ;
     WASM2.value = new WASM2();
     return WASM2;
+  })();
+  var D3 = /* @__PURE__ */ (function() {
+    function D32() {
+    }
+    ;
+    D32.value = new D32();
+    return D32;
   })();
   var wasmConsumer = function(sim) {
     return function(emitterHandle) {
@@ -11699,8 +16410,8 @@
                 alpha,
                 nodeCount: length(nodes)
               }))();
-              var $13 = alpha < alphaMin;
-              if ($13) {
+              var $11 = alpha < alphaMin;
+              if ($11) {
                 return Completed2.value;
               }
               ;
@@ -11729,7 +16440,28 @@
           return emit(v2.handle)(Completed.value)();
         }
       })();
-      start3(coord)();
+      start2(coord)();
+      var rekindle = function __do6() {
+        reheat2(sim)();
+        write(1)(alphaRef)();
+        emit(v2.handle)(Started.value)();
+        var running = read(runningRef)();
+        return unless3(running)(function __do7() {
+          write(true)(runningRef)();
+          var oldCoord = read(coordRef)();
+          stop(oldCoord)();
+          var c2 = create7();
+          write(c2)(coordRef)();
+          register(c2)({
+            tick: wasmConsumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
+            onComplete: function __do8() {
+              write(false)(runningRef)();
+              return emit(v2.handle)(Completed.value)();
+            }
+          })();
+          return start2(c2)();
+        })();
+      };
       return {
         events: v2.emitter,
         handle: {
@@ -11738,25 +16470,7 @@
               return function __do6() {
                 var currentSetup = read(setupRef)();
                 var result = applySetupWithData2(currentSetup)(nodes)(links)(sim)();
-                reheat3(sim)();
-                write(1)(alphaRef)();
-                emit(v2.handle)(Started.value)();
-                var running = read(runningRef)();
-                unless4(running)(function __do7() {
-                  write(true)(runningRef)();
-                  var oldCoord = read(coordRef)();
-                  stop(oldCoord)();
-                  var c2 = create7();
-                  write(c2)(coordRef)();
-                  register(c2)({
-                    tick: wasmConsumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
-                    onComplete: function __do8() {
-                      write(false)(runningRef)();
-                      return emit(v2.handle)(Completed.value)();
-                    }
-                  })();
-                  return start3(c2)();
-                })();
+                rekindle();
                 return result;
               };
             };
@@ -11765,76 +16479,39 @@
             return function __do6() {
               write(newSetup)(setupRef)();
               applySetup2(newSetup)(sim)();
-              reheat3(sim)();
-              write(1)(alphaRef)();
-              emit(v2.handle)(Started.value)();
-              var running = read(runningRef)();
-              return unless4(running)(function __do7() {
-                write(true)(runningRef)();
-                var oldCoord = read(coordRef)();
-                stop(oldCoord)();
-                var c2 = create7();
-                write(c2)(coordRef)();
-                register(c2)({
-                  tick: wasmConsumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
-                  onComplete: function __do8() {
-                    write(false)(runningRef)();
-                    return emit(v2.handle)(Completed.value)();
-                  }
-                })();
-                return start3(c2)();
-              })();
+              return rekindle();
             };
           },
           getNodes: getNodes2(sim),
           getAlpha: read(alphaRef),
           stop: function __do6() {
             var running = read(runningRef)();
-            return when6(running)(function __do7() {
+            return when14(running)(function __do7() {
               write(false)(runningRef)();
+              var oldCoord = read(coordRef)();
+              stop(oldCoord)();
               return emit(v2.handle)(Stopped.value)();
             })();
           },
           start: function __do6() {
             var running = read(runningRef)();
-            return unless4(running)(function __do7() {
-              reheat3(sim)();
-              write(1)(alphaRef)();
-              write(true)(runningRef)();
-              emit(v2.handle)(Started.value)();
-              var oldCoord = read(coordRef)();
-              stop(oldCoord)();
-              var c2 = create7();
-              write(c2)(coordRef)();
-              register(c2)({
-                tick: wasmConsumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
-                onComplete: function __do8() {
-                  write(false)(runningRef)();
-                  return emit(v2.handle)(Completed.value)();
-                }
-              })();
-              return start3(c2)();
-            })();
+            return unless3(running)(rekindle)();
           },
-          reheat: function __do6() {
-            reheat3(sim)();
-            write(1)(alphaRef)();
-            return emit(v2.handle)(Started.value)();
-          },
-          interpolatePositions: function(v1) {
-            return function(v22) {
-              return function(v3) {
-                return pure9(unit);
+          reheat: rekindle,
+          interpolatePositions: function(startPos) {
+            return function(targetPos) {
+              return function(progress2) {
+                return interpolatePositions(startPos)(targetPos)(progress2)(sim);
               };
             };
           },
-          pinNodes: pure9(unit),
-          unpinNodes: pure9(unit)
+          pinNodes: pinNodes(sim),
+          unpinNodes: unpinNodes(sim)
         }
       };
     };
   };
-  var d3Consumer = function(sim) {
+  var pureConsumer = function(sim) {
     return function(emitterHandle) {
       return function(alphaRef) {
         return function(alphaMin) {
@@ -11847,8 +16524,8 @@
                 alpha,
                 nodeCount: length(nodes)
               }))();
-              var $17 = alpha < alphaMin;
-              if ($17) {
+              var $15 = alpha < alphaMin;
+              if ($15) {
                 return Completed2.value;
               }
               ;
@@ -11859,17 +16536,26 @@
       };
     };
   };
-  var runD3Simulation = function(config) {
+  var runPureSimulation = function(config) {
     return function __do5() {
       var v2 = create6();
       var simConfig = {
         alphaTarget: defaultConfig2.alphaTarget,
-        velocityDecay: defaultConfig2.velocityDecay,
+        velocityRetention: defaultConfig2.velocityRetention,
         alphaDecay: config.setup.params.alphaDecay,
         alphaMin: config.alphaMin
       };
       var sim = create3(simConfig)();
+      var keepAlphaMin = modify_(function(v1) {
+        return {
+          alphaDecay: v1.alphaDecay,
+          alphaTarget: v1.alphaTarget,
+          velocityRetention: v1.velocityRetention,
+          alphaMin: config.alphaMin
+        };
+      })(sim.settings);
       applySetupWithData(config.setup)(config.nodes)(config.links)(sim)();
+      keepAlphaMin();
       var setupRef = $$new(config.setup)();
       var alphaRef = $$new(1)();
       var coord = create7();
@@ -11877,13 +16563,34 @@
       var runningRef = $$new(true)();
       emit(v2.handle)(Started.value)();
       register(coord)({
-        tick: d3Consumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
+        tick: pureConsumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
         onComplete: function __do6() {
           write(false)(runningRef)();
           return emit(v2.handle)(Completed.value)();
         }
       })();
-      start3(coord)();
+      start2(coord)();
+      var rekindle = function __do6() {
+        write(1)(sim.alpha)();
+        write(1)(alphaRef)();
+        emit(v2.handle)(Started.value)();
+        var running = read(runningRef)();
+        return unless3(running)(function __do7() {
+          write(true)(runningRef)();
+          var oldCoord = read(coordRef)();
+          stop(oldCoord)();
+          var c2 = create7();
+          write(c2)(coordRef)();
+          register(c2)({
+            tick: pureConsumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
+            onComplete: function __do8() {
+              write(false)(runningRef)();
+              return emit(v2.handle)(Completed.value)();
+            }
+          })();
+          return start2(c2)();
+        })();
+      };
       return {
         events: v2.emitter,
         handle: {
@@ -11892,25 +16599,8 @@
               return function __do6() {
                 var currentSetup = read(setupRef)();
                 var result = applySetupWithData(currentSetup)(nodes)(links)(sim)();
-                reheat(sim)();
-                write(1)(alphaRef)();
-                emit(v2.handle)(Started.value)();
-                var running = read(runningRef)();
-                unless4(running)(function __do7() {
-                  write(true)(runningRef)();
-                  var oldCoord = read(coordRef)();
-                  stop(oldCoord)();
-                  var c2 = create7();
-                  write(c2)(coordRef)();
-                  register(c2)({
-                    tick: d3Consumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
-                    onComplete: function __do8() {
-                      write(false)(runningRef)();
-                      return emit(v2.handle)(Completed.value)();
-                    }
-                  })();
-                  return start3(c2)();
-                })();
+                keepAlphaMin();
+                rekindle();
                 return result;
               };
             };
@@ -11919,62 +16609,26 @@
             return function __do6() {
               write(newSetup)(setupRef)();
               applySetup(newSetup)(sim)();
-              reheat(sim)();
-              write(1)(alphaRef)();
-              emit(v2.handle)(Started.value)();
-              var running = read(runningRef)();
-              return unless4(running)(function __do7() {
-                write(true)(runningRef)();
-                var oldCoord = read(coordRef)();
-                stop(oldCoord)();
-                var c2 = create7();
-                write(c2)(coordRef)();
-                register(c2)({
-                  tick: d3Consumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
-                  onComplete: function __do8() {
-                    write(false)(runningRef)();
-                    return emit(v2.handle)(Completed.value)();
-                  }
-                })();
-                return start3(c2)();
-              })();
+              keepAlphaMin();
+              return rekindle();
             };
           },
           getNodes: getNodes(sim),
           getAlpha: read(alphaRef),
           stop: function __do6() {
             var running = read(runningRef)();
-            return when6(running)(function __do7() {
+            return when14(running)(function __do7() {
               write(false)(runningRef)();
+              var oldCoord = read(coordRef)();
+              stop(oldCoord)();
               return emit(v2.handle)(Stopped.value)();
             })();
           },
           start: function __do6() {
             var running = read(runningRef)();
-            return unless4(running)(function __do7() {
-              reheat(sim)();
-              write(1)(alphaRef)();
-              write(true)(runningRef)();
-              emit(v2.handle)(Started.value)();
-              var oldCoord = read(coordRef)();
-              stop(oldCoord)();
-              var c2 = create7();
-              write(c2)(coordRef)();
-              register(c2)({
-                tick: d3Consumer(sim)(v2.handle)(alphaRef)(config.alphaMin),
-                onComplete: function __do8() {
-                  write(false)(runningRef)();
-                  return emit(v2.handle)(Completed.value)();
-                }
-              })();
-              return start3(c2)();
-            })();
+            return unless3(running)(rekindle)();
           },
-          reheat: function __do6() {
-            reheat(sim)();
-            write(1)(alphaRef)();
-            return emit(v2.handle)(Started.value)();
-          },
+          reheat: rekindle,
           interpolatePositions: function(startPos) {
             return function(targetPos) {
               return function(progress2) {
@@ -11989,31 +16643,35 @@
     };
   };
   var runSimulation = function(config) {
+    if (config.engine instanceof Pure) {
+      return runPureSimulation(config);
+    }
+    ;
     if (config.engine instanceof D3) {
-      return runD3Simulation(config);
+      return runPureSimulation(config);
     }
     ;
     if (config.engine instanceof WASM) {
       return runWASMSimulation(config);
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.Simulation (line 230, column 24 - line 232, column 35): " + [config.engine.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.Simulation (line 239, column 24 - line 242, column 35): " + [config.engine.constructor.name]);
   };
 
   // output/Hylograph.Simulation.Core.Tick/index.js
-  var map17 = /* @__PURE__ */ map(functorArray);
-  var min6 = /* @__PURE__ */ min(ordNumber);
-  var map18 = /* @__PURE__ */ map(functorMap);
-  var toUnfoldable6 = /* @__PURE__ */ toUnfoldable4(unfoldableArray);
+  var map36 = /* @__PURE__ */ map(functorArray);
+  var min8 = /* @__PURE__ */ min(ordNumber);
+  var map114 = /* @__PURE__ */ map(functorMap);
+  var toUnfoldable5 = /* @__PURE__ */ toUnfoldable4(unfoldableArray);
   var tickTransitions = function(delta) {
     return function(transitions) {
-      var advanced = map17(function(t2) {
+      var advanced = map36(function(t2) {
         return {
           item: t2.item,
-          progress: min6(1)(t2.progress + delta)
+          progress: min8(1)(t2.progress + delta)
         };
       })(transitions);
-      var completed = map17(function(v2) {
+      var completed = map36(function(v2) {
         return v2.item;
       })(filter(function(t2) {
         return t2.progress >= 1;
@@ -12031,10 +16689,10 @@
     var filter4 = filter2(dictOrd);
     return function(delta) {
       return function(progressMap) {
-        var advanced = map18(function(p2) {
-          return min6(1)(p2 + delta);
+        var advanced = map114(function(p2) {
+          return min8(1)(p2 + delta);
         })(progressMap);
-        var completed = toUnfoldable6(keys2(filter4(function(p2) {
+        var completed = toUnfoldable5(keys2(filter4(function(p2) {
           return p2 >= 1;
         })(advanced)));
         var active = filter4(function(p2) {
@@ -12047,39 +16705,39 @@
       };
     };
   };
-  var startTransitions = /* @__PURE__ */ map17(function(item) {
+  var startTransitions = /* @__PURE__ */ map36(function(item) {
     return {
       item,
       progress: 0
     };
   });
   var startProgress = function(dictOrd) {
-    var insert9 = insert2(dictOrd);
+    var insert8 = insert2(dictOrd);
     return function(keys4) {
       return function(existing) {
         return foldl2(function(m2) {
           return function(k) {
-            return insert9(k)(0)(m2);
+            return insert8(k)(0)(m2);
           };
         })(existing)(keys4);
       };
     };
   };
-  var lerp2 = function(start4) {
+  var lerp2 = function(start3) {
     return function(end) {
       return function(t2) {
-        return start4 + (end - start4) * t2;
+        return start3 + (end - start3) * t2;
       };
     };
   };
 
   // output/ForcePlayground.Simple/index.js
   var mod2 = /* @__PURE__ */ mod(euclideanRingInt);
-  var map19 = /* @__PURE__ */ map(functorArray);
+  var map37 = /* @__PURE__ */ map(functorArray);
   var show6 = /* @__PURE__ */ show(showInt);
-  var show12 = /* @__PURE__ */ show(showNumber);
+  var show1 = /* @__PURE__ */ show(showNumber);
   var elem4 = /* @__PURE__ */ elem2(eqInt);
-  var lookup3 = /* @__PURE__ */ lookup(ordInt);
+  var lookup5 = /* @__PURE__ */ lookup(ordInt);
   var append12 = /* @__PURE__ */ append(semigroupArray);
   var ForceCharge = /* @__PURE__ */ (function() {
     function ForceCharge2() {
@@ -12192,7 +16850,7 @@
     return fromMaybe("#999")(index(linkTypeColors)(mod2(t2)(4)));
   };
   var initialSetup = /* @__PURE__ */ (function() {
-    return setup("network")([withStrength($$static(-30))(manyBody("charge")), withStrength($$static(0.7))(withRadius($$static(10))(collide("collision"))), withStrength($$static(0.4))(withDistance($$static(40))(link("links"))), withStrength($$static(0.1))(withX($$static(0))(positionX("forceX"))), withStrength($$static(0.1))(withY($$static(-50))(positionY("forceY")))]);
+    return setup("network")([withStrength($$static(-30))(manyBody2("charge")), withStrength($$static(0.7))(withRadius($$static(10))(collide2("collision"))), withStrength($$static(0.4))(withDistance($$static(40))(link("links"))), withStrength($$static(0.1))(withX($$static(0))(positionX2("forceX"))), withStrength($$static(0.1))(withY($$static(-50))(positionY2("forceY")))]);
   })();
   var forceIdToName = function(v2) {
     if (v2 instanceof ForceCharge) {
@@ -12222,11 +16880,11 @@
   };
   var forceIdToConfig = function(forceId) {
     if (forceId instanceof ForceCharge) {
-      return addForce(withStrength($$static(-30))(manyBody("charge")));
+      return addForce(withStrength($$static(-30))(manyBody2("charge")));
     }
     ;
     if (forceId instanceof ForceCollide2) {
-      return addForce(withStrength($$static(0.7))(withRadius($$static(10))(collide("collision"))));
+      return addForce(withStrength($$static(0.7))(withRadius($$static(10))(collide2("collision"))));
     }
     ;
     if (forceId instanceof ForceLink2) {
@@ -12234,35 +16892,35 @@
     }
     ;
     if (forceId instanceof ForceX) {
-      return addForce(withStrength($$static(0.1))(withX($$static(0))(positionX("forceX"))));
+      return addForce(withStrength($$static(0.1))(withX($$static(0))(positionX2("forceX"))));
     }
     ;
     if (forceId instanceof ForceY) {
-      return addForce(withStrength($$static(0.1))(withY($$static(-50))(positionY("forceY"))));
+      return addForce(withStrength($$static(0.1))(withY($$static(-50))(positionY2("forceY"))));
     }
     ;
     throw new Error("Failed pattern match at ForcePlayground.Simple (line 152, column 27 - line 162, column 87): " + [forceId.constructor.name]);
   };
   var eqForceId = {
-    eq: function(x4) {
-      return function(y4) {
-        if (x4 instanceof ForceCharge && y4 instanceof ForceCharge) {
+    eq: function(x3) {
+      return function(y3) {
+        if (x3 instanceof ForceCharge && y3 instanceof ForceCharge) {
           return true;
         }
         ;
-        if (x4 instanceof ForceCollide2 && y4 instanceof ForceCollide2) {
+        if (x3 instanceof ForceCollide2 && y3 instanceof ForceCollide2) {
           return true;
         }
         ;
-        if (x4 instanceof ForceLink2 && y4 instanceof ForceLink2) {
+        if (x3 instanceof ForceLink2 && y3 instanceof ForceLink2) {
           return true;
         }
         ;
-        if (x4 instanceof ForceX && y4 instanceof ForceX) {
+        if (x3 instanceof ForceX && y3 instanceof ForceX) {
           return true;
         }
         ;
-        if (x4 instanceof ForceY && y4 instanceof ForceY) {
+        if (x3 instanceof ForceY && y3 instanceof ForceY) {
           return true;
         }
         ;
@@ -12271,61 +16929,61 @@
     }
   };
   var ordForceId = {
-    compare: function(x4) {
-      return function(y4) {
-        if (x4 instanceof ForceCharge && y4 instanceof ForceCharge) {
+    compare: function(x3) {
+      return function(y3) {
+        if (x3 instanceof ForceCharge && y3 instanceof ForceCharge) {
           return EQ.value;
         }
         ;
-        if (x4 instanceof ForceCharge) {
+        if (x3 instanceof ForceCharge) {
           return LT.value;
         }
         ;
-        if (y4 instanceof ForceCharge) {
+        if (y3 instanceof ForceCharge) {
           return GT.value;
         }
         ;
-        if (x4 instanceof ForceCollide2 && y4 instanceof ForceCollide2) {
+        if (x3 instanceof ForceCollide2 && y3 instanceof ForceCollide2) {
           return EQ.value;
         }
         ;
-        if (x4 instanceof ForceCollide2) {
+        if (x3 instanceof ForceCollide2) {
           return LT.value;
         }
         ;
-        if (y4 instanceof ForceCollide2) {
+        if (y3 instanceof ForceCollide2) {
           return GT.value;
         }
         ;
-        if (x4 instanceof ForceLink2 && y4 instanceof ForceLink2) {
+        if (x3 instanceof ForceLink2 && y3 instanceof ForceLink2) {
           return EQ.value;
         }
         ;
-        if (x4 instanceof ForceLink2) {
+        if (x3 instanceof ForceLink2) {
           return LT.value;
         }
         ;
-        if (y4 instanceof ForceLink2) {
+        if (y3 instanceof ForceLink2) {
           return GT.value;
         }
         ;
-        if (x4 instanceof ForceX && y4 instanceof ForceX) {
+        if (x3 instanceof ForceX && y3 instanceof ForceX) {
           return EQ.value;
         }
         ;
-        if (x4 instanceof ForceX) {
+        if (x3 instanceof ForceX) {
           return LT.value;
         }
         ;
-        if (y4 instanceof ForceX) {
+        if (y3 instanceof ForceX) {
           return GT.value;
         }
         ;
-        if (x4 instanceof ForceY && y4 instanceof ForceY) {
+        if (x3 instanceof ForceY && y3 instanceof ForceY) {
           return EQ.value;
         }
         ;
-        throw new Error("Failed pattern match at ForcePlayground.Simple (line 0, column 0 - line 0, column 0): " + [x4.constructor.name, y4.constructor.name]);
+        throw new Error("Failed pattern match at ForcePlayground.Simple (line 0, column 0 - line 0, column 0): " + [x3.constructor.name, y3.constructor.name]);
       };
     },
     Eq0: function() {
@@ -12333,14 +16991,14 @@
     }
   };
   var createSimulation = function(model) {
-    var simLinks = map19(function(l2) {
+    var simLinks = map37(function(l2) {
       return {
         source: l2.source,
         target: l2.target
       };
     })(model.links);
     var config = {
-      engine: D3.value,
+      engine: Pure.value,
       setup: initialSetup,
       nodes: model.nodes,
       links: simLinks,
@@ -12361,7 +17019,7 @@
       return show6(lnk.source.id) + ("-" + (show6(lnk.target.id) + ("-" + show6(lnk.index))));
     };
     return forEach("links")(Line.value)(scene.links)(linkKey)(function(lnk) {
-      return elem3(Line.value)([x1(lnk.source.x), y1(lnk.source.y), x22(lnk.target.x), y22(lnk.target.y), strokeWidth(0.5 + lnk.weight * 2), stroke(linkTypeColor(lnk.linkType)), opacity(show12(0.3 + lnk.weight * 0.4))])([]);
+      return elem3(Line.value)([x1(lnk.source.x), y1(lnk.source.y), x2(lnk.target.x), y2(lnk.target.y), strokeWidth(0.5 + lnk.weight * 2), stroke(linkTypeColor(lnk.linkType)), opacity(show1(0.3 + lnk.weight * 0.4))])([]);
     });
   };
   var categoryColors = ["#1e5a8c", "#d4a024", "#c41e3a", "#2d8b57", "#6b7280", "#9333ea", "#f97316", "#94a3b8", "#dc2626", "#0891b2"];
@@ -12384,7 +17042,7 @@
       return show6(rn.node.id);
     };
     return forEach("nodes")(Circle.value)(scene.nodes)(nodeKey)(function(rn) {
-      return withBehaviors([onDrag(simulationDragNested(simulationId))])(elem3(Circle.value)([cx(rn.node.x), cy(rn.node.y), r(radiusForRenderNode(rn)), fill(fillForRenderNode(rn)), stroke(strokeForRenderNode(rn)), strokeWidth(strokeWidthForRenderNode(rn)), opacity(show12(opacityForRenderNode(rn))), style("cursor: grab;")])([]));
+      return withBehaviors([onDrag(simulationDragNested(simulationId))])(elem3(Circle.value)([cx(rn.node.x), cy(rn.node.y), r(radiusForRenderNode(rn)), fill(fillForRenderNode(rn)), stroke(strokeForRenderNode(rn)), strokeWidth(strokeWidthForRenderNode(rn)), opacity(show1(opacityForRenderNode(rn))), style("cursor: grab;")])([]));
     });
   };
   var renderScene = function(scene) {
@@ -12424,14 +17082,14 @@
                 };
               };
             });
-            var renderNodes = map19(function(n) {
+            var renderNodes = map37(function(n) {
               return {
                 node: n,
-                enterProgress: lookup3(n.id)(enteringProgress),
+                enterProgress: lookup5(n.id)(enteringProgress),
                 exitProgress: Nothing.value
               };
             })(visibleNodes);
-            var exitingRenderNodes = map19(function(e) {
+            var exitingRenderNodes = map37(function(e) {
               return {
                 node: e.item,
                 enterProgress: Nothing.value,
@@ -12449,7 +17107,7 @@
     };
   };
   var allForces = /* @__PURE__ */ (function() {
-    return fromFoldable3(foldableArray)(ordForceId)([ForceX.value, ForceY.value, ForceCharge.value, ForceCollide2.value, ForceLink2.value]);
+    return fromFoldable4(foldableArray)(ordForceId)([ForceX.value, ForceY.value, ForceCharge.value, ForceCollide2.value, ForceLink2.value]);
   })();
   var addForceToSetup = forceIdToConfig;
 
@@ -12493,17 +17151,17 @@
   }
 
   // output/Foreign.Object/index.js
-  var $$void7 = /* @__PURE__ */ $$void(functorST);
-  var lookup4 = /* @__PURE__ */ (function() {
+  var $$void8 = /* @__PURE__ */ $$void(functorST);
+  var lookup6 = /* @__PURE__ */ (function() {
     return runFn4(_lookup)(Nothing.value)(Just.create);
   })();
-  var fromFoldable8 = function(dictFoldable) {
-    var fromFoldable14 = fromFoldable(dictFoldable);
+  var fromFoldable11 = function(dictFoldable) {
+    var fromFoldable16 = fromFoldable(dictFoldable);
     return function(l2) {
       return runST(function __do5() {
         var s2 = newImpl();
-        foreach(fromFoldable14(l2))(function(v2) {
-          return $$void7(poke2(v2.value0)(v2.value1)(s2));
+        foreach(fromFoldable16(l2))(function(v2) {
+          return $$void8(poke2(v2.value0)(v2.value1)(s2));
         })();
         return s2;
       });
@@ -12634,8 +17292,8 @@
   });
 
   // output/Halogen.VDom.Types/index.js
-  var map20 = /* @__PURE__ */ map(functorArray);
-  var map110 = /* @__PURE__ */ map(functorTuple);
+  var map38 = /* @__PURE__ */ map(functorArray);
+  var map115 = /* @__PURE__ */ map(functorTuple);
   var Text2 = /* @__PURE__ */ (function() {
     function Text3(value0) {
       this.value0 = value0;
@@ -12747,11 +17405,11 @@
       }
       ;
       if (v22 instanceof Elem2) {
-        return new Elem2(v22.value0, v22.value1, v2.value0(v22.value2), map20(go2)(v22.value3));
+        return new Elem2(v22.value0, v22.value1, v2.value0(v22.value2), map38(go2)(v22.value3));
       }
       ;
       if (v22 instanceof Keyed) {
-        return new Keyed(v22.value0, v22.value1, v2.value0(v22.value2), map20(map110(go2))(v22.value3));
+        return new Keyed(v22.value0, v22.value1, v2.value0(v22.value2), map38(map115(go2))(v22.value3));
       }
       ;
       if (v22 instanceof Widget) {
@@ -12896,10 +17554,10 @@
       return el.hasAttribute(attr4);
     }
   }
-  function addEventListener2(ev, listener, el) {
+  function addEventListener(ev, listener, el) {
     el.addEventListener(ev, listener, false);
   }
-  function removeEventListener2(ev, listener, el) {
+  function removeEventListener(ev, listener, el) {
     el.removeEventListener(ev, listener, false);
   }
   var jsUndefined = void 0;
@@ -12911,7 +17569,7 @@
   var newMutMap = newImpl;
 
   // output/Halogen.VDom.DOM/index.js
-  var $runtime_lazy4 = function(name15, moduleName, init3) {
+  var $runtime_lazy9 = function(name15, moduleName, init3) {
     var state3 = 0;
     var val;
     return function(lineNumber) {
@@ -12926,7 +17584,7 @@
   var haltWidget = function(v2) {
     return halt(v2.widget);
   };
-  var $lazy_patchWidget = /* @__PURE__ */ $runtime_lazy4("patchWidget", "Halogen.VDom.DOM", function() {
+  var $lazy_patchWidget = /* @__PURE__ */ $runtime_lazy9("patchWidget", "Halogen.VDom.DOM", function() {
     return function(state3, vdom) {
       if (vdom instanceof Grafted) {
         return $lazy_patchWidget(291)(state3, runGraft(vdom.value0));
@@ -12952,7 +17610,7 @@
     var parent2 = parentNode2(v2.node);
     return removeChild2(v2.node, parent2);
   };
-  var $lazy_patchText = /* @__PURE__ */ $runtime_lazy4("patchText", "Halogen.VDom.DOM", function() {
+  var $lazy_patchText = /* @__PURE__ */ $runtime_lazy9("patchText", "Halogen.VDom.DOM", function() {
     return function(state3, vdom) {
       if (vdom instanceof Grafted) {
         return $lazy_patchText(82)(state3, runGraft(vdom.value0));
@@ -13010,7 +17668,7 @@
     ;
     return false;
   };
-  var $lazy_patchElem = /* @__PURE__ */ $runtime_lazy4("patchElem", "Halogen.VDom.DOM", function() {
+  var $lazy_patchElem = /* @__PURE__ */ $runtime_lazy9("patchElem", "Halogen.VDom.DOM", function() {
     return function(state3, vdom) {
       if (vdom instanceof Grafted) {
         return $lazy_patchElem(135)(state3, runGraft(vdom.value0));
@@ -13063,7 +17721,7 @@
     };
   });
   var patchElem = /* @__PURE__ */ $lazy_patchElem(130);
-  var $lazy_patchKeyed = /* @__PURE__ */ $runtime_lazy4("patchKeyed", "Halogen.VDom.DOM", function() {
+  var $lazy_patchKeyed = /* @__PURE__ */ $runtime_lazy9("patchKeyed", "Halogen.VDom.DOM", function() {
     return function(state3, vdom) {
       if (vdom instanceof Grafted) {
         return $lazy_patchKeyed(222)(state3, runGraft(vdom.value0));
@@ -13117,37 +17775,37 @@
     };
   });
   var patchKeyed = /* @__PURE__ */ $lazy_patchKeyed(217);
-  var buildWidget = function(v2, build, w) {
+  var buildWidget = function(v2, build2, w) {
     var res = v2.buildWidget(v2)(w);
     var res$prime = unStep(function(v1) {
       return mkStep(new Step(v1.value0, {
-        build,
+        build: build2,
         widget: res
       }, patchWidget, haltWidget));
     })(res);
     return res$prime;
   };
-  var buildText = function(v2, build, s2) {
+  var buildText = function(v2, build2, s2) {
     var node = createTextNode2(s2, v2.document);
     var state3 = {
-      build,
+      build: build2,
       node,
       value: s2
     };
     return mkStep(new Step(node, state3, patchText, haltText));
   };
-  var buildKeyed = function(v2, build, ns1, name1, as1, ch1) {
+  var buildKeyed = function(v2, build2, ns1, name1, as1, ch1) {
     var el = createElement2(toNullable(ns1), name1, v2.document);
     var node = toNode(el);
     var onChild = function(v1, ix, v22) {
-      var res = build(v22.value1);
+      var res = build2(v22.value1);
       insertChildIx(ix, extract2(res), node);
       return res;
     };
     var children2 = strMapWithIxE(ch1, fst, onChild);
     var attrs = v2.buildAttributes(el)(as1);
     var state3 = {
-      build,
+      build: build2,
       node,
       attrs,
       ns: ns1,
@@ -13157,18 +17815,18 @@
     };
     return mkStep(new Step(node, state3, patchKeyed, haltKeyed));
   };
-  var buildElem = function(v2, build, ns1, name1, as1, ch1) {
+  var buildElem = function(v2, build2, ns1, name1, as1, ch1) {
     var el = createElement2(toNullable(ns1), name1, v2.document);
     var node = toNode(el);
     var onChild = function(ix, child) {
-      var res = build(child);
+      var res = build2(child);
       insertChildIx(ix, extract2(res), node);
       return res;
     };
     var children2 = forE2(ch1, onChild);
     var attrs = v2.buildAttributes(el)(as1);
     var state3 = {
-      build,
+      build: build2,
       node,
       attrs,
       ns: ns1,
@@ -13178,7 +17836,7 @@
     return mkStep(new Step(node, state3, patchElem, haltElem));
   };
   var buildVDom = function(spec) {
-    var $lazy_build = $runtime_lazy4("build", "Halogen.VDom.DOM", function() {
+    var $lazy_build = $runtime_lazy9("build", "Halogen.VDom.DOM", function() {
       return function(v2) {
         if (v2 instanceof Text2) {
           return buildText(spec, $lazy_build(59), v2.value0);
@@ -13203,8 +17861,8 @@
         throw new Error("Failed pattern match at Halogen.VDom.DOM (line 58, column 27 - line 63, column 52): " + [v2.constructor.name]);
       };
     });
-    var build = $lazy_build(58);
-    return build;
+    var build2 = $lazy_build(58);
+    return build2;
   };
 
   // output/Foreign/foreign.js
@@ -13213,20 +17871,51 @@
   }
 
   // output/Data.List.NonEmpty/index.js
-  var singleton5 = /* @__PURE__ */ (function() {
+  var singleton6 = /* @__PURE__ */ (function() {
     var $200 = singleton3(plusList);
     return function($201) {
       return NonEmptyList($200($201));
     };
   })();
-  var cons2 = function(y4) {
+  var cons2 = function(y3) {
     return function(v2) {
-      return new NonEmpty(y4, new Cons(v2.value0, v2.value1));
+      return new NonEmpty(y3, new Cons(v2.value0, v2.value1));
     };
   };
 
+  // output/Web.Event.EventTarget/foreign.js
+  function eventListener(fn) {
+    return function() {
+      return function(event) {
+        return fn(event)();
+      };
+    };
+  }
+  function addEventListener2(type) {
+    return function(listener) {
+      return function(useCapture) {
+        return function(target6) {
+          return function() {
+            return target6.addEventListener(type, listener, useCapture);
+          };
+        };
+      };
+    };
+  }
+  function removeEventListener2(type) {
+    return function(listener) {
+      return function(useCapture) {
+        return function(target6) {
+          return function() {
+            return target6.removeEventListener(type, listener, useCapture);
+          };
+        };
+      };
+    };
+  }
+
   // output/Halogen.VDom.DOM.Prop/index.js
-  var $runtime_lazy5 = function(name15, moduleName, init3) {
+  var $runtime_lazy10 = function(name15, moduleName, init3) {
     var state3 = 0;
     var val;
     return function(lineNumber) {
@@ -13371,7 +18060,7 @@
           ;
           if (v1 instanceof Handler) {
             var handler3 = unsafeLookup(v1.value0, prevEvents);
-            return removeEventListener2(v1.value0, fst(handler3), el);
+            return removeEventListener(v1.value0, fst(handler3), el);
           }
           ;
           if (v1 instanceof Ref) {
@@ -13389,7 +18078,7 @@
         return unit;
       };
       var haltProp = function(state3) {
-        var v2 = lookup4("ref")(state3.props);
+        var v2 = lookup6("ref")(state3.props);
         if (v2 instanceof Just && v2.value0 instanceof Ref) {
           return mbEmit(v2.value0.value0(new Removed(el)));
         }
@@ -13466,7 +18155,7 @@
               };
             })();
             pokeMutMap(v22.value0, new Tuple(listener, ref2), events);
-            addEventListener2(v22.value0, listener, el);
+            addEventListener(v22.value0, listener, el);
             return v22;
           }
           ;
@@ -13478,7 +18167,7 @@
           throw new Error("Failed pattern match at Halogen.VDom.DOM.Prop (line 113, column 5 - line 135, column 15): " + [v22.constructor.name]);
         };
       };
-      var $lazy_patchProp = $runtime_lazy5("patchProp", "Halogen.VDom.DOM.Prop", function() {
+      var $lazy_patchProp = $runtime_lazy10("patchProp", "Halogen.VDom.DOM.Prop", function() {
         return function(state3, ps2) {
           var events = newMutMap();
           var onThis = removeProp(state3.events);
@@ -13507,8 +18196,8 @@
   };
 
   // output/Halogen.HTML.Core/index.js
-  var HTML = function(x4) {
-    return x4;
+  var HTML = function(x3) {
+    return x3;
   };
   var toPropValue = function(dict) {
     return dict.toPropValue;
@@ -13547,16 +18236,16 @@
   };
 
   // output/Control.Applicative.Free/index.js
-  var identity8 = /* @__PURE__ */ identity(categoryFn);
-  var Pure = /* @__PURE__ */ (function() {
-    function Pure2(value0) {
+  var identity7 = /* @__PURE__ */ identity(categoryFn);
+  var Pure2 = /* @__PURE__ */ (function() {
+    function Pure3(value0) {
       this.value0 = value0;
     }
     ;
-    Pure2.create = function(value0) {
-      return new Pure2(value0);
+    Pure3.create = function(value0) {
+      return new Pure3(value0);
     };
-    return Pure2;
+    return Pure3;
   })();
   var Lift = /* @__PURE__ */ (function() {
     function Lift3(value0) {
@@ -13590,15 +18279,15 @@
     return Lift.create;
   })();
   var goLeft = function(dictApplicative) {
-    var pure20 = pure(dictApplicative);
+    var pure24 = pure(dictApplicative);
     return function(fStack) {
       return function(valStack) {
         return function(nat) {
           return function(func) {
             return function(count) {
-              if (func instanceof Pure) {
+              if (func instanceof Pure2) {
                 return new Tuple(new Cons({
-                  func: pure20(func.value0),
+                  func: pure24(func.value0),
                   count
                 }, fStack), valStack);
               }
@@ -13622,7 +18311,7 @@
     };
   };
   var goApply = function(dictApplicative) {
-    var apply2 = apply(dictApplicative.Apply0());
+    var apply14 = apply(dictApplicative.Apply0());
     return function(fStack) {
       return function(vals) {
         return function(gVal) {
@@ -13631,7 +18320,7 @@
           }
           ;
           if (fStack instanceof Cons) {
-            var gRes = apply2(fStack.value0.func)(gVal);
+            var gRes = apply14(fStack.value0.func)(gVal);
             var $31 = fStack.value0.count === 1;
             if ($31) {
               if (fStack.value1 instanceof Nil) {
@@ -13662,14 +18351,14 @@
   };
   var functorFreeAp = {
     map: function(f) {
-      return function(x4) {
-        return mkAp(new Pure(f))(x4);
+      return function(x3) {
+        return mkAp(new Pure2(f))(x3);
       };
     }
   };
   var foldFreeAp = function(dictApplicative) {
     var goApply1 = goApply(dictApplicative);
-    var pure20 = pure(dictApplicative);
+    var pure24 = pure(dictApplicative);
     var goLeft1 = goLeft(dictApplicative);
     return function(nat) {
       return function(z2) {
@@ -13677,8 +18366,8 @@
           var $tco_done = false;
           var $tco_result;
           function $tco_loop(v2) {
-            if (v2.value1.value0 instanceof Pure) {
-              var v1 = goApply1(v2.value0)(v2.value1.value1)(pure20(v2.value1.value0.value0));
+            if (v2.value1.value0 instanceof Pure2) {
+              var v1 = goApply1(v2.value0)(v2.value1.value1)(pure24(v2.value1.value0.value0));
               if (v1 instanceof Left) {
                 $tco_done = true;
                 return v1.value0;
@@ -13722,12 +18411,12 @@
           ;
           return $tco_result;
         };
-        return go2(new Tuple(Nil.value, singleton5(z2)));
+        return go2(new Tuple(Nil.value, singleton6(z2)));
       };
     };
   };
   var retractFreeAp = function(dictApplicative) {
-    return foldFreeAp(dictApplicative)(identity8);
+    return foldFreeAp(dictApplicative)(identity7);
   };
   var applyFreeAp = {
     apply: function(fba) {
@@ -13741,7 +18430,7 @@
   };
   var applicativeFreeAp = /* @__PURE__ */ (function() {
     return {
-      pure: Pure.create,
+      pure: Pure2.create,
       Apply0: function() {
         return applyFreeAp;
       }
@@ -13853,7 +18542,7 @@
   var foldr4 = function(k) {
     return function(b2) {
       return function(q3) {
-        var foldl5 = function($copy_v) {
+        var foldl7 = function($copy_v) {
           return function($copy_v1) {
             return function($copy_v2) {
               var $tco_var_v = $copy_v;
@@ -13893,9 +18582,9 @@
               var v2 = uncons3(xs);
               if (v2 instanceof Nothing) {
                 $tco_done1 = true;
-                return foldl5(function(x4) {
+                return foldl7(function(x3) {
                   return function(i2) {
-                    return i2(x4);
+                    return i2(x3);
                   };
                 })(b2)(ys);
               }
@@ -13941,18 +18630,18 @@
   var empty7 = /* @__PURE__ */ (function() {
     return CatNil.value;
   })();
-  var append6 = link2;
+  var append7 = link2;
   var semigroupCatList = {
-    append: append6
+    append: append7
   };
   var snoc4 = function(cat) {
     return function(a3) {
-      return append6(cat)(new CatCons(a3, empty6));
+      return append7(cat)(new CatCons(a3, empty6));
     };
   };
 
   // output/Control.Monad.Free/index.js
-  var $runtime_lazy6 = function(name15, moduleName, init3) {
+  var $runtime_lazy11 = function(name15, moduleName, init3) {
     var state3 = 0;
     var val;
     return function(lineNumber) {
@@ -13964,19 +18653,19 @@
       return val;
     };
   };
-  var append7 = /* @__PURE__ */ append(semigroupCatList);
-  var Free = /* @__PURE__ */ (function() {
-    function Free2(value0, value1) {
+  var append8 = /* @__PURE__ */ append(semigroupCatList);
+  var Free2 = /* @__PURE__ */ (function() {
+    function Free3(value0, value1) {
       this.value0 = value0;
       this.value1 = value1;
     }
     ;
-    Free2.create = function(value0) {
+    Free3.create = function(value0) {
       return function(value1) {
-        return new Free2(value0, value1);
+        return new Free3(value0, value1);
       };
     };
-    return Free2;
+    return Free3;
   })();
   var Return = /* @__PURE__ */ (function() {
     function Return2(value0) {
@@ -14010,7 +18699,7 @@
       };
       var concatF = function(v23) {
         return function(r3) {
-          return new Free(v23.value0, append7(v23.value1)(r3));
+          return new Free2(v23.value0, append8(v23.value1)(r3));
         };
       };
       if (v2.value0 instanceof Return) {
@@ -14045,7 +18734,7 @@
     return $tco_result;
   };
   var fromView = function(f) {
-    return new Free(f, empty7);
+    return new Free2(f, empty7);
   };
   var freeMonad = {
     Applicative0: function() {
@@ -14070,7 +18759,7 @@
   var freeBind = {
     bind: function(v2) {
       return function(k) {
-        return new Free(v2.value0, snoc4(v2.value1)(k));
+        return new Free2(v2.value0, snoc4(v2.value1)(k));
       };
     },
     Apply0: function() {
@@ -14085,7 +18774,7 @@
       return $lazy_freeApply(0);
     }
   };
-  var $lazy_freeApply = /* @__PURE__ */ $runtime_lazy6("freeApply", "Control.Monad.Free", function() {
+  var $lazy_freeApply = /* @__PURE__ */ $runtime_lazy11("freeApply", "Control.Monad.Free", function() {
     return {
       apply: ap(freeMonad),
       Functor0: function() {
@@ -14093,26 +18782,26 @@
       }
     };
   });
-  var pure10 = /* @__PURE__ */ pure(freeApplicative);
+  var pure15 = /* @__PURE__ */ pure(freeApplicative);
   var liftF = function(f) {
     return fromView(new Bind(f, function($192) {
-      return pure10($192);
+      return pure15($192);
     }));
   };
   var foldFree = function(dictMonadRec) {
     var Monad0 = dictMonadRec.Monad0();
-    var map112 = map(Monad0.Bind1().Apply0().Functor0());
-    var pure110 = pure(Monad0.Applicative0());
+    var map117 = map(Monad0.Bind1().Apply0().Functor0());
+    var pure112 = pure(Monad0.Applicative0());
     var tailRecM4 = tailRecM(dictMonadRec);
     return function(k) {
       var go2 = function(f) {
         var v2 = toView(f);
         if (v2 instanceof Return) {
-          return map112(Done.create)(pure110(v2.value0));
+          return map117(Done.create)(pure112(v2.value0));
         }
         ;
         if (v2 instanceof Bind) {
-          return map112(function($199) {
+          return map117(function($199) {
             return Loop.create(v2.value1($199));
           })(k(v2.value0));
         }
@@ -14137,9 +18826,9 @@
   var unsafeRefEq = reallyUnsafeRefEq;
 
   // output/Halogen.Subscription/index.js
-  var $$void8 = /* @__PURE__ */ $$void(functorEffect);
+  var $$void9 = /* @__PURE__ */ $$void(functorEffect);
   var bind5 = /* @__PURE__ */ bind(bindEffect);
-  var append8 = /* @__PURE__ */ append(semigroupArray);
+  var append9 = /* @__PURE__ */ append(semigroupArray);
   var traverse_3 = /* @__PURE__ */ traverse_(applicativeEffect);
   var traverse_1 = /* @__PURE__ */ traverse_3(foldableArray);
   var unsubscribe = function(v2) {
@@ -14148,7 +18837,7 @@
   var subscribe2 = function(v2) {
     return function(k) {
       return v2(function($76) {
-        return $$void8(k($76));
+        return $$void9(k($76));
       });
     };
   };
@@ -14174,7 +18863,7 @@
       emitter: function(k) {
         return function __do5() {
           modify_(function(v2) {
-            return append8(v2)([k]);
+            return append9(v2)([k]);
           })(subscribers)();
           return modify_(deleteBy(unsafeRefEq)(k))(subscribers);
         };
@@ -14188,12 +18877,12 @@
   };
 
   // output/Halogen.Query.HalogenM/index.js
-  var identity9 = /* @__PURE__ */ identity(categoryFn);
-  var SubscriptionId = function(x4) {
-    return x4;
+  var identity8 = /* @__PURE__ */ identity(categoryFn);
+  var SubscriptionId = function(x3) {
+    return x3;
   };
-  var ForkId = function(x4) {
-    return x4;
+  var ForkId = function(x3) {
+    return x3;
   };
   var State = /* @__PURE__ */ (function() {
     function State2(value0) {
@@ -14326,13 +19015,13 @@
     };
     return GetRef2;
   })();
-  var HalogenM = function(x4) {
-    return x4;
+  var HalogenM = function(x3) {
+    return x3;
   };
   var subscribe3 = function(es) {
     return liftF(new Subscribe(function(v2) {
       return es;
-    }, identity9));
+    }, identity8));
   };
   var ordSubscriptionId = ordInt;
   var ordForkId = ordInt;
@@ -14424,7 +19113,7 @@
   })();
 
   // output/Halogen.VDom.Thunk/index.js
-  var $runtime_lazy7 = function(name15, moduleName, init3) {
+  var $runtime_lazy12 = function(name15, moduleName, init3) {
     var state3 = 0;
     var val;
     return function(lineNumber) {
@@ -14446,7 +19135,7 @@
     var haltThunk = function(state3) {
       return halt(state3.vdom);
     };
-    var $lazy_patchThunk = $runtime_lazy7("patchThunk", "Halogen.VDom.Thunk", function() {
+    var $lazy_patchThunk = $runtime_lazy12("patchThunk", "Halogen.VDom.Thunk", function() {
       return function(state3, t2) {
         var $48 = unsafeEqThunk(state3.thunk, t2);
         if ($48) {
@@ -14476,8 +19165,8 @@
   // output/Halogen.Component/index.js
   var voidLeft2 = /* @__PURE__ */ voidLeft(functorHalogenM);
   var traverse_4 = /* @__PURE__ */ traverse_(applicativeHalogenM)(foldableMaybe);
-  var map21 = /* @__PURE__ */ map(functorHalogenM);
-  var pure11 = /* @__PURE__ */ pure(applicativeHalogenM);
+  var map39 = /* @__PURE__ */ map(functorHalogenM);
+  var pure16 = /* @__PURE__ */ pure(applicativeHalogenM);
   var ComponentSlot = /* @__PURE__ */ (function() {
     function ComponentSlot2(value0) {
       this.value0 = value0;
@@ -14520,7 +19209,7 @@
       ;
       if (v2 instanceof Query) {
         return unCoyoneda(function(g) {
-          var $45 = map21(maybe(v2.value1(unit))(g));
+          var $45 = map39(maybe(v2.value1(unit))(g));
           return function($46) {
             return $45(args.handleQuery($46));
           };
@@ -14533,8 +19222,8 @@
   var mkComponent = unsafeCoerce2;
   var defaultEval = /* @__PURE__ */ (function() {
     return {
-      handleAction: $$const(pure11(unit)),
-      handleQuery: $$const(pure11(Nothing.value)),
+      handleAction: $$const(pure16(unit)),
+      handleQuery: $$const(pure16(Nothing.value)),
       receive: $$const(Nothing.value),
       initialize: Nothing.value,
       finalize: Nothing.value
@@ -14542,9 +19231,9 @@
   })();
 
   // output/Halogen.HTML.Elements/index.js
-  var pure12 = /* @__PURE__ */ pure(applicativeMaybe);
+  var pure17 = /* @__PURE__ */ pure(applicativeMaybe);
   var elementNS = function($15) {
-    return element(pure12($15));
+    return element(pure17($15));
   };
   var element2 = /* @__PURE__ */ (function() {
     return element(Nothing.value);
@@ -14556,7 +19245,7 @@
   var p_ = /* @__PURE__ */ p([]);
   var span4 = /* @__PURE__ */ element2("span");
   var div2 = /* @__PURE__ */ element2("div");
-  var button2 = /* @__PURE__ */ element2("button");
+  var button = /* @__PURE__ */ element2("button");
 
   // output/Web.HTML.Event.EventTypes/index.js
   var domcontentloaded = "DOMContentLoaded";
@@ -14711,8 +19400,8 @@
 
   // output/Halogen.Svg.Attributes/index.js
   var show8 = /* @__PURE__ */ show(showNumber);
-  var map23 = /* @__PURE__ */ map(functorArray);
-  var y23 = /* @__PURE__ */ (function() {
+  var map40 = /* @__PURE__ */ map(functorArray);
+  var y22 = /* @__PURE__ */ (function() {
     var $22 = attr3("y2");
     return function($23) {
       return $22(show8($23));
@@ -14724,13 +19413,13 @@
       return $24(show8($25));
     };
   })();
-  var y3 = /* @__PURE__ */ (function() {
+  var y = /* @__PURE__ */ (function() {
     var $26 = attr3("y");
     return function($27) {
       return $26(show8($27));
     };
   })();
-  var x23 = /* @__PURE__ */ (function() {
+  var x22 = /* @__PURE__ */ (function() {
     var $28 = attr3("x2");
     return function($29) {
       return $28(show8($29));
@@ -14742,7 +19431,7 @@
       return $30(show8($31));
     };
   })();
-  var x3 = /* @__PURE__ */ (function() {
+  var x = /* @__PURE__ */ (function() {
     var $32 = attr3("x");
     return function($33) {
       return $32(show8($33));
@@ -14758,7 +19447,7 @@
     return function(y_) {
       return function(w) {
         return function(h_) {
-          return attr3("viewBox")(joinWith(" ")(map23(show8)([x_, y_, w, h_])));
+          return attr3("viewBox")(joinWith(" ")(map40(show8)([x_, y_, w, h_])));
         };
       };
     };
@@ -14772,7 +19461,7 @@
   var points = /* @__PURE__ */ (function() {
     var $67 = attr3("points");
     var $68 = intercalate2(monoidString)(" ");
-    var $69 = map23(function(v2) {
+    var $69 = map40(function(v2) {
       return show8(v2.value0) + ("," + show8(v2.value1));
     });
     return function($70) {
@@ -14821,14 +19510,14 @@
   var path = function(props) {
     return element3("path")(props)([]);
   };
-  var polygon = function(props) {
+  var polygon2 = function(props) {
     return element3("polygon")(props)([]);
   };
   var rect = function(props) {
     return element3("rect")(props)([]);
   };
   var svg = /* @__PURE__ */ element3("svg");
-  var circle = function(props) {
+  var circle2 = function(props) {
     return element3("circle")(props)([]);
   };
 
@@ -14858,31 +19547,31 @@
 
   // output/ForcePlayground.Component/index.js
   var mod3 = /* @__PURE__ */ mod(euclideanRingInt);
-  var fromFoldable10 = /* @__PURE__ */ fromFoldable3(foldableArray);
-  var fromFoldable13 = /* @__PURE__ */ fromFoldable10(ordForceId);
-  var fromFoldable23 = /* @__PURE__ */ fromFoldable8(foldableArray);
-  var map24 = /* @__PURE__ */ map(functorArray);
+  var fromFoldable14 = /* @__PURE__ */ fromFoldable4(foldableArray);
+  var fromFoldable15 = /* @__PURE__ */ fromFoldable14(ordForceId);
+  var fromFoldable24 = /* @__PURE__ */ fromFoldable11(foldableArray);
+  var map41 = /* @__PURE__ */ map(functorArray);
   var show9 = /* @__PURE__ */ show(showInt);
-  var toUnfoldable7 = /* @__PURE__ */ toUnfoldable2(unfoldableArray);
+  var toUnfoldable6 = /* @__PURE__ */ toUnfoldable2(unfoldableArray);
   var member5 = /* @__PURE__ */ member2(ordForceId);
-  var append9 = /* @__PURE__ */ append(semigroupArray);
+  var append10 = /* @__PURE__ */ append(semigroupArray);
   var bind6 = /* @__PURE__ */ bind(bindHalogenM);
   var get2 = /* @__PURE__ */ get(monadStateHalogenM);
   var fromFoldable33 = /* @__PURE__ */ fromFoldable(foldableSet);
-  var pure13 = /* @__PURE__ */ pure(applicativeHalogenM);
+  var pure18 = /* @__PURE__ */ pure(applicativeHalogenM);
   var sortWith2 = /* @__PURE__ */ sortWith(ordInt);
   var fromFoldable43 = /* @__PURE__ */ fromFoldable2(ordInt)(foldableArray);
   var member12 = /* @__PURE__ */ member2(ordInt);
-  var fromFoldable52 = /* @__PURE__ */ fromFoldable10(ordInt);
+  var fromFoldable52 = /* @__PURE__ */ fromFoldable14(ordInt);
   var tickProgressMap2 = /* @__PURE__ */ tickProgressMap(ordInt);
-  var min7 = /* @__PURE__ */ min(ordNumber);
+  var min9 = /* @__PURE__ */ min(ordNumber);
   var discard2 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
-  var when7 = /* @__PURE__ */ when(applicativeHalogenM);
+  var when15 = /* @__PURE__ */ when(applicativeHalogenM);
   var modify_3 = /* @__PURE__ */ modify_2(monadStateHalogenM);
-  var $$void9 = /* @__PURE__ */ $$void(functorHalogenM);
+  var $$void10 = /* @__PURE__ */ $$void(functorHalogenM);
   var mapFlipped2 = /* @__PURE__ */ mapFlipped(functorEmitter);
-  var $$delete5 = /* @__PURE__ */ $$delete3(ordForceId);
-  var insert7 = /* @__PURE__ */ insert3(ordForceId);
+  var $$delete4 = /* @__PURE__ */ $$delete3(ordForceId);
+  var insert6 = /* @__PURE__ */ insert3(ordForceId);
   var toUnfoldable1 = /* @__PURE__ */ toUnfoldable4(unfoldableArray);
   var delete1 = /* @__PURE__ */ $$delete3(ordInt);
   var insert1 = /* @__PURE__ */ insert3(ordInt);
@@ -15018,41 +19707,41 @@
     }
     ;
     if (v2 instanceof PresetClustered) {
-      return fromFoldable13([ForceCharge.value, ForceCollide2.value, ForceLink2.value]);
+      return fromFoldable15([ForceCharge.value, ForceCollide2.value, ForceLink2.value]);
     }
     ;
     if (v2 instanceof PresetQuadrants) {
-      return fromFoldable13([ForceCollide2.value]);
+      return fromFoldable15([ForceCollide2.value]);
     }
     ;
     throw new Error("Failed pattern match at ForcePlayground.Component (line 79, column 16 - line 82, column 53): " + [v2.constructor.name]);
   };
   var mapToPositionObject = function(m2) {
-    return fromFoldable23(map24(function(v2) {
+    return fromFoldable24(map41(function(v2) {
       return new Tuple(show9(v2.value0), v2.value1);
-    })(toUnfoldable7(m2)));
+    })(toUnfoldable6(m2)));
   };
   var iconVertical = /* @__PURE__ */ (function() {
-    return svg([viewBox2(0)(0)(40)(40), classes2(["semiotic-icon"])])([line([x12(20), y12(4), x23(20), y23(36), classes2(["semiotic-line"])]), polygon([points([new Tuple(14, 12), new Tuple(20, 4), new Tuple(26, 12)]), classes2(["semiotic-shape"])]), polygon([points([new Tuple(14, 28), new Tuple(20, 36), new Tuple(26, 28)]), classes2(["semiotic-shape"])]), circle([cx2(20), cy2(20), r2(3), classes2(["semiotic-shape"])])]);
+    return svg([viewBox2(0)(0)(40)(40), classes2(["semiotic-icon"])])([line([x12(20), y12(4), x22(20), y22(36), classes2(["semiotic-line"])]), polygon2([points([new Tuple(14, 12), new Tuple(20, 4), new Tuple(26, 12)]), classes2(["semiotic-shape"])]), polygon2([points([new Tuple(14, 28), new Tuple(20, 36), new Tuple(26, 28)]), classes2(["semiotic-shape"])]), circle2([cx2(20), cy2(20), r2(3), classes2(["semiotic-shape"])])]);
   })();
   var iconTriangle = /* @__PURE__ */ (function() {
-    return svg([viewBox2(0)(0)(40)(40), classes2(["semiotic-icon"])])([polygon([points([new Tuple(20, 6), new Tuple(34, 34), new Tuple(6, 34)]), classes2(["semiotic-shape"])])]);
+    return svg([viewBox2(0)(0)(40)(40), classes2(["semiotic-icon"])])([polygon2([points([new Tuple(20, 6), new Tuple(34, 34), new Tuple(6, 34)]), classes2(["semiotic-shape"])])]);
   })();
-  var iconStarburst = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle([/* @__PURE__ */ cx2(20), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(20), /* @__PURE__ */ y12(4), /* @__PURE__ */ x23(20), /* @__PURE__ */ y23(12), /* @__PURE__ */ classes2(["semiotic-line"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(20), /* @__PURE__ */ y12(28), /* @__PURE__ */ x23(20), /* @__PURE__ */ y23(36), /* @__PURE__ */ classes2(["semiotic-line"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(4), /* @__PURE__ */ y12(20), /* @__PURE__ */ x23(12), /* @__PURE__ */ y23(20), /* @__PURE__ */ classes2(["semiotic-line"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(28), /* @__PURE__ */ y12(20), /* @__PURE__ */ x23(36), /* @__PURE__ */ y23(20), /* @__PURE__ */ classes2(["semiotic-line"])])]);
-  var iconScattered = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle([/* @__PURE__ */ cx2(8), /* @__PURE__ */ cy2(10), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(32), /* @__PURE__ */ cy2(8), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(20), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(6), /* @__PURE__ */ cy2(32), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(34), /* @__PURE__ */ cy2(30), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
+  var iconStarburst = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle2([/* @__PURE__ */ cx2(20), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(20), /* @__PURE__ */ y12(4), /* @__PURE__ */ x22(20), /* @__PURE__ */ y22(12), /* @__PURE__ */ classes2(["semiotic-line"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(20), /* @__PURE__ */ y12(28), /* @__PURE__ */ x22(20), /* @__PURE__ */ y22(36), /* @__PURE__ */ classes2(["semiotic-line"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(4), /* @__PURE__ */ y12(20), /* @__PURE__ */ x22(12), /* @__PURE__ */ y22(20), /* @__PURE__ */ classes2(["semiotic-line"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(28), /* @__PURE__ */ y12(20), /* @__PURE__ */ x22(36), /* @__PURE__ */ y22(20), /* @__PURE__ */ classes2(["semiotic-line"])])]);
+  var iconScattered = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle2([/* @__PURE__ */ cx2(8), /* @__PURE__ */ cy2(10), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(32), /* @__PURE__ */ cy2(8), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(20), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(6), /* @__PURE__ */ cy2(32), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(34), /* @__PURE__ */ cy2(30), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
   var iconRefresh = /* @__PURE__ */ (function() {
-    return svg([viewBox2(0)(0)(40)(40), classes2(["semiotic-icon", "semiotic-icon--inline"])])([path([d([m(Abs.value)(20)(8), a(Abs.value)(12)(12)(0)(Arc1.value)(Sweep1.value)(8)(20)]), classes2(["semiotic-arc"])]), polygon([points([new Tuple(4, 12), new Tuple(8, 20), new Tuple(12, 12)]), classes2(["semiotic-shape"])])]);
+    return svg([viewBox2(0)(0)(40)(40), classes2(["semiotic-icon", "semiotic-icon--inline"])])([path([d([m(Abs.value)(20)(8), a(Abs.value)(12)(12)(0)(Arc1.value)(Sweep1.value)(8)(20)]), classes2(["semiotic-arc"])]), polygon2([points([new Tuple(4, 12), new Tuple(8, 20), new Tuple(12, 12)]), classes2(["semiotic-shape"])])]);
   })();
-  var iconQuadrants = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ line([/* @__PURE__ */ x12(20), /* @__PURE__ */ y12(4), /* @__PURE__ */ x23(20), /* @__PURE__ */ y23(36), /* @__PURE__ */ classes2(["semiotic-line-thin"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(4), /* @__PURE__ */ y12(20), /* @__PURE__ */ x23(36), /* @__PURE__ */ y23(20), /* @__PURE__ */ classes2(["semiotic-line-thin"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(10), /* @__PURE__ */ cy2(10), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(30), /* @__PURE__ */ cy2(10), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(10), /* @__PURE__ */ cy2(30), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(30), /* @__PURE__ */ cy2(30), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
-  var iconOverlap = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle([/* @__PURE__ */ cx2(15), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(10), /* @__PURE__ */ classes2(["semiotic-shape-stroke"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(25), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(10), /* @__PURE__ */ classes2(["semiotic-shape-stroke"])])]);
+  var iconQuadrants = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ line([/* @__PURE__ */ x12(20), /* @__PURE__ */ y12(4), /* @__PURE__ */ x22(20), /* @__PURE__ */ y22(36), /* @__PURE__ */ classes2(["semiotic-line-thin"])]), /* @__PURE__ */ line([/* @__PURE__ */ x12(4), /* @__PURE__ */ y12(20), /* @__PURE__ */ x22(36), /* @__PURE__ */ y22(20), /* @__PURE__ */ classes2(["semiotic-line-thin"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(10), /* @__PURE__ */ cy2(10), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(30), /* @__PURE__ */ cy2(10), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(10), /* @__PURE__ */ cy2(30), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(30), /* @__PURE__ */ cy2(30), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
+  var iconOverlap = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle2([/* @__PURE__ */ cx2(15), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(10), /* @__PURE__ */ classes2(["semiotic-shape-stroke"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(25), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(10), /* @__PURE__ */ classes2(["semiotic-shape-stroke"])])]);
   var iconHorizontal = /* @__PURE__ */ (function() {
-    return svg([viewBox2(0)(0)(40)(40), classes2(["semiotic-icon"])])([line([x12(4), y12(20), x23(36), y23(20), classes2(["semiotic-line"])]), polygon([points([new Tuple(12, 14), new Tuple(4, 20), new Tuple(12, 26)]), classes2(["semiotic-shape"])]), polygon([points([new Tuple(28, 14), new Tuple(36, 20), new Tuple(28, 26)]), classes2(["semiotic-shape"])]), circle([cx2(20), cy2(20), r2(3), classes2(["semiotic-shape"])])]);
+    return svg([viewBox2(0)(0)(40)(40), classes2(["semiotic-icon"])])([line([x12(4), y12(20), x22(36), y22(20), classes2(["semiotic-line"])]), polygon2([points([new Tuple(12, 14), new Tuple(4, 20), new Tuple(12, 26)]), classes2(["semiotic-shape"])]), polygon2([points([new Tuple(28, 14), new Tuple(36, 20), new Tuple(28, 26)]), classes2(["semiotic-shape"])]), circle2([cx2(20), cy2(20), r2(3), classes2(["semiotic-shape"])])]);
   })();
-  var iconDots = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle([/* @__PURE__ */ cx2(13), /* @__PURE__ */ cy2(13), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(27), /* @__PURE__ */ cy2(13), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(13), /* @__PURE__ */ cy2(27), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(27), /* @__PURE__ */ cy2(27), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
-  var iconConnected = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ line([/* @__PURE__ */ x12(10), /* @__PURE__ */ y12(20), /* @__PURE__ */ x23(30), /* @__PURE__ */ y23(20), /* @__PURE__ */ classes2(["semiotic-line"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(10), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(30), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
-  var iconClustered = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle([/* @__PURE__ */ cx2(20), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(14), /* @__PURE__ */ cy2(16), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(26), /* @__PURE__ */ cy2(17), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(15), /* @__PURE__ */ cy2(25), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle([/* @__PURE__ */ cx2(25), /* @__PURE__ */ cy2(24), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
-  var iconCircle = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle([/* @__PURE__ */ cx2(20), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(12), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
-  var iconBars = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ rect([/* @__PURE__ */ x3(10), /* @__PURE__ */ y3(8), /* @__PURE__ */ width9(6), /* @__PURE__ */ height9(24), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ rect([/* @__PURE__ */ x3(24), /* @__PURE__ */ y3(8), /* @__PURE__ */ width9(6), /* @__PURE__ */ height9(24), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
+  var iconDots = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle2([/* @__PURE__ */ cx2(13), /* @__PURE__ */ cy2(13), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(27), /* @__PURE__ */ cy2(13), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(13), /* @__PURE__ */ cy2(27), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(27), /* @__PURE__ */ cy2(27), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
+  var iconConnected = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ line([/* @__PURE__ */ x12(10), /* @__PURE__ */ y12(20), /* @__PURE__ */ x22(30), /* @__PURE__ */ y22(20), /* @__PURE__ */ classes2(["semiotic-line"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(10), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(30), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(5), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
+  var iconClustered = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle2([/* @__PURE__ */ cx2(20), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(4), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(14), /* @__PURE__ */ cy2(16), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(26), /* @__PURE__ */ cy2(17), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(15), /* @__PURE__ */ cy2(25), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ circle2([/* @__PURE__ */ cx2(25), /* @__PURE__ */ cy2(24), /* @__PURE__ */ r2(3), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
+  var iconCircle = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ circle2([/* @__PURE__ */ cx2(20), /* @__PURE__ */ cy2(20), /* @__PURE__ */ r2(12), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
+  var iconBars = /* @__PURE__ */ svg([/* @__PURE__ */ viewBox2(0)(0)(40)(40), /* @__PURE__ */ classes2(["semiotic-icon"])])([/* @__PURE__ */ rect([/* @__PURE__ */ x(10), /* @__PURE__ */ y(8), /* @__PURE__ */ width9(6), /* @__PURE__ */ height9(24), /* @__PURE__ */ classes2(["semiotic-shape"])]), /* @__PURE__ */ rect([/* @__PURE__ */ x(24), /* @__PURE__ */ y(8), /* @__PURE__ */ width9(6), /* @__PURE__ */ height9(24), /* @__PURE__ */ classes2(["semiotic-shape"])])]);
   var goldenAngle = /* @__PURE__ */ (function() {
     return pi * (3 - sqrt(5));
   })();
@@ -15070,7 +19759,7 @@
       return function(icon) {
         return function(tooltip) {
           var isEnabled = member5(forceId)(state3.enabledForces);
-          return button2([classes(append9(["semiotic-button"])((function() {
+          return button([classes(append10(["semiotic-button"])((function() {
             if (isEnabled) {
               return ["semiotic-button--active"];
             }
@@ -15084,17 +19773,17 @@
     };
   };
   var eqForcePreset = {
-    eq: function(x4) {
-      return function(y4) {
-        if (x4 instanceof PresetStandard && y4 instanceof PresetStandard) {
+    eq: function(x3) {
+      return function(y3) {
+        if (x3 instanceof PresetStandard && y3 instanceof PresetStandard) {
           return true;
         }
         ;
-        if (x4 instanceof PresetClustered && y4 instanceof PresetClustered) {
+        if (x3 instanceof PresetClustered && y3 instanceof PresetClustered) {
           return true;
         }
         ;
-        if (x4 instanceof PresetQuadrants && y4 instanceof PresetQuadrants) {
+        if (x3 instanceof PresetQuadrants && y3 instanceof PresetQuadrants) {
           return true;
         }
         ;
@@ -15108,7 +19797,7 @@
       return function(icon) {
         return function(tooltip) {
           var isActive = eq12(state3.activePreset)(new Just(preset));
-          return button2([classes(append9(["semiotic-button"])((function() {
+          return button([classes(append10(["semiotic-button"])((function() {
             if (isActive) {
               return ["semiotic-button--active"];
             }
@@ -15122,9 +19811,9 @@
     };
   };
   var easeInOutCubic2 = function(t2) {
-    var pow3 = function(x4) {
+    var pow3 = function(x3) {
       return function(v2) {
-        return x4 * x4 * x4;
+        return x3 * x3 * x3;
       };
     };
     var $96 = t2 < 0.5;
@@ -15146,11 +19835,11 @@
         });
       }
       ;
-      return pure13(unit);
+      return pure18(unit);
     });
   };
   var computeQuadrantTargets = function(nodes) {
-    var grouped = groupBy(function(a3) {
+    var grouped2 = groupBy(function(a3) {
       return function(b2) {
         return a3.group === b2.group;
       };
@@ -15160,18 +19849,18 @@
     var computeGroupTargets = function(groupNodes) {
       var groupArray = toArray(groupNodes);
       var first = head2(groupNodes);
-      var center2 = quadrantCenter(first.group);
+      var center3 = quadrantCenter(first.group);
       return mapWithIndex2(function(idx) {
         return function(n) {
           var offset = phyllotaxisOffset(idx);
           return new Tuple(n.id, {
-            x: center2.x + offset.x,
-            y: center2.y + offset.y
+            x: center3.x + offset.x,
+            y: center3.y + offset.y
           });
         };
       })(groupArray);
     };
-    var allTargets = concatMap(computeGroupTargets)(grouped);
+    var allTargets = concatMap(computeGroupTargets)(grouped2);
     return fromFoldable43(allTargets);
   };
   var categoryIcon = function(state3) {
@@ -15180,7 +19869,7 @@
         return function(icon) {
           return function(tooltip) {
             var isVisible = member12(catId)(state3.shownCategories);
-            return button2([classes(append9(["semiotic-button"])((function() {
+            return button([classes(append10(["semiotic-button"])((function() {
               if (isVisible) {
                 return ["semiotic-button--active"];
               }
@@ -15195,7 +19884,7 @@
     };
   };
   var renderControlPanel = function(state3) {
-    return div2([classes(["semiotic-panel"])])([div2([classes(["semiotic-row"])])([categoryIcon(state3)(0)("#1e5a8c")(iconCircle)("RESEARCH"), categoryIcon(state3)(1)("#d4a024")(iconTriangle)("INDUSTRY"), categoryIcon(state3)(2)("#c41e3a")(iconBars)("GOVERNMENT"), categoryIcon(state3)(3)("#2d8b57")(iconDots)("COMMUNITY")]), div2([classes(["semiotic-row"])])([forceIcon(state3)(ForceCharge.value)(iconStarburst)("CHARGE"), forceIcon(state3)(ForceCollide2.value)(iconOverlap)("COLLIDE"), forceIcon(state3)(ForceLink2.value)(iconConnected)("LINKS"), forceIcon(state3)(ForceX.value)(iconHorizontal)("CENTER-X"), forceIcon(state3)(ForceY.value)(iconVertical)("CENTER-Y")]), div2([classes(["semiotic-row"])])([presetIcon(state3)(PresetStandard.value)(iconClustered)("CENTERED"), presetIcon(state3)(PresetClustered.value)(iconScattered)("FLOATING"), presetIcon(state3)(PresetQuadrants.value)(iconQuadrants)("QUADRANTS")]), div2([classes(["semiotic-row", "semiotic-row--footer"])])([button2([classes(["semiotic-button", "semiotic-button--wide"]), title2("Generate new network"), onClick(function(v2) {
+    return div2([classes(["semiotic-panel"])])([div2([classes(["semiotic-row"])])([categoryIcon(state3)(0)("#1e5a8c")(iconCircle)("RESEARCH"), categoryIcon(state3)(1)("#d4a024")(iconTriangle)("INDUSTRY"), categoryIcon(state3)(2)("#c41e3a")(iconBars)("GOVERNMENT"), categoryIcon(state3)(3)("#2d8b57")(iconDots)("COMMUNITY")]), div2([classes(["semiotic-row"])])([forceIcon(state3)(ForceCharge.value)(iconStarburst)("CHARGE"), forceIcon(state3)(ForceCollide2.value)(iconOverlap)("COLLIDE"), forceIcon(state3)(ForceLink2.value)(iconConnected)("LINKS"), forceIcon(state3)(ForceX.value)(iconHorizontal)("CENTER-X"), forceIcon(state3)(ForceY.value)(iconVertical)("CENTER-Y")]), div2([classes(["semiotic-row"])])([presetIcon(state3)(PresetStandard.value)(iconClustered)("CENTERED"), presetIcon(state3)(PresetClustered.value)(iconScattered)("FLOATING"), presetIcon(state3)(PresetQuadrants.value)(iconQuadrants)("QUADRANTS")]), div2([classes(["semiotic-row", "semiotic-row--footer"])])([button([classes(["semiotic-button", "semiotic-button--wide"]), title2("Generate new network"), onClick(function(v2) {
       return RegenerateGraph.value;
     })])([iconRefresh, span4([classes(["semiotic-label"])])([text5("REGENERATE")])])]), div2([classes(["semiotic-row"])])([span4([classes(["v2-indicator"]), style2("font-size: 10px; color: #2d8b57; opacity: 0.7;")])([text5("V2: runSimulation API")])])]);
   };
@@ -15220,9 +19909,9 @@
           if (state3.simHandle instanceof Just && state3.model instanceof Just) {
             var v1 = tickProgressMap2(transitionDelta)(state3.enteringProgress);
             var v22 = tickTransitions(transitionDelta)(state3.exitingNodes);
-            var newQuadrantProgress = min7(1)(state3.quadrantProgress + transitionDelta);
+            var newQuadrantProgress = min9(1)(state3.quadrantProgress + transitionDelta);
             var isAnimatingQuadrants = state3.quadrantProgress < 1 && !isEmpty(state3.quadrantTargets);
-            return discard2(when7(isAnimatingQuadrants)(liftEffect7((function() {
+            return discard2(when15(isAnimatingQuadrants)(liftEffect7((function() {
               var targetObj = mapToPositionObject(state3.quadrantTargets);
               var t2 = easeInOutCubic2(newQuadrantProgress);
               var startObj = mapToPositionObject(state3.quadrantStarts);
@@ -15253,7 +19942,7 @@
             });
           }
           ;
-          return pure13(unit);
+          return pure18(unit);
         });
       }
       ;
@@ -15271,7 +19960,7 @@
                   return discard2(liftEffect7(registerSimulation2(result.handle.reheat)))(function() {
                     return discard2(liftEffect7(renderSVGContainer("#force-playground-container")))(function() {
                       return bind6(liftEffect7(toHalogenEmitter(result.events)))(function(halogenEmitter) {
-                        return discard2($$void9(subscribe3(mapFlipped2(halogenEmitter)(function(event) {
+                        return discard2($$void10(subscribe3(mapFlipped2(halogenEmitter)(function(event) {
                           if (event instanceof Tick) {
                             return new SimTick(event.value0.alpha);
                           }
@@ -15290,7 +19979,7 @@
                           ;
                           throw new Error("Failed pattern match at ForcePlayground.Component (line 545, column 55 - line 549, column 30): " + [event.constructor.name]);
                         }))))(function() {
-                          var allNodeIds = fromFoldable52(map24(function(v1) {
+                          var allNodeIds = fromFoldable52(map41(function(v1) {
                             return v1.id;
                           })(model.nodes));
                           return discard2(modify_3(function(v1) {
@@ -15332,17 +20021,17 @@
       if (v2 instanceof ToggleForce) {
         return bind6(get2)(function(state3) {
           if (state3.simHandle instanceof Nothing) {
-            return pure13(unit);
+            return pure18(unit);
           }
           ;
           if (state3.simHandle instanceof Just) {
             var isEnabled = member5(v2.value0)(state3.enabledForces);
             var newEnabledForces = (function() {
               if (isEnabled) {
-                return $$delete5(v2.value0)(state3.enabledForces);
+                return $$delete4(v2.value0)(state3.enabledForces);
               }
               ;
-              return insert7(v2.value0)(state3.enabledForces);
+              return insert6(v2.value0)(state3.enabledForces);
             })();
             var newSetup = (function() {
               if (isEnabled) {
@@ -15376,11 +20065,11 @@
       if (v2 instanceof ApplyPreset) {
         return bind6(get2)(function(state3) {
           if (state3.simHandle instanceof Nothing) {
-            return pure13(unit);
+            return pure18(unit);
           }
           ;
           if (state3.model instanceof Nothing) {
-            return pure13(unit);
+            return pure18(unit);
           }
           ;
           if (state3.simHandle instanceof Just && state3.model instanceof Just) {
@@ -15399,7 +20088,7 @@
               if (v2.value0 instanceof PresetQuadrants) {
                 return bind6(liftEffect7(state3.simHandle.value0.getNodes))(function(currentNodes) {
                   var targetPositions = computeQuadrantTargets(state3.model.value0.nodes);
-                  var startPositions = fromFoldable43(map24(function(n) {
+                  var startPositions = fromFoldable43(map41(function(n) {
                     return new Tuple(n.id, {
                       x: n.x,
                       y: n.y
@@ -15460,7 +20149,7 @@
               ;
               return insert1(v2.value0)(state3.shownCategories);
             })();
-            var newVisibleIds = fromFoldable52(map24(function(v1) {
+            var newVisibleIds = fromFoldable52(map41(function(v1) {
               return v1.id;
             })(filter(function(n) {
               return member12(n.group)(newShownCategories);
@@ -15486,21 +20175,21 @@
                   $144.shownCategories = newShownCategories;
                   $144.visibleNodeIds = newVisibleIds;
                   $144.enteringProgress = newEntering;
-                  $144.exitingNodes = append9(state3.exitingNodes)(newExiting);
+                  $144.exitingNodes = append10(state3.exitingNodes)(newExiting);
                   return $144;
                 });
               });
             });
           }
           ;
-          return pure13(unit);
+          return pure18(unit);
         });
       }
       ;
       if (v2 instanceof ShowAllCategories) {
         return bind6(get2)(function(state3) {
           if (state3.simHandle instanceof Just && state3.model instanceof Just) {
-            var allNodeIds = fromFoldable52(map24(function(v1) {
+            var allNodeIds = fromFoldable52(map41(function(v1) {
               return v1.id;
             })(state3.model.value0.nodes));
             var addedIds = difference6(allNodeIds)(state3.visibleNodeIds);
@@ -15523,7 +20212,7 @@
             });
           }
           ;
-          return pure13(unit);
+          return pure18(unit);
         });
       }
       ;
@@ -15564,10 +20253,10 @@
   var liftEffect3 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var bindFlipped4 = /* @__PURE__ */ bindFlipped(bindEffect);
   var composeKleisliFlipped2 = /* @__PURE__ */ composeKleisliFlipped(bindEffect);
-  var pure14 = /* @__PURE__ */ pure(applicativeAff);
+  var pure19 = /* @__PURE__ */ pure(applicativeAff);
   var bindFlipped1 = /* @__PURE__ */ bindFlipped(bindMaybe);
-  var pure15 = /* @__PURE__ */ pure(applicativeEffect);
-  var map25 = /* @__PURE__ */ map(functorEffect);
+  var pure110 = /* @__PURE__ */ pure(applicativeEffect);
+  var map42 = /* @__PURE__ */ map(functorEffect);
   var discard3 = /* @__PURE__ */ discard(discardUnit);
   var throwError2 = /* @__PURE__ */ throwError(monadThrowAff);
   var selectElement2 = function(query2) {
@@ -15577,20 +20266,20 @@
         return $16(toParentNode($17));
       };
     })())(document2))(windowImpl)))(function(mel) {
-      return pure14(bindFlipped1(fromElement)(mel));
+      return pure19(bindFlipped1(fromElement)(mel));
     });
   };
-  var runHalogenAff = /* @__PURE__ */ runAff_(/* @__PURE__ */ either(throwException)(/* @__PURE__ */ $$const(/* @__PURE__ */ pure15(unit))));
+  var runHalogenAff = /* @__PURE__ */ runAff_(/* @__PURE__ */ either(throwException)(/* @__PURE__ */ $$const(/* @__PURE__ */ pure110(unit))));
   var awaitLoad = /* @__PURE__ */ makeAff(function(callback) {
     return function __do5() {
       var rs = bindFlipped4(readyState)(bindFlipped4(document2)(windowImpl))();
       if (rs instanceof Loading) {
-        var et = map25(toEventTarget2)(windowImpl)();
+        var et = map42(toEventTarget)(windowImpl)();
         var listener = eventListener(function(v2) {
           return callback(new Right(unit));
         })();
-        addEventListener(domcontentloaded)(listener)(false)(et)();
-        return effectCanceler(removeEventListener(domcontentloaded)(listener)(false)(et));
+        addEventListener2(domcontentloaded)(listener)(false)(et)();
+        return effectCanceler(removeEventListener2(domcontentloaded)(listener)(false)(et));
       }
       ;
       callback(new Right(unit))();
@@ -15599,7 +20288,7 @@
   });
   var awaitBody = /* @__PURE__ */ discard3(bindAff)(awaitLoad)(function() {
     return bind7(selectElement2("body"))(function(body2) {
-      return maybe(throwError2(error("Could not find body")))(pure14)(body2);
+      return maybe(throwError2(error("Could not find body")))(pure19)(body2);
     });
   });
 
@@ -15688,8 +20377,8 @@
   // output/Halogen.Aff.Driver.Eval/index.js
   var traverse_5 = /* @__PURE__ */ traverse_(applicativeEffect)(foldableMaybe);
   var bindFlipped5 = /* @__PURE__ */ bindFlipped(bindMaybe);
-  var lookup6 = /* @__PURE__ */ lookup(ordSubscriptionId);
-  var bind13 = /* @__PURE__ */ bind(bindAff);
+  var lookup8 = /* @__PURE__ */ lookup(ordSubscriptionId);
+  var bind15 = /* @__PURE__ */ bind(bindAff);
   var liftEffect4 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var discard4 = /* @__PURE__ */ discard(discardUnit);
   var discard1 = /* @__PURE__ */ discard4(bindAff);
@@ -15697,34 +20386,34 @@
   var traverse_22 = /* @__PURE__ */ traverse_12(foldableList);
   var fork3 = /* @__PURE__ */ fork(monadForkAff);
   var parSequence_2 = /* @__PURE__ */ parSequence_(parallelAff)(applicativeParAff)(foldableList);
-  var pure16 = /* @__PURE__ */ pure(applicativeAff);
-  var map27 = /* @__PURE__ */ map(functorCoyoneda);
+  var pure20 = /* @__PURE__ */ pure(applicativeAff);
+  var map44 = /* @__PURE__ */ map(functorCoyoneda);
   var parallel3 = /* @__PURE__ */ parallel(parallelAff);
-  var map111 = /* @__PURE__ */ map(functorAff);
+  var map116 = /* @__PURE__ */ map(functorAff);
   var sequential2 = /* @__PURE__ */ sequential(parallelAff);
-  var map28 = /* @__PURE__ */ map(functorMaybe);
-  var insert8 = /* @__PURE__ */ insert2(ordSubscriptionId);
+  var map212 = /* @__PURE__ */ map(functorMaybe);
+  var insert7 = /* @__PURE__ */ insert2(ordSubscriptionId);
   var retractFreeAp2 = /* @__PURE__ */ retractFreeAp(applicativeParAff);
-  var $$delete6 = /* @__PURE__ */ $$delete2(ordForkId);
+  var $$delete5 = /* @__PURE__ */ $$delete2(ordForkId);
   var unlessM2 = /* @__PURE__ */ unlessM(monadEffect);
   var insert12 = /* @__PURE__ */ insert2(ordForkId);
   var traverse_32 = /* @__PURE__ */ traverse_12(foldableMaybe);
   var lookup1 = /* @__PURE__ */ lookup(ordForkId);
   var lookup22 = /* @__PURE__ */ lookup(ordString);
   var foldFree2 = /* @__PURE__ */ foldFree(monadRecAff);
-  var alter2 = /* @__PURE__ */ alter(ordString);
+  var alter3 = /* @__PURE__ */ alter(ordString);
   var unsubscribe3 = function(sid) {
     return function(ref2) {
       return function __do5() {
         var v2 = read(ref2)();
         var subs = read(v2.subscriptions)();
-        return traverse_5(unsubscribe)(bindFlipped5(lookup6(sid))(subs))();
+        return traverse_5(unsubscribe)(bindFlipped5(lookup8(sid))(subs))();
       };
     };
   };
   var queueOrRun = function(ref2) {
     return function(au) {
-      return bind13(liftEffect4(read(ref2)))(function(v2) {
+      return bind15(liftEffect4(read(ref2)))(function(v2) {
         if (v2 instanceof Nothing) {
           return au;
         }
@@ -15743,11 +20432,11 @@
         initializers: Nil.value,
         finalizers: Nil.value
       })(lchs)))(function() {
-        return bind13(liftEffect4(f))(function(result) {
-          return bind13(liftEffect4(read(lchs)))(function(v2) {
+        return bind15(liftEffect4(f))(function(result) {
+          return bind15(liftEffect4(read(lchs)))(function(v2) {
             return discard1(traverse_22(fork3)(v2.finalizers))(function() {
               return discard1(parSequence_2(v2.initializers))(function() {
-                return pure16(result);
+                return pure20(result);
               });
             });
           });
@@ -15758,7 +20447,7 @@
   var handleAff = /* @__PURE__ */ runAff_(/* @__PURE__ */ either(throwException)(/* @__PURE__ */ $$const(/* @__PURE__ */ pure(applicativeEffect)(unit))));
   var fresh = function(f) {
     return function(ref2) {
-      return bind13(liftEffect4(read(ref2)))(function(v2) {
+      return bind15(liftEffect4(read(ref2)))(function(v2) {
         return liftEffect4(modify$prime(function(i2) {
           return {
             state: i2 + 1 | 0,
@@ -15771,8 +20460,8 @@
   var evalQ = function(render2) {
     return function(ref2) {
       return function(q3) {
-        return bind13(liftEffect4(read(ref2)))(function(v2) {
-          return evalM(render2)(ref2)(v2["component"]["eval"](new Query(map27(Just.create)(liftCoyoneda(q3)), $$const(Nothing.value))));
+        return bind15(liftEffect4(read(ref2)))(function(v2) {
+          return evalM(render2)(ref2)(v2["component"]["eval"](new Query(map44(Just.create)(liftCoyoneda(q3)), $$const(Nothing.value))));
         });
       };
     };
@@ -15782,16 +20471,16 @@
       return function(v2) {
         var evalChildQuery = function(ref2) {
           return function(cqb) {
-            return bind13(liftEffect4(read(ref2)))(function(v1) {
+            return bind15(liftEffect4(read(ref2)))(function(v1) {
               return unChildQueryBox(function(v22) {
                 var evalChild = function(v3) {
-                  return parallel3(bind13(liftEffect4(read(v3)))(function(dsx) {
+                  return parallel3(bind15(liftEffect4(read(v3)))(function(dsx) {
                     return unDriverStateX(function(ds) {
                       return evalQ(render2)(ds.selfRef)(v22.value1);
                     })(dsx);
                   }));
                 };
-                return map111(v22.value2)(sequential2(v22.value0(applicativeParAff)(evalChild)(v1.children)));
+                return map116(v22.value2)(sequential2(v22.value0(applicativeParAff)(evalChild)(v1.children)));
               })(cqb);
             });
           };
@@ -15799,10 +20488,10 @@
         var go2 = function(ref2) {
           return function(v1) {
             if (v1 instanceof State) {
-              return bind13(liftEffect4(read(ref2)))(function(v22) {
+              return bind15(liftEffect4(read(ref2)))(function(v22) {
                 var v3 = v1.value0(v22.state);
                 if (unsafeRefEq(v22.state)(v3.value1)) {
-                  return pure16(v3.value0);
+                  return pure20(v3.value0);
                 }
                 ;
                 if (otherwise) {
@@ -15825,7 +20514,7 @@
                     state: v3.value1
                   })(ref2)))(function() {
                     return discard1(handleLifecycle(v22.lifecycleHandlers)(render2(v22.lifecycleHandlers)(ref2)))(function() {
-                      return pure16(v3.value0);
+                      return pure20(v3.value0);
                     });
                   });
                 }
@@ -15835,13 +20524,13 @@
             }
             ;
             if (v1 instanceof Subscribe) {
-              return bind13(fresh(SubscriptionId)(ref2))(function(sid) {
-                return bind13(liftEffect4(subscribe2(v1.value0(sid))(function(act) {
+              return bind15(fresh(SubscriptionId)(ref2))(function(sid) {
+                return bind15(liftEffect4(subscribe2(v1.value0(sid))(function(act) {
                   return handleAff(evalF(render2)(ref2)(new Action(act)));
                 })))(function(finalize) {
-                  return bind13(liftEffect4(read(ref2)))(function(v22) {
-                    return discard1(liftEffect4(modify_(map28(insert8(sid)(finalize)))(v22.subscriptions)))(function() {
-                      return pure16(v1.value1(sid));
+                  return bind15(liftEffect4(read(ref2)))(function(v22) {
+                    return discard1(liftEffect4(modify_(map212(insert7(sid)(finalize)))(v22.subscriptions)))(function() {
+                      return pure20(v1.value1(sid));
                     });
                   });
                 });
@@ -15850,7 +20539,7 @@
             ;
             if (v1 instanceof Unsubscribe) {
               return discard1(liftEffect4(unsubscribe3(v1.value0)(ref2)))(function() {
-                return pure16(v1.value1);
+                return pure20(v1.value1);
               });
             }
             ;
@@ -15863,10 +20552,10 @@
             }
             ;
             if (v1 instanceof Raise) {
-              return bind13(liftEffect4(read(ref2)))(function(v22) {
-                return bind13(liftEffect4(read(v22.handlerRef)))(function(handler3) {
+              return bind15(liftEffect4(read(ref2)))(function(v22) {
+                return bind15(liftEffect4(read(v22.handlerRef)))(function(handler3) {
                   return discard1(queueOrRun(v22.pendingOuts)(handler3(v1.value0)))(function() {
-                    return pure16(v1.value1);
+                    return pure20(v1.value1);
                   });
                 });
               });
@@ -15882,15 +20571,15 @@
             }
             ;
             if (v1 instanceof Fork) {
-              return bind13(fresh(ForkId)(ref2))(function(fid) {
-                return bind13(liftEffect4(read(ref2)))(function(v22) {
-                  return bind13(liftEffect4($$new(false)))(function(doneRef) {
-                    return bind13(fork3($$finally(liftEffect4(function __do5() {
-                      modify_($$delete6(fid))(v22.forks)();
+              return bind15(fresh(ForkId)(ref2))(function(fid) {
+                return bind15(liftEffect4(read(ref2)))(function(v22) {
+                  return bind15(liftEffect4($$new(false)))(function(doneRef) {
+                    return bind15(fork3($$finally(liftEffect4(function __do5() {
+                      modify_($$delete5(fid))(v22.forks)();
                       return write(true)(doneRef)();
                     }))(evalM(render2)(ref2)(v1.value0))))(function(fiber) {
                       return discard1(liftEffect4(unlessM2(read(doneRef))(modify_(insert12(fid)(fiber))(v22.forks))))(function() {
-                        return pure16(v1.value1(fid));
+                        return pure20(v1.value1(fid));
                       });
                     });
                   });
@@ -15899,28 +20588,28 @@
             }
             ;
             if (v1 instanceof Join) {
-              return bind13(liftEffect4(read(ref2)))(function(v22) {
-                return bind13(liftEffect4(read(v22.forks)))(function(forkMap) {
+              return bind15(liftEffect4(read(ref2)))(function(v22) {
+                return bind15(liftEffect4(read(v22.forks)))(function(forkMap) {
                   return discard1(traverse_32(joinFiber)(lookup1(v1.value0)(forkMap)))(function() {
-                    return pure16(v1.value1);
+                    return pure20(v1.value1);
                   });
                 });
               });
             }
             ;
             if (v1 instanceof Kill) {
-              return bind13(liftEffect4(read(ref2)))(function(v22) {
-                return bind13(liftEffect4(read(v22.forks)))(function(forkMap) {
+              return bind15(liftEffect4(read(ref2)))(function(v22) {
+                return bind15(liftEffect4(read(v22.forks)))(function(forkMap) {
                   return discard1(traverse_32(killFiber(error("Cancelled")))(lookup1(v1.value0)(forkMap)))(function() {
-                    return pure16(v1.value1);
+                    return pure20(v1.value1);
                   });
                 });
               });
             }
             ;
             if (v1 instanceof GetRef) {
-              return bind13(liftEffect4(read(ref2)))(function(v22) {
-                return pure16(v1.value1(lookup22(v1.value0)(v22.refs)));
+              return bind15(liftEffect4(read(ref2)))(function(v22) {
+                return pure20(v1.value1(lookup22(v1.value0)(v22.refs)));
               });
             }
             ;
@@ -15952,13 +20641,13 @@
               subscriptions: st.subscriptions,
               forks: st.forks,
               lifecycleHandlers: st.lifecycleHandlers,
-              refs: alter2($$const(v2.value1))(v2.value0)(st.refs)
+              refs: alter3($$const(v2.value1))(v2.value0)(st.refs)
             };
           })));
         }
         ;
         if (v2 instanceof Action) {
-          return bind13(liftEffect4(read(ref2)))(function(v1) {
+          return bind15(liftEffect4(read(ref2)))(function(v1) {
             return evalM(render2)(ref2)(v1["component"]["eval"](new Action2(v2.value0, unit)));
           });
         }
@@ -15971,7 +20660,7 @@
   // output/Halogen.Aff.Driver/index.js
   var bind8 = /* @__PURE__ */ bind(bindEffect);
   var discard5 = /* @__PURE__ */ discard(discardUnit);
-  var for_7 = /* @__PURE__ */ for_(applicativeEffect)(foldableMaybe);
+  var for_6 = /* @__PURE__ */ for_(applicativeEffect)(foldableMaybe);
   var traverse_6 = /* @__PURE__ */ traverse_(applicativeAff)(foldableList);
   var fork4 = /* @__PURE__ */ fork(monadForkAff);
   var bindFlipped6 = /* @__PURE__ */ bindFlipped(bindEffect);
@@ -15981,17 +20670,17 @@
   var discard22 = /* @__PURE__ */ discard5(bindAff);
   var parSequence_3 = /* @__PURE__ */ parSequence_(parallelAff)(applicativeParAff)(foldableList);
   var liftEffect5 = /* @__PURE__ */ liftEffect(monadEffectAff);
-  var pure17 = /* @__PURE__ */ pure(applicativeEffect);
-  var map29 = /* @__PURE__ */ map(functorEffect);
-  var pure18 = /* @__PURE__ */ pure(applicativeAff);
-  var when8 = /* @__PURE__ */ when(applicativeEffect);
+  var pure21 = /* @__PURE__ */ pure(applicativeEffect);
+  var map45 = /* @__PURE__ */ map(functorEffect);
+  var pure111 = /* @__PURE__ */ pure(applicativeAff);
+  var when16 = /* @__PURE__ */ when(applicativeEffect);
   var renderStateX2 = /* @__PURE__ */ renderStateX(functorEffect);
-  var $$void10 = /* @__PURE__ */ $$void(functorAff);
+  var $$void11 = /* @__PURE__ */ $$void(functorAff);
   var foreachSlot2 = /* @__PURE__ */ foreachSlot(applicativeEffect);
   var renderStateX_2 = /* @__PURE__ */ renderStateX_(applicativeEffect);
   var tailRecM3 = /* @__PURE__ */ tailRecM(monadRecEffect);
   var voidLeft3 = /* @__PURE__ */ voidLeft(functorEffect);
-  var bind14 = /* @__PURE__ */ bind(bindAff);
+  var bind16 = /* @__PURE__ */ bind(bindAff);
   var liftEffect1 = /* @__PURE__ */ liftEffect(monadEffectEffect);
   var newLifecycleHandlers = /* @__PURE__ */ (function() {
     return $$new({
@@ -16003,7 +20692,7 @@
     return function __do5() {
       var queue = read(ref2)();
       write(Nothing.value)(ref2)();
-      return for_7(queue)((function() {
+      return for_6(queue)((function() {
         var $59 = traverse_6(fork4);
         return function($60) {
           return handleAff($59(reverse2($60)));
@@ -16080,7 +20769,7 @@
               return function(childrenOutRef) {
                 return unComponentSlot(function(slot) {
                   return function __do5() {
-                    var childrenIn = map29(slot.pop)(read(childrenInRef))();
+                    var childrenIn = map45(slot.pop)(read(childrenInRef))();
                     var $$var2 = (function() {
                       if (childrenIn instanceof Just) {
                         write(childrenIn.value0.value1)(childrenInRef)();
@@ -16088,7 +20777,7 @@
                         unDriverStateX(function(st) {
                           return function __do6() {
                             flip(write)(st.handlerRef)((function() {
-                              var $65 = maybe(pure18(unit))(handler3);
+                              var $65 = maybe(pure111(unit))(handler3);
                               return function($66) {
                                 return $65(slot.output($66));
                               };
@@ -16101,7 +20790,7 @@
                       ;
                       if (childrenIn instanceof Nothing) {
                         return runComponent(lchs)((function() {
-                          var $67 = maybe(pure18(unit))(handler3);
+                          var $67 = maybe(pure111(unit))(handler3);
                           return function($68) {
                             return $67(slot.output($68));
                           };
@@ -16110,10 +20799,10 @@
                       ;
                       throw new Error("Failed pattern match at Halogen.Aff.Driver (line 213, column 14 - line 222, column 98): " + [childrenIn.constructor.name]);
                     })();
-                    var isDuplicate = map29(function($69) {
+                    var isDuplicate = map45(function($69) {
                       return isJust(slot.get($69));
                     })(read(childrenOutRef))();
-                    when8(isDuplicate)(warn("Halogen: Duplicate slot address was detected during rendering, unexpected results may occur"))();
+                    when16(isDuplicate)(warn("Halogen: Duplicate slot address was detected during rendering, unexpected results may occur"))();
                     modify_(slot.set($$var2))(childrenOutRef)();
                     return bind8(read($$var2))(renderStateX2(function(v2) {
                       if (v2 instanceof Nothing) {
@@ -16121,7 +20810,7 @@
                       }
                       ;
                       if (v2 instanceof Just) {
-                        return pure17(renderSpec2.renderChild(v2.value0));
+                        return pure21(renderSpec2.renderChild(v2.value0));
                       }
                       ;
                       throw new Error("Failed pattern match at Halogen.Aff.Driver (line 227, column 37 - line 229, column 50): " + [v2.constructor.name]);
@@ -16136,15 +20825,15 @@
           return function($$var2) {
             return function __do5() {
               var v2 = read($$var2)();
-              var shouldProcessHandlers = map29(isNothing)(read(v2.pendingHandlers))();
-              when8(shouldProcessHandlers)(write(new Just(Nil.value))(v2.pendingHandlers))();
+              var shouldProcessHandlers = map45(isNothing)(read(v2.pendingHandlers))();
+              when16(shouldProcessHandlers)(write(new Just(Nil.value))(v2.pendingHandlers))();
               write(empty5)(v2.childrenOut)();
               write(v2.children)(v2.childrenIn)();
               var handler3 = (function() {
                 var $70 = queueOrRun(v2.pendingHandlers);
                 var $71 = evalF(render2)(v2.selfRef);
                 return function($72) {
-                  return $70($$void10($71($72)));
+                  return $70($$void11($71($72)));
                 };
               })();
               var childHandler = (function() {
@@ -16185,7 +20874,7 @@
                   children: children2
                 };
               }))();
-              return when8(shouldProcessHandlers)(flip(tailRecM3)(unit)(function(v1) {
+              return when16(shouldProcessHandlers)(flip(tailRecM3)(unit)(function(v1) {
                 return function __do6() {
                   var handlers = read(v2.pendingHandlers)();
                   write(new Just(Nil.value))(v2.pendingHandlers)();
@@ -16230,9 +20919,9 @@
         var evalDriver = function(disposed) {
           return function(ref2) {
             return function(q3) {
-              return bind14(liftEffect5(read(disposed)))(function(v2) {
+              return bind16(liftEffect5(read(disposed)))(function(v2) {
                 if (v2) {
-                  return pure18(Nothing.value);
+                  return pure111(Nothing.value);
                 }
                 ;
                 return evalQ(render2)(ref2)(q3);
@@ -16254,15 +20943,15 @@
                 return unDriverStateX(function(v1) {
                   return function __do6() {
                     var v22 = liftEffect1(read(v1.selfRef))();
-                    return for_7(v22.rendering)(renderSpec2.dispose)();
+                    return for_6(v22.rendering)(renderSpec2.dispose)();
                   };
                 })(dsx)();
               });
             };
           };
         };
-        return bind14(liftEffect5(newLifecycleHandlers))(function(lchs) {
-          return bind14(liftEffect5($$new(false)))(function(disposed) {
+        return bind16(liftEffect5(newLifecycleHandlers))(function(lchs) {
+          return bind16(liftEffect5($$new(false)))(function(disposed) {
             return handleLifecycle(lchs)(function __do5() {
               var sio = create8();
               var dsx = bindFlipped6(read)(runComponent(lchs)((function() {
@@ -16272,7 +20961,7 @@
                 };
               })())(i2)(component3))();
               return unDriverStateX(function(st) {
-                return pure17({
+                return pure21({
                   query: evalDriver(disposed)(st.selfRef),
                   messages: sio.emitter,
                   dispose: dispose(disposed)(lchs)(dsx)
@@ -16286,7 +20975,7 @@
   };
 
   // output/Halogen.VDom.Driver/index.js
-  var $runtime_lazy8 = function(name15, moduleName, init3) {
+  var $runtime_lazy13 = function(name15, moduleName, init3) {
     var state3 = 0;
     var val;
     return function(lineNumber) {
@@ -16298,29 +20987,29 @@
       return val;
     };
   };
-  var $$void11 = /* @__PURE__ */ $$void(functorEffect);
-  var pure19 = /* @__PURE__ */ pure(applicativeEffect);
+  var $$void12 = /* @__PURE__ */ $$void(functorEffect);
+  var pure23 = /* @__PURE__ */ pure(applicativeEffect);
   var traverse_7 = /* @__PURE__ */ traverse_(applicativeEffect)(foldableMaybe);
   var unwrap4 = /* @__PURE__ */ unwrap();
-  var when9 = /* @__PURE__ */ when(applicativeEffect);
+  var when17 = /* @__PURE__ */ when(applicativeEffect);
   var not3 = /* @__PURE__ */ not(/* @__PURE__ */ heytingAlgebraFunction(/* @__PURE__ */ heytingAlgebraFunction(heytingAlgebraBoolean)));
-  var identity10 = /* @__PURE__ */ identity(categoryFn);
-  var bind15 = /* @__PURE__ */ bind(bindAff);
+  var identity9 = /* @__PURE__ */ identity(categoryFn);
+  var bind17 = /* @__PURE__ */ bind(bindAff);
   var liftEffect6 = /* @__PURE__ */ liftEffect(monadEffectAff);
-  var map30 = /* @__PURE__ */ map(functorEffect);
+  var map46 = /* @__PURE__ */ map(functorEffect);
   var bindFlipped7 = /* @__PURE__ */ bindFlipped(bindEffect);
   var substInParent = function(v2) {
     return function(v1) {
       return function(v22) {
         if (v1 instanceof Just && v22 instanceof Just) {
-          return $$void11(insertBefore(v2)(v1.value0)(v22.value0));
+          return $$void12(insertBefore(v2)(v1.value0)(v22.value0));
         }
         ;
         if (v1 instanceof Nothing && v22 instanceof Just) {
-          return $$void11(appendChild(v2)(v22.value0));
+          return $$void12(appendChild(v2)(v22.value0));
         }
         ;
-        return pure19(unit);
+        return pure23(unit);
       };
     };
   };
@@ -16347,7 +21036,7 @@
         };
         var buildWidget2 = function(spec) {
           var buildThunk2 = buildThunk(unwrap4)(spec);
-          var $lazy_patch = $runtime_lazy8("patch", "Halogen.VDom.Driver", function() {
+          var $lazy_patch = $runtime_lazy13("patch", "Halogen.VDom.Driver", function() {
             return function(st, slot) {
               if (st instanceof Just) {
                 if (slot instanceof ComponentSlot) {
@@ -16366,7 +21055,7 @@
               return $lazy_render(104)(slot);
             };
           });
-          var $lazy_render = $runtime_lazy8("render", "Halogen.VDom.Driver", function() {
+          var $lazy_render = $runtime_lazy13("render", "Halogen.VDom.Driver", function() {
             return function(slot) {
               if (slot instanceof ComponentSlot) {
                 return $lazy_renderComponentSlot(86)(slot.value0);
@@ -16380,7 +21069,7 @@
               throw new Error("Failed pattern match at Halogen.VDom.Driver (line 84, column 7 - line 89, column 75): " + [slot.constructor.name]);
             };
           });
-          var $lazy_renderComponentSlot = $runtime_lazy8("renderComponentSlot", "Halogen.VDom.Driver", function() {
+          var $lazy_renderComponentSlot = $runtime_lazy13("renderComponentSlot", "Halogen.VDom.Driver", function() {
             return function(cs) {
               var renderChild = read(renderChildRef)();
               var rsx = renderChild(cs)();
@@ -16414,7 +21103,7 @@
                   var spec = mkSpec(handler3)(renderChildRef)(document3);
                   var machine = buildVDom(spec)(v2);
                   var node = extract2(machine);
-                  $$void11(appendChild(node)(toNode2(container)))();
+                  $$void12(appendChild(node)(toNode2(container)))();
                   return {
                     machine,
                     node,
@@ -16430,7 +21119,7 @@
                   var nextSib = nextSibling(v1.value0.node)();
                   var machine$prime = step2(v1.value0.machine, v2);
                   var newNode = extract2(machine$prime);
-                  when9(not3(unsafeRefEq)(v1.value0.node)(newNode))(substInParent(newNode)(nextSib)(parent2))();
+                  when17(not3(unsafeRefEq)(v1.value0.node)(newNode))(substInParent(newNode)(nextSib)(parent2))();
                   return {
                     machine: machine$prime,
                     node: newNode,
@@ -16446,7 +21135,7 @@
       };
       return {
         render: render2,
-        renderChild: identity10,
+        renderChild: identity9,
         removeChild: removeChild3,
         dispose: removeChild3
       };
@@ -16455,7 +21144,7 @@
   var runUI2 = function(component3) {
     return function(i2) {
       return function(element4) {
-        return bind15(liftEffect6(map30(toDocument)(bindFlipped7(document2)(windowImpl))))(function(document3) {
+        return bind17(liftEffect6(map46(toDocument)(bindFlipped7(document2)(windowImpl))))(function(document3) {
           return runUI(renderSpec(document3)(element4))(component3)(i2);
         });
       };
@@ -16463,10 +21152,10 @@
   };
 
   // output/ForcePlayground.Main/index.js
-  var $$void12 = /* @__PURE__ */ $$void(functorAff);
+  var $$void13 = /* @__PURE__ */ $$void(functorAff);
   var component2 = /* @__PURE__ */ component(monadAffAff);
   var main2 = /* @__PURE__ */ runHalogenAff(/* @__PURE__ */ bind(bindAff)(awaitBody)(function(body2) {
-    return $$void12(runUI2(component2)(unit)(body2));
+    return $$void13(runUI2(component2)(unit)(body2));
   }));
 
   // <stdin>

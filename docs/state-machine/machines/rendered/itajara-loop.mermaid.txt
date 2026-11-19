@@ -1,0 +1,73 @@
+stateDiagram-v2
+    empty : Empty  (entry wipe)
+    sized : Sized, empty
+    tape : Threaded tape  (entry thread-tape)
+    armed_by_level : Listening for a sound  (entry listen, exit release-input)
+    armed_for_grid : Waiting for the bar  (entry request-at-boundary, exit cancel-request)
+    armed_by_sound : Sound found, waiting for the bar  (entry request-at-boundary, exit release-input cancel-request)
+    recording_open : Recording, open  (entry start-take, exit close-take)
+    recording_sized : Recording, sized  (entry start-take arm-close, exit close-take)
+    overdubbing_open : Overdubbing  (entry start-layer, exit close-layer)
+    overdubbing_one_pass : Overdubbing, one pass  (entry start-layer arm-close, exit close-layer)
+    playing : Playing
+    multiplying : Multiplying  (entry start-multiply, exit close-multiply)
+    [*] --> empty
+    empty --> recording_open : record (r)
+    empty --> armed_for_grid : record (r)
+    empty --> armed_by_level : record (r)
+    empty --> empty : clear (c)
+    empty --> sized : fix the next take (fix), size in bars (len)
+    empty --> tape : thread a tape (blank)
+    sized --> recording_sized : record (r)
+    sized --> armed_for_grid : record (r)
+    sized --> armed_by_level : record (r)
+    sized --> multiplying : multiply (x)
+    sized --> empty : clear (c), forget the length (z)
+    sized --> sized : fix the next take (fix), size in bars (len)
+    sized --> tape : thread a tape (blank)
+    tape --> overdubbing_open : record (r)
+    tape --> overdubbing_one_pass : record (r)
+    tape --> armed_by_level : record (r)
+    tape --> multiplying : multiply (x)
+    tape --> sized : undo (u)
+    tape --> empty : clear (c)
+    tape --> tape : thread a tape (blank)
+    armed_by_level --> empty : clear (c), level-arm off (lev0), record (r)
+    armed_by_level --> playing : level-arm off (lev0), record (r)
+    armed_by_level --> tape : level-arm off (lev0), record (r)
+    armed_by_level --> sized : level-arm off (lev0), record (r)
+    armed_by_level --> recording_open : a sound crossed the threshold
+    armed_by_level --> overdubbing_open : a sound crossed the threshold
+    armed_by_level --> recording_sized : a sound crossed the threshold
+    armed_by_level --> overdubbing_one_pass : a sound crossed the threshold
+    armed_by_level --> armed_by_sound : a sound crossed the threshold
+    armed_for_grid --> empty : clear (c), the audio device was lost
+    armed_for_grid --> recording_open : the bar line arrived
+    armed_for_grid --> recording_sized : the bar line arrived
+    armed_for_grid --> sized : the audio device was lost
+    armed_by_sound --> empty : clear (c), level-arm off (lev0), record (r)
+    armed_by_sound --> playing : level-arm off (lev0), record (r)
+    armed_by_sound --> tape : level-arm off (lev0), record (r)
+    armed_by_sound --> sized : level-arm off (lev0), record (r)
+    armed_by_sound --> recording_open : the bar line arrived
+    armed_by_sound --> overdubbing_open : the bar line arrived
+    armed_by_sound --> recording_sized : the bar line arrived
+    armed_by_sound --> overdubbing_one_pass : the bar line arrived
+    armed_by_sound --> armed_by_level : the audio device was lost
+    recording_open --> playing : record (r)
+    recording_open --> empty : clear (c), the audio device was lost
+    recording_sized --> playing : the take reached its length, record (r)
+    recording_sized --> empty : clear (c)
+    recording_sized --> sized : the audio device was lost
+    overdubbing_open --> playing : the audio device was lost, record (r)
+    overdubbing_open --> empty : clear (c)
+    overdubbing_one_pass --> playing : the take reached its length, the audio device was lost, record (r)
+    overdubbing_one_pass --> empty : clear (c)
+    playing --> overdubbing_open : record (r)
+    playing --> overdubbing_one_pass : record (r)
+    playing --> armed_by_level : record (r)
+    playing --> multiplying : multiply (x)
+    playing --> sized : undo (u)
+    playing --> empty : clear (c)
+    multiplying --> playing : the audio device was lost, multiply (x), record (r)
+    multiplying --> empty : clear (c)

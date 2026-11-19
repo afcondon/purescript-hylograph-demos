@@ -1,6 +1,7 @@
 machine  elevator
 title    "Elevator"
 format   2
+clock    seconds
 initial  idle
 
 STATES        LABEL           ON ENTRY                  ON EXIT

@@ -26,6 +26,7 @@
 
 machine  heating  "Heating controller"
 format   2
+clock    minutes
 initial  off
 
 states

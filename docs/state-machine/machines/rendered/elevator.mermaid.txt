@@ -1,0 +1,30 @@
+stateDiagram-v2
+    idle : Idle  (entry close-doors hold-brake)
+    up : Going up  (entry close-doors drive-up)
+    down : Going down  (entry close-doors drive-down)
+    arriving : Arriving  (entry stop-drive ring-arrival)
+    doors_open : Doors open  (entry open-doors)
+    held : Doors held  (entry hold-doors)
+    stopped : Emergency stop  (entry stop-drive sound-alarm, exit cancel-alarm)
+    [*] --> idle
+    idle --> down : call
+    idle --> up : call
+    idle --> doors_open : open doors
+    idle --> stopped : emergency stop
+    up --> stopped : emergency stop
+    up --> arriving : floor reached
+    down --> stopped : emergency stop
+    down --> arriving : floor reached
+    arriving --> doors_open : dwell elapsed, open doors
+    arriving --> stopped : emergency stop
+    doors_open --> held : open doors
+    doors_open --> idle : close doors
+    doors_open --> down : close doors
+    doors_open --> up : close doors
+    doors_open --> stopped : emergency stop
+    held --> doors_open : close doors
+    held --> stopped : emergency stop
+    stopped --> doors_open : reset
+    doors_open --> idle : after dwell elapsed
+    doors_open --> down : after dwell elapsed
+    doors_open --> up : after dwell elapsed

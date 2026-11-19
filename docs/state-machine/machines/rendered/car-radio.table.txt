@@ -1,6 +1,7 @@
 machine  car-radio
 title    "Car radio"
 format   2
+clock    seconds
 initial  off
 
 STATES       LABEL      ON ENTRY       ON EXIT

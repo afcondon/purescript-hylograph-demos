@@ -14,6 +14,7 @@
 
 machine  loop   "One loop of a six-loop looper"
 format   2
+clock    beats
 initial  empty
 
 states

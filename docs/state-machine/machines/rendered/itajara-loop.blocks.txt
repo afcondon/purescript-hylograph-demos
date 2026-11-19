@@ -1,0 +1,363 @@
+# The phase machine of one loop in the Itajara daemon (music/itajara/daemon/
+# src/engine.rs), written down. The daemon runs six u8 constants — IDLE,
+# ARMED, FIRST, OVERDUB, PLAYING, MULTIPLY — set at seventeen sites from three
+# threads, and what each byte MEANS depends on flags beside it: `threaded`,
+# `one_pass`, `close_at`/`rec_len`, `request`/`request_at`, `level_arm`/
+# `arm_from`. This artifact is that byte and those flags as one machine, so
+# the daemon's Rust and the pedalboard's PureScript can be held to the same
+# table instead of agreeing by care. It is prescriptive in a few places, and
+# each is named below; loop.json next door is untouched and is a witness.
+#
+# WHICH QUALIFIERS BECAME STATES. The test used: a qualifier is a state when
+# it changes what the host must do on ENTRY or what more than one event does;
+# it is a fact when only a guard reads it at the moment of a press. So:
+#
+#   * Armed splits in three. Listening for a sound (`lev1`) and waiting for
+#     the bar line (`g1` on an empty loop) enter differently — one claims the
+#     input and watches it, the other files a request the output callback
+#     will honour — and a second press cancels the first but is a no-op on
+#     the second. The daemon spells the first as ARMED and the second as
+#     IDLE-with-a-request; here both are states, because both are 'about to
+#     record' and neither is idle. The third is both at once: a listening
+#     loop whose sound has been found while quantise is on files a request
+#     for the bar and KEEPS the input — `armed-by-sound`. It is not
+#     `armed-for-grid`, and the replay of 2026-09-06 (step 5b) is what said
+#     so: a second press cancels it, and an outage drops the request and
+#     leaves it listening, where `armed-for-grid` shrugs off the press and
+#     an outage returns it to rest. Only an empty or sized loop ever waits
+#     for the bar without a sound — a pressed overdub starts on the press —
+#     so `armed-for-grid`'s exits read `has-length` alone.
+#   * Recording splits by whether it closes itself. A first take with a
+#     known length (`fix`, `len`, or a length kept from before) arms
+#     `close_at` on entry and the closer thread delivers `closed`; an open
+#     take waits for the foot. Same for an overdub: one pass arms its close,
+#     an ordinary overdub does not. Four recording states, two entry lists.
+#   * Empty, Sized and Tape are three rest states, not one with facts. They
+#     answer `record` differently (an open first take, a sized first take, an
+#     overdub), `blank` differently (allowed, allowed, re-thread) and enter
+#     differently (wipe, nothing, thread a silent layer). `threaded` was a
+#     flag; here it is where you are.
+#   * Multiply is its own state, as it is in the daemon.
+#
+# WHICH QUALIFIERS STAYED FACTS. `level-arm`, `quantised` and `one-pass` are
+# modes a verb toggles between presses; the machine reads them when `record`
+# arrives and never carries them. `writable`, `plain`, `at-ceiling` and
+# `input-held-elsewhere` are the daemon's own guards (`not_writable`,
+# `not_plain`, the layer ceiling, `busy_elsewhere`), asked in the daemon's
+# order so the same press gets the same refusal. `has-length`, `has-layers`
+# and `threaded` are read in exactly one place: on the way OUT of an armed
+# state, to know where a cancelled arm returns to and what kind of take a
+# found sound begins. That is the history-state problem the README names,
+# and this is its documented workaround — the host holds the memory and the
+# machine asks for it. `last-layer` tells `undo` whether it has just made
+# the loop Sized. `has-grid` is what `len` needs before a bar means anything.
+#
+# WHAT IS CONFIG. `fixed-rig` (`--fixed` at launch) is the one thing that
+# reshapes the diagram: on a fixed rig `clear` lands on Tape, not Empty, so
+# every slot is an empty tape of one length. The initial state is Empty
+# regardless; a fixed rig seeds each slot with `Drive.enter tape`, which is
+# what `enter` is for.
+#
+# WHY THERE ARE NO DEADLINES. A sized take closes itself after ITS OWN
+# LENGTH in frames, which is neither config nor a literal — it is the host's
+# memory. `after` cannot say that, so the close is a runtime event `closed`,
+# and `arm-close` on entry is the command that tells the host to schedule
+# it. The closer thread and the callback keep the timing; the machine keeps
+# only that a close is owed. With no deadlines the machine declares no
+# clock, and `Host.reportClock` accepts it on a host with no timer at all.
+#
+# COMMANDS. Every recording state establishes itself on entry (zero the
+# layer, stamp the origin, start the write; arm the close if it knows its
+# length) and commits on exit (`close-take` for a first take, whose length
+# becomes the cycle; `close-layer` for an overdub; `close-multiply`, which
+# rounds to cycles and grows the loop). Exit commands are used here against
+# the README's advice, and knowingly: the commit is the one thing every way
+# OUT of a recording owes, including `clear` and a lost device. On those two
+# exits the host's `close-take` has less to commit than usual — nothing,
+# after an outage with a hole in it — and it knows that, because it is the
+# thing that raised `lost`. The armed states also pay on exit:
+# `release-input` gives the converter back and `cancel-request` withdraws a
+# request the callback has not consumed; both are harmless after the take
+# actually began, because `start-take` consumes what they would clear.
+#
+# WHAT THE MACHINE DOES NOT KNOW. Arguments. `fix13` stores thirteen seconds,
+# `len4` stores four bars, `blank13` threads thirteen seconds: the number is
+# the verb's, the phase change is the machine's, and the host keeps the
+# number the way it keeps every count. The same goes for `undo` on a loop
+# with layers to spare (a layer goes; the phase does not), for `fix` on a
+# loop with material (it sets `one-pass`, a fact), and for `len` on a loop
+# with material (it declares or resizes; the phase does not move — but it
+# asks for a bar first, as it does on an empty loop, unless the loop is
+# itself the bar, which is `has-grid` too; the replay found this).
+#
+# WHERE THIS IS PRESCRIPTIVE. The daemon does not guard `u`, `x`, `z` or
+# `blank` against an armed loop, and does not guard `u` or `z` against a
+# recording one; a press there would decrement a layer under a live write
+# or forget a length mid-take. Here every one of them refuses
+# `still-recording`, which is the tag `fix` already uses for the same case.
+# The daemon also lets `x` on an armed loop abandon the arm and start a
+# multiply; here it refuses. Adopting this artifact makes those refusals
+# real, and that is intended. ADOPTED 2026-09-06 (step 5b): the daemon
+# guards every one of them now (`guards::still_recording`), a cancelled
+# arm returns to what the loop held rather than to idle, and
+# `daemon/src/engine/conformance.rs` replays this machine's vectors
+# through the engine — so this table is what the daemon is tested
+# against, not a description of it.
+#
+# REFUSAL TAGS are the daemon's acks: `input-held` ('loop N has the input'),
+# `not-writable` (swinging, or a tape at speed), `not-plain` ('playing at
+# xN; sp1 to record into it'), `at-ceiling`, `still-recording` ('finish
+# that first'), `nothing-to-undo`, `nothing-to-multiply`, `has-material`
+# ('has something in it' / 'layers still playing'), `no-length` ('no length
+# set'), `no-grid` ('no bar yet').
+
+machine  itajara-loop  "One loop of the Itajara looper daemon"
+format   2
+initial  empty
+
+states
+  empty                 "Empty"
+  sized                 "Sized, empty"
+  tape                  "Threaded tape"
+  armed-by-level        "Listening for a sound"
+  armed-for-grid        "Waiting for the bar"
+  armed-by-sound        "Sound found, waiting for the bar"
+  recording-open        "Recording, open"
+  recording-sized       "Recording, sized"
+  overdubbing-open      "Overdubbing"
+  overdubbing-one-pass  "Overdubbing, one pass"
+  playing               "Playing"
+  multiplying           "Multiplying"
+
+events
+  record     user     "record (r)"
+  multiply   user     "multiply (x)"
+  undo       user     "undo (u)"
+  clear      user     "clear (c)"
+  fix        user     "fix the next take (fix)"
+  size       user     "size in bars (len)"
+  blank      user     "thread a tape (blank)"
+  free       user     "forget the length (z)"
+  level-off  user     "level-arm off (lev0)"
+  sound      runtime  "a sound crossed the threshold"
+  boundary   runtime  "the bar line arrived"
+  closed     runtime  "the take reached its length"
+  lost       runtime  "the audio device was lost"
+
+config
+  fixed-rig  = false  "Every slot is a tape of one fixed length (--fixed)"
+
+facts
+  input-held-elsewhere  "Another loop holds the converter"
+  writable              "The write head can follow the play head: not swinging, not a tape at speed"
+  plain                 "Playing plainly: x1, forwards"
+  at-ceiling            "The loop is at the layer ceiling"
+  level-arm             "Level-arm is on: wait for a sound rather than the press"
+  quantised             "Quantise is on: start on the bar line"
+  one-pass              "The next layer is one pass and closes itself"
+  last-layer            "Only one layer is left"
+  has-length            "The loop has a length"
+  has-layers            "The loop has at least one layer"
+  threaded              "The loop was a threaded tape"
+  has-grid              "A bar exists: Link is running or a loop has a length"
+
+refusals
+  input-held           "another loop has the input; one converter, one recording — finish that first"
+  not-writable         "a write head cannot follow this play head: put the speed back, or stop the pendulum"
+  not-plain            "the loop is playing at a speed; sp1 to record into it"
+  at-ceiling           "the loop is at the layer ceiling; undo one first"
+  still-recording      "the loop is recording; finish that first"
+  nothing-to-undo      "the loop has nothing to undo"
+  nothing-to-multiply  "the loop has nothing to multiply; record a loop first"
+  has-material         "the loop has something in it; undo or clear it first"
+  no-length            "no length is set; the next recording sets one"
+  no-grid              "no bar yet: there is no clock and no loop has a length"
+
+commands
+  wipe                 "Zero every layer and forget the length"
+  thread-tape          "Lay down a silent layer of the asked-for length, going round"
+  listen               "Claim the input and watch it for the threshold"
+  release-input        "Give the input back; no take began"
+  request-at-boundary  "Ask the output callback to start the take on the next bar line"
+  cancel-request       "Withdraw a pending request"
+  start-take           "Zero layer 0, stamp origin and rec_from, start the linear write"
+  start-layer          "Zero the next layer, record from origin, start the modular write"
+  arm-close            "Set close_at one length on; the closer delivers `closed`"
+  close-take           "Commit the first take: its length becomes the cycle, draw the layer"
+  close-layer          "Commit the layer: shape it, draw it, count it"
+  start-multiply       "Zero the next layer and record from the top of this cycle"
+  close-multiply       "Round to whole cycles and grow the loop to fit"
+
+empty:
+  entry  wipe
+  record                                    when input-held-elsewhere  -> refuse input-held
+                                            elif not writable          -> refuse not-writable
+                                            elif not plain             -> refuse not-plain
+                                            elif level-arm             -> armed-by-level
+                                            elif quantised             -> armed-for-grid
+                                            else                       -> recording-open
+  multiply                                  when input-held-elsewhere  -> refuse input-held
+                                            elif not plain             -> refuse not-plain
+                                            else                       -> refuse nothing-to-multiply
+  undo                                                                 -> refuse nothing-to-undo
+  clear                                     when fixed-rig             -> tape
+                                            else                       -> empty
+  fix                                                                  -> sized
+  size                                      when not has-grid          -> refuse no-grid
+                                            else                       -> sized
+  blank                                                                -> tape
+  free                                                                 -> refuse no-length
+  level-off, sound, boundary, closed, lost                             -> stay
+
+sized:
+  record                                    when input-held-elsewhere  -> refuse input-held
+                                            elif not writable          -> refuse not-writable
+                                            elif level-arm             -> armed-by-level
+                                            elif quantised             -> armed-for-grid
+                                            else                       -> recording-sized
+  multiply                                  when input-held-elsewhere  -> refuse input-held
+                                            elif not plain             -> refuse not-plain
+                                            else                       -> multiplying
+  undo                                                                 -> refuse nothing-to-undo
+  clear                                     when fixed-rig             -> tape
+                                            else                       -> empty
+  fix                                                                  -> sized
+  size                                      when not has-grid          -> refuse no-grid
+                                            else                       -> sized
+  blank                                                                -> tape
+  free                                                                 -> empty
+  level-off, sound, boundary, closed, lost                             -> stay
+
+tape:
+  entry  thread-tape
+  record                                         when input-held-elsewhere  -> refuse input-held
+                                                 elif not writable          -> refuse not-writable
+                                                 elif at-ceiling            -> refuse at-ceiling
+                                                 elif level-arm             -> armed-by-level
+                                                 elif one-pass              -> overdubbing-one-pass
+                                                 else                       -> overdubbing-open
+  multiply                                       when input-held-elsewhere  -> refuse input-held
+                                                 elif not plain             -> refuse not-plain
+                                                 elif at-ceiling            -> refuse at-ceiling
+                                                 else                       -> multiplying
+  undo                                                                      -> sized
+  clear                                          when fixed-rig             -> tape
+                                                 else                       -> empty
+  fix, level-off, sound, boundary, closed, lost                             -> stay
+  size                                           when not has-grid          -> refuse no-grid
+                                                 else                       -> stay
+  blank                                                                     -> tape
+  free                                                                      -> refuse has-material
+
+armed-by-level:
+  entry  listen
+  exit   release-input
+  record, level-off                       when threaded and has-layers  -> tape
+                                          elif has-layers               -> playing
+                                          elif has-length               -> sized
+                                          else                          -> empty
+  multiply, undo, fix, size, blank, free                                -> refuse still-recording
+  clear                                   when fixed-rig                -> tape
+                                          else                          -> empty
+  sound                                   when quantised                -> armed-by-sound
+                                          elif has-layers and one-pass  -> overdubbing-one-pass
+                                          elif has-layers               -> overdubbing-open
+                                          elif has-length               -> recording-sized
+                                          else                          -> recording-open
+  boundary, closed, lost                                                -> stay
+
+armed-for-grid:
+  entry  request-at-boundary
+  exit   cancel-request
+  record, level-off, sound, closed                         -> stay
+  multiply, undo, fix, size, blank, free                   -> refuse still-recording
+  clear                                   when fixed-rig   -> tape
+                                          else             -> empty
+  boundary                                when has-length  -> recording-sized
+                                          else             -> recording-open
+  lost                                    when has-length  -> sized
+                                          else             -> empty
+
+armed-by-sound:
+  entry  request-at-boundary
+  exit   release-input, cancel-request
+  record, level-off                       when threaded and has-layers  -> tape
+                                          elif has-layers               -> playing
+                                          elif has-length               -> sized
+                                          else                          -> empty
+  multiply, undo, fix, size, blank, free                                -> refuse still-recording
+  clear                                   when fixed-rig                -> tape
+                                          else                          -> empty
+  sound, closed                                                         -> stay
+  boundary                                when has-layers and one-pass  -> overdubbing-one-pass
+                                          elif has-layers               -> overdubbing-open
+                                          elif has-length               -> recording-sized
+                                          else                          -> recording-open
+  lost                                                                  -> armed-by-level
+
+recording-open:
+  entry  start-take
+  exit   close-take
+  record                                                  -> playing
+  multiply, undo, fix, size, blank, free                  -> refuse still-recording
+  clear                                   when fixed-rig  -> tape
+                                          else            -> empty
+  level-off, sound, boundary, closed                      -> stay
+  lost                                                    -> empty
+
+recording-sized:
+  entry  start-take, arm-close
+  exit   close-take
+  record, closed                                          -> playing
+  multiply, undo, fix, size, blank, free                  -> refuse still-recording
+  clear                                   when fixed-rig  -> tape
+                                          else            -> empty
+  level-off, sound, boundary                              -> stay
+  lost                                                    -> sized
+
+overdubbing-open:
+  entry  start-layer
+  exit   close-layer
+  record, lost                                            -> playing
+  multiply, undo, fix, size, blank, free                  -> refuse still-recording
+  clear                                   when fixed-rig  -> tape
+                                          else            -> empty
+  level-off, sound, boundary, closed                      -> stay
+
+overdubbing-one-pass:
+  entry  start-layer, arm-close
+  exit   close-layer
+  record, closed, lost                                    -> playing
+  multiply, undo, fix, size, blank, free                  -> refuse still-recording
+  clear                                   when fixed-rig  -> tape
+                                          else            -> empty
+  level-off, sound, boundary                              -> stay
+
+playing:
+  record                                         when input-held-elsewhere  -> refuse input-held
+                                                 elif not writable          -> refuse not-writable
+                                                 elif at-ceiling            -> refuse at-ceiling
+                                                 elif level-arm             -> armed-by-level
+                                                 elif one-pass              -> overdubbing-one-pass
+                                                 else                       -> overdubbing-open
+  multiply                                       when input-held-elsewhere  -> refuse input-held
+                                                 elif not plain             -> refuse not-plain
+                                                 elif at-ceiling            -> refuse at-ceiling
+                                                 else                       -> multiplying
+  undo                                           when last-layer            -> sized
+                                                 else                       -> stay
+  clear                                          when fixed-rig             -> tape
+                                                 else                       -> empty
+  fix, level-off, sound, boundary, closed, lost                             -> stay
+  size                                           when not has-grid          -> refuse no-grid
+                                                 else                       -> stay
+  blank, free                                                               -> refuse has-material
+
+multiplying:
+  entry  start-multiply
+  exit   close-multiply
+  record, multiply, lost                              -> playing
+  undo, fix, size, blank, free                        -> refuse still-recording
+  clear                               when fixed-rig  -> tape
+                                      else            -> empty
+  level-off, sound, boundary, closed                  -> stay

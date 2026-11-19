@@ -27,6 +27,7 @@
 
 machine  elevator  "Elevator"
 format   2
+clock    seconds
 initial  idle
 
 states

@@ -1,0 +1,71 @@
+machine  itajara-layer
+title    "One layer slot of one Itajara loop"
+format   2
+initial  free
+
+STATES      LABEL           ON ENTRY                ON EXIT
+  free      Free
+  writing   Writing a take  zero-slot, start-write  set-shape
+  summing   Summing a pass  start-write             redraw
+  sounding  Sounding
+  off       Off
+  undone    Undone, kept
+
+EVENTS    SOURCE   LABEL
+  start   user     a take starts here (r, x, t, cp, dp)
+  sum     user     a pass sums into this layer (r on an alt loop)
+  commit  runtime  the write closed
+  on      user     turn it on (ly k 1)
+  off     user     turn it off (ly k 0)
+  window  user     set or clear its window (lw)
+  undo    user     undo reaches this layer (u)
+  redo    user     redo reaches this layer (y)
+  clear   user     the loop is cleared (c)
+  lost    runtime  the audio device was lost
+
+FACTS           MEANING
+  top           This is the highest counted layer
+  next-to-redo  This is the lowest undone layer
+  was-on        It was on when it was undone
+
+REFUSALS         MEANING
+  nothing-here   the slot holds nothing
+  still-writing  the layer is being written; finish that first
+  occupied       a take cannot start over a layer; sum into it, or undo it
+  not-counted    the layer is undone; redo it first
+  not-top        undo reaches only the newest layer
+  not-next       redo reaches only the oldest undone layer
+  not-undone     the layer is there; nothing to redo
+
+COMMANDS       MEANING
+  zero-slot    Zero the slot's audio: whatever was kept here is dropped
+  start-write  Point the write head at this slot
+  set-shape    Declare the layer: length, tail, born; period 1, phase 0, gain 1, on, NO window
+  redraw       Rebuild the envelope; length, tail, born and window are untouched
+
+GRID   rows are states, columns are events
+              start           sum             commit    on              off             window          undo            redo            clear  lost
+  > free      writing         !nothing-here   .         !nothing-here   !nothing-here   !nothing-here   !nothing-here   !nothing-here   .      .
+    writing   !still-writing  !still-writing  sounding  !still-writing  !still-writing  !still-writing  !still-writing  !still-writing  free   free
+    summing   !still-writing  !still-writing  sounding  .               .               .               !still-writing  !still-writing  free   sounding
+    sounding  !occupied       summing         .         .               off             .               [1]             !not-undone     free   .
+    off       !occupied       summing         .         sounding        .               .               [2]             !not-undone     free   .
+    undone    writing         !not-counted    .         !not-counted    !not-counted    !not-counted    !not-counted    [3]             free   .
+
+KEY
+  >     the initial state
+  .     stay — the event is declared here and does nothing
+  !tag  refuse with that tag — see REFUSALS
+  [n]   guarded, or declared twice — see CASES
+
+CASES
+  [1]  sounding on undo
+         when top                      -> undone
+         else                          refuse not-top
+  [2]  off on undo
+         when top                      -> undone
+         else                          refuse not-top
+  [3]  undone on redo
+         when next-to-redo and was-on  -> sounding
+         elif next-to-redo             -> off
+         else                          refuse not-next

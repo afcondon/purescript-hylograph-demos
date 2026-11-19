@@ -1,0 +1,19 @@
+stateDiagram-v2
+    off : Off  (entry power-down)
+    radio : Radio  (entry tune-radio)
+    seeking : Seeking  (entry start-seek, exit stop-seek)
+    cd : CD  (entry spin-up-disc)
+    bluetooth : Bluetooth  (entry connect-phone, exit disconnect-phone)
+    [*] --> off
+    off --> radio : power
+    radio --> off : power
+    radio --> cd : source
+    radio --> seeking : seek
+    seeking --> off : power
+    seeking --> radio : cancel
+    cd --> off : power
+    cd --> bluetooth : source
+    cd --> radio : eject
+    bluetooth --> off : power
+    bluetooth --> radio : source
+    seeking --> radio : after no station found

@@ -1,0 +1,25 @@
+stateDiagram-v2
+    free : Free
+    writing : Writing a take  (entry zero-slot start-write, exit set-shape)
+    summing : Summing a pass  (entry start-write, exit redraw)
+    sounding : Sounding
+    off : Off
+    undone : Undone, kept
+    [*] --> free
+    free --> writing : a take starts here (r, x, t, cp, dp)
+    writing --> sounding : the write closed
+    writing --> free : the loop is cleared (c), the audio device was lost
+    summing --> sounding : the write closed, the audio device was lost
+    summing --> free : the loop is cleared (c)
+    sounding --> summing : a pass sums into this layer (r on an alt loop)
+    sounding --> off : turn it off (ly k 0)
+    sounding --> undone : undo reaches this layer (u)
+    sounding --> free : the loop is cleared (c)
+    off --> summing : a pass sums into this layer (r on an alt loop)
+    off --> sounding : turn it on (ly k 1)
+    off --> undone : undo reaches this layer (u)
+    off --> free : the loop is cleared (c)
+    undone --> writing : a take starts here (r, x, t, cp, dp)
+    undone --> off : redo reaches this layer (y)
+    undone --> sounding : redo reaches this layer (y)
+    undone --> free : the loop is cleared (c)

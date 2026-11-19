@@ -20,6 +20,7 @@
   ],
 
   "initial": "empty",
+  "clock": "beats",
 
   "states": [
     { "id": "empty",       "label": "Empty",     "entry": ["discard-audio"] },

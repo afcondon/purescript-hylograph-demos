@@ -33,6 +33,7 @@
   ],
 
   "initial": "idle",
+  "clock": "seconds",
 
   "states": [
     { "id": "idle",       "label": "Idle",           "entry": ["close-doors", "hold-brake"] },

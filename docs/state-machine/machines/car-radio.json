@@ -23,6 +23,7 @@
   ],
 
   "initial": "off",
+  "clock": "seconds",
 
   "states": [
     { "id": "off",       "label": "Off",       "entry": ["power-down"] },

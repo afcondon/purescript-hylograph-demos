@@ -771,6 +771,14 @@
   var sliceImpl = function(s, e, l) {
     return l.slice(s, e);
   };
+  var zipWithImpl = function(f, xs, ys) {
+    var l = xs.length < ys.length ? xs.length : ys.length;
+    var result = new Array(l);
+    for (var i2 = 0; i2 < l; i2++) {
+      result[i2] = f(xs[i2])(ys[i2]);
+    }
+    return result;
+  };
   var unsafeIndexImpl = function(xs, n) {
     return xs[n];
   };
@@ -1534,6 +1542,7 @@
   // output/Data.Array/index.js
   var map4 = /* @__PURE__ */ map(functorMaybe);
   var fromJust4 = /* @__PURE__ */ fromJust();
+  var zipWith = /* @__PURE__ */ runFn3(zipWithImpl);
   var unsafeIndex = function() {
     return runFn2(unsafeIndexImpl);
   };
@@ -4631,10 +4640,10 @@
     };
   };
   var neighbors = function(dictOrd) {
-    var lookup6 = lookup(dictOrd);
+    var lookup7 = lookup(dictOrd);
     return function(v) {
       return function(adj) {
-        var v1 = lookup6(v)(adj);
+        var v1 = lookup7(v)(adj);
         if (v1 instanceof Nothing) {
           return [];
         }
@@ -4648,7 +4657,7 @@
     };
   };
   var processColorNeighbors = function(dictOrd) {
-    var lookup6 = lookup(dictOrd);
+    var lookup7 = lookup(dictOrd);
     var neighbors1 = neighbors(dictOrd);
     var insert13 = insert(dictOrd);
     return function(adj) {
@@ -4667,7 +4676,7 @@
                       }
                       ;
                       if (v22 instanceof Just) {
-                        var uColor = fromMaybe(true)(lookup6(v22.value0.head)(c));
+                        var uColor = fromMaybe(true)(lookup7(v22.value0.head)(c));
                         var ns = neighbors1(v22.value0.head)(adj);
                         return processColorNeighbors(dictOrd)(adj)(v22.value0.head)(uColor)(ns)(v22.value0.tail)(c);
                       }
@@ -4679,7 +4688,7 @@
                 }
                 ;
                 if (v1 instanceof Just) {
-                  var v2 = lookup6(v1.value0.head)(colors);
+                  var v2 = lookup7(v1.value0.head)(colors);
                   if (v2 instanceof Nothing) {
                     return processColorNeighbors(dictOrd)(adj)(v)(vColor)(v1.value0.tail)(snoc(queue)(v1.value0.head))(insert13(v1.value0.head)(!vColor)(colors));
                   }
@@ -4705,7 +4714,7 @@
     };
   };
   var bfsColor = function(dictOrd) {
-    var lookup6 = lookup(dictOrd);
+    var lookup7 = lookup(dictOrd);
     var neighbors1 = neighbors(dictOrd);
     var processColorNeighbors1 = processColorNeighbors(dictOrd);
     var insert13 = insert(dictOrd);
@@ -4720,7 +4729,7 @@
               }
               ;
               if (v instanceof Just) {
-                var vColor = fromMaybe(true)(lookup6(v.value0.head)(colors));
+                var vColor = fromMaybe(true)(lookup7(v.value0.head)(colors));
                 var nbrs = neighbors1(v.value0.head)(adj);
                 return processColorNeighbors1(adj)(v.value0.head)(vColor)(nbrs)(v.value0.tail)(colors);
               }
@@ -4803,7 +4812,7 @@
   };
   var processNeighbors = function(dictOrd) {
     var insert13 = insert2(dictOrd);
-    var lookup6 = lookup(dictOrd);
+    var lookup7 = lookup(dictOrd);
     var insert23 = insert(dictOrd);
     var popEdgesUntil1 = popEdgesUntil(dictOrd);
     var notEq2 = notEq(eqMaybe(dictOrd.Eq0()));
@@ -4832,8 +4841,8 @@
                 }
                 ;
                 if (v instanceof Just) {
-                  var uDisc = fromMaybe(0)(lookup6(u2)(state3.disc));
-                  var v2 = lookup6(v.value0.head)(state3.disc);
+                  var uDisc = fromMaybe(0)(lookup7(u2)(state3.disc));
+                  var v2 = lookup7(v.value0.head)(state3.disc);
                   if (v2 instanceof Nothing) {
                     var state$prime = {
                       aps: state3.aps,
@@ -4845,8 +4854,8 @@
                       stack: snoc(state3.stack)(new Tuple(u2, v.value0.head))
                     };
                     var state$prime$prime = bccDFS(dictOrd)(adj)(v.value0.head)(state$prime);
-                    var uLow = fromMaybe(0)(lookup6(u2)(state$prime$prime.low));
-                    var vLow = fromMaybe(0)(lookup6(v.value0.head)(state$prime$prime.low));
+                    var uLow = fromMaybe(0)(lookup7(u2)(state$prime$prime.low));
+                    var vLow = fromMaybe(0)(lookup7(v.value0.head)(state$prime$prime.low));
                     var state32 = {
                       aps: state$prime$prime.aps,
                       components: state$prime$prime.components,
@@ -4890,10 +4899,10 @@
                   }
                   ;
                   if (v2 instanceof Just) {
-                    var parentOfU = lookup6(u2)(state3.parent);
+                    var parentOfU = lookup7(u2)(state3.parent);
                     var $154 = notEq2(new Just(v.value0.head))(parentOfU) && v2.value0 < uDisc;
                     if ($154) {
-                      var uLow = fromMaybe(0)(lookup6(u2)(state3.low));
+                      var uLow = fromMaybe(0)(lookup7(u2)(state3.low));
                       var state$prime = {
                         aps: state3.aps,
                         components: state3.components,
@@ -5512,38 +5521,8 @@
     };
   };
 
-  // output/Web.Internal.FFI/foreign.js
-  function _unsafeReadProtoTagged(nothing, just, name15, value12) {
-    if (typeof window !== "undefined") {
-      var ty = window[name15];
-      if (ty != null && value12 instanceof ty) {
-        return just(value12);
-      }
-    }
-    var obj = value12;
-    while (obj != null) {
-      var proto = Object.getPrototypeOf(obj);
-      var constructorName = proto.constructor.name;
-      if (constructorName === name15) {
-        return just(value12);
-      } else if (constructorName === "Object") {
-        return nothing;
-      }
-      obj = proto;
-    }
-    return nothing;
-  }
-
-  // output/Web.Internal.FFI/index.js
-  var unsafeReadProtoTagged = function(name15) {
-    return function(value12) {
-      return _unsafeReadProtoTagged(Nothing.value, Just.create, name15, value12);
-    };
-  };
-
   // output/Web.DOM.Element/index.js
   var toNode = unsafeCoerce2;
-  var toEventTarget = unsafeCoerce2;
 
   // output/Halogen.VDom.DOM/index.js
   var $runtime_lazy4 = function(name15, moduleName, init3) {
@@ -6569,6 +6548,27 @@
     Abbr2.value = new Abbr2();
     return Abbr2;
   })();
+  var Button = /* @__PURE__ */ (function() {
+    function Button2() {
+    }
+    ;
+    Button2.value = new Button2();
+    return Button2;
+  })();
+  var Input = /* @__PURE__ */ (function() {
+    function Input2() {
+    }
+    ;
+    Input2.value = new Input2();
+    return Input2;
+  })();
+  var Label = /* @__PURE__ */ (function() {
+    function Label2() {
+    }
+    ;
+    Label2.value = new Label2();
+    return Label2;
+  })();
   var elementContext = function(v) {
     if (v instanceof Circle) {
       return SVGContext.value;
@@ -6730,7 +6730,19 @@
       return HTMLContext.value;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.Element.Types (line 89, column 1 - line 89, column 47): " + [v.constructor.name]);
+    if (v instanceof Button) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Input) {
+      return HTMLContext.value;
+    }
+    ;
+    if (v instanceof Label) {
+      return HTMLContext.value;
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.Element.Types (line 93, column 1 - line 93, column 47): " + [v.constructor.name]);
   };
 
   // output/Hylograph.Behavior.Types/index.js
@@ -6943,6 +6955,16 @@
       return new ThunkedPointerDown2(value0);
     };
     return ThunkedPointerDown2;
+  })();
+  var ThunkedInput = /* @__PURE__ */ (function() {
+    function ThunkedInput2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    ThunkedInput2.create = function(value0) {
+      return new ThunkedInput2(value0);
+    };
+    return ThunkedInput2;
   })();
   var FromArray = /* @__PURE__ */ (function() {
     function FromArray2(value0) {
@@ -9587,13 +9609,6 @@
     };
   })();
 
-  // output/Web.Event.Event/foreign.js
-  function stopPropagation(e) {
-    return function() {
-      return e.stopPropagation();
-    };
-  }
-
   // output/Web.HTML.Event.EventTypes/index.js
   var domcontentloaded = "DOMContentLoaded";
 
@@ -9934,12 +9949,12 @@
         }
         return extent;
       }
-      function toSVGCoords(clientX2, clientY2) {
+      function toSVGCoords(clientX, clientY) {
         const svg = element3.ownerSVGElement || element3;
         if (svg.createSVGPoint) {
           const pt = svg.createSVGPoint();
-          pt.x = clientX2;
-          pt.y = clientY2;
+          pt.x = clientX;
+          pt.y = clientY;
           const ctm = svg.getScreenCTM();
           if (ctm) {
             const inv = ctm.inverse();
@@ -9948,7 +9963,7 @@
           }
         }
         const rect = element3.getBoundingClientRect();
-        return [clientX2 - rect.left, clientY2 - rect.top];
+        return [clientX - rect.left, clientY - rect.top];
       }
       function toSVGDelta(screenDx, screenDy) {
         const svg = element3.ownerSVGElement || element3;
@@ -10129,6 +10144,7 @@
       el.setAttributeNS("http://www.w3.org/XML/1998/namespace", name15, value12);
     } else {
       el.setAttribute(name15, value12);
+      if (name15 === "value" && "value" in el && el.value !== value12) el.value = value12;
     }
   };
   var getAttribute = (el) => (name15) => () => {
@@ -10166,35 +10182,108 @@
       (el) => el.tagName.toLowerCase() === tagName2 && el.getAttribute("data-hats-fold") === foldName
     );
   };
+  var foldAnchor = (parent2) => (existing) => (domIdx) => () => {
+    if (existing.length > 0) return existing[existing.length - 1].nextSibling;
+    return parent2.children[domIdx] || null;
+  };
+  var placeInDataOrder = (parent2) => (elements) => (anchor) => () => {
+    let next = anchor;
+    for (let i2 = elements.length - 1; i2 >= 0; i2--) {
+      const el = elements[i2];
+      if (el === next || el.parentNode !== parent2) continue;
+      if (next && next.parentNode === parent2) {
+        if (!(el.compareDocumentPosition(next) & 4)) parent2.insertBefore(el, next);
+      }
+      next = el;
+    }
+  };
   var removeElement = (el) => () => {
     if (el.parentNode) {
       el.parentNode.removeChild(el);
     }
   };
-  var setCursorPointer = (el) => () => {
-    el.style.cursor = "pointer";
+  var handlersOf = (el) => el.__hatsHandlers || (el.__hatsHandlers = /* @__PURE__ */ Object.create(null));
+  function addHandler(el, event, handler3) {
+    const handlers = handlersOf(el);
+    if (!(event in handlers)) {
+      handlers[event] = [];
+      el.addEventListener(event, function(e) {
+        for (const h of handlers[event].slice()) h(e);
+      });
+    }
+    handlers[event].push(handler3);
+  }
+  var beginBehaviors = (el) => () => {
+    const handlers = el.__hatsHandlers;
+    if (handlers) for (const event in handlers) handlers[event] = [];
+    if (el.__hatsCursor) {
+      el.style.cursor = "";
+      el.__hatsCursor = false;
+    }
+    if (el.__hatsHighlight) el.__hatsHighlight.stale = true;
+    if (el.__hatsInteraction) el.__hatsInteraction.stale = true;
   };
+  var endBehaviors = (el) => () => {
+    const highlight = el.__hatsHighlight;
+    if (highlight && highlight.stale) {
+      removeEntry(getHatsHighlightGroup(highlight.group), highlight);
+      el.__hatsHighlight = null;
+    }
+    const interaction = el.__hatsInteraction;
+    if (interaction && interaction.stale) {
+      removeEntry(getCoordInteractionGroup(interaction.group), interaction);
+      el.__hatsInteraction = null;
+    }
+  };
+  function removeEntry(entries, entry) {
+    const at = entries.indexOf(entry);
+    if (at >= 0) entries.splice(at, 1);
+  }
+  var attachOnce = (el) => (kind2) => (attach) => () => {
+    const attached = el.__hatsAttached || (el.__hatsAttached = /* @__PURE__ */ Object.create(null));
+    if (!attached[kind2]) {
+      attached[kind2] = true;
+      attach();
+    }
+  };
+  function pointerCursor(el) {
+    el.style.cursor = "pointer";
+    el.__hatsCursor = true;
+  }
   var attachMouseEnterThunked = (el) => (handler3) => () => {
-    el.addEventListener("mouseenter", function(event) {
+    addHandler(el, "mouseenter", function(event) {
       handler3()();
     });
   };
   var attachMouseLeaveThunked = (el) => (handler3) => () => {
-    el.addEventListener("mouseleave", function(event) {
+    addHandler(el, "mouseleave", function(event) {
       handler3()();
     });
   };
   var attachClickThunked = (el) => (handler3) => () => {
-    el.addEventListener("click", function(event) {
+    addHandler(el, "click", function(event) {
       event.stopPropagation();
       handler3()();
     });
-    el.style.cursor = "pointer";
+    pointerCursor(el);
+  };
+  var attachClickWithModifierThunked = (el) => (plainHandler) => (modifierHandler) => () => {
+    addHandler(el, "click", function(event) {
+      event.stopPropagation();
+      const hasModifier = event.metaKey || event.ctrlKey || event.shiftKey;
+      (hasModifier ? modifierHandler : plainHandler)()();
+    });
+    pointerCursor(el);
   };
   var attachPointerDownThunked = (el) => (handler3) => () => {
-    el.addEventListener("pointerdown", function(event) {
+    addHandler(el, "pointerdown", function(event) {
       event.stopPropagation();
       handler3()();
+    });
+  };
+  var attachInputThunked = (el) => (handler3) => () => {
+    addHandler(el, "input", function(event) {
+      handler3(el.value)();
     });
   };
   var attachZoom = (el) => (scaleMin) => (scaleMax) => (targetSelector) => () => {
@@ -10298,14 +10387,30 @@
   }
   var attachCoordinatedHighlightThunked = (element3) => (identifyThunk) => (classifyFn) => (groupName) => (tooltipContentThunk) => (tooltipTrigger) => (tooltipBorderColor) => () => {
     const group3 = groupName;
-    const entry = { element: element3, identifyThunk, classifyFn, tooltipContentThunk, tooltipTrigger, tooltipBorderColor };
-    getHatsHighlightGroup(group3).push(entry);
+    const fields = { element: element3, identifyThunk, classifyFn, tooltipContentThunk, tooltipTrigger, tooltipBorderColor, group: group3, stale: false };
+    const existing = element3.__hatsHighlight;
+    if (existing) {
+      if (existing.group !== group3) {
+        removeEntry(getHatsHighlightGroup(existing.group), existing);
+        getHatsHighlightGroup(group3).push(existing);
+      }
+      Object.assign(existing, fields);
+      return;
+    }
+    element3.__hatsHighlight = fields;
+    getHatsHighlightGroup(group3).push(fields);
+    if (element3.__hatsHighlightListening) return;
+    element3.__hatsHighlightListening = true;
     element3.addEventListener("mouseenter", function(event) {
-      const hoveredId = identifyThunk();
-      applyHatsHighlightsWithTooltips(group3, hoveredId, element3, event);
+      const entry = element3.__hatsHighlight;
+      if (!entry) return;
+      const hoveredId = entry.identifyThunk();
+      applyHatsHighlightsWithTooltips(entry.group, hoveredId, element3, event);
     });
     element3.addEventListener("mouseleave", function(event) {
-      clearHatsHighlightsInGroupWithTooltips(group3);
+      const entry = element3.__hatsHighlight;
+      if (!entry) return;
+      clearHatsHighlightsInGroupWithTooltips(entry.group);
     });
   };
   function applyHatsHighlightsWithTooltips(groupName, hoveredId, triggerElement, event) {
@@ -10454,14 +10559,29 @@
   var attachCoordinatedInteractionThunked = (element3) => (identifyThunk) => (respondToHover) => (respondToBrush) => (respondToClear) => (positionThunk) => (groupName) => () => {
     const group3 = groupName;
     const getPosition = positionThunk && positionThunk.value0 ? positionThunk.value0 : null;
-    const entry = { element: element3, identifyThunk, respondToHover, respondToBrush, respondToClear, getPosition };
-    getCoordInteractionGroup(group3).push(entry);
+    const fields = { element: element3, identifyThunk, respondToHover, respondToBrush, respondToClear, getPosition, group: group3, stale: false };
+    const existing = element3.__hatsInteraction;
+    if (existing) {
+      if (existing.group !== group3) {
+        removeEntry(getCoordInteractionGroup(existing.group), existing);
+        getCoordInteractionGroup(group3).push(existing);
+      }
+      Object.assign(existing, fields);
+      return;
+    }
+    element3.__hatsInteraction = fields;
+    getCoordInteractionGroup(group3).push(fields);
+    if (element3.__hatsInteractionListening) return;
+    element3.__hatsInteractionListening = true;
     element3.addEventListener("mouseenter", function(event) {
-      const hoveredId = identifyThunk();
-      applyHoverInteraction(group3, hoveredId);
+      const entry = element3.__hatsInteraction;
+      if (!entry) return;
+      applyHoverInteraction(entry.group, entry.identifyThunk());
     });
     element3.addEventListener("mouseleave", function(event) {
-      applyClearInteraction(group3);
+      const entry = element3.__hatsInteraction;
+      if (!entry) return;
+      applyClearInteraction(entry.group);
     });
   };
   var activeBrushes = /* @__PURE__ */ new Map();
@@ -11411,6 +11531,18 @@
       return "abbr";
     }
     ;
+    if (v instanceof Button) {
+      return "button";
+    }
+    ;
+    if (v instanceof Input) {
+      return "input";
+    }
+    ;
+    if (v instanceof Label) {
+      return "label";
+    }
+    ;
     throw new Error("Failed pattern match at Hylograph.Internal.Element.Operations (line 31, column 1 - line 31, column 45): " + [v.constructor.name]);
   };
   var createElementWithNS = function(elemType) {
@@ -11573,21 +11705,7 @@
   }
 
   // output/Web.HTML.Window/index.js
-  var toEventTarget2 = unsafeCoerce2;
-
-  // output/Web.UIEvent.MouseEvent/foreign.js
-  function ctrlKey(e) {
-    return e.ctrlKey;
-  }
-  function shiftKey(e) {
-    return e.shiftKey;
-  }
-  function metaKey(e) {
-    return e.metaKey;
-  }
-
-  // output/Web.UIEvent.MouseEvent/index.js
-  var fromEvent = /* @__PURE__ */ unsafeReadProtoTagged("MouseEvent");
+  var toEventTarget = unsafeCoerce2;
 
   // output/Hylograph.HATS.InterpreterTick/index.js
   var append6 = /* @__PURE__ */ append(semigroupArray);
@@ -11608,6 +11726,8 @@
   var difference3 = /* @__PURE__ */ difference2(ordString);
   var intersection3 = /* @__PURE__ */ intersection2(ordString);
   var member4 = /* @__PURE__ */ member2(ordString);
+  var fromFoldable1 = /* @__PURE__ */ fromFoldable(ordString)(foldableArray);
+  var lookup5 = /* @__PURE__ */ lookup(ordString);
   var tooltipTriggerToInt = function(v) {
     if (v instanceof OnHover) {
       return 0;
@@ -11621,7 +11741,7 @@
       return 2;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 718, column 23 - line 721, column 19): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 762, column 23 - line 765, column 19): " + [v.constructor.name]);
   };
   var interactionStateToInt = function(v) {
     if (v instanceof Primary2) {
@@ -11644,7 +11764,7 @@
       return 4;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 725, column 25 - line 730, column 18): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 769, column 25 - line 774, column 18): " + [v.constructor.name]);
   };
   var highlightClassToInt = function(v) {
     if (v instanceof Primary) {
@@ -11671,7 +11791,7 @@
       return 5;
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 707, column 23 - line 713, column 21): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 751, column 23 - line 757, column 21): " + [v.constructor.name]);
   };
   var enumerateDFS = function(root) {
     return function(getChildren) {
@@ -11680,8 +11800,8 @@
           var children2 = getChildren(node);
           var isLeaf = $$null(children2);
           var childResults = concatMap(go2)(children2);
-          var $77 = isLeaf || includeInternal;
-          if ($77) {
+          var $80 = isLeaf || includeInternal;
+          if ($80) {
             return append6([node])(childResults);
           }
           ;
@@ -11714,7 +11834,7 @@
             return append6(thisNode)(go2(append6(v.value0.tail)(children2)));
           }
           ;
-          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 556, column 14 - line 563, column 43): " + [v.constructor.name]);
+          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 594, column 14 - line 601, column 43): " + [v.constructor.name]);
         };
         return go2([root]);
       };
@@ -11734,7 +11854,7 @@
         return enumerateBFS(v.value0.root)(v.value0.children)(v.value0.includeInternal);
       }
       ;
-      throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 537, column 5 - line 539, column 80): " + [v.value0.order.constructor.name]);
+      throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 575, column 5 - line 577, column 80): " + [v.value0.order.constructor.name]);
     }
     ;
     if (v instanceof WithContext) {
@@ -11743,7 +11863,7 @@
       })(v.value0);
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 534, column 18 - line 540, column 41): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 572, column 18 - line 578, column 41): " + [v.constructor.name]);
   };
   var elementTypeToTagName = function(v) {
     if (v instanceof Circle) {
@@ -11906,7 +12026,19 @@
       return "abbr";
     }
     ;
-    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 593, column 24 - line 633, column 17): " + [v.constructor.name]);
+    if (v instanceof Button) {
+      return "button";
+    }
+    ;
+    if (v instanceof Input) {
+      return "input";
+    }
+    ;
+    if (v instanceof Label) {
+      return "label";
+    }
+    ;
+    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 636, column 24 - line 679, column 19): " + [v.constructor.name]);
   };
   var clearContainer = clearContainer_;
   var clearChildren = function(el) {
@@ -11915,36 +12047,7 @@
       return traverse_4(removeElement)(children2)();
     };
   };
-  var attachClickWithModifierPurs = function(el) {
-    return function(plainHandler) {
-      return function(modifierHandler) {
-        return function __do2() {
-          var listener = eventListener(function(event) {
-            return function __do3() {
-              stopPropagation(event)();
-              var v = fromEvent(event);
-              if (v instanceof Just) {
-                var hasModifier = metaKey(v.value0) || (ctrlKey(v.value0) || shiftKey(v.value0));
-                if (hasModifier) {
-                  return modifierHandler(unit)();
-                }
-                ;
-                return plainHandler(unit)();
-              }
-              ;
-              if (v instanceof Nothing) {
-                return plainHandler(unit)();
-              }
-              ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 691, column 5 - line 700, column 26): " + [v.constructor.name]);
-            };
-          })();
-          addEventListener2("click")(listener)(false)(toEventTarget(el))();
-          return setCursorPointer(el)();
-        };
-      };
-    };
-  };
+  var attachClickWithModifierPurs = attachClickWithModifierThunked;
   var appendTo = function(p2) {
     return function(child) {
       return function __do2() {
@@ -12008,7 +12111,7 @@
                     };
                   }
                   ;
-                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 464, column 49 - line 477, column 26): " + [v.constructor.name]);
+                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 502, column 49 - line 515, column 26): " + [v.constructor.name]);
                 };
               };
             };
@@ -12066,7 +12169,7 @@
                     };
                   }
                   ;
-                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 497, column 47 - line 510, column 26): " + [v.constructor.name]);
+                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 535, column 47 - line 548, column 26): " + [v.constructor.name]);
                 };
               };
             };
@@ -12138,7 +12241,7 @@
                     return pure5(Nothing.value);
                   }
                   ;
-                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 430, column 59 - line 443, column 26): " + [v.constructor.name]);
+                  throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 468, column 59 - line 481, column 26): " + [v.constructor.name]);
                 };
               };
             };
@@ -12167,7 +12270,7 @@
                   return map22(catMaybes)(traverse2(mkUpdateTransition(el)(duration2)(delay)(easing))(templateAttrs));
                 }
                 ;
-                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 452, column 5 - line 460, column 97): " + [phaseSpec.transition.constructor.name]);
+                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 490, column 5 - line 498, column 97): " + [phaseSpec.transition.constructor.name]);
               };
             };
           };
@@ -12188,7 +12291,7 @@
                 return map22(catMaybes)(traverse2(mkExitTransition(el)(duration2)(delay)(easing))(phaseSpec.attrs));
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 485, column 5 - line 493, column 97): " + [phaseSpec.transition.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 523, column 5 - line 531, column 97): " + [phaseSpec.transition.constructor.name]);
             };
           };
         };
@@ -12209,7 +12312,7 @@
                   return map22(catMaybes)(traverse2(mkEnterTransition(duration2)(delay)(easing)(templateAttrs))(phaseSpec.attrs));
                 }
                 ;
-                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 418, column 5 - line 426, column 109): " + [phaseSpec.transition.constructor.name]);
+                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 456, column 5 - line 464, column 109): " + [phaseSpec.transition.constructor.name]);
               };
             };
           };
@@ -12236,7 +12339,7 @@
                 return setAttribute3(el)(v.value0)(v.value1);
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 350, column 7 - line 352, column 46): " + [v1.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 379, column 7 - line 381, column 46): " + [v1.constructor.name]);
             }
             ;
             if (v instanceof ThunkedAttr) {
@@ -12250,10 +12353,10 @@
                 return setAttribute3(el)(v.value0)(value12);
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 355, column 10 - line 357, column 46): " + [v1.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 384, column 10 - line 386, column 46): " + [v1.constructor.name]);
             }
             ;
-            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 348, column 26 - line 357, column 46): " + [v.constructor.name]);
+            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 377, column 26 - line 386, column 46): " + [v.constructor.name]);
           };
         };
         var applyNonNumericAttrs = function(el) {
@@ -12283,19 +12386,19 @@
             }
             ;
             if (v instanceof ThunkedDrag && v.value0 instanceof SimpleDrag) {
-              return attachSimpleDrag(el);
+              return attachOnce(el)("drag")(attachSimpleDrag(el));
             }
             ;
             if (v instanceof ThunkedDrag && v.value0 instanceof SimulationDrag) {
-              return attachSimulationDragById(el)(v.value0.value0);
+              return attachOnce(el)("drag")(attachSimulationDragById(el)(v.value0.value0));
             }
             ;
             if (v instanceof ThunkedDrag && v.value0 instanceof SimulationDragNested) {
-              return attachSimulationDragNestedById(el)(v.value0.value0);
+              return attachOnce(el)("drag")(attachSimulationDragNestedById(el)(v.value0.value0));
             }
             ;
             if (v instanceof ThunkedZoom) {
-              return attachZoom(el)(v.value0.scaleExtent.value0)(v.value0.scaleExtent.value1)(v.value0.targetSelector);
+              return attachOnce(el)("zoom")(attachZoom(el)(v.value0.scaleExtent.value0)(v.value0.scaleExtent.value1)(v.value0.targetSelector));
             }
             ;
             if (v instanceof ThunkedCoordinatedHighlight) {
@@ -12320,21 +12423,26 @@
             }
             ;
             if (v instanceof ThunkedBrush) {
-              return $$void5(attachCoordinatedBrushThunked(el)(v.value0.extent)(toNullable(v.value0.group)));
+              return attachOnce(el)("brush")($$void5(attachCoordinatedBrushThunked(el)(v.value0.extent)(toNullable(v.value0.group))));
             }
             ;
             if (v instanceof ThunkedPointerDown) {
               return attachPointerDownThunked(el)(v.value0);
             }
             ;
-            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 369, column 22 - line 405, column 70): " + [v.constructor.name]);
+            if (v instanceof ThunkedInput) {
+              return attachInputThunked(el)(v.value0);
+            }
+            ;
+            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 404, column 22 - line 443, column 58): " + [v.constructor.name]);
           };
         };
         var applyBehaviors = function(el) {
           return function(behaviors) {
             return function __do2() {
-              traverse2(applyBehavior(el))(behaviors)();
-              return unit;
+              beginBehaviors(el)();
+              traverse_4(applyBehavior(el))(behaviors)();
+              return endBehaviors(el)();
             };
           };
         };
@@ -12348,7 +12456,7 @@
               return setAttribute3(el)(v.value0)(v.value1(unit));
             }
             ;
-            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 338, column 18 - line 340, column 64): " + [v.constructor.name]);
+            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 367, column 18 - line 369, column 64): " + [v.constructor.name]);
           };
         };
         var applyAttrs = function(el) {
@@ -12391,14 +12499,14 @@
                                 return Nothing.value;
                               }
                               ;
-                              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 285, column 22 - line 290, column 36): " + [gupSpec.value0.enter.constructor.name]);
+                              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 314, column 22 - line 319, column 36): " + [gupSpec.value0.enter.constructor.name]);
                             }
                             ;
                             if (gupSpec instanceof Nothing) {
                               return Nothing.value;
                             }
                             ;
-                            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 284, column 24 - line 291, column 34): " + [gupSpec.constructor.name]);
+                            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 313, column 24 - line 320, column 34): " + [gupSpec.constructor.name]);
                           })();
                           applyBehaviors(el)(itemTree.value0.behaviors)();
                           var childMaps = traverse2(goWithDatum(el))(itemTree.value0.children)();
@@ -12467,7 +12575,7 @@
               });
             }
             ;
-            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 307, column 19 - line 326, column 10): " + [v.constructor.name]);
+            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 336, column 19 - line 355, column 10): " + [v.constructor.name]);
           };
         };
         var processChildren = function(p2) {
@@ -12521,7 +12629,7 @@
                       return el2;
                     }
                     ;
-                    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 140, column 13 - line 150, column 18): " + [v1.constructor.name]);
+                    throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 137, column 13 - line 147, column 18): " + [v1.constructor.name]);
                   })();
                   var childResult = processChildren(el)(v.value0.children)();
                   return {
@@ -12547,6 +12655,7 @@
                         };
                       };
                     })(existingEls)();
+                    var anchor = foldAnchor(p2)(existingEls)(domIdx)();
                     var existingKeys = fromFoldable7(map16(function(v1) {
                       return v1.key;
                     })(existingKeysAndEls));
@@ -12555,8 +12664,8 @@
                     var exitKeys = difference3(existingKeys)(newKeys);
                     var exitTransitions = traverseWithIndex2(function(exitIdx) {
                       return function(v1) {
-                        var $204 = member4(v1.key)(exitKeys);
-                        if ($204) {
+                        var $205 = member4(v1.key)(exitKeys);
+                        if ($205) {
                           if (spec.gup instanceof Just) {
                             if (spec.gup.value0.exit instanceof Just) {
                               return function __do3() {
@@ -12576,7 +12685,7 @@
                               };
                             }
                             ;
-                            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 175, column 29 - line 184, column 29): " + [spec.gup.value0.exit.constructor.name]);
+                            throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 177, column 29 - line 186, column 29): " + [spec.gup.value0.exit.constructor.name]);
                           }
                           ;
                           if (spec.gup instanceof Nothing) {
@@ -12586,7 +12695,7 @@
                             };
                           }
                           ;
-                          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 174, column 16 - line 187, column 27): " + [spec.gup.constructor.name]);
+                          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 176, column 16 - line 189, column 27): " + [spec.gup.constructor.name]);
                         }
                         ;
                         return pure5(Nothing.value);
@@ -12594,8 +12703,8 @@
                     })(existingKeysAndEls)();
                     var updateTransitions = traverseWithIndex2(function(updateIdx) {
                       return function(v1) {
-                        var $212 = member4(v1.key)(updateKeys);
-                        if ($212) {
+                        var $213 = member4(v1.key)(updateKeys);
+                        if ($213) {
                           var v2 = find2(function(d) {
                             return spec.keyFn(d) === v1.key;
                           })(items2);
@@ -12617,6 +12726,13 @@
                                 ;
                                 return [];
                               })();
+                              (function() {
+                                if (templateTree instanceof Elem2) {
+                                  return applyBehaviors(v1.element)(templateTree.value0.behaviors)();
+                                }
+                                ;
+                                return unit;
+                              })();
                               if (spec.gup instanceof Just) {
                                 if (spec.gup.value0.update instanceof Just) {
                                   applyNonNumericAttrs(v1.element)(templateAttrs)();
@@ -12636,7 +12752,7 @@
                                   return Nothing.value;
                                 }
                                 ;
-                                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 207, column 33 - line 220, column 33): " + [spec.gup.value0.update.constructor.name]);
+                                throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 214, column 33 - line 227, column 33): " + [spec.gup.value0.update.constructor.name]);
                               }
                               ;
                               if (spec.gup instanceof Nothing) {
@@ -12646,7 +12762,7 @@
                                 return Nothing.value;
                               }
                               ;
-                              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 206, column 15 - line 226, column 31): " + [spec.gup.constructor.name]);
+                              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 213, column 15 - line 233, column 31): " + [spec.gup.constructor.name]);
                             };
                           }
                           ;
@@ -12654,7 +12770,7 @@
                             return pure5(Nothing.value);
                           }
                           ;
-                          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 194, column 16 - line 227, column 36): " + [v2.constructor.name]);
+                          throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 196, column 16 - line 234, column 36): " + [v2.constructor.name]);
                         }
                         ;
                         return pure5(Nothing.value);
@@ -12664,19 +12780,41 @@
                       return member4(spec.keyFn(d))(enterKeys);
                     })(items2);
                     var enterResults = traverseWithIndex2(renderEnteringItem(p2)(spec.name)(spec.keyFn)(spec.template)(spec.gup))(enterItems)();
+                    var updateKeysAndEls = filter(function(v1) {
+                      return member4(v1.key)(updateKeys);
+                    })(existingKeysAndEls);
                     var updateElements = map16(function(v1) {
                       return v1.element;
-                    })(filter(function(v1) {
-                      return member4(v1.key)(updateKeys);
-                    })(existingKeysAndEls));
+                    })(updateKeysAndEls);
                     var enterElements = map16(function(v1) {
                       return v1.element;
                     })(enterResults);
                     var childMaps = foldl2(union4)(empty2)(map16(function(v1) {
                       return v1.childSelections;
                     })(enterResults));
-                    var selections = insert7(spec.name)(append6(updateElements)(enterElements))(childMaps);
-                    var totalElements = length(updateElements) + length(enterElements) | 0;
+                    var elementByKey = fromFoldable1(append6(map16(function(v1) {
+                      return new Tuple(v1.key, v1.element);
+                    })(updateKeysAndEls))(zipWith(function(d) {
+                      return function(r) {
+                        return new Tuple(spec.keyFn(d), r.element);
+                      };
+                    })(enterItems)(enterResults)));
+                    var inDataOrder = mapMaybe(function(d) {
+                      return lookup5(spec.keyFn(d))(elementByKey);
+                    })(items2);
+                    placeInDataOrder(p2)(inDataOrder)(anchor)();
+                    var lingering = length(catMaybes(exitTransitions));
+                    var liveElements = length(updateElements) + length(enterElements) | 0;
+                    var totalElements = liveElements + lingering | 0;
+                    var selected2 = (function() {
+                      var $233 = length(inDataOrder) === liveElements;
+                      if ($233) {
+                        return inDataOrder;
+                      }
+                      ;
+                      return append6(updateElements)(enterElements);
+                    })();
+                    var selections = insert7(spec.name)(selected2)(childMaps);
                     return {
                       result: {
                         selections,
@@ -12692,7 +12830,7 @@
                 });
               }
               ;
-              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 135, column 27 - line 251, column 10): " + [v.constructor.name]);
+              throw new Error("Failed pattern match at Hylograph.HATS.InterpreterTick (line 132, column 27 - line 280, column 10): " + [v.constructor.name]);
             };
           };
         };
@@ -12724,8 +12862,8 @@
     return function(tree) {
       return function __do2() {
         var doc = (function __do3() {
-          var $235 = bind4(windowImpl)(document2)();
-          return toDocument($235);
+          var $242 = bind4(windowImpl)(document2)();
+          return toDocument($242);
         })();
         var container = selectElement(selector)(doc)();
         return rerenderTree(doc)(container)(tree)();
@@ -13093,7 +13231,7 @@
     return function __do2() {
       var rs = bindFlipped4(readyState)(bindFlipped4(document2)(windowImpl))();
       if (rs instanceof Loading) {
-        var et = map19(toEventTarget2)(windowImpl)();
+        var et = map19(toEventTarget)(windowImpl)();
         var listener = eventListener(function(v) {
           return callback(new Right(unit));
         })();
@@ -13203,7 +13341,7 @@
   // output/Halogen.Aff.Driver.Eval/index.js
   var traverse_5 = /* @__PURE__ */ traverse_(applicativeEffect)(foldableMaybe);
   var bindFlipped5 = /* @__PURE__ */ bindFlipped(bindMaybe);
-  var lookup5 = /* @__PURE__ */ lookup(ordSubscriptionId);
+  var lookup6 = /* @__PURE__ */ lookup(ordSubscriptionId);
   var bind12 = /* @__PURE__ */ bind(bindAff);
   var liftEffect4 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var discard4 = /* @__PURE__ */ discard(discardUnit);
@@ -13233,7 +13371,7 @@
       return function __do2() {
         var v = read(ref2)();
         var subs = read(v.subscriptions)();
-        return traverse_5(unsubscribe)(bindFlipped5(lookup5(sid))(subs))();
+        return traverse_5(unsubscribe)(bindFlipped5(lookup6(sid))(subs))();
       };
     };
   };

@@ -1,0 +1,233 @@
+machine  itajara-loop
+title    "One loop of the Itajara looper daemon"
+format   2
+initial  empty
+
+STATES                  LABEL                             ON ENTRY                ON EXIT
+  empty                 Empty                             wipe
+  sized                 Sized, empty
+  tape                  Threaded tape                     thread-tape
+  armed-by-level        Listening for a sound             listen                  release-input
+  armed-for-grid        Waiting for the bar               request-at-boundary     cancel-request
+  armed-by-sound        Sound found, waiting for the bar  request-at-boundary     release-input, cancel-request
+  recording-open        Recording, open                   start-take              close-take
+  recording-sized       Recording, sized                  start-take, arm-close   close-take
+  overdubbing-open      Overdubbing                       start-layer             close-layer
+  overdubbing-one-pass  Overdubbing, one pass             start-layer, arm-close  close-layer
+  playing               Playing
+  multiplying           Multiplying                       start-multiply          close-multiply
+
+EVENTS       SOURCE   LABEL
+  record     user     record (r)
+  multiply   user     multiply (x)
+  undo       user     undo (u)
+  clear      user     clear (c)
+  fix        user     fix the next take (fix)
+  size       user     size in bars (len)
+  blank      user     thread a tape (blank)
+  free       user     forget the length (z)
+  level-off  user     level-arm off (lev0)
+  sound      runtime  a sound crossed the threshold
+  boundary   runtime  the bar line arrived
+  closed     runtime  the take reached its length
+  lost       runtime  the audio device was lost
+
+CONFIG       DEFAULT  LABEL
+  fixed-rig  false    Every slot is a tape of one fixed length (--fixed)
+
+FACTS                   MEANING
+  input-held-elsewhere  Another loop holds the converter
+  writable              The write head can follow the play head: not swinging, not a tape at speed
+  plain                 Playing plainly: x1, forwards
+  at-ceiling            The loop is at the layer ceiling
+  level-arm             Level-arm is on: wait for a sound rather than the press
+  quantised             Quantise is on: start on the bar line
+  one-pass              The next layer is one pass and closes itself
+  last-layer            Only one layer is left
+  has-length            The loop has a length
+  has-layers            The loop has at least one layer
+  threaded              The loop was a threaded tape
+  has-grid              A bar exists: Link is running or a loop has a length
+
+REFUSALS               MEANING
+  input-held           another loop has the input; one converter, one recording — finish that first
+  not-writable         a write head cannot follow this play head: put the speed back, or stop the pendulum
+  not-plain            the loop is playing at a speed; sp1 to record into it
+  at-ceiling           the loop is at the layer ceiling; undo one first
+  still-recording      the loop is recording; finish that first
+  nothing-to-undo      the loop has nothing to undo
+  nothing-to-multiply  the loop has nothing to multiply; record a loop first
+  has-material         the loop has something in it; undo or clear it first
+  no-length            no length is set; the next recording sets one
+  no-grid              no bar yet: there is no clock and no loop has a length
+
+COMMANDS               MEANING
+  wipe                 Zero every layer and forget the length
+  thread-tape          Lay down a silent layer of the asked-for length, going round
+  listen               Claim the input and watch it for the threshold
+  release-input        Give the input back; no take began
+  request-at-boundary  Ask the output callback to start the take on the next bar line
+  cancel-request       Withdraw a pending request
+  start-take           Zero layer 0, stamp origin and rec_from, start the linear write
+  start-layer          Zero the next layer, record from origin, start the modular write
+  arm-close            Set close_at one length on; the closer delivers `closed`
+  close-take           Commit the first take: its length becomes the cycle, draw the layer
+  close-layer          Commit the layer: shape it, draw it, count it
+  start-multiply       Zero the next layer and record from the top of this cycle
+  close-multiply       Round to whole cycles and grow the loop to fit
+
+GRID   rows are states, columns are events
+                          record   multiply          undo              clear  fix               size              blank             free              level-off  sound  boundary  closed   lost
+  > empty                 [1]      [2]               !nothing-to-undo  [3]    sized             [4]               tape              !no-length        .          .      .         .        .
+    sized                 [5]      [6]               !nothing-to-undo  [7]    sized             [8]               tape              empty             .          .      .         .        .
+    tape                  [9]      [10]              sized             [11]   .                 [12]              tape              !has-material     .          .      .         .        .
+    armed-by-level        [13]     !still-recording  !still-recording  [14]   !still-recording  !still-recording  !still-recording  !still-recording  [15]       [16]   .         .        .
+    armed-for-grid        .        !still-recording  !still-recording  [17]   !still-recording  !still-recording  !still-recording  !still-recording  .          .      [18]      .        [19]
+    armed-by-sound        [20]     !still-recording  !still-recording  [21]   !still-recording  !still-recording  !still-recording  !still-recording  [22]       .      [23]      .        armed-by-level
+    recording-open        playing  !still-recording  !still-recording  [24]   !still-recording  !still-recording  !still-recording  !still-recording  .          .      .         .        empty
+    recording-sized       playing  !still-recording  !still-recording  [25]   !still-recording  !still-recording  !still-recording  !still-recording  .          .      .         playing  sized
+    overdubbing-open      playing  !still-recording  !still-recording  [26]   !still-recording  !still-recording  !still-recording  !still-recording  .          .      .         .        playing
+    overdubbing-one-pass  playing  !still-recording  !still-recording  [27]   !still-recording  !still-recording  !still-recording  !still-recording  .          .      .         playing  playing
+    playing               [28]     [29]              [30]              [31]   .                 [32]              !has-material     !has-material     .          .      .         .        .
+    multiplying           playing  playing           !still-recording  [33]   !still-recording  !still-recording  !still-recording  !still-recording  .          .      .         .        playing
+
+KEY
+  >     the initial state
+  .     stay — the event is declared here and does nothing
+  !tag  refuse with that tag — see REFUSALS
+  [n]   guarded, or declared twice — see CASES
+
+CASES
+  [1]  empty on record
+         when input-held-elsewhere     refuse input-held
+         elif not writable             refuse not-writable
+         elif not plain                refuse not-plain
+         elif level-arm                -> armed-by-level
+         elif quantised                -> armed-for-grid
+         else                          -> recording-open
+  [2]  empty on multiply
+         when input-held-elsewhere     refuse input-held
+         elif not plain                refuse not-plain
+         else                          refuse nothing-to-multiply
+  [3]  empty on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [4]  empty on size
+         when not has-grid             refuse no-grid
+         else                          -> sized
+  [5]  sized on record
+         when input-held-elsewhere     refuse input-held
+         elif not writable             refuse not-writable
+         elif level-arm                -> armed-by-level
+         elif quantised                -> armed-for-grid
+         else                          -> recording-sized
+  [6]  sized on multiply
+         when input-held-elsewhere     refuse input-held
+         elif not plain                refuse not-plain
+         else                          -> multiplying
+  [7]  sized on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [8]  sized on size
+         when not has-grid             refuse no-grid
+         else                          -> sized
+  [9]  tape on record
+         when input-held-elsewhere     refuse input-held
+         elif not writable             refuse not-writable
+         elif at-ceiling               refuse at-ceiling
+         elif level-arm                -> armed-by-level
+         elif one-pass                 -> overdubbing-one-pass
+         else                          -> overdubbing-open
+  [10]  tape on multiply
+         when input-held-elsewhere     refuse input-held
+         elif not plain                refuse not-plain
+         elif at-ceiling               refuse at-ceiling
+         else                          -> multiplying
+  [11]  tape on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [12]  tape on size
+         when not has-grid             refuse no-grid
+         else                          stay
+  [13]  armed-by-level on record
+         when threaded and has-layers  -> tape
+         elif has-layers               -> playing
+         elif has-length               -> sized
+         else                          -> empty
+  [14]  armed-by-level on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [15]  armed-by-level on level-off
+         when threaded and has-layers  -> tape
+         elif has-layers               -> playing
+         elif has-length               -> sized
+         else                          -> empty
+  [16]  armed-by-level on sound
+         when quantised                -> armed-by-sound
+         elif has-layers and one-pass  -> overdubbing-one-pass
+         elif has-layers               -> overdubbing-open
+         elif has-length               -> recording-sized
+         else                          -> recording-open
+  [17]  armed-for-grid on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [18]  armed-for-grid on boundary
+         when has-length               -> recording-sized
+         else                          -> recording-open
+  [19]  armed-for-grid on lost
+         when has-length               -> sized
+         else                          -> empty
+  [20]  armed-by-sound on record
+         when threaded and has-layers  -> tape
+         elif has-layers               -> playing
+         elif has-length               -> sized
+         else                          -> empty
+  [21]  armed-by-sound on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [22]  armed-by-sound on level-off
+         when threaded and has-layers  -> tape
+         elif has-layers               -> playing
+         elif has-length               -> sized
+         else                          -> empty
+  [23]  armed-by-sound on boundary
+         when has-layers and one-pass  -> overdubbing-one-pass
+         elif has-layers               -> overdubbing-open
+         elif has-length               -> recording-sized
+         else                          -> recording-open
+  [24]  recording-open on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [25]  recording-sized on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [26]  overdubbing-open on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [27]  overdubbing-one-pass on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [28]  playing on record
+         when input-held-elsewhere     refuse input-held
+         elif not writable             refuse not-writable
+         elif at-ceiling               refuse at-ceiling
+         elif level-arm                -> armed-by-level
+         elif one-pass                 -> overdubbing-one-pass
+         else                          -> overdubbing-open
+  [29]  playing on multiply
+         when input-held-elsewhere     refuse input-held
+         elif not plain                refuse not-plain
+         elif at-ceiling               refuse at-ceiling
+         else                          -> multiplying
+  [30]  playing on undo
+         when last-layer               -> sized
+         else                          stay
+  [31]  playing on clear
+         when fixed-rig                -> tape
+         else                          -> empty
+  [32]  playing on size
+         when not has-grid             refuse no-grid
+         else                          stay
+  [33]  multiplying on clear
+         when fixed-rig                -> tape
+         else                          -> empty

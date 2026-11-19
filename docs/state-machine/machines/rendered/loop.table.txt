@@ -1,6 +1,7 @@
 machine  loop
 title    "One loop of a six-loop looper"
 format   2
+clock    beats
 initial  empty
 
 STATES         LABEL      ON ENTRY        ON EXIT

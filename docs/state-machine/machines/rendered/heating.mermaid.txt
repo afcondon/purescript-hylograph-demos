@@ -1,0 +1,32 @@
+stateDiagram-v2
+    off : Off  (entry burner-off pump-off)
+    frost : Frost watch  (entry burner-off pump-off)
+    satisfied : Up to temperature  (entry burner-off pump-off)
+    heating : Heating  (entry pump-on burner-on)
+    boosting : Boost  (entry pump-on burner-on)
+    fault : Fault  (entry burner-off pump-off latch-fault, exit clear-fault)
+    [*] --> off
+    off --> satisfied : mode
+    off --> heating : mode
+    off --> boosting : boost
+    off --> frost : thermostat calls
+    off --> fault : boiler fault
+    frost --> satisfied : mode
+    frost --> boosting : boost
+    frost --> off : thermostat satisfied
+    frost --> fault : boiler fault
+    satisfied --> off : mode
+    satisfied --> boosting : boost
+    satisfied --> heating : thermostat calls
+    satisfied --> fault : boiler fault
+    heating --> off : mode
+    heating --> boosting : boost
+    heating --> satisfied : thermostat satisfied
+    heating --> fault : boiler fault
+    boosting --> off : mode
+    boosting --> satisfied : cancel boost
+    boosting --> heating : cancel boost
+    boosting --> fault : boiler fault
+    fault --> off : reset
+    boosting --> satisfied : after boost elapsed
+    boosting --> heating : after boost elapsed

@@ -1,0 +1,504 @@
+{
+  "glassbox": 2,
+  "id": "itajara-loop",
+  "title": "One loop of the Itajara looper daemon",
+
+  "notes": [
+    "The phase machine of one loop in the Itajara daemon (music/itajara/daemon/",
+    "src/engine.rs), written down. The daemon runs six u8 constants — IDLE,",
+    "ARMED, FIRST, OVERDUB, PLAYING, MULTIPLY — set at seventeen sites from three",
+    "threads, and what each byte MEANS depends on flags beside it: `threaded`,",
+    "`one_pass`, `close_at`/`rec_len`, `request`/`request_at`, `level_arm`/",
+    "`arm_from`. This artifact is that byte and those flags as one machine, so",
+    "the daemon's Rust and the pedalboard's PureScript can be held to the same",
+    "table instead of agreeing by care. It is prescriptive in a few places, and",
+    "each is named below; loop.json next door is untouched and is a witness.",
+    "",
+    "WHICH QUALIFIERS BECAME STATES. The test used: a qualifier is a state when",
+    "it changes what the host must do on ENTRY or what more than one event does;",
+    "it is a fact when only a guard reads it at the moment of a press. So:",
+    "",
+    "  * Armed splits in three. Listening for a sound (`lev1`) and waiting for",
+    "    the bar line (`g1` on an empty loop) enter differently — one claims the",
+    "    input and watches it, the other files a request the output callback",
+    "    will honour — and a second press cancels the first but is a no-op on",
+    "    the second. The daemon spells the first as ARMED and the second as",
+    "    IDLE-with-a-request; here both are states, because both are 'about to",
+    "    record' and neither is idle. The third is both at once: a listening",
+    "    loop whose sound has been found while quantise is on files a request",
+    "    for the bar and KEEPS the input — `armed-by-sound`. It is not",
+    "    `armed-for-grid`, and the replay of 2026-09-06 (step 5b) is what said",
+    "    so: a second press cancels it, and an outage drops the request and",
+    "    leaves it listening, where `armed-for-grid` shrugs off the press and",
+    "    an outage returns it to rest. Only an empty or sized loop ever waits",
+    "    for the bar without a sound — a pressed overdub starts on the press —",
+    "    so `armed-for-grid`'s exits read `has-length` alone.",
+    "  * Recording splits by whether it closes itself. A first take with a",
+    "    known length (`fix`, `len`, or a length kept from before) arms",
+    "    `close_at` on entry and the closer thread delivers `closed`; an open",
+    "    take waits for the foot. Same for an overdub: one pass arms its close,",
+    "    an ordinary overdub does not. Four recording states, two entry lists.",
+    "  * Empty, Sized and Tape are three rest states, not one with facts. They",
+    "    answer `record` differently (an open first take, a sized first take, an",
+    "    overdub), `blank` differently (allowed, allowed, re-thread) and enter",
+    "    differently (wipe, nothing, thread a silent layer). `threaded` was a",
+    "    flag; here it is where you are.",
+    "  * Multiply is its own state, as it is in the daemon.",
+    "",
+    "WHICH QUALIFIERS STAYED FACTS. `level-arm`, `quantised` and `one-pass` are",
+    "modes a verb toggles between presses; the machine reads them when `record`",
+    "arrives and never carries them. `writable`, `plain`, `at-ceiling` and",
+    "`input-held-elsewhere` are the daemon's own guards (`not_writable`,",
+    "`not_plain`, the layer ceiling, `busy_elsewhere`), asked in the daemon's",
+    "order so the same press gets the same refusal. `has-length`, `has-layers`",
+    "and `threaded` are read in exactly one place: on the way OUT of an armed",
+    "state, to know where a cancelled arm returns to and what kind of take a",
+    "found sound begins. That is the history-state problem the README names,",
+    "and this is its documented workaround — the host holds the memory and the",
+    "machine asks for it. `last-layer` tells `undo` whether it has just made",
+    "the loop Sized. `has-grid` is what `len` needs before a bar means anything.",
+    "",
+    "WHAT IS CONFIG. `fixed-rig` (`--fixed` at launch) is the one thing that",
+    "reshapes the diagram: on a fixed rig `clear` lands on Tape, not Empty, so",
+    "every slot is an empty tape of one length. The initial state is Empty",
+    "regardless; a fixed rig seeds each slot with `Drive.enter tape`, which is",
+    "what `enter` is for.",
+    "",
+    "WHY THERE ARE NO DEADLINES. A sized take closes itself after ITS OWN",
+    "LENGTH in frames, which is neither config nor a literal — it is the host's",
+    "memory. `after` cannot say that, so the close is a runtime event `closed`,",
+    "and `arm-close` on entry is the command that tells the host to schedule",
+    "it. The closer thread and the callback keep the timing; the machine keeps",
+    "only that a close is owed. With no deadlines the machine declares no",
+    "clock, and `Host.reportClock` accepts it on a host with no timer at all.",
+    "",
+    "COMMANDS. Every recording state establishes itself on entry (zero the",
+    "layer, stamp the origin, start the write; arm the close if it knows its",
+    "length) and commits on exit (`close-take` for a first take, whose length",
+    "becomes the cycle; `close-layer` for an overdub; `close-multiply`, which",
+    "rounds to cycles and grows the loop). Exit commands are used here against",
+    "the README's advice, and knowingly: the commit is the one thing every way",
+    "OUT of a recording owes, including `clear` and a lost device. On those two",
+    "exits the host's `close-take` has less to commit than usual — nothing,",
+    "after an outage with a hole in it — and it knows that, because it is the",
+    "thing that raised `lost`. The armed states also pay on exit:",
+    "`release-input` gives the converter back and `cancel-request` withdraws a",
+    "request the callback has not consumed; both are harmless after the take",
+    "actually began, because `start-take` consumes what they would clear.",
+    "",
+    "WHAT THE MACHINE DOES NOT KNOW. Arguments. `fix13` stores thirteen seconds,",
+    "`len4` stores four bars, `blank13` threads thirteen seconds: the number is",
+    "the verb's, the phase change is the machine's, and the host keeps the",
+    "number the way it keeps every count. The same goes for `undo` on a loop",
+    "with layers to spare (a layer goes; the phase does not), for `fix` on a",
+    "loop with material (it sets `one-pass`, a fact), and for `len` on a loop",
+    "with material (it declares or resizes; the phase does not move — but it",
+    "asks for a bar first, as it does on an empty loop, unless the loop is",
+    "itself the bar, which is `has-grid` too; the replay found this).",
+    "",
+    "WHERE THIS IS PRESCRIPTIVE. The daemon does not guard `u`, `x`, `z` or",
+    "`blank` against an armed loop, and does not guard `u` or `z` against a",
+    "recording one; a press there would decrement a layer under a live write",
+    "or forget a length mid-take. Here every one of them refuses",
+    "`still-recording`, which is the tag `fix` already uses for the same case.",
+    "The daemon also lets `x` on an armed loop abandon the arm and start a",
+    "multiply; here it refuses. Adopting this artifact makes those refusals",
+    "real, and that is intended. ADOPTED 2026-09-06 (step 5b): the daemon",
+    "guards every one of them now (`guards::still_recording`), a cancelled",
+    "arm returns to what the loop held rather than to idle, and",
+    "`daemon/src/engine/conformance.rs` replays this machine's vectors",
+    "through the engine — so this table is what the daemon is tested",
+    "against, not a description of it.",
+    "",
+    "REFUSAL TAGS are the daemon's acks: `input-held` ('loop N has the input'),",
+    "`not-writable` (swinging, or a tape at speed), `not-plain` ('playing at",
+    "xN; sp1 to record into it'), `at-ceiling`, `still-recording` ('finish",
+    "that first'), `nothing-to-undo`, `nothing-to-multiply`, `has-material`",
+    "('has something in it' / 'layers still playing'), `no-length` ('no length",
+    "set'), `no-grid` ('no bar yet')."
+  ],
+
+  "initial": "empty",
+
+  "states": [
+    { "id": "empty", "label": "Empty", "entry": ["wipe"] },
+    { "id": "sized", "label": "Sized, empty" },
+    { "id": "tape", "label": "Threaded tape", "entry": ["thread-tape"] },
+    { "id": "armed-by-level", "label": "Listening for a sound", "entry": ["listen"], "exit": ["release-input"] },
+    { "id": "armed-for-grid", "label": "Waiting for the bar", "entry": ["request-at-boundary"], "exit": ["cancel-request"] },
+    { "id": "armed-by-sound", "label": "Sound found, waiting for the bar", "entry": ["request-at-boundary"], "exit": ["release-input", "cancel-request"] },
+    { "id": "recording-open", "label": "Recording, open", "entry": ["start-take"], "exit": ["close-take"] },
+    { "id": "recording-sized", "label": "Recording, sized", "entry": ["start-take", "arm-close"], "exit": ["close-take"] },
+    { "id": "overdubbing-open", "label": "Overdubbing", "entry": ["start-layer"], "exit": ["close-layer"] },
+    { "id": "overdubbing-one-pass", "label": "Overdubbing, one pass", "entry": ["start-layer", "arm-close"], "exit": ["close-layer"] },
+    { "id": "playing", "label": "Playing" },
+    { "id": "multiplying", "label": "Multiplying", "entry": ["start-multiply"], "exit": ["close-multiply"] }
+  ],
+
+  "events": [
+    { "id": "record",    "label": "record (r)",                          "source": "user" },
+    { "id": "multiply",  "label": "multiply (x)",                        "source": "user" },
+    { "id": "undo",      "label": "undo (u)",                            "source": "user" },
+    { "id": "clear",     "label": "clear (c)",                           "source": "user" },
+    { "id": "fix",       "label": "fix the next take (fix)",             "source": "user" },
+    { "id": "size",      "label": "size in bars (len)",                  "source": "user" },
+    { "id": "blank",     "label": "thread a tape (blank)",               "source": "user" },
+    { "id": "free",      "label": "forget the length (z)",               "source": "user" },
+    { "id": "level-off", "label": "level-arm off (lev0)",                "source": "user" },
+    { "id": "sound",     "label": "a sound crossed the threshold",       "source": "runtime" },
+    { "id": "boundary",  "label": "the bar line arrived",                "source": "runtime" },
+    { "id": "closed",    "label": "the take reached its length",         "source": "runtime" },
+    { "id": "lost",      "label": "the audio device was lost",           "source": "runtime" }
+  ],
+
+  "config": [
+    { "id": "fixed-rig", "label": "Every slot is a tape of one fixed length (--fixed)", "default": false }
+  ],
+
+  "facts": [
+    { "id": "input-held-elsewhere",  "label": "Another loop holds the converter" },
+    { "id": "writable",              "label": "The write head can follow the play head: not swinging, not a tape at speed" },
+    { "id": "plain",                 "label": "Playing plainly: x1, forwards" },
+    { "id": "at-ceiling",            "label": "The loop is at the layer ceiling" },
+    { "id": "level-arm",             "label": "Level-arm is on: wait for a sound rather than the press" },
+    { "id": "quantised",             "label": "Quantise is on: start on the bar line" },
+    { "id": "one-pass",              "label": "The next layer is one pass and closes itself" },
+    { "id": "last-layer",            "label": "Only one layer is left" },
+    { "id": "has-length",            "label": "The loop has a length" },
+    { "id": "has-layers",            "label": "The loop has at least one layer" },
+    { "id": "threaded",              "label": "The loop was a threaded tape" },
+    { "id": "has-grid",              "label": "A bar exists: Link is running or a loop has a length" }
+  ],
+
+  "refusals": [
+    { "id": "input-held",          "text": "another loop has the input; one converter, one recording — finish that first" },
+    { "id": "not-writable",        "text": "a write head cannot follow this play head: put the speed back, or stop the pendulum" },
+    { "id": "not-plain",           "text": "the loop is playing at a speed; sp1 to record into it" },
+    { "id": "at-ceiling",          "text": "the loop is at the layer ceiling; undo one first" },
+    { "id": "still-recording",     "text": "the loop is recording; finish that first" },
+    { "id": "nothing-to-undo",     "text": "the loop has nothing to undo" },
+    { "id": "nothing-to-multiply", "text": "the loop has nothing to multiply; record a loop first" },
+    { "id": "has-material",        "text": "the loop has something in it; undo or clear it first" },
+    { "id": "no-length",           "text": "no length is set; the next recording sets one" },
+    { "id": "no-grid",             "text": "no bar yet: there is no clock and no loop has a length" }
+  ],
+
+  "commands": [
+    { "id": "wipe",                 "label": "Zero every layer and forget the length" },
+    { "id": "thread-tape",          "label": "Lay down a silent layer of the asked-for length, going round" },
+    { "id": "listen",               "label": "Claim the input and watch it for the threshold" },
+    { "id": "release-input",        "label": "Give the input back; no take began" },
+    { "id": "request-at-boundary",  "label": "Ask the output callback to start the take on the next bar line" },
+    { "id": "cancel-request",       "label": "Withdraw a pending request" },
+    { "id": "start-take",           "label": "Zero layer 0, stamp origin and rec_from, start the linear write" },
+    { "id": "start-layer",          "label": "Zero the next layer, record from origin, start the modular write" },
+    { "id": "arm-close",            "label": "Set close_at one length on; the closer delivers `closed`" },
+    { "id": "close-take",           "label": "Commit the first take: its length becomes the cycle, draw the layer" },
+    { "id": "close-layer",          "label": "Commit the layer: shape it, draw it, count it" },
+    { "id": "start-multiply",       "label": "Zero the next layer and record from the top of this cycle" },
+    { "id": "close-multiply",       "label": "Round to whole cycles and grow the loop to fit" }
+  ],
+
+  "rules": [
+    { "from": "empty", "on": "record", "cases": [
+      { "when": {"fact": "input-held-elsewhere"}, "refuse": "input-held" },
+      { "when": {"not": {"fact": "writable"}}, "refuse": "not-writable" },
+      { "when": {"not": {"fact": "plain"}}, "refuse": "not-plain" },
+      { "when": {"fact": "level-arm"}, "to": "armed-by-level" },
+      { "when": {"fact": "quantised"}, "to": "armed-for-grid" },
+      { "to": "recording-open" }
+    ]},
+    { "from": "empty", "on": "multiply", "cases": [
+      { "when": {"fact": "input-held-elsewhere"}, "refuse": "input-held" },
+      { "when": {"not": {"fact": "plain"}}, "refuse": "not-plain" },
+      { "refuse": "nothing-to-multiply" }
+    ]},
+    { "from": "empty", "on": "undo",      "cases": [ { "refuse": "nothing-to-undo" } ] },
+    { "from": "empty", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "empty", "on": "fix",       "cases": [ { "to": "sized" } ] },
+    { "from": "empty", "on": "size", "cases": [
+      { "when": {"not": {"fact": "has-grid"}}, "refuse": "no-grid" },
+      { "to": "sized" }
+    ]},
+    { "from": "empty", "on": "blank",     "cases": [ { "to": "tape" } ] },
+    { "from": "empty", "on": "free",      "cases": [ { "refuse": "no-length" } ] },
+    { "from": "empty", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "empty", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "empty", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "empty", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "empty", "on": "lost",      "cases": [ { "stay": true } ] },
+
+    { "from": "sized", "on": "record", "cases": [
+      { "when": {"fact": "input-held-elsewhere"}, "refuse": "input-held" },
+      { "when": {"not": {"fact": "writable"}}, "refuse": "not-writable" },
+      { "when": {"fact": "level-arm"}, "to": "armed-by-level" },
+      { "when": {"fact": "quantised"}, "to": "armed-for-grid" },
+      { "to": "recording-sized" }
+    ]},
+    { "from": "sized", "on": "multiply", "cases": [
+      { "when": {"fact": "input-held-elsewhere"}, "refuse": "input-held" },
+      { "when": {"not": {"fact": "plain"}}, "refuse": "not-plain" },
+      { "to": "multiplying" }
+    ]},
+    { "from": "sized", "on": "undo",      "cases": [ { "refuse": "nothing-to-undo" } ] },
+    { "from": "sized", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "sized", "on": "fix",       "cases": [ { "to": "sized" } ] },
+    { "from": "sized", "on": "size", "cases": [
+      { "when": {"not": {"fact": "has-grid"}}, "refuse": "no-grid" },
+      { "to": "sized" }
+    ]},
+    { "from": "sized", "on": "blank",     "cases": [ { "to": "tape" } ] },
+    { "from": "sized", "on": "free",      "cases": [ { "to": "empty" } ] },
+    { "from": "sized", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "sized", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "sized", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "sized", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "sized", "on": "lost",      "cases": [ { "stay": true } ] },
+
+    { "from": "tape", "on": "record", "cases": [
+      { "when": {"fact": "input-held-elsewhere"}, "refuse": "input-held" },
+      { "when": {"not": {"fact": "writable"}}, "refuse": "not-writable" },
+      { "when": {"fact": "at-ceiling"}, "refuse": "at-ceiling" },
+      { "when": {"fact": "level-arm"}, "to": "armed-by-level" },
+      { "when": {"fact": "one-pass"}, "to": "overdubbing-one-pass" },
+      { "to": "overdubbing-open" }
+    ]},
+    { "from": "tape", "on": "multiply", "cases": [
+      { "when": {"fact": "input-held-elsewhere"}, "refuse": "input-held" },
+      { "when": {"not": {"fact": "plain"}}, "refuse": "not-plain" },
+      { "when": {"fact": "at-ceiling"}, "refuse": "at-ceiling" },
+      { "to": "multiplying" }
+    ]},
+    { "from": "tape", "on": "undo",      "cases": [ { "to": "sized" } ] },
+    { "from": "tape", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "tape", "on": "fix",       "cases": [ { "stay": true } ] },
+    { "from": "tape", "on": "size", "cases": [
+      { "when": {"not": {"fact": "has-grid"}}, "refuse": "no-grid" },
+      { "stay": true }
+    ]},
+    { "from": "tape", "on": "blank",     "cases": [ { "to": "tape" } ] },
+    { "from": "tape", "on": "free",      "cases": [ { "refuse": "has-material" } ] },
+    { "from": "tape", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "tape", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "tape", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "tape", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "tape", "on": "lost",      "cases": [ { "stay": true } ] },
+
+    { "from": "armed-by-level", "on": "record", "cases": [
+      { "when": {"all": [{"fact": "threaded"}, {"fact": "has-layers"}]}, "to": "tape" },
+      { "when": {"fact": "has-layers"}, "to": "playing" },
+      { "when": {"fact": "has-length"}, "to": "sized" },
+      { "to": "empty" }
+    ]},
+    { "from": "armed-by-level", "on": "multiply",  "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-level", "on": "undo",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-level", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "armed-by-level", "on": "fix",       "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-level", "on": "size",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-level", "on": "blank",     "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-level", "on": "free",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-level", "on": "level-off", "cases": [
+      { "when": {"all": [{"fact": "threaded"}, {"fact": "has-layers"}]}, "to": "tape" },
+      { "when": {"fact": "has-layers"}, "to": "playing" },
+      { "when": {"fact": "has-length"}, "to": "sized" },
+      { "to": "empty" }
+    ]},
+    { "from": "armed-by-level", "on": "sound", "cases": [
+      { "when": {"fact": "quantised"}, "to": "armed-by-sound" },
+      { "when": {"all": [{"fact": "has-layers"}, {"fact": "one-pass"}]}, "to": "overdubbing-one-pass" },
+      { "when": {"fact": "has-layers"}, "to": "overdubbing-open" },
+      { "when": {"fact": "has-length"}, "to": "recording-sized" },
+      { "to": "recording-open" }
+    ]},
+    { "from": "armed-by-level", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "armed-by-level", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "armed-by-level", "on": "lost",      "cases": [ { "stay": true } ] },
+
+    { "from": "armed-for-grid", "on": "record",    "cases": [ { "stay": true } ] },
+    { "from": "armed-for-grid", "on": "multiply",  "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-for-grid", "on": "undo",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-for-grid", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "armed-for-grid", "on": "fix",       "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-for-grid", "on": "size",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-for-grid", "on": "blank",     "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-for-grid", "on": "free",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-for-grid", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "armed-for-grid", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "armed-for-grid", "on": "boundary", "cases": [
+      { "when": {"fact": "has-length"}, "to": "recording-sized" },
+      { "to": "recording-open" }
+    ]},
+    { "from": "armed-for-grid", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "armed-for-grid", "on": "lost", "cases": [
+      { "when": {"fact": "has-length"}, "to": "sized" },
+      { "to": "empty" }
+    ]},
+
+    { "from": "armed-by-sound", "on": "record", "cases": [
+      { "when": {"all": [{"fact": "threaded"}, {"fact": "has-layers"}]}, "to": "tape" },
+      { "when": {"fact": "has-layers"}, "to": "playing" },
+      { "when": {"fact": "has-length"}, "to": "sized" },
+      { "to": "empty" }
+    ]},
+    { "from": "armed-by-sound", "on": "multiply",  "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-sound", "on": "undo",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-sound", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "armed-by-sound", "on": "fix",       "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-sound", "on": "size",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-sound", "on": "blank",     "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-sound", "on": "free",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "armed-by-sound", "on": "level-off", "cases": [
+      { "when": {"all": [{"fact": "threaded"}, {"fact": "has-layers"}]}, "to": "tape" },
+      { "when": {"fact": "has-layers"}, "to": "playing" },
+      { "when": {"fact": "has-length"}, "to": "sized" },
+      { "to": "empty" }
+    ]},
+    { "from": "armed-by-sound", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "armed-by-sound", "on": "boundary", "cases": [
+      { "when": {"all": [{"fact": "has-layers"}, {"fact": "one-pass"}]}, "to": "overdubbing-one-pass" },
+      { "when": {"fact": "has-layers"}, "to": "overdubbing-open" },
+      { "when": {"fact": "has-length"}, "to": "recording-sized" },
+      { "to": "recording-open" }
+    ]},
+    { "from": "armed-by-sound", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "armed-by-sound", "on": "lost",      "cases": [ { "to": "armed-by-level" } ] },
+
+    { "from": "recording-open", "on": "record",    "cases": [ { "to": "playing" } ] },
+    { "from": "recording-open", "on": "multiply",  "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-open", "on": "undo",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-open", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "recording-open", "on": "fix",       "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-open", "on": "size",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-open", "on": "blank",     "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-open", "on": "free",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-open", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "recording-open", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "recording-open", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "recording-open", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "recording-open", "on": "lost",      "cases": [ { "to": "empty" } ] },
+
+    { "from": "recording-sized", "on": "record",    "cases": [ { "to": "playing" } ] },
+    { "from": "recording-sized", "on": "multiply",  "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-sized", "on": "undo",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-sized", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "recording-sized", "on": "fix",       "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-sized", "on": "size",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-sized", "on": "blank",     "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-sized", "on": "free",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "recording-sized", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "recording-sized", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "recording-sized", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "recording-sized", "on": "closed",    "cases": [ { "to": "playing" } ] },
+    { "from": "recording-sized", "on": "lost",      "cases": [ { "to": "sized" } ] },
+
+    { "from": "overdubbing-open", "on": "record",    "cases": [ { "to": "playing" } ] },
+    { "from": "overdubbing-open", "on": "multiply",  "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-open", "on": "undo",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-open", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "overdubbing-open", "on": "fix",       "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-open", "on": "size",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-open", "on": "blank",     "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-open", "on": "free",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-open", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "overdubbing-open", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "overdubbing-open", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "overdubbing-open", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "overdubbing-open", "on": "lost",      "cases": [ { "to": "playing" } ] },
+
+    { "from": "overdubbing-one-pass", "on": "record",    "cases": [ { "to": "playing" } ] },
+    { "from": "overdubbing-one-pass", "on": "multiply",  "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-one-pass", "on": "undo",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-one-pass", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "overdubbing-one-pass", "on": "fix",       "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-one-pass", "on": "size",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-one-pass", "on": "blank",     "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-one-pass", "on": "free",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "overdubbing-one-pass", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "overdubbing-one-pass", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "overdubbing-one-pass", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "overdubbing-one-pass", "on": "closed",    "cases": [ { "to": "playing" } ] },
+    { "from": "overdubbing-one-pass", "on": "lost",      "cases": [ { "to": "playing" } ] },
+
+    { "from": "playing", "on": "record", "cases": [
+      { "when": {"fact": "input-held-elsewhere"}, "refuse": "input-held" },
+      { "when": {"not": {"fact": "writable"}}, "refuse": "not-writable" },
+      { "when": {"fact": "at-ceiling"}, "refuse": "at-ceiling" },
+      { "when": {"fact": "level-arm"}, "to": "armed-by-level" },
+      { "when": {"fact": "one-pass"}, "to": "overdubbing-one-pass" },
+      { "to": "overdubbing-open" }
+    ]},
+    { "from": "playing", "on": "multiply", "cases": [
+      { "when": {"fact": "input-held-elsewhere"}, "refuse": "input-held" },
+      { "when": {"not": {"fact": "plain"}}, "refuse": "not-plain" },
+      { "when": {"fact": "at-ceiling"}, "refuse": "at-ceiling" },
+      { "to": "multiplying" }
+    ]},
+    { "from": "playing", "on": "undo", "cases": [
+      { "when": {"fact": "last-layer"}, "to": "sized" },
+      { "stay": true }
+    ]},
+    { "from": "playing", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "playing", "on": "fix",       "cases": [ { "stay": true } ] },
+    { "from": "playing", "on": "size", "cases": [
+      { "when": {"not": {"fact": "has-grid"}}, "refuse": "no-grid" },
+      { "stay": true }
+    ]},
+    { "from": "playing", "on": "blank",     "cases": [ { "refuse": "has-material" } ] },
+    { "from": "playing", "on": "free",      "cases": [ { "refuse": "has-material" } ] },
+    { "from": "playing", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "playing", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "playing", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "playing", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "playing", "on": "lost",      "cases": [ { "stay": true } ] },
+
+    { "from": "multiplying", "on": "record",    "cases": [ { "to": "playing" } ] },
+    { "from": "multiplying", "on": "multiply",  "cases": [ { "to": "playing" } ] },
+    { "from": "multiplying", "on": "undo",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "multiplying", "on": "clear", "cases": [
+      { "when": {"config": "fixed-rig"}, "to": "tape" },
+      { "to": "empty" }
+    ]},
+    { "from": "multiplying", "on": "fix",       "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "multiplying", "on": "size",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "multiplying", "on": "blank",     "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "multiplying", "on": "free",      "cases": [ { "refuse": "still-recording" } ] },
+    { "from": "multiplying", "on": "level-off", "cases": [ { "stay": true } ] },
+    { "from": "multiplying", "on": "sound",     "cases": [ { "stay": true } ] },
+    { "from": "multiplying", "on": "boundary",  "cases": [ { "stay": true } ] },
+    { "from": "multiplying", "on": "closed",    "cases": [ { "stay": true } ] },
+    { "from": "multiplying", "on": "lost",      "cases": [ { "to": "playing" } ] }
+  ]
+}

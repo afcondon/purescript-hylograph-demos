@@ -1,6 +1,7 @@
 machine  heating
 title    "Heating controller"
 format   2
+clock    minutes
 initial  off
 
 STATES       LABEL              ON ENTRY                           ON EXIT

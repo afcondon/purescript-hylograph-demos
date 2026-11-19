@@ -17,6 +17,7 @@
 
 machine  car-radio  "Car radio"
 format   2
+clock    seconds
 initial  off
 
 states

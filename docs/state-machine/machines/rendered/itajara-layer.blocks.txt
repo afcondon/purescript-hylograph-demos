@@ -1,0 +1,153 @@
+# The life of one layer slot in one loop of the Itajara daemon
+# (music/itajara/daemon/src/engine/layer.rs), written down. itajara-loop
+# next door is the loop's phase machine; this is what one of its slots is
+# doing meanwhile. A loop has N slots (`--max-layers`), each running this
+# machine; the loop's `n_layers` counts how many are in a counted state.
+#
+# WHY IT EXISTS. On 2026-09-07 a take into a cleared slot played only where
+# the previous occupant's window had been: the window is a per-slot
+# setting, and nothing said which settings belong to the audio and go with
+# it, and which describe the slot and stay. This machine says: EVERYTHING
+# a layer carries — length, tail, born, period and phase, gain, on, window
+# — belongs to the audio, and `set-shape` on the way out of Writing is the
+# one moment the slot is made clean. Undo keeps the audio for redo, so it
+# keeps the settings; a new take does not. The Rust fix was one line in
+# `Layer::set_shape`; this is the line as a table, so the next setting
+# added to a layer is asked the same question.
+#
+# WHICH QUALIFIERS BECAME STATES. Free, Writing, Summing, Sounding, Off and
+# Undone. Sounding and Off are two states rather than one with a fact
+# because `on` and `off` swap them and the loop's alternate rule reads the
+# difference for every layer at once. Writing and Summing are two because
+# they enter differently — a take zeroes the slot, a summed pass does not
+# (taxonomy §2C: sound-on-sound is passes summing into one layer) — and
+# leave differently: a take is shaped, a pass only redraws. Undone is a
+# state because it is neither counted nor gone: `redo` brings it back and
+# `start` drops it, and no fact could carry both.
+#
+# WHICH QUALIFIERS STAYED FACTS. `top` and `next-to-redo` are the loop's
+# stack discipline — undo reaches only the highest counted slot, redo only
+# the lowest undone one — and the loop knows them, not the slot. `was-on`
+# is the history-state workaround the README names: an undone layer comes
+# back as it was, and the host remembers which.
+#
+# WHAT THE DAEMON'S REPLAY CHANGED (2026-09-07, the first day). Two rules
+# were written from the loop artifact's side and the engine had reasons:
+# a lost device DROPS a partial overdub as it drops a partial first take —
+# a layer with a gap in it is worse than no layer (`drop_takes`) — so
+# `writing × lost` goes to Free whatever the take was, and the `first-take`
+# fact that told them apart is gone; and a layer a pass is summing into
+# still takes `on`, `off` and `window`, because the write head follows the
+# play head through whatever the layer is doing, so those three stay
+# rather than refuse. The loop artifact's `overdubbing-open × lost →
+# playing [close-layer]` still names the wrong command for that exit; the
+# loop's replay cannot see it and it is left as a known lie.
+#
+# WHAT THE MACHINE DOES NOT KNOW. Arguments and counting. `lw` stores the
+# window and the machine only says when a window is LEGAL (a counted
+# layer, not one being written) and when it is DROPPED (`set-shape`).
+# `n_layers` and `redo_to` are the loop's, moved by the loop machine's
+# `close-layer` and by undo and redo there; this slot never counts itself.
+# The alternate rule (`alt`, taxonomy §6) is also the loop's: it decides
+# which slots receive `off` when one is `commit`ted, and this machine just
+# obeys.
+#
+# REFUSAL TAGS. `nothing-here` (the slot holds nothing), `still-writing`
+# (the daemon's `still_recording` seen from the slot), `occupied` (a take
+# may not start over a counted layer — a summed pass is `sum`, not
+# `start`), `not-counted` (an undone layer takes no setting), `not-top`
+# and `not-next` (the stack), `not-undone` (redo on a layer that is
+# there).
+
+machine  itajara-layer  "One layer slot of one Itajara loop"
+format   2
+initial  free
+
+states
+  free      "Free"
+  writing   "Writing a take"
+  summing   "Summing a pass"
+  sounding  "Sounding"
+  off       "Off"
+  undone    "Undone, kept"
+
+events
+  start   user     "a take starts here (r, x, t, cp, dp)"
+  sum     user     "a pass sums into this layer (r on an alt loop)"
+  commit  runtime  "the write closed"
+  on      user     "turn it on (ly k 1)"
+  off     user     "turn it off (ly k 0)"
+  window  user     "set or clear its window (lw)"
+  undo    user     "undo reaches this layer (u)"
+  redo    user     "redo reaches this layer (y)"
+  clear   user     "the loop is cleared (c)"
+  lost    runtime  "the audio device was lost"
+
+facts
+  top           "This is the highest counted layer"
+  next-to-redo  "This is the lowest undone layer"
+  was-on        "It was on when it was undone"
+
+refusals
+  nothing-here   "the slot holds nothing"
+  still-writing  "the layer is being written; finish that first"
+  occupied       "a take cannot start over a layer; sum into it, or undo it"
+  not-counted    "the layer is undone; redo it first"
+  not-top        "undo reaches only the newest layer"
+  not-next       "redo reaches only the oldest undone layer"
+  not-undone     "the layer is there; nothing to redo"
+
+commands
+  zero-slot    "Zero the slot's audio: whatever was kept here is dropped"
+  start-write  "Point the write head at this slot"
+  set-shape    "Declare the layer: length, tail, born; period 1, phase 0, gain 1, on, NO window"
+  redraw       "Rebuild the envelope; length, tail, born and window are untouched"
+
+free:
+  start                             -> writing
+  sum, on, off, window, undo, redo  -> refuse nothing-here
+  commit, clear, lost               -> stay
+
+writing:
+  entry  zero-slot, start-write
+  exit   set-shape
+  start, sum, on, off, window, undo, redo  -> refuse still-writing
+  commit                                   -> sounding
+  clear, lost                              -> free
+
+summing:
+  entry  start-write
+  exit   redraw
+  start, sum, undo, redo  -> refuse still-writing
+  commit, lost            -> sounding
+  on, off, window         -> stay
+  clear                   -> free
+
+sounding:
+  start                               -> refuse occupied
+  sum                                 -> summing
+  commit, on, window, lost            -> stay
+  off                                 -> off
+  undo                      when top  -> undone
+                            else      -> refuse not-top
+  redo                                -> refuse not-undone
+  clear                               -> free
+
+off:
+  start                                -> refuse occupied
+  sum                                  -> summing
+  commit, off, window, lost            -> stay
+  on                                   -> sounding
+  undo                       when top  -> undone
+                             else      -> refuse not-top
+  redo                                 -> refuse not-undone
+  clear                                -> free
+
+undone:
+  start                                                     -> writing
+  sum, on, off, window, undo                                -> refuse not-counted
+  commit, lost                                              -> stay
+  redo                        when next-to-redo and was-on  -> sounding
+                              elif next-to-redo             -> off
+                              else                          -> refuse not-next
+  clear                                                     -> free

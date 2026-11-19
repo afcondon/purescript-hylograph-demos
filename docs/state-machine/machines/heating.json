@@ -32,6 +32,7 @@
   ],
 
   "initial": "off",
+  "clock": "minutes",
 
   "states": [
     { "id": "off",       "label": "Off",               "entry": ["burner-off", "pump-off"] },

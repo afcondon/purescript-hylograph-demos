@@ -1,0 +1,22 @@
+stateDiagram-v2
+    empty : Empty  (entry discard-audio)
+    armed : Armed  (entry start-count-in, exit stop-count-in)
+    recording : Recording  (entry start-recorder, exit stop-recorder)
+    playing : Playing  (entry start-playback, exit stop-playback)
+    overdubbing : Overdub  (entry start-overdub, exit stop-overdub)
+    stopped : Stopped
+    [*] --> empty
+    empty --> armed : record
+    armed --> empty : clear, record, stop
+    recording --> playing : play, record
+    recording --> stopped : stop
+    recording --> empty : clear
+    playing --> overdubbing : record
+    playing --> stopped : stop
+    playing --> empty : clear
+    overdubbing --> playing : play, record
+    overdubbing --> stopped : stop
+    overdubbing --> empty : clear
+    stopped --> playing : play
+    stopped --> empty : clear
+    armed --> recording : after count-in

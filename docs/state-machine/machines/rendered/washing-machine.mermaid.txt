@@ -1,0 +1,41 @@
+stateDiagram-v2
+    idle : Idle
+    locking : Locking  (entry lock-door)
+    prewashing : Prewash  (entry fill-drum tumble)
+    filling : Filling  (entry fill-drum)
+    washing : Washing  (entry heat-water tumble)
+    draining : Draining  (entry drain)
+    rinse_filling : Rinse fill  (entry fill-drum)
+    rinsing : Rinsing  (entry tumble)
+    spinning : Spinning  (entry drain spin)
+    unlocking : Unlocking  (entry unlock-door)
+    done : Done  (entry chime)
+    paused : Paused  (entry hold-everything)
+    [*] --> idle
+    idle --> locking : start
+    locking --> paused : pause
+    locking --> unlocking : cancel
+    locking --> filling : step complete
+    prewashing --> paused : pause
+    prewashing --> draining : cancel, step complete
+    filling --> paused : pause
+    filling --> draining : cancel
+    filling --> washing : step complete
+    washing --> paused : pause
+    washing --> draining : cancel, step complete
+    draining --> spinning : step complete
+    draining --> rinse_filling : step complete
+    rinse_filling --> paused : pause
+    rinse_filling --> draining : cancel
+    rinse_filling --> rinsing : step complete
+    rinsing --> paused : pause
+    rinsing --> draining : cancel, step complete
+    spinning --> paused : pause
+    spinning --> unlocking : cancel, step complete
+    unlocking --> done : step complete
+    done --> locking : start
+    done --> idle : open door
+    paused --> washing : resume
+    paused --> rinsing : resume
+    paused --> filling : resume
+    paused --> draining : cancel
