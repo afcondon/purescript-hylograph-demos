@@ -19,8 +19,9 @@ import Effect.Class (liftEffect)
 import Effect.Console as Console
 import Effect.Ref as Ref
 import Hylograph.ForceEngine.Setup (Setup)
-import Hylograph.ForceEngine.Setup.WASM (WASMSim)
-import Hylograph.ForceEngine.Setup.WASM as Simulation
+import Hylograph.ForceEngine.Simulation (SimulationNode)
+import Hylograph.Simulation.Stepped (Engine(..), Stepped)
+import Hylograph.Simulation.Stepped as Stepped
 import Hylograph.HATS.InterpreterTick (rerender)
 import Hylograph.Transition.RAF (requestAnimationFrame)
 import Territories.Chart (controls, nodesChart, readout)
@@ -43,7 +44,7 @@ main = launchAff_ do
   case loaded of
     Left problem -> liftEffect (Console.error problem)
     Right story -> do
-      Simulation.initWasm "./pkg/force_kernel.js"
+      Stepped.initWasm "./pkg/force_kernel.js"
       liftEffect (run story)
 
 run :: Story -> Effect Unit
@@ -55,8 +56,8 @@ run story = do
   let
     draw bodies = do
       current <- Ref.read state
-      maxDisplacement <- Simulation.maxDisplacement simulation
-      maxAcceleration <- Simulation.maxAcceleration simulation
+      maxDisplacement <- simulation.maxDisplacement
+      maxAcceleration <- simulation.maxAcceleration
       void $ rerender "#stage" (nodesChart geography story current.mode bodies)
       void $ rerender "#readout" $ readout geography
         { mode: current.mode, ticks: current.ticks, maxDisplacement, maxAcceleration, settled: current.settled }
@@ -66,35 +67,34 @@ run story = do
     choose mode = do
       current <- Ref.read state
       when (mode /= current.mode) do
-        Simulation.applySetup (physics geography mode) simulation
+        simulation.applySetup (physics geography mode)
         Ref.write { mode, ticks: 0, settled: false } state
         void $ rerender "#controls" (controls choose mode)
 
     frame _ = do
       current <- Ref.read state
       unless current.settled do
-        bodies <- Simulation.step simulation
-        settled <- Simulation.settled atRest simulation
+        bodies <- simulation.step
+        settled <- simulation.settled atRest
         Ref.write (current { ticks = current.ticks + 1, settled = settled }) state
         draw bodies
       void $ requestAnimationFrame frame
 
   void $ rerender "#controls" (controls choose Territories)
-  draw =<< Simulation.getNodes simulation
+  draw =<< simulation.nodes
   void $ requestAnimationFrame frame
 
 -- | Before anything is drawn: find where the characters come to rest in each
 -- | mode, give each character those two places to remember (see
 -- | `Physics.physics`), and walk there and back until the walk repeats.
 -- | Returns the simulation at rest in its territories.
-rehearse :: Geography -> Story -> Effect (WASMSim Physics.BodyFields)
+rehearse :: Geography -> Story -> Effect (Stepped Physics.BodyFields)
 rehearse geography story = do
-  finding <- Simulation.create (Physics.bodies geography story) (Physics.links story)
+  finding <- Stepped.create Rust (physics geography Territories) (Physics.bodies geography story) (Physics.links story)
   inTerritories <- rest (physics geography Territories) finding
-  Simulation.applySetup (cooling (physics geography OpenCountry)) finding
-  _ <- Simulation.tickN coolingTicks finding
-  inOpenCountry <- Simulation.getNodes finding
-  Simulation.free finding
+  finding.applySetup (cooling (physics geography OpenCountry))
+  inOpenCountry <- finding.advance coolingTicks
+  finding.free
 
   let
     remembering = Array.zipWith
@@ -106,7 +106,7 @@ rehearse geography story = do
       )
       inTerritories
       inOpenCountry
-  walking <- Simulation.create remembering (Physics.links story)
+  walking <- Stepped.create Rust (physics geography OpenCountry) remembering (Physics.links story)
   for_ (Array.replicate roundTrips unit) \_ -> do
     void $ rest (physics geography OpenCountry) walking
     void $ rest (physics geography Territories) walking
@@ -114,16 +114,16 @@ rehearse geography story = do
 
 -- | Apply a setup and tick until the simulation is at rest (or has plainly
 -- | not come to rest: the limit is far beyond any walk here).
-rest :: forall fields. Setup (Simulation.SimulationNode fields) -> WASMSim fields -> Effect (Array (Simulation.SimulationNode fields))
+rest :: forall fields. Setup (SimulationNode fields) -> Stepped fields -> Effect (Array (SimulationNode fields))
 rest setup simulation = do
-  Simulation.applySetup setup simulation
+  simulation.applySetup setup
   ticks <- Ref.new 0
   untilE do
-    void $ Simulation.tick simulation
+    void simulation.step
     made <- Ref.modify (_ + 1) ticks
-    settled <- Simulation.settled atRest simulation
+    settled <- simulation.settled atRest
     pure (settled || made >= tickLimit)
-  Simulation.getNodes simulation
+  simulation.nodes
 
 coolingTicks :: Int
 coolingTicks = 400

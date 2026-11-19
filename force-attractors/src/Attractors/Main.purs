@@ -26,7 +26,8 @@ import Effect.Class (liftEffect)
 import Effect.Console as Console
 import Effect.Ref as Ref
 import Hylograph.ForceEngine.Setup (Setup, collide, dynamic, setupWithParams, static, towards, withRadius, withStrength)
-import Hylograph.ForceEngine.Setup.WASM as Simulation
+import Hylograph.Simulation.Stepped (Engine(..))
+import Hylograph.Simulation.Stepped as Stepped
 import Hylograph.HATS.InterpreterTick (rerender)
 import Hylograph.Transition.RAF (requestAnimationFrame)
 
@@ -100,7 +101,7 @@ main = launchAff_ do
   case loaded of
     Left problem -> liftEffect (Console.error problem)
     Right flare -> do
-      Simulation.initWasm "./pkg/force_kernel.js"
+      Stepped.initWasm "./pkg/force_kernel.js"
       liftEffect (run flare)
 
 run :: Flare -> Effect Unit
@@ -108,16 +109,15 @@ run flare = do
   let
     first = TidyTree
     start = arrange first flare
-  simulation <- Simulation.create (bodiesAt start flare) []
-  Simulation.applySetup (physics start) simulation
+  simulation <- Stepped.create Rust (physics start) (bodiesAt start flare) []
   state <- Ref.new { layout: first, arrangement: start, ticks: 0, settled: true }
 
   let
     draw bodies = do
       current <- Ref.read state
-      kineticEnergy <- Simulation.kineticEnergy simulation
-      maxDisplacement <- Simulation.maxDisplacement simulation
-      maxAcceleration <- Simulation.maxAcceleration simulation
+      kineticEnergy <- simulation.kineticEnergy
+      maxDisplacement <- simulation.maxDisplacement
+      maxAcceleration <- simulation.maxAcceleration
       void $ rerender "#stage" (nodesChart current.arrangement bodies)
       void $ rerender "#readout" $ readout
         { layout: current.layout
@@ -133,8 +133,8 @@ run flare = do
     -- its nodes are not touched.
     choose layout = do
       let arrangement = arrange layout flare
-      void $ Simulation.retarget "towards" (targetIn arrangement) simulation
-      Simulation.reheat simulation
+      void $ simulation.retarget "towards" (targetIn arrangement)
+      simulation.reheat
       Ref.write { layout, arrangement, ticks: 0, settled: false } state
       void $ rerender "#controls" (controls choose layout)
 
@@ -142,14 +142,14 @@ run flare = do
     frame _ = do
       current <- Ref.read state
       unless current.settled do
-        bodies <- Simulation.step simulation
-        settled <- Simulation.settled atRest simulation
+        bodies <- simulation.step
+        settled <- simulation.settled atRest
         Ref.write (current { ticks = current.ticks + 1, settled = settled }) state
         draw bodies
       void $ requestAnimationFrame frame
 
   void $ rerender "#controls" (controls choose first)
-  draw =<< Simulation.getNodes simulation
+  draw =<< simulation.nodes
   void $ requestAnimationFrame frame
 
 -- | The hierarchy's nodes as bodies at rest on an arrangement's targets.
