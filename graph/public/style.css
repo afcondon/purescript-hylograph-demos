@@ -332,23 +332,21 @@
 .legend-line.active { background: var(--dark); }
 .legend-line.path { background: var(--ochre); height: 4px; }
 
-/* Win banner: in the page's flow, above the graphs, which stay in view.
-   It keeps its height when hidden so that the graphs do not jump. */
-.win-banner {
-  visibility: hidden;
+/* The solved dialog: at the foot of the window, over none of the graphs. */
+.solved-dialog {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 24px;
-  margin: 14px auto 0;
-  padding: 10px 24px;
-  border-top: 2px solid var(--dark);
-  border-bottom: 2px solid var(--dark);
-  width: fit-content;
-}
-
-.win-banner.active {
-  visibility: visible;
+  gap: 22px;
+  padding: 14px 26px;
+  background: var(--bg-cream);
+  border: 2px solid var(--dark);
+  box-shadow: 0 10px 30px rgba(20, 33, 61, 0.25);
+  white-space: nowrap;
 }
 
 .win-text {
@@ -372,6 +370,19 @@
   border: 2px solid var(--slate-blue);
   background: var(--slate-blue);
   color: white;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keep-looking {
+  margin-top: 0;
+  padding: 6px 18px;
+  font-size: 1rem;
+  font-family: 'Palatino Linotype', Georgia, serif;
+  font-style: italic;
+  border: 2px solid var(--slate-blue);
+  background: transparent;
+  color: var(--slate-blue);
   cursor: pointer;
   transition: all 0.15s;
 }

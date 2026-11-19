@@ -10,7 +10,7 @@ import Prelude
 
 import Data.Array as Array
 import Data.Map as Map
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe, isJust)
 import Data.Set (Set)
 import Data.Set as Set
 import Data.Traversable (traverse)
@@ -49,7 +49,21 @@ type State =
   , paths :: Array (Maybe (Array NodeId))
   -- One layout per graph, in graph order: its simulation and positions
   , layouts :: Array Sim.Layout
+  -- Whether "all paths connected" has been said, and waved away
+  , announcement :: Announcement
+  -- Whether the Solve button gave the answer
+  , solutionShown :: Boolean
   }
+
+-- | Where the solved dialog stands. It is announced when the puzzle becomes
+-- | solved, stays dismissed while it remains solved, and starts again once
+-- | the puzzle is unsolved.
+data Announcement
+  = Unsolved
+  | Announced
+  | Dismissed
+
+derive instance Eq Announcement
 
 -- | Component actions
 data Action
@@ -60,6 +74,7 @@ data Action
   | SolvePuzzle
   | AnimationFrame
   | CheckPaths
+  | DismissDialog
 
 -- =============================================================================
 -- Component
@@ -83,6 +98,8 @@ initialState _ =
   , scrambleHistory: []
   , paths: Array.replicate 6 Nothing
   , layouts: []
+  , announcement: Unsolved
+  , solutionShown: false
   }
 
 -- =============================================================================
@@ -94,11 +111,11 @@ render state =
   HH.div
     [ HP.class_ (H.ClassName "honeycomb-container") ]
     [ renderHeader state
-    , renderWinBanner state
     , renderHoneycomb state
     , renderControls
     , renderInstructions
     , renderTechDescription
+    , renderSolvedDialog state
     ]
 
 renderHeader :: forall m. State -> H.ComponentHTML Action () m
@@ -237,28 +254,42 @@ renderLegend =
         ]
     ]
 
--- | A banner above the graphs, not a screen over them: the solved puzzle
--- | stays in view and can still be played.
-renderWinBanner :: forall m. State -> H.ComponentHTML Action () m
-renderWinBanner state =
-  HH.div
-    [ HP.class_ (H.ClassName $ "win-banner" <> if allConnected then " active" else "") ]
-    [ HH.div
-        [ HP.class_ (H.ClassName "win-text") ]
-        [ HH.text "All Paths Connected" ]
-    , HH.div
-        [ HP.class_ (H.ClassName "win-moves") ]
-        [ HH.text $ "Solved in " <> show state.moveCount <> " moves" ]
-    , HH.button
-        [ HP.class_ (H.ClassName "play-again")
-        , HE.onClick \_ -> NewPuzzle
-        ]
-        [ HH.text "Play Again" ]
-    ]
+-- | The dialog that says the puzzle is solved. It sits at the foot of the
+-- | window and covers none of the graphs, so the solution stays in view and
+-- | can still be played; it is drawn only while the puzzle is solved and
+-- | has not been dismissed.
+renderSolvedDialog :: forall m. State -> H.ComponentHTML Action () m
+renderSolvedDialog state = case state.announcement of
+  Unsolved -> HH.text ""
+  Dismissed -> HH.text ""
+  Announced ->
+    HH.div
+      [ HP.class_ (H.ClassName "solved-dialog")
+      , HP.attr (HH.AttrName "role") "dialog"
+      , HP.attr (HH.AttrName "aria-label") "All paths connected"
+      ]
+      [ HH.div
+          [ HP.class_ (H.ClassName "solved-words") ]
+          [ HH.div [ HP.class_ (H.ClassName "win-text") ] [ HH.text "All Paths Connected" ]
+          , HH.div [ HP.class_ (H.ClassName "win-moves") ] [ HH.text how ]
+          ]
+      , HH.button
+          [ HP.class_ (H.ClassName "keep-looking")
+          , HE.onClick \_ -> DismissDialog
+          ]
+          [ HH.text "Keep Looking" ]
+      , HH.button
+          [ HP.class_ (H.ClassName "play-again")
+          , HE.onClick \_ -> NewPuzzle
+          ]
+          [ HH.text "Play Again" ]
+      ]
   where
-  allConnected = state.moveCount > 0 && Array.all isJust state.paths
-  isJust (Just _) = true
-  isJust Nothing = false
+  how
+    | state.solutionShown = "The solution, shown"
+    | state.moveCount == 0 = "Connected from the start"
+    | state.moveCount == 1 = "Solved in 1 move"
+    | otherwise = "Solved in " <> show state.moveCount <> " moves"
 
 -- =============================================================================
 -- Actions
@@ -294,6 +325,7 @@ handleAction = case _ of
       , globalToggles = puzzle.initialToggles
       , scrambleHistory = puzzle.scrambleHistory
       , moveCount = 0
+      , solutionShown = false
       }
     relinkAll
     handleAction CheckPaths
@@ -301,12 +333,12 @@ handleAction = case _ of
   ResetPuzzle -> do
     state <- H.get
     let toggles = Array.foldl (flip toggleInSet) Set.empty state.scrambleHistory
-    H.modify_ _ { globalToggles = toggles, moveCount = 0 }
+    H.modify_ _ { globalToggles = toggles, moveCount = 0, solutionShown = false }
     relinkAll
     handleAction CheckPaths
 
   SolvePuzzle -> do
-    H.modify_ _ { globalToggles = Set.empty }
+    H.modify_ _ { globalToggles = Set.empty, solutionShown = true }
     relinkAll
     handleAction CheckPaths
 
@@ -319,7 +351,16 @@ handleAction = case _ of
   CheckPaths -> do
     state <- H.get
     let computedPaths = state.graphs <#> \g -> computePath g state.globalToggles
-    H.modify_ _ { paths = computedPaths }
+    let
+      solved = not (Array.null computedPaths) && Array.all isJust computedPaths
+      announcement = case state.announcement of
+        _ | not solved -> Unsolved
+        Unsolved -> Announced
+        standing -> standing
+    H.modify_ _ { paths = computedPaths, announcement = announcement }
+
+  DismissDialog ->
+    H.modify_ _ { announcement = Dismissed }
 
 -- | Give every graph's simulation the edges the graph now has; those whose
 -- | edges changed are reheated and start moving.

@@ -96,7 +96,22 @@ const judgedRight = (graphs, what) => {
   const right = graphs.filter((graph) => walkable(graph) === graph.connected).length;
   expect(marked && right === GRAPHS, `${what}: ${right} of ${GRAPHS} graphs are called connected exactly when the drawn edges join start to end (${graphs.map((graph) => (walkable(graph) ? 'y' : 'n') + (graph.connected ? 'Y' : 'N')).join(' ')}: walk, page)`);
 };
-const banner = (page) => page.evaluate(() => { const b = document.querySelector('.win-banner'); const r = b.getBoundingClientRect(); const first = document.querySelector('.hex-container').getBoundingClientRect(); return { shown: getComputedStyle(b).visibility === 'visible', text: b.textContent, fixed: getComputedStyle(b).position === 'fixed', aboveGraphs: r.bottom <= first.top + 1 }; });
+// The solved dialog: is it drawn, what does it say, and does it cover any graph?
+// A graph is covered if, with the graph scrolled to the middle of the window,
+// the element at the graph's centre is not inside that graph.
+const banner = (page) => page.evaluate(() => {
+  const dialog = document.querySelector('.solved-dialog');
+  if (!dialog) return { shown: false, text: '', covered: 0 };
+  let covered = 0;
+  for (const hex of document.querySelectorAll('.hex-container')) {
+    hex.scrollIntoView({ block: 'center' });
+    const r = hex.getBoundingClientRect();
+    if (!hex.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2))) covered++;
+  }
+  window.scrollTo(0, 0);
+  return { shown: true, text: dialog.textContent, covered, role: dialog.getAttribute('role') };
+});
+const press = (page, label) => page.evaluate((text) => [...document.querySelectorAll('button')].find((b) => b.textContent === text).click(), label);
 // Each graph's own edges shape its layout: joined pairs closer on average than unjoined ones.
 const reflectsEdges = (graphs, what) => {
   const shaped = graphs.filter((graph) => {
@@ -150,7 +165,7 @@ try {
   expect(layouts === edgeSets, `${edgeSets} different edge sets among the six graphs are laid out in ${layouts} different ways`);
   reflectsEdges(opening, 'opening puzzle');
   judgedRight(opening, 'opening puzzle');
-  expect((await banner(page)).shown === false, 'opening puzzle: no banner');
+  { const b = await banner(page); expect(b.shown === opening.every((graph) => walkable(graph)), `opening puzzle: the solved dialog is ${b.shown ? 'drawn' : 'not drawn'}, and the six are ${opening.every((graph) => walkable(graph)) ? '' : 'not '}all joined`); }
   const connected = opening.filter((graph) => graph.connected).length;
   expect((await status(page)).includes(`${connected} / 6`), `the status bar counts ${connected} connected: "${(await status(page)).trim()}"`);
   await shot(page, 'opening');
@@ -169,7 +184,7 @@ try {
   expect(moved > 0.5, `the toggle reheats the layout: a node moved ${moved.toFixed(2)} px`);
   reflectsEdges(toggled, `edge ${edge} toggled`);
   judgedRight(toggled, `edge ${edge} toggled`);
-  { const b = await banner(page); expect(b.shown === toggled.every((graph) => walkable(graph)), `edge ${edge} toggled: the banner is ${b.shown ? 'shown' : 'hidden'}, and the drawn edges ${toggled.every((graph) => walkable(graph)) ? 'do' : 'do not'} join start to end in all six`); }
+  { const b = await banner(page); expect(b.shown === toggled.every((graph) => walkable(graph)), `edge ${edge} toggled: the solved dialog is ${b.shown ? 'drawn' : 'not drawn'}, and the drawn edges ${toggled.every((graph) => walkable(graph)) ? 'do' : 'do not'} join start to end in all six`); }
   expect(flipped === GRAPHS, `clicking ${edge} in graph ${graphIndex + 1}: ${flipped} of ${GRAPHS} graphs gained or lost exactly that edge`);
   expect((await status(page)).includes('Moves: 1'), `the move is counted: "${(await status(page)).trim()}"`);
   await shot(page, 'toggled');
@@ -180,17 +195,22 @@ try {
   expect(solved.every((graph) => graph.connected) && (await status(page)).includes('6 / 6'), `Solve: ${solved.filter((graph) => graph.connected).length} of ${GRAPHS} graphs connected; "${(await status(page)).trim()}"`);
   reflectsEdges(solved, 'solved');
   judgedRight(solved, 'solved');
-  { const b = await banner(page); expect(b.shown && !b.fixed && b.aboveGraphs && /All Paths Connected/.test(b.text), `solved: the banner is shown, in the page above the graphs and not over them ("${b.text.replace(/\s+/g, ' ').trim()}")`); }
+  { const b = await banner(page); expect(b.shown && b.covered === 0 && b.role === 'dialog' && /All Paths Connected/.test(b.text) && /The solution, shown/.test(b.text), `solved: the dialog is drawn, covers ${b.covered} of the six graphs, and says the solution was shown ("${b.text.replace(/\s+/g, ' ').trim()}")`); }
+  // Keep Looking puts it away, and it stays away while the puzzle stays solved.
+  await page.screenshot({ path: join(here, 'screenshots', 'solved-dialog.png'), fullPage: false });
+  await press(page, 'Keep Looking'); await sleep(60);
+  expect((await banner(page)).shown === false && (await picture(page)).every((graph) => graph.connected), 'Keep Looking: the dialog is gone and the solved puzzle is still there');
   // The solved puzzle can still be played: one more toggle, and the page must judge it again.
   { const index = solved.findIndex((graph) => graph.edges.length > 0);
     await page.evaluate((i) => document.querySelectorAll('.hex-container')[i].querySelector('g.edge').dispatchEvent(new MouseEvent('click', { bubbles: true })), index);
     const after = await settle(page, 'solved, then one more toggle');
     judgedRight(after, 'solved, then one more toggle');
     const b = await banner(page);
-    expect(b.shown === after.every((graph) => walkable(graph)), `solved, then one more toggle: the banner is ${b.shown ? 'shown' : 'hidden'}, and the drawn edges ${after.every((graph) => walkable(graph)) ? 'do' : 'do not'} join start to end in all six`); }
+    expect(b.shown === false, `solved, then one more toggle: the dialog is ${b.shown ? 'drawn' : 'not drawn'} (dismissed, or no longer solved: all joined ${after.every((graph) => walkable(graph))})`); }
   await shot(page, 'solved');
   // Many more positions: sixty toggles of whichever edge comes up, judged after each.
-  { let wrong = 0, bannerWrong = 0, calledSolved = 0, tried = 0, pick = 7;
+  // The dialog must be drawn when the six become joined, and not drawn whenever they are not.
+  { let wrong = 0, bannerWrong = 0, calledSolved = 0, tried = 0, pick = 7, was = (await picture(page)).every((g) => walkable(g));
     for (let turn = 0; turn < 60; turn++) {
       const now = await picture(page);
       const withEdges = now.map((graph, i) => ({ i, n: graph.edges.length })).filter((g) => g.n > 0);
@@ -202,10 +222,18 @@ try {
       const after = await picture(page), all = after.every((g) => walkable(g));
       tried++;
       if (after.some((g) => walkable(g) !== g.connected)) wrong++;
-      if ((await banner(page)).shown !== all) bannerWrong++;
+      const drawn = (await banner(page)).shown;
+      if ((!all && drawn) || (all && !was && !drawn)) bannerWrong++;
+      if (all && drawn) await press(page, 'Keep Looking');
+      was = all;
       if (all) calledSolved++;
     }
-    expect(tried === 60 && wrong === 0 && bannerWrong === 0, `sixty more toggles: the page's "connected" was wrong in ${wrong} positions and the banner in ${bannerWrong} (all six joined in ${calledSolved} of ${tried})`); }
+    expect(tried === 60 && wrong === 0 && bannerWrong === 0, `sixty more toggles: the page's "connected" was wrong in ${wrong} positions and the dialog in ${bannerWrong} (all six joined in ${calledSolved} of ${tried})`); }
+  // Play again: a new puzzle, and the dialog only if that one is solved.
+  { await press(page, 'New Puzzle'); await sleep(200);
+    const fresh = await picture(page), b = await banner(page);
+    judgedRight(fresh, 'new puzzle');
+    expect(b.shown === fresh.every((graph) => walkable(graph)) && /Moves: 0/.test(await status(page)), `new puzzle: the dialog is ${b.shown ? 'drawn' : 'not drawn'}, the six are ${fresh.every((graph) => walkable(graph)) ? '' : 'not '}all joined, and the moves are back to 0`); }
   await page.close();
   expect(problems.length === 0, `the page reported nothing${problems.length ? `: ${[...new Set(problems)].join(' | ')}` : ''}`);
 } catch (error) {
