@@ -11,7 +11,7 @@ package:
     - foldable-traversable: ">=6.0.0 <7.0.0"
     - halogen: ">=7.0.0 <8.0.0"
     - hylograph-graph: ">=0.3.0 <0.4.0"
-    - hylograph-selection: ">=0.5.1 <0.6.0"
+    - hylograph-selection: ">=0.6.0 <0.7.0"
     - integers: ">=6.0.0 <7.0.0"
     - baskerville-core: "*"
     - baskerville-sudoku: "*"

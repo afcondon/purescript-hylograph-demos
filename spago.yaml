@@ -8,16 +8,10 @@ workspace:
     # Likewise unpublished: the layout-driven half of the chart library.
     hylograph-layout-components:
       path: ../purescript-hylograph-layout-components
-    # Local, because the state-machine demo needs `Transition extra`, which is
-    # newer than the published 0.3.0 that package set 80.8.0 carries. Keep
-    # publish.version at 0.3.0 there until we actually publish, or every
-    # sibling demo's `<0.4.0` range breaks.
-    hylograph-layout:
-      path: ../purescript-hylograph-layout
-    # Local for the same reason, and it has to be pinned rather than left to the
-    # registry: hylograph-layout above imports `Data.Graph.InducedTree`, which
-    # post-dates hylograph-graph's v0.3.0 tag, so one consistent copy of
-    # hylograph-graph has to be in the build.
+    # Local, so it agrees with the hylograph-layout pinned below: layout 0.5.0
+    # needs hylograph-graph >=0.3.1 (for `Data.Graph.InducedTree`), which is
+    # exactly what this checkout is, so one consistent copy is in the build.
+    # 0.3.1 is now published too, so this could become `hylograph-graph: "0.3.1"`.
     hylograph-graph:
       path: ../purescript-hylograph-graph
     # Glassbox is being broken out into its own library; both packages resolve
@@ -26,25 +20,16 @@ workspace:
       path: ../purescript-glassbox/core
     glassbox-draw:
       path: ../purescript-glassbox/draw
-    # Local, because the force-attractors demo needs the Rust kernel's forces
-    # (towards, retarget, kineticEnergy), which are newer than the 0.6.0 that
-    # package set 80.8.0 carries. The version there is still 0.6.0, so the
-    # other demos' ranges hold.
-    hylograph-simulation:
-      path: ../purescript-hylograph-simulation
-    # The Halogen adapter no longer depends on hylograph-d3-kernel; that is
-    # unreleased (0.6.0), so it comes from the sibling checkout too.
-    hylograph-simulation-halogen:
-      path: ../purescript-hylograph-simulation-halogen
-    # The simulation library's default kernel: d3-force's forces, and the
-    # Rust kernel's, in PureScript. Unpublished, so it comes from the sibling
-    # checkout, as hylograph-simulation above now requires.
-    hylograph-forces:
-      path: ../purescript-hylograph-forces
-    # Local for the keyed-join fix the film "A join is a fold" found, which the
-    # force-attractors demo re-renders through sixty times a second.
-    hylograph-selection:
-      path: ../purescript-hylograph-selection
+    # Published 2026-11-19 and not yet in package set 80.8.0, so pinned here.
+    # Layout 0.5.0 carries `Transition extra` (state-machine) and d3-hierarchy
+    # parity; simulation 1.0.0 the Rust kernel's forces (force-attractors);
+    # simulation-halogen 0.6.0 drops hylograph-d3-kernel; forces 0.1.0 is the
+    # simulation's default kernel; selection 0.6.0 has the keyed-join fix.
+    hylograph-layout: "0.5.0"
+    hylograph-simulation: "1.0.0"
+    hylograph-simulation-halogen: "0.6.0"
+    hylograph-forces: "0.1.0"
+    hylograph-selection: "0.6.0"
     baskerville-core:
       path: ../../purescript-baskerville
     baskerville-sudoku:
