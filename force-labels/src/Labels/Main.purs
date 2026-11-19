@@ -17,12 +17,12 @@ import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Console as Console
 import Effect.Ref as Ref
-import Hylograph.ForceEngine.Setup.WASM (initWasm)
 import Hylograph.HATS.InterpreterTick (rerender)
 import Hylograph.Transition.RAF (performanceNow, requestAnimationFrame)
 import Labels.Chart (controls, nodesChart, readout, summarise)
-import Labels.Engine (Engine, Kernel(..))
-import Labels.Engine as Engine
+import Hylograph.Simulation.Stepped (Stepped, initWasm)
+import Hylograph.Simulation.Stepped as Stepped
+import Labels.Engine (Kernel(..), engineOf)
 import Labels.Nations (Era(..), Nation)
 import Labels.Nations as Nations
 import Labels.Physics (Body, BodyFields, Placing(..), Stage(..), atRest, bodies, firstStage, forcesOf, nextStage)
@@ -32,7 +32,8 @@ type State =
   { era :: Era
   , placing :: Placing
   , stage :: Stage
-  , engine :: Engine BodyFields
+  , kernel :: Kernel
+  , engine :: Stepped BodyFields
   , bodies :: Array Body
   , ticks :: Int -- since the last change
   , spent :: Number -- milliseconds in the kernel since the last change
@@ -49,20 +50,21 @@ main = launchAff_ do
       initWasm "./pkg/force_kernel.js"
       liftEffect (run nations)
 
--- | How many nations are shown: the most populous of the year. (With all
--- | 180 the labels jam; see `Labels.Physics`.)
+-- | How many nations are shown: every one that has a reading for the year
+-- | (145 in 1900, 174 to 178 since).
 shown :: Int
-shown = 100
+shown = 180
 
 run :: Array Nation -> Effect Unit
 run nations = do
   let
     firstBodies = bodies [] (dotsIn shown In2008 nations)
-  firstEngine <- Engine.start PureScript (forcesOf Free (firstStage Free) firstBodies) firstBodies
+  firstEngine <- Stepped.create (engineOf PureScript) (forcesOf Free (firstStage Free)) firstBodies []
   state <- Ref.new
     { era: In2008
     , placing: Free
     , stage: firstStage Free
+    , kernel: PureScript
     , engine: firstEngine
     , bodies: firstBodies
     , ticks: 0
@@ -77,7 +79,7 @@ run nations = do
       void $ rerender "#stage" (nodesChart current.bodies)
       void $ rerender "#readout" $ readout
         { summary: summarise current.bodies
-        , kernel: current.engine.kernel
+        , kernel: current.kernel
         , ticks: current.ticks
         , settled: current.settled
         , millisecondsPerTick: current.millisecondsPerTick
@@ -87,20 +89,20 @@ run nations = do
       current <- Ref.read state
       void $ rerender "#controls" $
         controls { era: chooseEra, placing: choosePlacing, kernel: chooseKernel }
-          { era: current.era, placing: current.placing, kernel: current.engine.kernel }
+          { era: current.era, placing: current.placing, kernel: current.kernel }
 
     -- Another year: other dots, in other places. The labels that are still
     -- wanted set off from where they are.
     chooseEra era = do
       current <- Ref.read state
       let next = bodies current.bodies (dotsIn shown era nations)
-      restart (current { era = era }) current.engine.kernel next
+      restart (current { era = era }) current.kernel next
 
     -- Other forces on the same bodies.
     choosePlacing placing = do
       current <- Ref.read state
       let stage = firstStage placing
-      current.engine.apply (forcesOf placing stage current.bodies)
+      current.engine.applySetup (forcesOf placing stage)
       Ref.write (current { placing = placing, stage = stage, ticks = 0, spent = 0.0, settled = false }) state
       drawControls
 
@@ -112,9 +114,9 @@ run nations = do
     -- A new simulation of these bodies, beginning the stages again.
     restart current kernel next = do
       let stage = firstStage current.placing
-      current.engine.stop
-      engine <- Engine.start kernel (forcesOf current.placing stage next) next
-      Ref.write (current { engine = engine, bodies = next, stage = stage, ticks = 0, spent = 0.0, settled = false }) state
+      current.engine.free
+      engine <- Stepped.create (engineOf kernel) (forcesOf current.placing stage) next []
+      Ref.write (current { kernel = kernel, engine = engine, bodies = next, stage = stage, ticks = 0, spent = 0.0, settled = false }) state
       drawControls
 
     frame _ = do
@@ -130,11 +132,12 @@ run nations = do
           mean = Just (spent / toNumber ticks)
           onward = nextStage current.stage
           -- At rest when the last stage has stopped moving and, if the
-          -- labels are free, nothing overlaps: the collisions give a little
-          -- while the charges are still strong, and that is not yet rest.
+          -- labels are free, nothing overlaps: while the spring and the
+          -- charges are still warm the collision gives a little, and a
+          -- moment's stillness then is not yet rest.
           settled = onward.stage == Packing && not onward.changed && still
             && (current.placing == AtTheirDots || (summarise next).overlaps == 0)
-        when onward.changed (current.engine.apply (forcesOf current.placing onward.stage next))
+        when onward.changed (current.engine.applySetup (forcesOf current.placing onward.stage))
         Ref.write
           ( current
               { bodies = next
@@ -142,7 +145,7 @@ run nations = do
               , ticks = ticks
               , spent = spent
               , settled = settled
-              , millisecondsPerTick = case current.engine.kernel of
+              , millisecondsPerTick = case current.kernel of
                   PureScript -> current.millisecondsPerTick { pureScript = mean }
                   Rust -> current.millisecondsPerTick { rust = mean }
               }

@@ -22,12 +22,12 @@ import Effect.Ref as Ref
 import Downhill.Chart (controls, nodesChart, readout)
 import Downhill.Graph (Graph)
 import Downhill.Graph as Graph
-import Downhill.Machine (Machine)
-import Downhill.Machine as Machine
 import Downhill.Physics (Body, BodyFields, bodies, downhill, physics)
 import Downhill.Timeline (Moment, Timeline)
 import Downhill.Timeline as Timeline
 import Hylograph.HATS.InterpreterTick (rerender)
+import Hylograph.Simulation.Stepped (Stepped)
+import Hylograph.Simulation.Stepped as Stepped
 import Hylograph.Transition.RAF (requestAnimationFrame)
 
 type State =
@@ -49,7 +49,7 @@ main = launchAff_ do
 run :: Graph -> Effect Unit
 run graph = do
   let starting = bodies graph
-  machine <- Machine.start physics starting graph.imports
+  machine <- Stepped.create Stepped.Default physics starting graph.imports
   first <- momentOf machine 0 starting
   state <- Ref.new
     { timeline: Timeline.begin first
@@ -63,8 +63,8 @@ run graph = do
   let
     draw = do
       current <- Ref.read state
-      finished <- Machine.finished machine
-      alpha <- Machine.alpha machine
+      finished <- machine.cooled
+      alpha <- machine.alpha
       let
         pinned = pinnedIn current.bodies
         reading =
@@ -93,7 +93,7 @@ run graph = do
     -- the same.
     play = do
       current <- Ref.read state
-      finished <- Machine.finished machine
+      finished <- machine.cooled
       unless finished do
         Ref.write (current { timeline = Timeline.cutAfterNow current.timeline, playing = true }) state
       draw
@@ -112,7 +112,7 @@ run graph = do
       let timeline = Timeline.goTo place current.timeline
       case Timeline.now timeline of
         Just moment -> do
-          restored <- Machine.restore moment.snapshot machine
+          restored <- machine.restore moment.snapshot
           Ref.write (current { timeline = timeline, bodies = restored, tick = moment.tick, playing = false }) state
         Nothing -> pure unit
       draw
@@ -125,11 +125,11 @@ run graph = do
       when (isJust current.firstRun && not current.playing) do
         case Array.index current.bodies place of
           Just body -> do
-            Machine.pin place (if Array.elem place (pinnedIn current.bodies) then Nothing else Just { x: body.x, y: body.y }) machine
+            machine.pin body.id (if Array.elem place (pinnedIn current.bodies) then Nothing else Just { x: body.x, y: body.y })
             -- Read the simulation back through a snapshot of itself: the
             -- nodes with the pin, as the next tick will find them.
-            changed <- Machine.snapshot machine
-            pinnedNow <- Machine.restore changed machine
+            changed <- machine.snapshot
+            pinnedNow <- machine.restore changed
             let moment = { tick: current.tick, snapshot: changed, places: placesOf pinnedNow, pinned: pinnedIn pinnedNow }
             Ref.write (current { timeline = Timeline.replaceNow moment current.timeline, bodies = pinnedNow, branched = true }) state
           Nothing -> pure unit
@@ -146,8 +146,8 @@ run graph = do
     frame _ = do
       current <- Ref.read state
       when current.playing do
-        next <- Machine.step machine
-        finished <- Machine.finished machine
+        next <- machine.step
+        finished <- machine.cooled
         let
           tick = current.tick + 1
           stepped = current { bodies = next, tick = tick }
@@ -170,9 +170,9 @@ run graph = do
   draw
   void $ requestAnimationFrame frame
 
-momentOf :: Machine BodyFields -> Int -> Array Body -> Effect Moment
+momentOf :: Stepped BodyFields -> Int -> Array Body -> Effect Moment
 momentOf machine tick present = do
-  snapshot <- Machine.snapshot machine
+  snapshot <- machine.snapshot
   pure { tick, snapshot, places: placesOf present, pinned: pinnedIn present }
 
 placesOf :: Array Body -> Array { x :: Number, y :: Number }

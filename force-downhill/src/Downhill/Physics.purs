@@ -13,7 +13,6 @@ module Downhill.Physics
   , physics
   , stage
   , wantedDrop
-  , askedDrop
   , downhill
   ) where
 
@@ -27,7 +26,7 @@ import Data.Number (cos, pi, sin, sqrt)
 import Data.String (Pattern(..))
 import Data.String as String
 import Downhill.Graph (Graph)
-import Hylograph.ForceEngine.Setup (Setup, directional, dynamic, link, manyBody, positionX, positionY, rectCollide, setupWithParams, static, withDegreeStrength, withDistance, withGap, withHalfHeight, withHalfWidth, withIterations, withStrength, withTheta, withX, withY)
+import Hylograph.ForceEngine.Setup (Setup, directional, dynamic, link, manyBody, positionX, positionY, rectCollide, setupWithParams, static, withDegreeStrength, withDistance, withGap, withHalfHeight, withHalfWidth, withHardLimit, withIterations, withStrength, withTheta, withX, withY)
 import Hylograph.ForceEngine.Simulation (SimulationNode)
 
 type Point = { x :: Number, y :: Number }
@@ -77,16 +76,13 @@ lastWords :: String -> String
 lastWords short = String.joinWith "." (Array.takeEnd 2 (String.split (Pattern ".") short))
 
 -- | How far below what imports it a module should be: what the picture
--- | promises, and what the force is asked for. The constraint is a spring
--- | like the others (it pushes by the shortfall, scaled by alpha), and at
--- | rest it has given way to what pulls the rows together (the force that
--- | keeps the graph on the stage, most of all); it is asked for more so that
--- | what is promised is kept.
+-- | promises, and what the constraint is asked for. As a force the
+-- | constraint is a spring like the others (it pushes by the shortfall,
+-- | scaled by alpha) and gives way to what pulls the rows together; with the
+-- | hard limit on, each link is also put right after every tick, so the drop
+-- | asked for is the drop kept, at rest and on the way there.
 wantedDrop :: Number
 wantedDrop = 40.0
-
-askedDrop :: Number
-askedDrop = 78.0
 
 -- | Alpha cools from 1 to nothing in about 300 ticks, as a force-directed
 -- | graph is usually laid out: a run has a beginning and an end, which is
@@ -99,16 +95,17 @@ physics = setupWithParams "downhill"
       # withHalfWidth (dynamic \body -> body.halfWidth + 5.0)
       # withHalfHeight (dynamic \body -> body.halfHeight + 5.0)
       # withIterations 2
-  , directional "downhill" # withGap (static askedDrop) # withStrength (static 1.0) # withIterations 5
+  , directional "downhill" # withGap (static wantedDrop) # withStrength (static 1.0) # withIterations 5 # withHardLimit true
   , positionX "middle" # withX (static (stage.width / 2.0)) # withStrength (static 0.055)
   , positionY "level" # withY (static (stage.height / 2.0)) # withStrength (static 0.09)
   ]
   { alpha: 1.0, alphaTarget: 0.0, alphaDecay: 0.0228, alphaMin: 0.001, velocityRetention: 0.6 }
 
 -- | How many of the imports have their target at least `wantedDrop` below
--- | their source.
+-- | their source. (To a billionth of a pixel: the drop kept is the one asked
+-- | for give or take the rounding of one addition.)
 downhill :: Graph -> Array Point -> Int
 downhill graph places = Array.length $ graph.imports # Array.filter \needs ->
   case Array.index places needs.source, Array.index places needs.target of
-    Just source, Just target -> target.y - source.y >= wantedDrop
+    Just source, Just target -> target.y - source.y >= wantedDrop - 1.0e-9
     _, _ -> false

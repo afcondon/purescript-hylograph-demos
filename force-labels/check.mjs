@@ -106,9 +106,11 @@ const judge = ({ labels, dots, leaders }) => {
     family: labels[0].text.family,
   };
 };
+// Every nation with a reading for the year is shown, not the most populous hundred.
+const nations = { 1900: 145, 1950: 178, 1980: 178, 2008: 174 };
 const clean = (what, verdict, took) => {
-  expect(verdict.labelPairs === 0 && verdict.onDots === 0 && verdict.outside === 0 && verdict.textOut === 0,
-    `${what}: ${verdict.count} labels; ${verdict.labelPairs} pairs overlap, ${verdict.onDots} on a dot, ${verdict.outside} outside the plot, ${verdict.textOut} texts wider than their boxes` +
+  expect(verdict.count === nations[what.slice(0, 4)] && verdict.labelPairs === 0 && verdict.onDots === 0 && verdict.outside === 0 && verdict.textOut === 0,
+    `${what}: ${verdict.count} labels of ${nations[what.slice(0, 4)]}; ${verdict.labelPairs} pairs overlap, ${verdict.onDots} on a dot, ${verdict.outside} outside the plot, ${verdict.textOut} texts wider than their boxes` +
     ` (nearest two labels ${verdict.nearestPair.toFixed(2)} px apart, nearest label and dot ${verdict.nearestDot.toFixed(2)} px); leader from the dot's edge mean ${verdict.meanLeader.toFixed(1)} px, longest ${verdict.maxLeader.toFixed(1)} px; ${took} ticks`);
 };
 
@@ -130,7 +132,11 @@ try {
   const back = await picture(page);
   clean('2008 again, freed from their dots', judge(back), await ticks(page));
   const strayed = Math.max(...back.labels.map((l, i) => Math.hypot(l.x - first.labels[i].x, l.y - first.labels[i].y)));
-  expect(strayed < 1, `freed again, the labels come to rest where they were: within ${strayed.toFixed(3)} px`);
+  // Not an expectation any more. A label squeezed between two bodies goes through one of them, and which
+  // one turns on the last digit of where it starts: freed a second time the labels start a hair from where
+  // they first did, and come to rest in another arrangement, as clean. (Until 2026-11-18 the charges did the
+  // arranging and the same arrangement came back, within half a pixel.)
+  console.log(`     freed again, the labels come to rest in another arrangement: one is ${strayed.toFixed(0)} px from where it was`);
 
   // Other years.
   for (const year of ['1950', '1900', '1980']) {

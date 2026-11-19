@@ -93,8 +93,10 @@ try {
   // 1. Downhill.
   const at = new Map(first.end.map(([name, x, y]) => [name, { x: Number(x), y: Number(y) }]));
   const drops = graph.imports.filter((link) => at.has(link.from) && at.has(link.to)).map((link) => at.get(link.to).y - at.get(link.from).y);
-  const short = drops.filter((drop) => drop < DROP).length;
-  expect(short === 0 && drops.length === 87, `at rest (tick ${first.reading.tick}, ${moments} moments): ${drops.length - short} of ${drops.length} imports have their target at least ${DROP} px below their source; the smallest drop is ${Math.min(...drops).toFixed(1)} px`);
+  // TOLERANCE: a billionth of a pixel. The constraint is hard: the drop kept is the drop asked for, give or
+  // take the rounding of one addition.
+  const short = drops.filter((drop) => drop < DROP - 1e-9).length;
+  expect(short === 0 && drops.length === 87, `at rest (tick ${first.reading.tick}, ${moments} moments): ${drops.length - short} of ${drops.length} imports have their target at least ${DROP} px below their source; the smallest drop is ${Math.min(...drops).toFixed(6)} px`);
   expect(first.reading.downhill === drops.length - short, `the page counts the same: ${first.reading.downhill}`);
   expect(same(await places(page, 'ghost'), first.end), 'the first run is kept: its ghost is where the modules are');
   await shot(page, 'at-rest');

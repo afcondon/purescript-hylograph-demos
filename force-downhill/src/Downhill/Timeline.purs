@@ -1,5 +1,5 @@
 -- | The timeline: a run of the simulation as a row of moments that can be
--- | gone back to. Pure; the simulation itself is in `Downhill.Machine`.
+-- | gone back to. Pure; the simulation itself is a `Hylograph.Simulation.Stepped`.
 module Downhill.Timeline
   ( Moment
   , Timeline
@@ -17,14 +17,14 @@ import Prelude
 
 import Data.Array as Array
 import Data.Maybe (Maybe(..), fromMaybe)
-import Downhill.Physics (Point)
-import Hylograph.Forces.Pure.Snapshot (Snapshot)
+import Downhill.Physics (BodyFields, Point)
+import Hylograph.Simulation.Stepped (Snapshot)
 
 -- | The simulation at one tick: enough to draw it (`places`, `pinned`) and
 -- | everything needed to go on from it (`snapshot`).
 type Moment =
   { tick :: Int
-  , snapshot :: Snapshot
+  , snapshot :: Snapshot BodyFields
   , places :: Array Point
   , pinned :: Array Int -- the places in the node array of the pinned nodes
   }

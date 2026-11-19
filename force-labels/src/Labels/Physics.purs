@@ -3,7 +3,8 @@
 -- | A dot is pinned where the data puts it. A label is free: a spring draws
 -- | it to its home just right of its dot, the rectangle collision keeps it
 -- | off every other label and every dot, and containment keeps it in the
--- | plot. Pinning the labels at their homes instead shows the overlap the
+-- | plot. The spring cools away to nothing, and what is left at rest is the
+-- | collision alone, which leaves nothing overlapping. Pinning the labels at their homes instead shows the overlap the
 -- | collision prevents.
 module Labels.Physics
   ( Body
@@ -29,7 +30,7 @@ import Data.Map as Map
 import Data.Maybe (Maybe(..))
 import Data.Nullable (notNull, null)
 import Data.Tuple (Tuple(..))
-import Hylograph.ForceEngine.Setup (Region(..), Setup, containEach, forceName, dynamic, manyBody, rectCollide, setupWithParams, static, towards, withDistanceMax, withFilter, withHalfHeight, withHalfWidth, withIterations, withRadius, withStrength, withTheta)
+import Hylograph.ForceEngine.Setup (Region(..), Setup, contain, forceName, dynamic, manyBody, rectCollide, setupWithParams, static, towards, withDistanceMax, withFilter, withHalfHeight, withHalfWidth, withIterations, withRegion, withStrength, withTheta, withThroughSqueeze)
 import Hylograph.ForceEngine.Simulation (SimulationNode)
 import Labels.Nations (Continent)
 import Labels.Plot (Box, Dot, Point, frame)
@@ -127,136 +128,87 @@ bodies before dots = (dots <#> asDot) <> (dots <#> asLabel)
 labelIds :: Int
 labelIds = 1000
 
--- | The forces for a way of placing the labels, given the bodies they will
--- | act on (containment needs to know each label's width: see below).
+-- | The forces for a way of placing the labels.
 -- |
--- | Alpha cools from 1 to `restingAlpha`. The spring and the charges are
--- | scaled by alpha and the collisions are not, so the labels travel quickly
--- | and then, at rest, press on each other only lightly: a collision gives
--- | by as much as it is pressed, and what it gives has to stay inside the
--- | margin.
-physics :: Placing -> Array Body -> Setup Body
+-- | Alpha cools from 1 to nothing. The spring and the charges are scaled by
+-- | alpha and the collision is not, so the labels are arranged while it is
+-- | warm and, as it cools, the collision is left alone with them: nothing
+-- | presses two rectangles together any more, and whatever still overlaps
+-- | comes apart.
+physics :: Placing -> Setup Body
 physics = arranged true
 
--- | The forces of `Free` without the collisions: what carries the labels out
--- | of the crowds of dots before the collisions are allowed to hold them.
-spreading :: Array Body -> Setup Body
+-- | The forces of `Free` without the collision: what carries the labels out
+-- | of the crowds of dots before the collision is allowed to hold them.
+spreading :: Setup Body
 spreading = arranged false Free
 
-arranged :: Boolean -> Placing -> Array Body -> Setup Body
-arranged colliding placing present = setupWithParams (placingLabel placing) (Array.filter wanted forces)
-  { alpha: 1.0, alphaTarget: restingAlpha, alphaDecay: 0.01, alphaMin: 0.001, velocityRetention: 0.4 }
+arranged :: Boolean -> Placing -> Setup Body
+arranged colliding placing = setupWithParams (placingLabel placing) (Array.filter wanted forces)
+  { alpha: 1.0, alphaTarget: 0.0, alphaDecay: cooling, alphaMin: 0.001, velocityRetention: 0.4 }
   where
-  wanted force = colliding || not (Array.elem (forceName force) [ "boxes: label and label", "boxes: label and dot" ])
-  home = towards "home" (\body -> if body.part == ItsLabel then Just body.home else Nothing)
+  wanted force = colliding || forceName force /= boxes
+  isLabel body = body.part == ItsLabel
+  -- Forces are applied in the order of their names, hence the numbers: the
+  -- collision sees what the spring and the charges have asked for.
+  home = towards "1 home" (\body -> if isLabel body then Just body.home else Nothing)
   forces = case placing of
     AtTheirDots -> [ home # withStrength (static 0.3) ]
     Free ->
       [ home # withStrength (static homeStrength)
-      -- Each rectangle collides a little larger than it is drawn. The
-      -- collision is a spring like the others, and at rest it has given a
-      -- little: the margin is what it gives, so that what is DRAWN does not
-      -- overlap.
-      --
-      -- Label against label: an overlapping pair shares the correction, the
-      -- larger moving less.
-      , rectCollide "boxes: label and label"
-          # withHalfWidth (dynamic \body -> onlyLabels body (body.halfWidth + margin))
-          # withHalfHeight (dynamic \body -> onlyLabels body (body.halfHeight + margin))
-          # withStrength (static 1.0)
-          # withIterations 4
-      -- Label against dot: the label takes (nearly) all of the correction.
-      , rectCollide "boxes: label and dot"
-          # withHalfWidth (dynamic \body -> againstDots apart.x body (body.halfWidth + margin))
-          # withHalfHeight (dynamic \body -> againstDots apart.y body (body.halfHeight + margin))
-          # withStrength (static 1.0)
-      -- The collisions alone jam. A label between two dots is pushed up by
-      -- one and down by the other; the pushes cancel and it stays on top of
-      -- both. The same happens in a column of labels with a dot at each end.
-      -- A rectangle is pushed along the axis on which it overlaps least, and
-      -- for a wide label that is nearly always up or down, so nothing ever
-      -- moves it sideways out of the column.
-      --
-      -- Two charges do that, and are what find the arrangement; the
-      -- collisions then only have to hold it. A dot repels every label from
-      -- a short way off, which carries the labels out of a crowd of dots to
-      -- where there is room; and the labels repel each other, along the line
-      -- between their middles, which is seldom straight up. (In each the
-      -- filter says who exerts the charge: a body it leaves out exerts none
-      -- and is still pushed. The charges are summed pair by pair, theta 0:
-      -- the approximation's cells make the forces jump as bodies cross them,
-      -- and the labels then never quite stop.)
-      , manyBody "clear of the dots"
+      -- Two charges arrange the labels before the collision holds them. A
+      -- dot repels every label from a short way off, which carries the
+      -- labels out of a crowd of dots to where there is room; and the labels
+      -- repel each other, along the line between their middles. The
+      -- collision would resolve without them (a squeezed rectangle goes
+      -- through what squeezes it), but it resolves a crowd by walking labels
+      -- out of it, further than they need to go: with the charges the
+      -- leaders are shorter by a fifth. (In each the filter says who exerts
+      -- the charge: a body it leaves out exerts none and is still pushed.
+      -- The charges are summed pair by pair, theta 0: the approximation's
+      -- cells make the forces jump as bodies cross them.)
+      , manyBody "2 clear of the dots"
           # withStrength (static dotCharge)
           # withFilter (\body -> body.part == ItsDot)
           # withDistanceMax dotReach
           # withTheta 0.0
-      , manyBody "apart"
+      , manyBody "3 apart"
           # withStrength (static labelCharge)
-          # withFilter (\body -> body.part == ItsLabel)
+          # withFilter isLabel
           # withDistanceMax labelReach
           # withTheta 0.0
-      -- WORKAROUND (hylograph-simulation, `ContainConfig`): containment
-      -- keeps a node a `radius` inside its region, and a label is not round.
-      -- So each label has a region of its own, the plot narrowed by the
-      -- difference between its half-width and half-height, and is kept its
-      -- half-height inside that.
-      , containEach "plot" (labels <#> ownPlot) (\body -> if body.part == ItsLabel then Map.lookup body.nation regionOf else Nothing)
-          # withRadius (dynamic _.halfHeight)
+      -- Every body is a rectangle, and each collides a little larger than
+      -- it is drawn, so that what is drawn has air round it. A dot is pinned,
+      -- so it is never moved and a label that overlaps it takes the whole
+      -- push; two labels share theirs, the larger moving less. A label
+      -- pushed from both sides (between two dots, or in a column of labels
+      -- with a dot at each end) goes through one of them: without that the
+      -- pushes cancel and it sits on both for ever.
+      , rectCollide boxes
+          # withHalfWidth (dynamic \body -> body.halfWidth + margin)
+          # withHalfHeight (dynamic \body -> body.halfHeight + margin)
+          # withStrength (static 1.0)
+          # withIterations 4
+          # withThroughSqueeze true
+      -- A label stays in the plot, by its own width and height.
+      , contain "5 plot" (RectRegion { x0: frame.left, y0: frame.top, x1: frame.right, y1: frame.bottom })
+          # withRegion (\body -> if isLabel body then Just 0 else Nothing)
+          # withHalfWidth (dynamic _.halfWidth)
+          # withHalfHeight (dynamic _.halfHeight)
           # withStrength (static 1.0)
       ]
-  labels = Array.filter (\body -> body.part == ItsLabel) present
-  regionOf = Map.fromFoldable (Array.mapWithIndex (\place body -> Tuple body.nation place) labels)
-  ownPlot body =
-    let
-      inset = body.halfWidth - body.halfHeight
-    in
-      RectRegion { x0: frame.left + inset, y0: frame.top, x1: frame.right - inset, y1: frame.bottom }
 
--- | WORKAROUND (hylograph-simulation and both kernels, `rectCollide`).
--- |
--- | The force has no filter, shares every correction between the two
--- | rectangles by area (the smaller takes the more), and does not know that
--- | a rectangle is pinned. A dot is small and pinned: a label overlapping a
--- | dot is given a small share of the push it needs, the dot is given the
--- | rest and ignores it, and at rest the label still covers the dot.
--- |
--- | What is wanted is two collisions: label against label, shared; and label
--- | against dot, the label taking all of it. A pair overlaps when the sum of
--- | its half-extents exceeds the distance between its centres on both axes,
--- | and the half-extents are numbers this demo supplies. So:
--- |
--- | - `onlyLabels`: a dot's half-extents are negative, and large. No sum
--- |   with a dot's is positive: only label and label collide.
--- | - `againstDots`: a label's half-extents are its own less `apart`, a
--- |   dot's its own plus `apart`. Label and dot sum to what they should.
--- |   Label and label sum to less than nothing (`apart` is more than any
--- |   label's half-extent). Dot and dot overlap when they are near each
--- |   other, and both are pinned. A label's area (the product of two
--- |   negative numbers) is now small beside a dot's, so the label takes
--- |   nine tenths or more of the correction.
-onlyLabels :: Body -> Number -> Number
-onlyLabels body extent = case body.part of
-  ItsLabel -> extent
-  ItsDot -> -4096.0
-
-againstDots :: Number -> Body -> Number -> Number
-againstDots offset body extent = case body.part of
-  ItsLabel -> extent - offset
-  ItsDot -> extent + offset
-
--- | More than any label's half-width and half-height (with the margin).
-apart :: { x :: Number, y :: Number }
-apart = { x: 72.0, y: 8.0 }
+boxes :: String
+boxes = "4 boxes"
 
 -- | How much larger than it is drawn a rectangle collides.
 margin :: Number
 margin = 1.25
 
--- | The spring to a label's home, the charge of a dot and of a label, and
--- | how far each charge reaches. Found by trial on the four years, with both
--- | kernels: weaker charges leave labels jammed (see `physics`), stronger
--- | ones carry them further from their dots than they need to go.
+-- | The spring to a label's home, the charge of a dot and of a label, how
+-- | far each charge reaches, and how fast alpha cools. Found by trial on the
+-- | four years: weaker charges leave more for the collision to walk apart,
+-- | stronger ones carry the labels further than they need to go.
 homeStrength :: Number
 homeStrength = 0.06
 
@@ -272,8 +224,8 @@ labelCharge = -90.0
 labelReach :: Number
 labelReach = 60.0
 
-restingAlpha :: Number
-restingAlpha = 0.03
+cooling :: Number
+cooling = 0.02
 
 -- | What the labels are doing after a change. Free labels are arranged in
 -- | three stages, each a setup applied to the running simulation:
@@ -300,7 +252,7 @@ nextStage = case _ of
   Spreading left -> if left > 1 then { stage: Spreading (left - 1), changed: false } else { stage: Packing, changed: true }
   Packing -> { stage: Packing, changed: false }
 
-forcesOf :: Placing -> Stage -> Array Body -> Setup Body
+forcesOf :: Placing -> Stage -> Setup Body
 forcesOf placing = case _ of
   Gathering _ -> physics AtTheirDots
   Spreading _ -> spreading
@@ -310,8 +262,6 @@ stageTicks :: Int
 stageTicks = 40
 
 -- | Still enough to stop: no label moved further than a twentieth of a
--- | pixel in the last tick. (The acceleration is allowed to be larger than
--- | in the other demos: rectangles that touch go on trading pushes of a few
--- | hundredths of a pixel for as long as they are ticked.)
+-- | pixel in the last tick.
 atRest :: { step :: Number, acceleration :: Number }
 atRest = { step: 0.05, acceleration: 0.1 }

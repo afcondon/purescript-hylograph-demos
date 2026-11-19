@@ -12,7 +12,6 @@ package:
     - either
     - foldable-traversable
     - foreign-object
-    - hylograph-forces-pure
     - hylograph-selection
     - hylograph-simulation
     - hylograph-transitions
