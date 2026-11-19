@@ -57,6 +57,8 @@ renderRow containerId marks = do
   let tree = HATS.forEach "marks" SVG marks _.key \m ->
         HATS.elem SVG
           [ F.viewBox 0.0 0.0 cellW cellW
+          , F.width cellW
+          , F.height cellW
           , F.attr "class" "catalogue-cell"
           ]
           [ m.tree ]
