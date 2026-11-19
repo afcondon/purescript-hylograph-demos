@@ -332,25 +332,27 @@
 .legend-line.active { background: var(--dark); }
 .legend-line.path { background: var(--ochre); height: 4px; }
 
-/* Win overlay */
-.win-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(245, 240, 230, 0.95);
-  z-index: 100;
+/* Win banner: in the page's flow, above the graphs, which stay in view.
+   It keeps its height when hidden so that the graphs do not jump. */
+.win-banner {
+  visibility: hidden;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  gap: 15px;
+  gap: 24px;
+  margin: 14px auto 0;
+  padding: 10px 24px;
+  border-top: 2px solid var(--dark);
+  border-bottom: 2px solid var(--dark);
+  width: fit-content;
 }
 
-.win-overlay.active {
-  display: flex;
+.win-banner.active {
+  visibility: visible;
 }
 
 .win-text {
-  font-size: 2.5rem;
+  font-size: 1.4rem;
   font-style: italic;
   color: var(--dark);
 }
@@ -362,8 +364,8 @@
 }
 
 .play-again {
-  margin-top: 20px;
-  padding: 12px 30px;
+  margin-top: 0;
+  padding: 6px 18px;
   font-size: 1rem;
   font-family: 'Palatino Linotype', Georgia, serif;
   font-style: italic;

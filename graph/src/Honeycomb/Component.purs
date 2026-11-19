@@ -94,11 +94,11 @@ render state =
   HH.div
     [ HP.class_ (H.ClassName "honeycomb-container") ]
     [ renderHeader state
+    , renderWinBanner state
     , renderHoneycomb state
     , renderControls
     , renderInstructions
     , renderTechDescription
-    , renderWinOverlay state
     ]
 
 renderHeader :: forall m. State -> H.ComponentHTML Action () m
@@ -237,10 +237,12 @@ renderLegend =
         ]
     ]
 
-renderWinOverlay :: forall m. State -> H.ComponentHTML Action () m
-renderWinOverlay state =
+-- | A banner above the graphs, not a screen over them: the solved puzzle
+-- | stays in view and can still be played.
+renderWinBanner :: forall m. State -> H.ComponentHTML Action () m
+renderWinBanner state =
   HH.div
-    [ HP.class_ (H.ClassName $ "win-overlay" <> if allConnected then " active" else "") ]
+    [ HP.class_ (H.ClassName $ "win-banner" <> if allConnected then " active" else "") ]
     [ HH.div
         [ HP.class_ (H.ClassName "win-text") ]
         [ HH.text "All Paths Connected" ]

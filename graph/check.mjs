@@ -66,7 +66,7 @@ const picture = (page) => page.evaluate(() => [...document.querySelectorAll('.he
   const box = svg.getAttribute('viewBox').split(/\s+/).map(Number);
   const nodes = [...svg.querySelectorAll('g.node')].map((g) => {
     const c = g.querySelector('circle');
-    return { label: g.querySelector('text').textContent, cx: c.getAttribute('cx'), cy: c.getAttribute('cy'), r: Number(c.getAttribute('r')) };
+    return { label: g.querySelector('text').textContent, cx: c.getAttribute('cx'), cy: c.getAttribute('cy'), r: Number(c.getAttribute('r')), start: g.classList.contains('start'), end: g.classList.contains('end') };
   });
   const at = new Map(nodes.map((n) => [`${n.cx},${n.cy}`, n.label]));
   const edges = [...svg.querySelectorAll('g.edge')].map((g) => {
@@ -75,6 +75,28 @@ const picture = (page) => page.evaluate(() => [...document.querySelectorAll('.he
   });
   return { box: { left: box[0], top: box[1], right: box[0] + box[2], bottom: box[1] + box[3] }, nodes, firstEdge: edges[0], edges: [...edges].sort(), connected: hex.querySelector('.hex-status').textContent === 'connected' };
 }));
+// "connected", worked out here from what is drawn and not from what the page
+// says: is there a walk along the drawn edges from the start node to the end?
+const walkable = (graph) => {
+  const start = graph.nodes.find((n) => n.start), end = graph.nodes.find((n) => n.end);
+  if (!start || !end) return null;
+  const seen = new Set([start.label]), queue = [start.label];
+  while (queue.length) {
+    const at = queue.shift();
+    for (const edge of graph.edges) {
+      const [a, b] = [edge.slice(0, edge.indexOf('-')), edge.slice(edge.indexOf('-') + 1)];
+      const next = a === at ? b : b === at ? a : null;
+      if (next !== null && !seen.has(next)) { seen.add(next); queue.push(next); }
+    }
+  }
+  return seen.has(end.label);
+};
+const judgedRight = (graphs, what) => {
+  const marked = graphs.every((graph) => graph.nodes.filter((n) => n.start).length === 1 && graph.nodes.filter((n) => n.end).length === 1);
+  const right = graphs.filter((graph) => walkable(graph) === graph.connected).length;
+  expect(marked && right === GRAPHS, `${what}: ${right} of ${GRAPHS} graphs are called connected exactly when the drawn edges join start to end (${graphs.map((graph) => (walkable(graph) ? 'y' : 'n') + (graph.connected ? 'Y' : 'N')).join(' ')}: walk, page)`);
+};
+const banner = (page) => page.evaluate(() => { const b = document.querySelector('.win-banner'); const r = b.getBoundingClientRect(); const first = document.querySelector('.hex-container').getBoundingClientRect(); return { shown: getComputedStyle(b).visibility === 'visible', text: b.textContent, fixed: getComputedStyle(b).position === 'fixed', aboveGraphs: r.bottom <= first.top + 1 }; });
 // Each graph's own edges shape its layout: joined pairs closer on average than unjoined ones.
 const reflectsEdges = (graphs, what) => {
   const shaped = graphs.filter((graph) => {
@@ -127,6 +149,8 @@ try {
   const layouts = new Set(opening.map(layout)).size;
   expect(layouts === edgeSets, `${edgeSets} different edge sets among the six graphs are laid out in ${layouts} different ways`);
   reflectsEdges(opening, 'opening puzzle');
+  judgedRight(opening, 'opening puzzle');
+  expect((await banner(page)).shown === false, 'opening puzzle: no banner');
   const connected = opening.filter((graph) => graph.connected).length;
   expect((await status(page)).includes(`${connected} / 6`), `the status bar counts ${connected} connected: "${(await status(page)).trim()}"`);
   await shot(page, 'opening');
@@ -144,6 +168,8 @@ try {
   const moved = Math.max(...toggled.flatMap((graph, i) => graph.nodes.map((n, j) => Math.hypot(Number(n.cx) - Number(opening[i].nodes[j].cx), Number(n.cy) - Number(opening[i].nodes[j].cy)))));
   expect(moved > 0.5, `the toggle reheats the layout: a node moved ${moved.toFixed(2)} px`);
   reflectsEdges(toggled, `edge ${edge} toggled`);
+  judgedRight(toggled, `edge ${edge} toggled`);
+  { const b = await banner(page); expect(b.shown === toggled.every((graph) => walkable(graph)), `edge ${edge} toggled: the banner is ${b.shown ? 'shown' : 'hidden'}, and the drawn edges ${toggled.every((graph) => walkable(graph)) ? 'do' : 'do not'} join start to end in all six`); }
   expect(flipped === GRAPHS, `clicking ${edge} in graph ${graphIndex + 1}: ${flipped} of ${GRAPHS} graphs gained or lost exactly that edge`);
   expect((await status(page)).includes('Moves: 1'), `the move is counted: "${(await status(page)).trim()}"`);
   await shot(page, 'toggled');
@@ -153,7 +179,33 @@ try {
   const solved = await settle(page, 'solved');
   expect(solved.every((graph) => graph.connected) && (await status(page)).includes('6 / 6'), `Solve: ${solved.filter((graph) => graph.connected).length} of ${GRAPHS} graphs connected; "${(await status(page)).trim()}"`);
   reflectsEdges(solved, 'solved');
+  judgedRight(solved, 'solved');
+  { const b = await banner(page); expect(b.shown && !b.fixed && b.aboveGraphs && /All Paths Connected/.test(b.text), `solved: the banner is shown, in the page above the graphs and not over them ("${b.text.replace(/\s+/g, ' ').trim()}")`); }
+  // The solved puzzle can still be played: one more toggle, and the page must judge it again.
+  { const index = solved.findIndex((graph) => graph.edges.length > 0);
+    await page.evaluate((i) => document.querySelectorAll('.hex-container')[i].querySelector('g.edge').dispatchEvent(new MouseEvent('click', { bubbles: true })), index);
+    const after = await settle(page, 'solved, then one more toggle');
+    judgedRight(after, 'solved, then one more toggle');
+    const b = await banner(page);
+    expect(b.shown === after.every((graph) => walkable(graph)), `solved, then one more toggle: the banner is ${b.shown ? 'shown' : 'hidden'}, and the drawn edges ${after.every((graph) => walkable(graph)) ? 'do' : 'do not'} join start to end in all six`); }
   await shot(page, 'solved');
+  // Many more positions: sixty toggles of whichever edge comes up, judged after each.
+  { let wrong = 0, bannerWrong = 0, calledSolved = 0, tried = 0, pick = 7;
+    for (let turn = 0; turn < 60; turn++) {
+      const now = await picture(page);
+      const withEdges = now.map((graph, i) => ({ i, n: graph.edges.length })).filter((g) => g.n > 0);
+      if (withEdges.length === 0) break;
+      pick = (pick * 1103515245 + 12345) % 2147483648;
+      const graph = withEdges[pick % withEdges.length], edgeIndex = Math.floor(pick / 64) % graph.n;
+      await page.evaluate(([i, e]) => document.querySelectorAll('.hex-container')[i].querySelectorAll('g.edge')[e].dispatchEvent(new MouseEvent('click', { bubbles: true })), [graph.i, edgeIndex]);
+      await sleep(60);
+      const after = await picture(page), all = after.every((g) => walkable(g));
+      tried++;
+      if (after.some((g) => walkable(g) !== g.connected)) wrong++;
+      if ((await banner(page)).shown !== all) bannerWrong++;
+      if (all) calledSolved++;
+    }
+    expect(tried === 60 && wrong === 0 && bannerWrong === 0, `sixty more toggles: the page's "connected" was wrong in ${wrong} positions and the banner in ${bannerWrong} (all six joined in ${calledSolved} of ${tried})`); }
   await page.close();
   expect(problems.length === 0, `the page reported nothing${problems.length ? `: ${[...new Set(problems)].join(' | ')}` : ''}`);
 } catch (error) {
