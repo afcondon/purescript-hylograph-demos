@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hylograph-onion — recipes</title>
+  <link rel="stylesheet" href="recipes.css">
+</head>
+<body>
+  <header>
+    <p class="kicker">HYLOGRAPH-ONION</p>
+    <h1>Recipes</h1>
+    <p class="subtitle">
+      The catalogue answers <em>what can a mark look like</em>. This answers
+      <em>how does a mark behave</em> — the question that arrives when you are
+      building a narrated film rather than a chart.
+    </p>
+    <p class="thesis">
+      A watercolour blob is not one shape. It is an ordered stack of two dozen
+      deformed variants at low opacity, and <code>blobTree</code> renders that
+      stack as a <strong>keyed data join</strong>. So a wash needs no tweening
+      and no separate animation model: transition the join’s enter phase and
+      the layers arrive one after another. The mark paints itself, in the
+      order a brush would lay it down.
+    </p>
+  </header>
+
+  <main>
+
+    <section class="recipe">
+      <div class="recipe-head">
+        <h2><span class="n">1</span> Paint on</h2>
+        <p class="use"><strong>For the series:</strong> every wash reveal. Replaces a fade-in, and costs nothing extra — the layers are already there.</p>
+        <p>Each variant’s delay is <code>staggerDelay × index</code>, so layer 0 lands first and layer 23 last. Note the direction: the <em>template</em> attrs are the final state, the <em>enter</em> attrs the starting state.</p>
+        <button id="r1-replay" class="replay">REPLAY</button>
+      </div>
+      <div class="recipe-stage-wrap" id="r1-stage"></div>
+      <pre class="recipe-code"><code id="code-r1"></code></pre>
+    </section>
+
+    <section class="recipe">
+      <div class="recipe-head">
+        <h2><span class="n">2</span> Wet on wet</h2>
+        <p class="use"><strong>For the series:</strong> any frame where two things meet and the meeting is the point — in video 0, beat 7, where the wash breaches the wall.</p>
+        <p><code>watercolourInterleaved</code> is <em>not</em> a morph between two shapes, whatever the name suggests. It alternates layer deposition between two blobs so their stacks interleave in z-order and neither sits cleanly on top: painted together while wet, rather than one over the other.</p>
+        <button id="r2-replay" class="replay">REPLAY</button>
+      </div>
+      <div class="recipe-stage-wrap" id="r2-stage"></div>
+      <pre class="recipe-code"><code id="code-r2"></code></pre>
+    </section>
+
+    <section class="recipe">
+      <div class="recipe-head">
+        <h2><span class="n">3</span> Drawn, not stroked</h2>
+        <p class="use"><strong>For the series:</strong> the spine, the arrows, the wall, every box rule.</p>
+        <p>A plain SVG stroke reads as mechanical against a watercolour ground. <code>plotLine</code> subdivides, displaces midpoints perpendicular to the segment, and overshoots each end. The overshoot is what sells it — a wobbled line with clean ends still reads as a computer being untidy; a line that runs past its corner reads as a hand.</p>
+      </div>
+      <div class="recipe-stage-wrap" id="r3-stage"></div>
+      <pre class="recipe-code"><code id="code-r3"></code></pre>
+    </section>
+
+    <section class="recipe">
+      <div class="recipe-head">
+        <h2><span class="n">4</span> Deterministic by construction</h2>
+        <p class="use"><strong>For the series:</strong> this is the one that makes a one-pass capture possible.</p>
+        <p><code>Seed</code> is an <code>Int</code> and every generator is pure, so the film is the same film on take one and take nine. <code>Prng.split</code> is how you buy variety without giving that up: one seed becomes two independent streams, so a family of marks can differ while the family stays reproducible.</p>
+      </div>
+      <div class="recipe-stage-wrap" id="r4-stage"></div>
+      <pre class="recipe-code"><code id="code-r4"></code></pre>
+    </section>
+
+    <section class="recipe">
+      <div class="recipe-head">
+        <h2><span class="n">5</span> The stagger is the performance</h2>
+        <p class="use"><strong>For the series:</strong> tuning a reveal to the narration without redrawing anything.</p>
+        <p>All three are the same geometry from the same seed; only the stagger differs. A 16-second beat and a 90-second beat want visibly different deposition rates, and this is the single number that buys it — so a reveal retimes from the beat sheet without the composition being touched.</p>
+        <button id="r5-replay" class="replay">REPLAY</button>
+      </div>
+      <div class="recipe-stage-wrap" id="r5-stage"></div>
+      <pre class="recipe-code"><code id="code-r5"></code></pre>
+    </section>
+
+  </main>
+
+  <footer>
+    <h3>Two things worth knowing before you use these</h3>
+    <p>
+      <strong>Tick from a timer, not <code>requestAnimationFrame</code>.</strong>
+      rAF fires zero callbacks in a hidden or covered tab, so a rAF-driven
+      reveal does not slow down — it hangs forever, with no error and nothing
+      in the console. Anything destined for a screen capture has to survive
+      the recorder’s own window covering the tab.
+    </p>
+    <p>
+      <strong>Clear before you replay.</strong> A rerender against the same
+      keys is an <em>update</em>, and update has no enter phase — so replaying
+      without clearing silently does nothing at all.
+    </p>
+  </footer>
+
+  <script type="module" src="bundle.js"></script>
+</body>
+</html>

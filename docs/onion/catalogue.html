@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hylograph-onion — visual encoding catalogue</title>
+  <link rel="stylesheet" href="catalogue.css">
+</head>
+<body>
+  <header>
+    <h1>hylograph-onion</h1>
+    <p class="subtitle">Visual encoding catalogue — 10 dimensions for watercolour data visualisation</p>
+  </header>
+
+  <pre class="dimension-code shared-code"><code id="code-rendermark"></code></pre>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Size</h2>
+      <p>Continuous. Radius of the base shape.</p>
+    </div>
+    <div class="dimension-cells" id="dim-size"></div>
+    <pre class="dimension-code"><code id="code-size"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Shape</h2>
+      <p>Categorical. Base polygon geometry.</p>
+    </div>
+    <div class="dimension-cells" id="dim-shape"></div>
+    <pre class="dimension-code"><code id="code-shape"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Colour</h2>
+      <p>Categorical or continuous. Fill hue.</p>
+    </div>
+    <div class="dimension-cells" id="dim-colour"></div>
+    <pre class="dimension-code"><code id="code-colour"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Fuzziness</h2>
+      <p>Continuous. Edge diffusion — encodes uncertainty.</p>
+    </div>
+    <div class="dimension-cells" id="dim-fuzziness"></div>
+    <pre class="dimension-code"><code id="code-fuzziness"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Opacity</h2>
+      <p>Continuous. Layer intensity — encodes confidence.</p>
+    </div>
+    <div class="dimension-cells" id="dim-opacity"></div>
+    <pre class="dimension-code"><code id="code-opacity"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Gradient</h2>
+      <p>Structural. Internal colour variation.</p>
+    </div>
+    <div class="dimension-cells" id="dim-gradient"></div>
+    <pre class="dimension-code"><code id="code-gradient"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Orientation</h2>
+      <p>Continuous (angular). Rotation of asymmetric shapes.</p>
+    </div>
+    <div class="dimension-cells" id="dim-orientation"></div>
+    <pre class="dimension-code"><code id="code-orientation"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Aspect ratio</h2>
+      <p>Continuous. Width-to-height ratio of ellipse base.</p>
+    </div>
+    <div class="dimension-cells" id="dim-aspect"></div>
+    <pre class="dimension-code"><code id="code-aspect"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Palette</h2>
+      <p>Categorical (higher-order). Constrains colour range.</p>
+    </div>
+    <div class="dimension-cells" id="dim-palette"></div>
+    <pre class="dimension-code"><code id="code-palette"></code></pre>
+  </section>
+
+  <section class="dimension">
+    <div class="dimension-label">
+      <h2>Combinations</h2>
+      <p>Multiple dimensions composed on single marks.</p>
+    </div>
+    <div class="dimension-cells" id="dim-combos"></div>
+    <pre class="dimension-code"><code id="code-combos"></code></pre>
+  </section>
+
+  <script type="module" src="bundle.js"></script>
+</body>
+</html>
