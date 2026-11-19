@@ -11,6 +11,16 @@
     <h1>Les Misérables</h1>
     <p class="subtitle">Character co-occurrence network — pen-plotter rendering</p>
   </header>
+  <p id="webkit-note" hidden>
+    In Safari, and in every browser on an iPhone or iPad, the watercolour
+    washes on this page draw as rings of bands for now. Chrome on a computer draws them
+    as intended.
+  </p>
+  <script>
+    // The washes are stacked gradients at low opacity. Chrome dithers them;
+    // WebKit does not, and the steps show as rings. Say so where it happens.
+    if (/AppleWebKit/.test(navigator.userAgent) && !/Chrome\/|Chromium\/|Edg\//.test(navigator.userAgent)) document.getElementById('webkit-note').hidden = false;
+  </script>
   <div id="lesmis-graph"></div>
   <details id="lesmis-code">
     <summary>Source</summary>

@@ -146,3 +146,17 @@ h1 {
   white-space: pre;
   font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
 }
+
+/* Shown only in WebKit browsers (see the script in lesmis.html). */
+#webkit-note {
+  max-width: 44rem;
+  margin: 0 0 1rem 2rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid rgba(26, 22, 18, 0.25);
+  border-left: 4px solid #b5533c;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #1a1612;
+  background: rgba(255, 255, 255, 0.5);
+}
+#webkit-note[hidden] { display: none; }

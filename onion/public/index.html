@@ -76,8 +76,12 @@
   <nav>
     <a href="catalogue.html">Catalogue</a>
     <a href="recipes.html">Recipes</a>
-    <a href="lesmis.html">Les Mis</a>
+    <a href="lesmis.html" id="lesmis-link">Les Mis</a>
   </nav>
+  <script>
+    // See lesmis.html: its washes draw as rings in WebKit for now.
+    if (/AppleWebKit/.test(navigator.userAgent) && !/Chrome\/|Chromium\/|Edg\//.test(navigator.userAgent)) document.getElementById('lesmis-link').insertAdjacentHTML('beforeend', ' <small>(best in Chrome on a computer, for now)</small>');
+  </script>
 
   <p class="tagline">
     Watercolour marks as a visual encoding channel for data visualisation.
