@@ -232,7 +232,7 @@ createSimulation model = do
 
     -- Configuration for runSimulation
     config =
-      { engine: D3
+      { engine: Pure
       , setup: initialSetup
       , nodes: model.nodes
       , links: simLinks
