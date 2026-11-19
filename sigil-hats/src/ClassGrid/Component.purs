@@ -190,7 +190,7 @@ initialLinks = allEdges
 createSimulation :: Effect { handle :: SimulationHandle ClassNodeRow, events :: SimulationEmitter }
 createSimulation =
   runSimulation
-    { engine: D3
+    { engine: Pure
     , setup: gridSetup
     , nodes: initialNodes
     , links: initialLinks
