@@ -32,6 +32,10 @@ workspace:
     # other demos' ranges hold.
     hylograph-simulation:
       path: ../purescript-hylograph-simulation
+    # The Halogen adapter no longer depends on hylograph-d3-kernel; that is
+    # unreleased (0.6.0), so it comes from the sibling checkout too.
+    hylograph-simulation-halogen:
+      path: ../purescript-hylograph-simulation-halogen
     # The simulation library's default kernel: d3-force's forces, and the
     # Rust kernel's, in PureScript. Unpublished, so it comes from the sibling
     # checkout, as hylograph-simulation above now requires.
