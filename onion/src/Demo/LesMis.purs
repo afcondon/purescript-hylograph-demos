@@ -446,7 +446,7 @@ handleAction = case _ of
           , fy: Nullable.null :: Nullable Number
           }) lesMisNodes
         config =
-          { engine: D3
+          { engine: Pure
           , setup: lesMisSetup
           , nodes: simNodes
           , links: simLinks
