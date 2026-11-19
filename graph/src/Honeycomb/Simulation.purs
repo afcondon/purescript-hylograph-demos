@@ -1,170 +1,185 @@
--- | Force Simulation for Honeycomb Puzzle
+-- | Force layout for the Honeycomb Puzzle.
 -- |
--- | Uses SimulationGroup for 6 synchronized graph simulations.
--- | Fully declarative - no Effect Refs in demo code.
-module Honeycomb.Simulation where
+-- | Each of the six graphs has a simulation of its own: a
+-- | `Hylograph.Simulation.Stepped` handle on the default (pure PureScript)
+-- | engine, stepped by the page's one animation loop. The handle copies the
+-- | nodes it is given and hands back new records every tick, so six handles
+-- | made from the same starting circle are six independent layouts.
+module Honeycomb.Simulation
+  ( HoneycombNode
+  , NodePositions
+  , Layout
+  , createLayout
+  , relinkLayout
+  , stepLayout
+  , honeycombSetup
+  , frame
+  , nodeRadius
+  ) where
 
 import Prelude
 
 import Data.Array as Array
-import Data.Foldable (for_)
 import Data.Int (toNumber)
 import Data.Map (Map)
 import Data.Map as Map
-import Data.Maybe (Maybe(..))
 import Data.Nullable (null)
 import Data.Set (Set)
 import Data.Set as Set
 import Data.Tuple (Tuple(..))
 import Effect (Effect)
+import Hylograph.ForceEngine.Setup (Region(..), Setup)
+import Hylograph.ForceEngine.Setup as Setup
+import Hylograph.ForceEngine.Simulation (SimulationNode)
+import Hylograph.Simulation.Stepped (Engine(..), Stepped, Tolerance)
+import Hylograph.Simulation.Stepped as Stepped
+
 import Honeycomb.Math (cos, sin, pi)
-
-import Hylograph.Kernel.D3.Simulation (SimulationNode, defaultConfig)
-import Hylograph.Kernel.D3.SimulationGroup as Group
-import Hylograph.Kernel.D3.Setup as Setup
-import Hylograph.Kernel.D3.Events (defaultCallbacks)
-
 import Honeycomb.Types (NodeId(..), EdgeKey, allNodes)
 
 -- =============================================================================
 -- Types
 -- =============================================================================
 
--- | Node type for Honeycomb simulations
+-- | A node of a Honeycomb simulation.
 type HoneycombNode = SimulationNode (nodeId :: NodeId)
 
--- | Node positions keyed by NodeId
+-- | Node positions keyed by NodeId.
 type NodePositions = Map NodeId { x :: Number, y :: Number }
 
--- | Re-export SimulationGroup for use in Component
-type HoneycombGroup = Group.SimulationGroup (nodeId :: NodeId) ()
+-- | One graph's layout: its simulation, where its nodes are now, and whether
+-- | it is still moving (a graph at rest is not stepped).
+type Layout =
+  { simulation :: Stepped (nodeId :: NodeId)
+  , positions :: NodePositions
+  , moving :: Boolean
+  }
+
+-- =============================================================================
+-- The frame every graph is drawn in
+-- =============================================================================
+
+-- | The SVG viewBox each graph is drawn in (see `Honeycomb.Render`).
+frame :: { width :: Number, height :: Number }
+frame = { width: 180.0, height: 150.0 }
+
+-- | The radius every node is drawn with.
+nodeRadius :: Number
+nodeRadius = 12.0
+
+-- | Half the width of the stroke round each node: what is kept inside the
+-- | frame is the circle as drawn, stroke and all.
+halfStroke :: Number
+halfStroke = 1.0
 
 -- =============================================================================
 -- Initialization
 -- =============================================================================
 
--- | Create initial nodes for a graph (circle layout centered in viewBox)
-createInitialNodes :: Array HoneycombNode
-createInitialNodes = Array.mapWithIndex mkNode allNodes
+-- | The nodes where every graph starts: a circle centred in the frame.
+initialNodes :: Array HoneycombNode
+initialNodes = Array.mapWithIndex node allNodes
   where
-  mkNode idx nodeId =
+  node index nodeId =
     let
-      angle = (toNumber idx) * 2.0 * pi / 8.0 - pi / 2.0
+      angle = toNumber index * 2.0 * pi / 8.0 - pi / 2.0
       radius = 45.0
-      cx = 90.0
-      cy = 75.0
     in
-      { id: idx
-      , nodeId: nodeId
-      , x: cx + radius * cos angle
-      , y: cy + radius * sin angle
+      { id: nodeIdToIndex nodeId
+      , nodeId
+      , x: frame.width / 2.0 + radius * cos angle
+      , y: frame.height / 2.0 + radius * sin angle
       , vx: 0.0
       , vy: 0.0
       , fx: null
       , fy: null
       }
 
--- | Create a simulation group with 6 simulations
-createHoneycombGroup :: Effect HoneycombGroup
-createHoneycombGroup = do
-  callbacks <- defaultCallbacks
-  Group.createGroupWithCallbacks 6 defaultConfig callbacks
+-- | A layout of the eight nodes joined by these edges, starting from the
+-- | circle, moving.
+createLayout :: Set EdgeKey -> Effect Layout
+createLayout edges = do
+  simulation <- Stepped.create Default honeycombSetup initialNodes (edgesToLinks edges)
+  nodes <- simulation.nodes
+  pure { simulation, positions: positionsOf nodes, moving: true }
 
--- | Initialize a simulation group with nodes
-initializeGroup :: HoneycombGroup -> Effect Unit
-initializeGroup group = do
-  let nodes = createInitialNodes
-  -- Set nodes for all 6 simulations
-  for_ (Array.range 0 5) \idx -> Group.setNodesAt idx nodes group
+-- | The same layout with these edges. If they are not the edges it has, it
+-- | is relinked and reheated, so it moves to fit them; otherwise it is left
+-- | as it is.
+relinkLayout :: Set EdgeKey -> Layout -> Effect Layout
+relinkLayout edges layout = do
+  let links = edgesToLinks edges
+  current <- layout.simulation.links
+  if Set.fromFoldable (linkPair <$> current) == Set.fromFoldable (linkPair <$> links) then
+    pure layout
+  else do
+    layout.simulation.relink links
+    layout.simulation.reheat
+    pure layout { moving = true }
+  where
+  linkPair link = Tuple link.source link.target
+
+-- | One tick of a layout that is moving; a layout at rest is left alone.
+stepLayout :: Layout -> Effect Layout
+stepLayout layout
+  | not layout.moving = pure layout
+  | otherwise = do
+      nodes <- layout.simulation.step
+      cooled <- layout.simulation.cooled
+      settled <- layout.simulation.settled atRest
+      pure layout { positions = positionsOf nodes, moving = not (cooled || settled) }
+
+-- | Still enough to stop stepping: no node moves a hundredth of a unit in a
+-- | tick (the frame is 180 units across, drawn about 200 pixels wide).
+atRest :: Tolerance
+atRest = { step: 0.01, acceleration: 0.01 }
 
 -- =============================================================================
--- Force Setup
+-- Forces
 -- =============================================================================
 
--- | Force setup for Honeycomb graphs
--- | ForceX/Y center nodes, ManyBody provides repulsion, Link connects edges
-honeycombSetup :: Setup.Setup HoneycombNode
-honeycombSetup = Setup.setup "honeycomb"
-  [ -- Pull nodes toward center X
-    Setup.positionX "centerX"
-      # Setup.withX (Setup.static 90.0)
+-- | Pull toward the middle of the frame, push the nodes apart, hold joined
+-- | nodes at a distance, and keep every node, as drawn, inside the frame.
+honeycombSetup :: Setup HoneycombNode
+honeycombSetup = Setup.setupWithParams "honeycomb"
+  [ Setup.positionX "centerX"
+      # Setup.withX (Setup.static (frame.width / 2.0))
       # Setup.withStrength (Setup.static 0.08)
-  , -- Pull nodes toward center Y
-    Setup.positionY "centerY"
-      # Setup.withY (Setup.static 75.0)
+  , Setup.positionY "centerY"
+      # Setup.withY (Setup.static (frame.height / 2.0))
       # Setup.withStrength (Setup.static 0.08)
-  , -- Repulsion between nodes
-    Setup.manyBody "charge"
+  , Setup.manyBody "charge"
       # Setup.withStrength (Setup.static (-120.0))
-  , -- Link force for connected nodes
-    Setup.link "links"
+  , Setup.link "links"
       # Setup.withDistance (Setup.static 35.0)
       # Setup.withStrength (Setup.static 0.3)
+  , Setup.contain "frame" (RectRegion { x0: 0.0, y0: 0.0, x1: frame.width, y1: frame.height })
+      # Setup.withRadius (Setup.static (nodeRadius + halfStroke))
   ]
-
--- | Apply the force setup to all simulations in the group
-applyHoneycombSetup :: HoneycombGroup -> Effect Unit
-applyHoneycombSetup = Group.applySetupAll honeycombSetup
+  -- d3's defaults, which the demo was tuned with: alpha decays to alphaMin
+  -- in 300 ticks, and a node keeps 60% of its velocity from tick to tick.
+  (Setup.defaultParams { alphaDecay = 0.0228, velocityRetention = 0.6 })
 
 -- =============================================================================
--- Edge/Link Management
+-- Edges as links
 -- =============================================================================
 
--- | Update links for a specific simulation based on effective edges
-updateLinksAt :: Int -> Set EdgeKey -> HoneycombGroup -> Effect Unit
-updateLinksAt idx edges group = do
-  let links = edgesToLinks edges
-  Group.setLinksAt idx links group
-
--- | Convert EdgeKeys to link array (source/target are node indices)
+-- | Edges as links between node ids.
 edgesToLinks :: Set EdgeKey -> Array { source :: Int, target :: Int }
-edgesToLinks edges = Set.toUnfoldable edges <#> edgeToLink
-  where
-  edgeToLink edge =
-    { source: nodeIdToIndex edge.a
-    , target: nodeIdToIndex edge.b
-    }
+edgesToLinks edges = Set.toUnfoldable edges <#> \edge ->
+  { source: nodeIdToIndex edge.a, target: nodeIdToIndex edge.b }
 
--- | Map NodeId to index (0-7)
+-- | A node's id in the simulation: its place in `allNodes`.
 nodeIdToIndex :: NodeId -> Int
-nodeIdToIndex C = 0
-nodeIdToIndex G = 1
-nodeIdToIndex D = 2
-nodeIdToIndex A = 3
-nodeIdToIndex E = 4
-nodeIdToIndex B = 5
-nodeIdToIndex FSharp = 6
-nodeIdToIndex CSharp = 7
+nodeIdToIndex = case _ of
+  C -> 0
+  G -> 1
+  D -> 2
+  A -> 3
+  E -> 4
+  B -> 5
+  FSharp -> 6
+  CSharp -> 7
 
--- | Map index back to NodeId
-indexToNodeId :: Int -> NodeId
-indexToNodeId 0 = C
-indexToNodeId 1 = G
-indexToNodeId 2 = D
-indexToNodeId 3 = A
-indexToNodeId 4 = E
-indexToNodeId 5 = B
-indexToNodeId 6 = FSharp
-indexToNodeId _ = CSharp
-
--- =============================================================================
--- Position Extraction
--- =============================================================================
-
--- | Get current node positions from a specific simulation
-getPositionsAt :: Int -> HoneycombGroup -> Effect NodePositions
-getPositionsAt idx group = do
-  mNodes <- Group.getNodesAt idx group
-  case mNodes of
-    Nothing -> pure Map.empty
-    Just nodes -> pure $ Map.fromFoldable $ nodes <#> \n ->
-      Tuple n.nodeId { x: n.x, y: n.y }
-
--- | Get positions from all 6 simulations
-getAllPositions :: HoneycombGroup -> Effect (Array NodePositions)
-getAllPositions group = do
-  Array.foldM getOne [] (Array.range 0 5)
-  where
-  getOne acc idx = do
-    positions <- getPositionsAt idx group
-    pure $ Array.snoc acc positions
+positionsOf :: Array HoneycombNode -> NodePositions
+positionsOf nodes = Map.fromFoldable $ nodes <#> \node -> Tuple node.nodeId { x: node.x, y: node.y }

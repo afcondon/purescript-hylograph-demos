@@ -4,7 +4,6 @@ module Honeycomb.Main where
 import Prelude
 
 import Effect (Effect)
-import Effect.Aff (launchAff_)
 import Halogen.Aff as HA
 import Halogen.VDom.Driver (runUI)
 

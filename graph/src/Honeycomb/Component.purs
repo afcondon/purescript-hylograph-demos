@@ -1,19 +1,20 @@
 -- | Honeycomb Puzzle - Halogen Component
 -- |
 -- | 6 hexagonal graphs with shared edge toggle mechanic.
--- | Each graph runs in its own force simulation via SimulationGroup.
+-- | Each graph runs in its own force simulation (a stepped handle), and one
+-- | animation loop for the page steps every graph that is still moving.
 -- | Circle of Fifths node naming, paths chain through graphs.
 module Honeycomb.Component where
 
 import Prelude
 
 import Data.Array as Array
-import Data.Foldable (for_)
-import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Set (Set)
 import Data.Set as Set
+import Data.Traversable (traverse)
+import Data.Tuple (Tuple(..))
 import Effect (Effect)
 import Effect.Aff.Class (class MonadAff)
 import Effect.Class (liftEffect)
@@ -22,10 +23,7 @@ import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 
-import Hylograph.Kernel.D3.SimulationGroup as Group
-import Hylograph.ForceEngine.Halogen (subscribeToGroup)
-import Hylograph.Kernel.D3.Events (SimulationEvent(..))
-
+import Honeycomb.AnimationFrames (animationFrames)
 import Honeycomb.Types (NodeId, EdgeKey, graphEndpoints)
 import Honeycomb.Render as Render
 import Honeycomb.Pathfinding as Path
@@ -49,9 +47,8 @@ type State =
   , moveCount :: Int
   , scrambleHistory :: Array EdgeKey
   , paths :: Array (Maybe (Array NodeId))
-  -- Simulation state (stored in Halogen, not Effect Ref)
-  , simGroup :: Maybe Sim.HoneycombGroup
-  , nodePositions :: Array Sim.NodePositions  -- positions per graph
+  -- One layout per graph, in graph order: its simulation and positions
+  , layouts :: Array Sim.Layout
   }
 
 -- | Component actions
@@ -61,7 +58,7 @@ data Action
   | NewPuzzle
   | ResetPuzzle
   | SolvePuzzle
-  | SimTick
+  | AnimationFrame
   | CheckPaths
 
 -- =============================================================================
@@ -85,8 +82,7 @@ initialState _ =
   , moveCount: 0
   , scrambleHistory: []
   , paths: Array.replicate 6 Nothing
-  , simGroup: Nothing
-  , nodePositions: Array.replicate 6 Map.empty
+  , layouts: []
   }
 
 -- =============================================================================
@@ -160,7 +156,7 @@ renderHexagon state idx graph =
   statusText = if hasPath then "connected" else "no path"
 
   -- Get positions for this graph (from simulation or default)
-  positions = fromMaybe Map.empty $ Array.index state.nodePositions idx
+  positions = fromMaybe Map.empty $ _.positions <$> Array.index state.layouts idx
 
   renderConfig = Render.mkRenderConfigWithPositions idx graph.baseEdges state.globalToggles mPath positions
 
@@ -269,39 +265,16 @@ renderWinOverlay state =
 handleAction :: forall output m. MonadAff m => Action -> H.HalogenM State Action () output m Unit
 handleAction = case _ of
   Initialize -> do
-    -- Create simulation group
-    simGroup <- liftEffect Sim.createHoneycombGroup
-
-    -- Initialize with nodes
-    liftEffect $ Sim.initializeGroup simGroup
-
-    -- Apply force configuration
-    liftEffect $ Sim.applyHoneycombSetup simGroup
-
-    -- Subscribe to tick events
-    emitter <- liftEffect $ subscribeToGroup simGroup
-    void $ H.subscribe $ emitter <#> \event -> case event of
-      Tick -> SimTick
-      _ -> SimTick
-
-    -- Store simulation in state
-    H.modify_ _ { simGroup = Just simGroup }
-
-    -- Generate initial puzzle
     puzzle <- liftEffect $ Gen.generatePuzzle 6
     H.modify_ _
       { graphs = puzzle.graphs <#> \g -> { index: g.index, baseEdges: g.baseEdges }
       , globalToggles = puzzle.initialToggles
       , scrambleHistory = puzzle.scrambleHistory
       }
-
-    -- Update links for all simulations based on effective edges
     state <- H.get
-    liftEffect $ updateAllLinks state simGroup
-
-    -- Start the simulation
-    liftEffect $ Group.startGroup simGroup
-
+    layouts <- liftEffect $ traverse Sim.createLayout (effectiveEdgesOf state)
+    H.modify_ _ { layouts = layouts }
+    void $ H.subscribe (animationFrames <#> const AnimationFrame)
     handleAction CheckPaths
 
   ToggleEdge edge -> do
@@ -309,16 +282,7 @@ handleAction = case _ of
       { globalToggles = toggleInSet edge s.globalToggles
       , moveCount = s.moveCount + 1
       }
-
-    -- Update links, re-apply setup (to reinit link force), and reheat
-    state <- H.get
-    case state.simGroup of
-      Nothing -> pure unit
-      Just simGroup -> do
-        liftEffect $ updateAllLinks state simGroup
-        liftEffect $ Sim.applyHoneycombSetup simGroup  -- Re-init forces with new links
-        liftEffect $ Group.reheatAll simGroup
-
+    relinkAll
     handleAction CheckPaths
 
   NewPuzzle -> do
@@ -329,60 +293,44 @@ handleAction = case _ of
       , scrambleHistory = puzzle.scrambleHistory
       , moveCount = 0
       }
-
-    -- Update links, re-apply setup, and reheat
-    state <- H.get
-    case state.simGroup of
-      Nothing -> pure unit
-      Just simGroup -> do
-        liftEffect $ updateAllLinks state simGroup
-        liftEffect $ Sim.applyHoneycombSetup simGroup
-        liftEffect $ Group.reheatAll simGroup
-
+    relinkAll
     handleAction CheckPaths
 
   ResetPuzzle -> do
     state <- H.get
     let toggles = Array.foldl (flip toggleInSet) Set.empty state.scrambleHistory
     H.modify_ _ { globalToggles = toggles, moveCount = 0 }
-
-    -- Update links, re-apply setup, and reheat
-    case state.simGroup of
-      Nothing -> pure unit
-      Just simGroup -> do
-        liftEffect $ updateAllLinks state { globalToggles = toggles } simGroup
-        liftEffect $ Sim.applyHoneycombSetup simGroup
-        liftEffect $ Group.reheatAll simGroup
-
+    relinkAll
     handleAction CheckPaths
 
   SolvePuzzle -> do
     H.modify_ _ { globalToggles = Set.empty }
-
-    -- Update links, re-apply setup, and reheat
-    state <- H.get
-    case state.simGroup of
-      Nothing -> pure unit
-      Just simGroup -> do
-        liftEffect $ updateAllLinks state { globalToggles = Set.empty } simGroup
-        liftEffect $ Sim.applyHoneycombSetup simGroup
-        liftEffect $ Group.reheatAll simGroup
-
+    relinkAll
     handleAction CheckPaths
 
-  SimTick -> do
-    -- Read positions from simulations and update state
-    state <- H.get
-    case state.simGroup of
-      Nothing -> pure unit
-      Just simGroup -> do
-        positions <- liftEffect $ Sim.getAllPositions simGroup
-        H.modify_ _ { nodePositions = positions }
+  AnimationFrame -> do
+    layouts <- H.gets _.layouts
+    when (Array.any _.moving layouts) do
+      stepped <- liftEffect $ traverse Sim.stepLayout layouts
+      H.modify_ _ { layouts = stepped }
 
   CheckPaths -> do
     state <- H.get
     let computedPaths = state.graphs <#> \g -> computePath g state.globalToggles
     H.modify_ _ { paths = computedPaths }
+
+-- | Give every graph's simulation the edges the graph now has; those whose
+-- | edges changed are reheated and start moving.
+relinkAll :: forall output m. MonadAff m => H.HalogenM State Action () output m Unit
+relinkAll = do
+  state <- H.get
+  layouts <- liftEffect $ relinkLayouts state
+  H.modify_ _ { layouts = layouts }
+
+relinkLayouts :: State -> Effect (Array Sim.Layout)
+relinkLayouts state =
+  traverse (\(Tuple edges layout) -> Sim.relinkLayout edges layout)
+    (Array.zip (effectiveEdgesOf state) state.layouts)
 
 -- =============================================================================
 -- Helpers
@@ -407,9 +355,6 @@ computePath graph toggles =
   in
     Path.findPath endpoints.start endpoints.end effectiveEdges
 
--- | Update links for all simulations based on current state
-updateAllLinks :: forall r. { graphs :: Array GraphPuzzle, globalToggles :: Set EdgeKey | r } -> Sim.HoneycombGroup -> Effect Unit
-updateAllLinks state simGroup = do
-  for_ state.graphs \graph -> do
-    let effectiveEdges = getEffectiveEdges graph state.globalToggles
-    Sim.updateLinksAt graph.index effectiveEdges simGroup
+-- | Each graph's effective edges, in graph order.
+effectiveEdgesOf :: forall r. { graphs :: Array GraphPuzzle, globalToggles :: Set EdgeKey | r } -> Array (Set EdgeKey)
+effectiveEdgesOf state = state.graphs <#> \graph -> getEffectiveEdges graph state.globalToggles
