@@ -1,4 +1,4 @@
-DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats components layout-components onion state-machine force-attractors force-territories force-labels force-downhill
+DEMOS = graph graph-decomposition baskerville-make baskerville-sudoku layout music selection simulation sigil sigil-hats components layout-components onion state-machine force-attractors force-territories force-labels force-downhill force-macondo
 
 .PHONY: all clean site $(DEMOS)
 

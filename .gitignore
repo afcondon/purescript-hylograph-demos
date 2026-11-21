@@ -31,3 +31,7 @@ force-territories/public/pkg/
 force-labels/public/bundle.js
 force-labels/public/pkg/
 force-downhill/public/bundle.js
+force-macondo/public/bundle.js
+# the film renders and the recordings they use are kept out of the repository
+force-macondo/film/out/
+force-macondo/film/audio/

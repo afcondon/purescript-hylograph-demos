@@ -1,0 +1,32 @@
+package:
+  name: hylograph-demo-force-macondo
+  description: "Cien años de soledad: who appears with whom, each person held in the circle of their generation"
+  dependencies:
+    - aff
+    - affjax
+    - affjax-web
+    - argonaut-core
+    - arrays
+    - console
+    - effect
+    - either
+    - foldable-traversable
+    - foreign-object
+    - hylograph-graph
+    - hylograph-onion
+    - hylograph-selection
+    - hylograph-simulation
+    - hylograph-transitions
+    - integers
+    - maybe
+    - nullable
+    - numbers
+    - ordered-collections
+    - prelude
+    - refs
+    - tuples
+
+  bundle:
+    module: Macondo.Main
+    outfile: public/bundle.js
+    platform: browser

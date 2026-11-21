@@ -1,0 +1,4370 @@
+{
+ "about": {
+  "unit": "passage",
+  "min_words": 40,
+  "counts": "present",
+  "units": 452,
+  "nodes": 81,
+  "links": 560
+ },
+ "nodes": [
+  {
+   "id": "jose-arcadio-buendia",
+   "name": "José Arcadio Buendía",
+   "name_es": "José Arcadio Buendía",
+   "group": 1,
+   "generation": 1,
+   "sex": "m",
+   "role": "founder",
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 7,
+   "parents": [],
+   "appearances": 86,
+   "first": 0,
+   "first_chapter": 1,
+   "era": 1
+  },
+  {
+   "id": "ursula",
+   "name": "Úrsula Iguarán",
+   "name_es": "Úrsula Iguarán",
+   "group": 1,
+   "generation": 1,
+   "sex": "f",
+   "role": "founder",
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 17,
+   "parents": [],
+   "appearances": 184,
+   "first": 0,
+   "first_chapter": 1,
+   "era": 1
+  },
+  {
+   "id": "jose-arcadio",
+   "name": "José Arcadio",
+   "name_es": "José Arcadio",
+   "group": 2,
+   "generation": 2,
+   "sex": "m",
+   "role": null,
+   "family": true,
+   "haunt": "other-house",
+   "world": "town",
+   "dies": 7,
+   "parents": [
+    "jose-arcadio-buendia",
+    "ursula"
+   ],
+   "appearances": 37,
+   "first": 1,
+   "first_chapter": 1,
+   "era": 2
+  },
+  {
+   "id": "colonel-aureliano",
+   "name": "Colonel Aureliano Buendía",
+   "name_es": "Coronel Aureliano Buendía",
+   "group": 2,
+   "generation": 2,
+   "sex": "m",
+   "role": "soldier",
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 13,
+   "parents": [
+    "jose-arcadio-buendia",
+    "ursula"
+   ],
+   "appearances": 147,
+   "first": 1,
+   "first_chapter": 1,
+   "era": 2
+  },
+  {
+   "id": "amaranta",
+   "name": "Amaranta",
+   "name_es": "Amaranta",
+   "group": 2,
+   "generation": 2,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 14,
+   "parents": [
+    "jose-arcadio-buendia",
+    "ursula"
+   ],
+   "appearances": 81,
+   "first": 38,
+   "first_chapter": 2,
+   "era": 2
+  },
+  {
+   "id": "rebeca",
+   "name": "Rebeca",
+   "name_es": "Rebeca",
+   "group": 2,
+   "generation": 2,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 17,
+   "parents": [
+    "jose-arcadio-buendia",
+    "ursula"
+   ],
+   "appearances": 44,
+   "first": 54,
+   "first_chapter": 3,
+   "era": 2
+  },
+  {
+   "id": "pilar-ternera",
+   "name": "Pilar Ternera",
+   "name_es": "Pilar Ternera",
+   "group": 2,
+   "generation": 2,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "pilar-ternera",
+   "world": "town",
+   "dies": 20,
+   "parents": [],
+   "appearances": 32,
+   "first": 31,
+   "first_chapter": 2,
+   "era": 2
+  },
+  {
+   "id": "remedios-moscote",
+   "name": "Remedios Moscote",
+   "name_es": "Remedios Moscote",
+   "group": 2,
+   "generation": 2,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "other-house",
+   "world": "house",
+   "dies": 5,
+   "parents": [],
+   "appearances": 8,
+   "first": 74,
+   "first_chapter": 3,
+   "era": 2
+  },
+  {
+   "id": "arcadio",
+   "name": "Arcadio",
+   "name_es": "Arcadio",
+   "group": 3,
+   "generation": 3,
+   "sex": "m",
+   "role": "soldier",
+   "family": true,
+   "haunt": "barracks",
+   "world": "power",
+   "dies": 6,
+   "parents": [
+    "jose-arcadio",
+    "pilar-ternera"
+   ],
+   "appearances": 27,
+   "first": 51,
+   "first_chapter": 3,
+   "era": 3
+  },
+  {
+   "id": "aureliano-jose",
+   "name": "Aureliano José",
+   "name_es": "Aureliano José",
+   "group": 3,
+   "generation": 3,
+   "sex": "m",
+   "role": "soldier",
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 8,
+   "parents": [
+    "colonel-aureliano",
+    "pilar-ternera"
+   ],
+   "appearances": 21,
+   "first": 104,
+   "first_chapter": 5,
+   "era": 3
+  },
+  {
+   "id": "santa-sofia",
+   "name": "Santa Sofía de la Piedad",
+   "name_es": "Santa Sofía de la Piedad",
+   "group": 3,
+   "generation": 3,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 36,
+   "first": 128,
+   "first_chapter": 6,
+   "era": 3
+  },
+  {
+   "id": "aureliano-triste",
+   "name": "Aureliano Triste",
+   "name_es": "Aureliano Triste",
+   "group": 3,
+   "generation": 3,
+   "sex": "m",
+   "role": "trade",
+   "family": true,
+   "haunt": "other-house",
+   "world": "town",
+   "dies": 12,
+   "parents": [
+    "colonel-aureliano"
+   ],
+   "appearances": 11,
+   "first": 268,
+   "first_chapter": 11,
+   "era": 3
+  },
+  {
+   "id": "aureliano-centeno",
+   "name": "Aureliano Centeno",
+   "name_es": "Aureliano Centeno",
+   "group": 3,
+   "generation": 3,
+   "sex": "m",
+   "role": "trade",
+   "family": true,
+   "haunt": null,
+   "world": null,
+   "dies": 12,
+   "parents": [
+    "colonel-aureliano"
+   ],
+   "appearances": 5,
+   "first": 273,
+   "first_chapter": 11,
+   "era": 3
+  },
+  {
+   "id": "aureliano-serrador",
+   "name": "Aureliano Serrador",
+   "name_es": "Aureliano Serrador",
+   "group": 3,
+   "generation": 3,
+   "sex": "m",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 12,
+   "parents": [
+    "colonel-aureliano"
+   ],
+   "appearances": 4,
+   "first": 279,
+   "first_chapter": 12,
+   "era": 3
+  },
+  {
+   "id": "aureliano-arcaya",
+   "name": "Aureliano Arcaya",
+   "name_es": "Aureliano Arcaya",
+   "group": 3,
+   "generation": 3,
+   "sex": "m",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 12,
+   "parents": [
+    "colonel-aureliano"
+   ],
+   "appearances": 4,
+   "first": 279,
+   "first_chapter": 12,
+   "era": 3
+  },
+  {
+   "id": "aureliano-amador",
+   "name": "Aureliano Amador",
+   "name_es": "Aureliano Amador",
+   "group": 3,
+   "generation": 3,
+   "sex": "m",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 18,
+   "parents": [
+    "colonel-aureliano"
+   ],
+   "appearances": 2,
+   "first": 288,
+   "first_chapter": 12,
+   "era": 3
+  },
+  {
+   "id": "remedios-the-beauty",
+   "name": "Remedios the Beauty",
+   "name_es": "Remedios, la bella",
+   "group": 4,
+   "generation": 4,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [
+    "arcadio",
+    "santa-sofia"
+   ],
+   "appearances": 21,
+   "first": 155,
+   "first_chapter": 7,
+   "era": 4
+  },
+  {
+   "id": "jose-arcadio-segundo",
+   "name": "José Arcadio Segundo",
+   "name_es": "José Arcadio Segundo",
+   "group": 4,
+   "generation": 4,
+   "sex": "m",
+   "role": "labour",
+   "family": true,
+   "haunt": "melquiades-room",
+   "world": "house",
+   "dies": 17,
+   "parents": [
+    "arcadio",
+    "santa-sofia"
+   ],
+   "appearances": 42,
+   "first": 155,
+   "first_chapter": 7,
+   "era": 4
+  },
+  {
+   "id": "aureliano-segundo",
+   "name": "Aureliano Segundo",
+   "name_es": "Aureliano Segundo",
+   "group": 4,
+   "generation": 4,
+   "sex": "m",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 17,
+   "parents": [
+    "arcadio",
+    "santa-sofia"
+   ],
+   "appearances": 90,
+   "first": 155,
+   "first_chapter": 7,
+   "era": 4
+  },
+  {
+   "id": "fernanda",
+   "name": "Fernanda del Carpio",
+   "name_es": "Fernanda del Carpio",
+   "group": 4,
+   "generation": 4,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 18,
+   "parents": [],
+   "appearances": 70,
+   "first": 231,
+   "first_chapter": 10,
+   "era": 4
+  },
+  {
+   "id": "petra-cotes",
+   "name": "Petra Cotes",
+   "name_es": "Petra Cotes",
+   "group": 4,
+   "generation": 4,
+   "sex": "f",
+   "role": "trade",
+   "family": true,
+   "haunt": "petra-cotes",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 28,
+   "first": 237,
+   "first_chapter": 10,
+   "era": 4
+  },
+  {
+   "id": "jose-arcadio-seminarian",
+   "name": "José Arcadio (the seminarian)",
+   "name_es": "José Arcadio (el seminarista)",
+   "group": 5,
+   "generation": 5,
+   "sex": "m",
+   "role": "clergy",
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 18,
+   "parents": [
+    "aureliano-segundo",
+    "fernanda"
+   ],
+   "appearances": 16,
+   "first": 230,
+   "first_chapter": 10,
+   "era": 5
+  },
+  {
+   "id": "meme",
+   "name": "Meme (Renata Remedios)",
+   "name_es": "Meme (Renata Remedios)",
+   "group": 5,
+   "generation": 5,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [
+    "aureliano-segundo",
+    "fernanda"
+   ],
+   "appearances": 25,
+   "first": 264,
+   "first_chapter": 11,
+   "era": 5
+  },
+  {
+   "id": "amaranta-ursula",
+   "name": "Amaranta Úrsula",
+   "name_es": "Amaranta Úrsula",
+   "group": 5,
+   "generation": 5,
+   "sex": "f",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 20,
+   "parents": [
+    "aureliano-segundo",
+    "fernanda"
+   ],
+   "appearances": 38,
+   "first": 316,
+   "first_chapter": 14,
+   "era": 5
+  },
+  {
+   "id": "mauricio-babilonia",
+   "name": "Mauricio Babilonia",
+   "name_es": "Mauricio Babilonia",
+   "group": 5,
+   "generation": 5,
+   "sex": "m",
+   "role": "banana-company",
+   "family": true,
+   "haunt": "town",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 7,
+   "first": 326,
+   "first_chapter": 14,
+   "era": 5
+  },
+  {
+   "id": "gaston",
+   "name": "Gaston",
+   "name_es": "Gastón",
+   "group": 5,
+   "generation": 5,
+   "sex": "m",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 12,
+   "first": 410,
+   "first_chapter": 19,
+   "era": 5
+  },
+  {
+   "id": "aureliano-babilonia",
+   "name": "Aureliano Babilonia",
+   "name_es": "Aureliano Babilonia",
+   "group": 6,
+   "generation": 6,
+   "sex": "m",
+   "role": "learning",
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [
+    "mauricio-babilonia",
+    "meme"
+   ],
+   "appearances": 60,
+   "first": 334,
+   "first_chapter": 15,
+   "era": 6
+  },
+  {
+   "id": "aureliano-pig-tail",
+   "name": "Aureliano (the last)",
+   "name_es": "Aureliano (el último)",
+   "group": 7,
+   "generation": 7,
+   "sex": "m",
+   "role": null,
+   "family": true,
+   "haunt": "house",
+   "world": "house",
+   "dies": 20,
+   "parents": [
+    "aureliano-babilonia",
+    "amaranta-ursula"
+   ],
+   "appearances": 5,
+   "first": 445,
+   "first_chapter": 20,
+   "era": 7
+  },
+  {
+   "id": "melquiades",
+   "name": "Melquíades",
+   "name_es": "Melquíades",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "gypsy",
+   "family": false,
+   "haunt": "melquiades-room",
+   "world": "house",
+   "dies": 4,
+   "parents": [],
+   "appearances": 22,
+   "first": 0,
+   "first_chapter": 1,
+   "era": 1
+  },
+  {
+   "id": "prudencio-aguilar",
+   "name": "Prudencio Aguilar",
+   "name_es": "Prudencio Aguilar",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": null,
+   "family": false,
+   "haunt": "before-macondo",
+   "world": "away",
+   "dies": 2,
+   "parents": [],
+   "appearances": 6,
+   "first": 25,
+   "first_chapter": 2,
+   "era": 1
+  },
+  {
+   "id": "visitacion",
+   "name": "Visitación",
+   "name_es": "Visitación",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "servant",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": 8,
+   "parents": [],
+   "appearances": 13,
+   "first": 51,
+   "first_chapter": 3,
+   "era": 1
+  },
+  {
+   "id": "cataure",
+   "name": "Cataure",
+   "name_es": "Cataure",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "servant",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 5,
+   "first": 51,
+   "first_chapter": 3,
+   "era": 1
+  },
+  {
+   "id": "apolinar-moscote",
+   "name": "Don Apolinar Moscote",
+   "name_es": "Don Apolinar Moscote",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "official",
+   "family": false,
+   "haunt": "other-house",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 20,
+   "first": 68,
+   "first_chapter": 3,
+   "era": 2
+  },
+  {
+   "id": "amparo-moscote",
+   "name": "Amparo Moscote",
+   "name_es": "Amparo Moscote",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": null,
+   "family": false,
+   "haunt": "other-house",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 5,
+   "first": 74,
+   "first_chapter": 3,
+   "era": 2
+  },
+  {
+   "id": "pietro-crespi",
+   "name": "Pietro Crespi",
+   "name_es": "Pietro Crespi",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "trade",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": 6,
+   "parents": [],
+   "appearances": 15,
+   "first": 77,
+   "first_chapter": 4,
+   "era": 2
+  },
+  {
+   "id": "bruno-crespi",
+   "name": "Bruno Crespi",
+   "name_es": "Bruno Crespi",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "trade",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 4,
+   "first": 123,
+   "first_chapter": 6,
+   "era": 1
+  },
+  {
+   "id": "gerineldo-marquez",
+   "name": "Colonel Gerineldo Márquez",
+   "name_es": "Coronel Gerineldo Márquez",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": 16,
+   "parents": [],
+   "appearances": 32,
+   "first": 81,
+   "first_chapter": 4,
+   "era": 2
+  },
+  {
+   "id": "magnifico-visbal",
+   "name": "Magnífico Visbal",
+   "name_es": "Magnífico Visbal",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "town",
+   "world": "town",
+   "dies": 7,
+   "parents": [],
+   "appearances": 4,
+   "first": 81,
+   "first_chapter": 4,
+   "era": 2
+  },
+  {
+   "id": "alirio-noguera",
+   "name": "Dr. Alirio Noguera",
+   "name_es": "Doctor Alirio Noguera",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "other-house",
+   "world": "town",
+   "dies": 5,
+   "parents": [],
+   "appearances": 2,
+   "first": 114,
+   "first_chapter": 5,
+   "era": 2
+  },
+  {
+   "id": "father-nicanor",
+   "name": "Father Nicanor Reyna",
+   "name_es": "Padre Nicanor Reyna",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "clergy",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": 8,
+   "parents": [],
+   "appearances": 14,
+   "first": 97,
+   "first_chapter": 5,
+   "era": 2
+  },
+  {
+   "id": "jose-raquel-moncada",
+   "name": "General José Raquel Moncada",
+   "name_es": "General José Raquel Moncada",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "barracks",
+   "world": "power",
+   "dies": 8,
+   "parents": [],
+   "appearances": 11,
+   "first": 172,
+   "first_chapter": 8,
+   "era": 2
+  },
+  {
+   "id": "roque-carnicero",
+   "name": "Captain Roque Carnicero",
+   "name_es": "Capitán Roque Carnicero",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "barracks",
+   "world": "power",
+   "dies": null,
+   "parents": [],
+   "appearances": 6,
+   "first": 138,
+   "first_chapter": 6,
+   "era": 2
+  },
+  {
+   "id": "aquiles-ricardo",
+   "name": "Captain Aquiles Ricardo",
+   "name_es": "Capitán Aquiles Ricardo",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "town",
+   "world": "town",
+   "dies": 8,
+   "parents": [],
+   "appearances": 5,
+   "first": 178,
+   "first_chapter": 8,
+   "era": 3
+  },
+  {
+   "id": "carmelita-montiel",
+   "name": "Carmelita Montiel",
+   "name_es": "Carmelita Montiel",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": null,
+   "family": false,
+   "haunt": "town",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 182,
+   "first_chapter": 8,
+   "era": 3
+  },
+  {
+   "id": "teofilo-vargas",
+   "name": "General Teófilo Vargas",
+   "name_es": "General Teófilo Vargas",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "war",
+   "world": "power",
+   "dies": 9,
+   "parents": [],
+   "appearances": 1,
+   "first": 201,
+   "first_chapter": 9,
+   "era": 2
+  },
+  {
+   "id": "father-antonio-isabel",
+   "name": "Father Antonio Isabel",
+   "name_es": "Padre Antonio Isabel",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "clergy",
+   "family": false,
+   "haunt": "house",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 10,
+   "first": 235,
+   "first_chapter": 10,
+   "era": 4
+  },
+  {
+   "id": "mr-herbert",
+   "name": "Mr. Herbert",
+   "name_es": "Mr. Herbert",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "banana-company",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 3,
+   "first": 276,
+   "first_chapter": 12,
+   "era": 4
+  },
+  {
+   "id": "jack-brown",
+   "name": "Mr. Jack Brown",
+   "name_es": "Mr. Jack Brown",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "banana-company",
+   "family": false,
+   "haunt": "banana-company",
+   "world": "company",
+   "dies": null,
+   "parents": [],
+   "appearances": 7,
+   "first": 278,
+   "first_chapter": 12,
+   "era": 4
+  },
+  {
+   "id": "patricia-brown",
+   "name": "Patricia Brown",
+   "name_es": "Patricia Brown",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "banana-company",
+   "family": false,
+   "haunt": "banana-company",
+   "world": "company",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 319,
+   "first_chapter": 14,
+   "era": 4
+  },
+  {
+   "id": "lorenzo-gavilan",
+   "name": "Lorenzo Gavilán",
+   "name_es": "Lorenzo Gavilán",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "station",
+   "world": "company",
+   "dies": 15,
+   "parents": [],
+   "appearances": 4,
+   "first": 342,
+   "first_chapter": 15,
+   "era": 4
+  },
+  {
+   "id": "catalan-bookseller",
+   "name": "The wise Catalonian",
+   "name_es": "El sabio catalán",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "learning",
+   "family": false,
+   "haunt": "other-house",
+   "world": "town",
+   "dies": 20,
+   "parents": [],
+   "appearances": 7,
+   "first": 402,
+   "first_chapter": 18,
+   "era": 6
+  },
+  {
+   "id": "gabriel",
+   "name": "Gabriel",
+   "name_es": "Gabriel",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "learning",
+   "family": false,
+   "haunt": "catarino",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 8,
+   "first": 418,
+   "first_chapter": 19,
+   "era": 6
+  },
+  {
+   "id": "mercedes",
+   "name": "Mercedes",
+   "name_es": "Mercedes",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "trade",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 3,
+   "first": 406,
+   "first_chapter": 18,
+   "era": 6
+  },
+  {
+   "id": "nigromanta",
+   "name": "Nigromanta",
+   "name_es": "Nigromanta",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "sex-work",
+   "family": false,
+   "haunt": "catarino",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 4,
+   "first": 417,
+   "first_chapter": 19,
+   "era": 6
+  },
+  {
+   "id": "alvaro",
+   "name": "Álvaro",
+   "name_es": "Álvaro",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "learning",
+   "family": false,
+   "haunt": "catarino",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 8,
+   "first": 418,
+   "first_chapter": 19,
+   "era": 6
+  },
+  {
+   "id": "german",
+   "name": "Germán",
+   "name_es": "Germán",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "learning",
+   "family": false,
+   "haunt": "catarino",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 9,
+   "first": 418,
+   "first_chapter": 19,
+   "era": 6
+  },
+  {
+   "id": "alfonso",
+   "name": "Alfonso",
+   "name_es": "Alfonso",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "learning",
+   "family": false,
+   "haunt": "catarino",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 9,
+   "first": 418,
+   "first_chapter": 19,
+   "era": 6
+  },
+  {
+   "id": "fernanda-father",
+   "name": "Don Fernando del Carpio",
+   "name_es": "Don Fernando del Carpio",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": null,
+   "family": false,
+   "haunt": "highland-city",
+   "world": "away",
+   "dies": 11,
+   "parents": [],
+   "appearances": 3,
+   "first": 259,
+   "first_chapter": 11,
+   "era": 4
+  },
+  {
+   "id": "gypsy-girl",
+   "name": "The gypsy girl",
+   "name_es": "La gitanita",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "gypsy",
+   "family": false,
+   "haunt": "town",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 5,
+   "first": 40,
+   "first_chapter": 2,
+   "era": 2
+  },
+  {
+   "id": "francisco-the-man",
+   "name": "Francisco the Man",
+   "name_es": "Francisco el Hombre",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": null,
+   "family": false,
+   "haunt": "catarino",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 1,
+   "first": 65,
+   "first_chapter": 3,
+   "era": 2
+  },
+  {
+   "id": "catarino",
+   "name": "Catarino",
+   "name_es": "Catarino",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "trade",
+   "family": false,
+   "haunt": "catarino",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 3,
+   "first": 65,
+   "first_chapter": 3,
+   "era": 2
+  },
+  {
+   "id": "mulatto-girl",
+   "name": "The mulatto girl",
+   "name_es": "La mulata adolescente",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "sex-work",
+   "family": false,
+   "haunt": "catarino",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 65,
+   "first_chapter": 3,
+   "era": 2
+  },
+  {
+   "id": "senora-moscote",
+   "name": "Señora Moscote",
+   "name_es": "La señora Moscote",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": null,
+   "family": false,
+   "haunt": "house",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 4,
+   "first": 73,
+   "first_chapter": 3,
+   "era": 2
+  },
+  {
+   "id": "gregorio-stevenson",
+   "name": "Colonel Gregorio Stevenson",
+   "name_es": "Coronel Gregorio Stevenson",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "barracks",
+   "world": "power",
+   "dies": 6,
+   "parents": [],
+   "appearances": 5,
+   "first": 131,
+   "first_chapter": 6,
+   "era": 3
+  },
+  {
+   "id": "argenida",
+   "name": "Argénida",
+   "name_es": "Argénida",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "servant",
+   "family": false,
+   "haunt": "other-house",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 272,
+   "first_chapter": 11,
+   "era": 4
+  },
+  {
+   "id": "melchor-escalona",
+   "name": "Don Melchor Escalona",
+   "name_es": "Don Melchor Escalona",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "learning",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 172,
+   "first_chapter": 8,
+   "era": 4
+  },
+  {
+   "id": "duke-of-marlborough",
+   "name": "The Duke of Marlborough",
+   "name_es": "El duque de Marlborough",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "soldier",
+   "family": false,
+   "haunt": "war",
+   "world": "power",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 200,
+   "first_chapter": 9,
+   "era": 2
+  },
+  {
+   "id": "colonels-physician",
+   "name": "Colonel Aureliano Buendía's personal physician",
+   "name_es": "El médico del coronel",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": null,
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 218,
+   "first_chapter": 9,
+   "era": 2
+  },
+  {
+   "id": "petronio",
+   "name": "Petronio",
+   "name_es": "Petronio",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "clergy",
+   "family": false,
+   "haunt": "church",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 236,
+   "first_chapter": 10,
+   "era": 4
+  },
+  {
+   "id": "yellow-rose-gentleman",
+   "name": "The gentleman of the yellow rose",
+   "name_es": "El caballero de la rosa amarilla",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": null,
+   "family": false,
+   "haunt": "church",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 3,
+   "first": 246,
+   "first_chapter": 10,
+   "era": 4
+  },
+  {
+   "id": "renata-argote",
+   "name": "Renata Argote",
+   "name_es": "Renata Argote",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": null,
+   "family": false,
+   "haunt": "highland-city",
+   "world": "away",
+   "dies": 11,
+   "parents": [],
+   "appearances": 1,
+   "first": 258,
+   "first_chapter": 11,
+   "era": 4
+  },
+  {
+   "id": "camila-sagastume",
+   "name": "Camila Sagastume",
+   "name_es": "Camila Sagastume",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": null,
+   "family": false,
+   "haunt": "petra-cotes",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 302,
+   "first_chapter": 13,
+   "era": 4
+  },
+  {
+   "id": "station-child",
+   "name": "The child at the station",
+   "name_es": "El niño de la estación",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": null,
+   "family": false,
+   "haunt": "station",
+   "world": "company",
+   "dies": null,
+   "parents": [],
+   "appearances": 5,
+   "first": 345,
+   "first_chapter": 15,
+   "era": 4
+  },
+  {
+   "id": "petronila-iguaran",
+   "name": "Petronila Iguarán",
+   "name_es": "Petronila Iguarán",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "ancestor",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 1,
+   "first": 381,
+   "first_chapter": 17,
+   "era": 2
+  },
+  {
+   "id": "tranquilina-maria-miniata-alacoque-buendia",
+   "name": "Tranquilina María Miniata Alacoque Buendía",
+   "name_es": "Tranquilina María Miniata Alacoque Buendía",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "ancestor",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 1,
+   "first": 381,
+   "first_chapter": 17,
+   "era": 2
+  },
+  {
+   "id": "aureliano-arcadio-buendia",
+   "name": "Aureliano Arcadio Buendía",
+   "name_es": "Aureliano Arcadio Buendía",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "ancestor",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 1,
+   "first": 381,
+   "first_chapter": 17,
+   "era": 2
+  },
+  {
+   "id": "aureliano-iguaran",
+   "name": "Aureliano Iguarán",
+   "name_es": "Aureliano Iguarán",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "ancestor",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 1,
+   "first": 381,
+   "first_chapter": 17,
+   "era": 2
+  },
+  {
+   "id": "pig-tail-cousin",
+   "name": "The cousin with the pig's tail",
+   "name_es": "El primo de la cola de cerdo",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "ancestor",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 1,
+   "first": 381,
+   "first_chapter": 17,
+   "era": 2
+  },
+  {
+   "id": "father-augusto-angel",
+   "name": "Father Augusto Angel",
+   "name_es": "Padre Augusto Ángel",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "clergy",
+   "family": false,
+   "haunt": "town",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 2,
+   "first": 386,
+   "first_chapter": 17,
+   "era": 4
+  },
+  {
+   "id": "smiling-madam",
+   "name": "The smiling proprietress of the imaginary brothel",
+   "name_es": "La matrona sonriente",
+   "group": 0,
+   "generation": null,
+   "sex": "f",
+   "role": "sex-work",
+   "family": false,
+   "haunt": "house",
+   "world": "house",
+   "dies": null,
+   "parents": [],
+   "appearances": 5,
+   "first": 420,
+   "first_chapter": 19,
+   "era": 6
+  },
+  {
+   "id": "last-priest",
+   "name": "The arthritic priest (Father Angel's successor)",
+   "name_es": "El párroco artrítico",
+   "group": 0,
+   "generation": null,
+   "sex": "m",
+   "role": "clergy",
+   "family": false,
+   "haunt": "church",
+   "world": "town",
+   "dies": null,
+   "parents": [],
+   "appearances": 3,
+   "first": 436,
+   "first_chapter": 20,
+   "era": 6
+  }
+ ],
+ "links": [
+  {
+   "source": "alfonso",
+   "target": "alvaro",
+   "value": 8
+  },
+  {
+   "source": "alfonso",
+   "target": "amaranta-ursula",
+   "value": 3
+  },
+  {
+   "source": "alfonso",
+   "target": "aureliano-babilonia",
+   "value": 8
+  },
+  {
+   "source": "alfonso",
+   "target": "catalan-bookseller",
+   "value": 5
+  },
+  {
+   "source": "alfonso",
+   "target": "gabriel",
+   "value": 8
+  },
+  {
+   "source": "alfonso",
+   "target": "gaston",
+   "value": 2
+  },
+  {
+   "source": "alfonso",
+   "target": "german",
+   "value": 7
+  },
+  {
+   "source": "alfonso",
+   "target": "last-priest",
+   "value": 1
+  },
+  {
+   "source": "alfonso",
+   "target": "mercedes",
+   "value": 1
+  },
+  {
+   "source": "alfonso",
+   "target": "nigromanta",
+   "value": 2
+  },
+  {
+   "source": "alfonso",
+   "target": "pilar-ternera",
+   "value": 2
+  },
+  {
+   "source": "alfonso",
+   "target": "smiling-madam",
+   "value": 2
+  },
+  {
+   "source": "alirio-noguera",
+   "target": "apolinar-moscote",
+   "value": 2
+  },
+  {
+   "source": "alirio-noguera",
+   "target": "colonel-aureliano",
+   "value": 2
+  },
+  {
+   "source": "alirio-noguera",
+   "target": "father-nicanor",
+   "value": 1
+  },
+  {
+   "source": "alirio-noguera",
+   "target": "gerineldo-marquez",
+   "value": 1
+  },
+  {
+   "source": "alvaro",
+   "target": "amaranta-ursula",
+   "value": 3
+  },
+  {
+   "source": "alvaro",
+   "target": "aureliano-babilonia",
+   "value": 8
+  },
+  {
+   "source": "alvaro",
+   "target": "catalan-bookseller",
+   "value": 4
+  },
+  {
+   "source": "alvaro",
+   "target": "gabriel",
+   "value": 8
+  },
+  {
+   "source": "alvaro",
+   "target": "gaston",
+   "value": 2
+  },
+  {
+   "source": "alvaro",
+   "target": "german",
+   "value": 7
+  },
+  {
+   "source": "alvaro",
+   "target": "last-priest",
+   "value": 1
+  },
+  {
+   "source": "alvaro",
+   "target": "mercedes",
+   "value": 1
+  },
+  {
+   "source": "alvaro",
+   "target": "nigromanta",
+   "value": 2
+  },
+  {
+   "source": "alvaro",
+   "target": "pilar-ternera",
+   "value": 2
+  },
+  {
+   "source": "alvaro",
+   "target": "smiling-madam",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "amaranta-ursula",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "amparo-moscote",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "apolinar-moscote",
+   "value": 3
+  },
+  {
+   "source": "amaranta",
+   "target": "arcadio",
+   "value": 8
+  },
+  {
+   "source": "amaranta",
+   "target": "aureliano-amador",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "aureliano-arcaya",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "aureliano-centeno",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "aureliano-jose",
+   "value": 11
+  },
+  {
+   "source": "amaranta",
+   "target": "aureliano-segundo",
+   "value": 11
+  },
+  {
+   "source": "amaranta",
+   "target": "aureliano-serrador",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "aureliano-triste",
+   "value": 4
+  },
+  {
+   "source": "amaranta",
+   "target": "bruno-crespi",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "catarino",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "cataure",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "colonel-aureliano",
+   "value": 28
+  },
+  {
+   "source": "amaranta",
+   "target": "father-antonio-isabel",
+   "value": 3
+  },
+  {
+   "source": "amaranta",
+   "target": "father-nicanor",
+   "value": 5
+  },
+  {
+   "source": "amaranta",
+   "target": "fernanda",
+   "value": 16
+  },
+  {
+   "source": "amaranta",
+   "target": "gerineldo-marquez",
+   "value": 7
+  },
+  {
+   "source": "amaranta",
+   "target": "gregorio-stevenson",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "jack-brown",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "jose-arcadio",
+   "value": 5
+  },
+  {
+   "source": "amaranta",
+   "target": "jose-arcadio-buendia",
+   "value": 18
+  },
+  {
+   "source": "amaranta",
+   "target": "jose-arcadio-segundo",
+   "value": 5
+  },
+  {
+   "source": "amaranta",
+   "target": "jose-arcadio-seminarian",
+   "value": 3
+  },
+  {
+   "source": "amaranta",
+   "target": "jose-raquel-moncada",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "melchor-escalona",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "melquiades",
+   "value": 4
+  },
+  {
+   "source": "amaranta",
+   "target": "meme",
+   "value": 7
+  },
+  {
+   "source": "amaranta",
+   "target": "patricia-brown",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "petra-cotes",
+   "value": 3
+  },
+  {
+   "source": "amaranta",
+   "target": "petronio",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "pietro-crespi",
+   "value": 12
+  },
+  {
+   "source": "amaranta",
+   "target": "pilar-ternera",
+   "value": 4
+  },
+  {
+   "source": "amaranta",
+   "target": "prudencio-aguilar",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "rebeca",
+   "value": 20
+  },
+  {
+   "source": "amaranta",
+   "target": "remedios-moscote",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "remedios-the-beauty",
+   "value": 11
+  },
+  {
+   "source": "amaranta",
+   "target": "roque-carnicero",
+   "value": 1
+  },
+  {
+   "source": "amaranta",
+   "target": "santa-sofia",
+   "value": 5
+  },
+  {
+   "source": "amaranta",
+   "target": "senora-moscote",
+   "value": 2
+  },
+  {
+   "source": "amaranta",
+   "target": "ursula",
+   "value": 64
+  },
+  {
+   "source": "amaranta",
+   "target": "visitacion",
+   "value": 6
+  },
+  {
+   "source": "amaranta",
+   "target": "yellow-rose-gentleman",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "aureliano-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "aureliano-babilonia",
+   "value": 31
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "aureliano-iguaran",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "aureliano-pig-tail",
+   "value": 5
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "aureliano-segundo",
+   "value": 13
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "catalan-bookseller",
+   "value": 2
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "colonel-aureliano",
+   "value": 2
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "father-augusto-angel",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "fernanda",
+   "value": 11
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "gabriel",
+   "value": 3
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "gaston",
+   "value": 10
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "german",
+   "value": 3
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "jose-arcadio",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "jose-arcadio-buendia",
+   "value": 2
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "jose-arcadio-segundo",
+   "value": 2
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "last-priest",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "melquiades",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "meme",
+   "value": 3
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "mercedes",
+   "value": 2
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "nigromanta",
+   "value": 2
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "petra-cotes",
+   "value": 2
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "petronila-iguaran",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "pig-tail-cousin",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "santa-sofia",
+   "value": 8
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "smiling-madam",
+   "value": 3
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "amaranta-ursula",
+   "target": "ursula",
+   "value": 7
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "apolinar-moscote",
+   "value": 2
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "arcadio",
+   "value": 1
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "colonel-aureliano",
+   "value": 3
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "father-nicanor",
+   "value": 1
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "gerineldo-marquez",
+   "value": 1
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "jose-arcadio-buendia",
+   "value": 2
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "magnifico-visbal",
+   "value": 1
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "pietro-crespi",
+   "value": 2
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "rebeca",
+   "value": 2
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "remedios-moscote",
+   "value": 3
+  },
+  {
+   "source": "amparo-moscote",
+   "target": "ursula",
+   "value": 2
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "arcadio",
+   "value": 5
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "aureliano-jose",
+   "value": 1
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "colonel-aureliano",
+   "value": 12
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "father-nicanor",
+   "value": 3
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "gerineldo-marquez",
+   "value": 2
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "jose-arcadio",
+   "value": 1
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "jose-arcadio-buendia",
+   "value": 12
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "magnifico-visbal",
+   "value": 1
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "melquiades",
+   "value": 1
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "pietro-crespi",
+   "value": 2
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "rebeca",
+   "value": 3
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "remedios-moscote",
+   "value": 5
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "senora-moscote",
+   "value": 4
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "ursula",
+   "value": 7
+  },
+  {
+   "source": "apolinar-moscote",
+   "target": "visitacion",
+   "value": 1
+  },
+  {
+   "source": "aquiles-ricardo",
+   "target": "aureliano-jose",
+   "value": 5
+  },
+  {
+   "source": "aquiles-ricardo",
+   "target": "carmelita-montiel",
+   "value": 2
+  },
+  {
+   "source": "aquiles-ricardo",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "aquiles-ricardo",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "arcadio",
+   "target": "aureliano-jose",
+   "value": 1
+  },
+  {
+   "source": "arcadio",
+   "target": "cataure",
+   "value": 2
+  },
+  {
+   "source": "arcadio",
+   "target": "colonel-aureliano",
+   "value": 9
+  },
+  {
+   "source": "arcadio",
+   "target": "father-nicanor",
+   "value": 2
+  },
+  {
+   "source": "arcadio",
+   "target": "gregorio-stevenson",
+   "value": 5
+  },
+  {
+   "source": "arcadio",
+   "target": "jose-arcadio",
+   "value": 4
+  },
+  {
+   "source": "arcadio",
+   "target": "jose-arcadio-buendia",
+   "value": 5
+  },
+  {
+   "source": "arcadio",
+   "target": "melquiades",
+   "value": 2
+  },
+  {
+   "source": "arcadio",
+   "target": "pietro-crespi",
+   "value": 2
+  },
+  {
+   "source": "arcadio",
+   "target": "pilar-ternera",
+   "value": 4
+  },
+  {
+   "source": "arcadio",
+   "target": "rebeca",
+   "value": 8
+  },
+  {
+   "source": "arcadio",
+   "target": "roque-carnicero",
+   "value": 1
+  },
+  {
+   "source": "arcadio",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "arcadio",
+   "target": "ursula",
+   "value": 14
+  },
+  {
+   "source": "arcadio",
+   "target": "visitacion",
+   "value": 5
+  },
+  {
+   "source": "argenida",
+   "target": "aureliano-segundo",
+   "value": 1
+  },
+  {
+   "source": "argenida",
+   "target": "aureliano-triste",
+   "value": 1
+  },
+  {
+   "source": "argenida",
+   "target": "rebeca",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "aureliano-arcaya",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "aureliano-babilonia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "aureliano-centeno",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "aureliano-segundo",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "aureliano-serrador",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "aureliano-triste",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "fernanda",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "jose-arcadio-seminarian",
+   "value": 1
+  },
+  {
+   "source": "aureliano-amador",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "aureliano-babilonia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "aureliano-iguaran",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "colonel-aureliano",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "jose-arcadio",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "jose-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "petronila-iguaran",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "pig-tail-cousin",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcadio-buendia",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "aureliano-centeno",
+   "value": 3
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "aureliano-segundo",
+   "value": 3
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "aureliano-serrador",
+   "value": 4
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "aureliano-triste",
+   "value": 3
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "colonel-aureliano",
+   "value": 2
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "fernanda",
+   "value": 3
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "jack-brown",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "remedios-the-beauty",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-arcaya",
+   "target": "ursula",
+   "value": 2
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "aureliano-iguaran",
+   "value": 1
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "aureliano-pig-tail",
+   "value": 5
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "aureliano-segundo",
+   "value": 10
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "catalan-bookseller",
+   "value": 6
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "colonel-aureliano",
+   "value": 2
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "father-augusto-angel",
+   "value": 1
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "fernanda",
+   "value": 14
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "gabriel",
+   "value": 8
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "gaston",
+   "value": 8
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "german",
+   "value": 9
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "jose-arcadio",
+   "value": 1
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "jose-arcadio-buendia",
+   "value": 2
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "jose-arcadio-segundo",
+   "value": 2
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "jose-arcadio-seminarian",
+   "value": 6
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "last-priest",
+   "value": 3
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "melquiades",
+   "value": 4
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "mercedes",
+   "value": 3
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "nigromanta",
+   "value": 4
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "petronila-iguaran",
+   "value": 1
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "pig-tail-cousin",
+   "value": 1
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "pilar-ternera",
+   "value": 4
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "santa-sofia",
+   "value": 11
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "smiling-madam",
+   "value": 5
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-babilonia",
+   "target": "ursula",
+   "value": 5
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "aureliano-segundo",
+   "value": 3
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "aureliano-serrador",
+   "value": 3
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "aureliano-triste",
+   "value": 5
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "colonel-aureliano",
+   "value": 1
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "fernanda",
+   "value": 3
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "jack-brown",
+   "value": 1
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "remedios-the-beauty",
+   "value": 1
+  },
+  {
+   "source": "aureliano-centeno",
+   "target": "ursula",
+   "value": 3
+  },
+  {
+   "source": "aureliano-iguaran",
+   "target": "colonel-aureliano",
+   "value": 1
+  },
+  {
+   "source": "aureliano-iguaran",
+   "target": "jose-arcadio",
+   "value": 1
+  },
+  {
+   "source": "aureliano-iguaran",
+   "target": "jose-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-iguaran",
+   "target": "petronila-iguaran",
+   "value": 1
+  },
+  {
+   "source": "aureliano-iguaran",
+   "target": "pig-tail-cousin",
+   "value": 1
+  },
+  {
+   "source": "aureliano-iguaran",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-iguaran",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-iguaran",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "aureliano-segundo",
+   "value": 2
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "bruno-crespi",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "carmelita-montiel",
+   "value": 2
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "colonel-aureliano",
+   "value": 5
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "father-nicanor",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "gerineldo-marquez",
+   "value": 3
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "jose-arcadio",
+   "value": 2
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "jose-arcadio-buendia",
+   "value": 2
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "jose-arcadio-segundo",
+   "value": 2
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "jose-raquel-moncada",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "melchor-escalona",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "pietro-crespi",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "pilar-ternera",
+   "value": 3
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "rebeca",
+   "value": 4
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "remedios-moscote",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "remedios-the-beauty",
+   "value": 3
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "roque-carnicero",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "santa-sofia",
+   "value": 2
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "senora-moscote",
+   "value": 1
+  },
+  {
+   "source": "aureliano-jose",
+   "target": "ursula",
+   "value": 12
+  },
+  {
+   "source": "aureliano-pig-tail",
+   "target": "smiling-madam",
+   "value": 3
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "aureliano-serrador",
+   "value": 3
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "aureliano-triste",
+   "value": 5
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "bruno-crespi",
+   "value": 1
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "camila-sagastume",
+   "value": 2
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "colonel-aureliano",
+   "value": 12
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "father-antonio-isabel",
+   "value": 6
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "father-augusto-angel",
+   "value": 2
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "fernanda",
+   "value": 42
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "fernanda-father",
+   "value": 2
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "gerineldo-marquez",
+   "value": 1
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "jack-brown",
+   "value": 4
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "jose-arcadio-buendia",
+   "value": 2
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "jose-arcadio-segundo",
+   "value": 24
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "jose-arcadio-seminarian",
+   "value": 3
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "jose-raquel-moncada",
+   "value": 1
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "mauricio-babilonia",
+   "value": 4
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "melchor-escalona",
+   "value": 2
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "melquiades",
+   "value": 3
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "meme",
+   "value": 16
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "mr-herbert",
+   "value": 1
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "patricia-brown",
+   "value": 2
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "petra-cotes",
+   "value": 27
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "petronio",
+   "value": 1
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "pilar-ternera",
+   "value": 4
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "rebeca",
+   "value": 1
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "remedios-the-beauty",
+   "value": 9
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "santa-sofia",
+   "value": 21
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "ursula",
+   "value": 35
+  },
+  {
+   "source": "aureliano-segundo",
+   "target": "yellow-rose-gentleman",
+   "value": 1
+  },
+  {
+   "source": "aureliano-serrador",
+   "target": "aureliano-triste",
+   "value": 3
+  },
+  {
+   "source": "aureliano-serrador",
+   "target": "colonel-aureliano",
+   "value": 2
+  },
+  {
+   "source": "aureliano-serrador",
+   "target": "fernanda",
+   "value": 3
+  },
+  {
+   "source": "aureliano-serrador",
+   "target": "jack-brown",
+   "value": 1
+  },
+  {
+   "source": "aureliano-serrador",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "aureliano-serrador",
+   "target": "remedios-the-beauty",
+   "value": 1
+  },
+  {
+   "source": "aureliano-serrador",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "aureliano-serrador",
+   "target": "ursula",
+   "value": 2
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "colonel-aureliano",
+   "value": 2
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "father-antonio-isabel",
+   "value": 1
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "fernanda",
+   "value": 4
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "jack-brown",
+   "value": 1
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "jose-arcadio-segundo",
+   "value": 1
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "rebeca",
+   "value": 2
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "remedios-the-beauty",
+   "value": 3
+  },
+  {
+   "source": "aureliano-triste",
+   "target": "ursula",
+   "value": 5
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "colonel-aureliano",
+   "value": 1
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "jose-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "jose-arcadio-segundo",
+   "value": 1
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "jose-raquel-moncada",
+   "value": 1
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "melchor-escalona",
+   "value": 1
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "mr-herbert",
+   "value": 1
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "pietro-crespi",
+   "value": 2
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "remedios-the-beauty",
+   "value": 1
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "bruno-crespi",
+   "target": "ursula",
+   "value": 3
+  },
+  {
+   "source": "camila-sagastume",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "catalan-bookseller",
+   "target": "gabriel",
+   "value": 4
+  },
+  {
+   "source": "catalan-bookseller",
+   "target": "gaston",
+   "value": 2
+  },
+  {
+   "source": "catalan-bookseller",
+   "target": "german",
+   "value": 5
+  },
+  {
+   "source": "catalan-bookseller",
+   "target": "nigromanta",
+   "value": 1
+  },
+  {
+   "source": "catalan-bookseller",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "catarino",
+   "target": "colonel-aureliano",
+   "value": 3
+  },
+  {
+   "source": "catarino",
+   "target": "francisco-the-man",
+   "value": 1
+  },
+  {
+   "source": "catarino",
+   "target": "gerineldo-marquez",
+   "value": 1
+  },
+  {
+   "source": "catarino",
+   "target": "jose-arcadio",
+   "value": 1
+  },
+  {
+   "source": "catarino",
+   "target": "jose-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "catarino",
+   "target": "magnifico-visbal",
+   "value": 1
+  },
+  {
+   "source": "catarino",
+   "target": "mulatto-girl",
+   "value": 1
+  },
+  {
+   "source": "catarino",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "catarino",
+   "target": "rebeca",
+   "value": 2
+  },
+  {
+   "source": "catarino",
+   "target": "ursula",
+   "value": 3
+  },
+  {
+   "source": "cataure",
+   "target": "colonel-aureliano",
+   "value": 1
+  },
+  {
+   "source": "cataure",
+   "target": "jose-arcadio-buendia",
+   "value": 4
+  },
+  {
+   "source": "cataure",
+   "target": "prudencio-aguilar",
+   "value": 1
+  },
+  {
+   "source": "cataure",
+   "target": "rebeca",
+   "value": 3
+  },
+  {
+   "source": "cataure",
+   "target": "ursula",
+   "value": 5
+  },
+  {
+   "source": "cataure",
+   "target": "visitacion",
+   "value": 5
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "colonels-physician",
+   "value": 2
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "duke-of-marlborough",
+   "value": 2
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "father-antonio-isabel",
+   "value": 4
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "father-nicanor",
+   "value": 3
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "fernanda",
+   "value": 8
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "francisco-the-man",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "gerineldo-marquez",
+   "value": 25
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "gypsy-girl",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "jack-brown",
+   "value": 2
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "jose-arcadio",
+   "value": 21
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "jose-arcadio-buendia",
+   "value": 37
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "jose-arcadio-segundo",
+   "value": 9
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "jose-arcadio-seminarian",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "jose-raquel-moncada",
+   "value": 7
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "magnifico-visbal",
+   "value": 4
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "melchor-escalona",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "melquiades",
+   "value": 9
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "meme",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "mr-herbert",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "mulatto-girl",
+   "value": 2
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "petronila-iguaran",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "pietro-crespi",
+   "value": 5
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "pig-tail-cousin",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "pilar-ternera",
+   "value": 11
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "prudencio-aguilar",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "rebeca",
+   "value": 18
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "remedios-moscote",
+   "value": 8
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "remedios-the-beauty",
+   "value": 6
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "roque-carnicero",
+   "value": 5
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "santa-sofia",
+   "value": 10
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "senora-moscote",
+   "value": 3
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "teofilo-vargas",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "ursula",
+   "value": 76
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "visitacion",
+   "value": 6
+  },
+  {
+   "source": "colonel-aureliano",
+   "target": "yellow-rose-gentleman",
+   "value": 1
+  },
+  {
+   "source": "colonels-physician",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "colonels-physician",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "father-augusto-angel",
+   "value": 1
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "fernanda",
+   "value": 4
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "gerineldo-marquez",
+   "value": 1
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "jose-arcadio-segundo",
+   "value": 4
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "jose-arcadio-seminarian",
+   "value": 1
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "meme",
+   "value": 1
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "petra-cotes",
+   "value": 2
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "petronio",
+   "value": 1
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "remedios-the-beauty",
+   "value": 2
+  },
+  {
+   "source": "father-antonio-isabel",
+   "target": "ursula",
+   "value": 6
+  },
+  {
+   "source": "father-augusto-angel",
+   "target": "fernanda",
+   "value": 1
+  },
+  {
+   "source": "father-augusto-angel",
+   "target": "jose-arcadio-segundo",
+   "value": 1
+  },
+  {
+   "source": "father-augusto-angel",
+   "target": "petra-cotes",
+   "value": 2
+  },
+  {
+   "source": "father-nicanor",
+   "target": "gerineldo-marquez",
+   "value": 1
+  },
+  {
+   "source": "father-nicanor",
+   "target": "jose-arcadio",
+   "value": 2
+  },
+  {
+   "source": "father-nicanor",
+   "target": "jose-arcadio-buendia",
+   "value": 3
+  },
+  {
+   "source": "father-nicanor",
+   "target": "pietro-crespi",
+   "value": 3
+  },
+  {
+   "source": "father-nicanor",
+   "target": "rebeca",
+   "value": 7
+  },
+  {
+   "source": "father-nicanor",
+   "target": "remedios-moscote",
+   "value": 1
+  },
+  {
+   "source": "father-nicanor",
+   "target": "roque-carnicero",
+   "value": 1
+  },
+  {
+   "source": "father-nicanor",
+   "target": "senora-moscote",
+   "value": 1
+  },
+  {
+   "source": "father-nicanor",
+   "target": "ursula",
+   "value": 8
+  },
+  {
+   "source": "fernanda",
+   "target": "fernanda-father",
+   "value": 3
+  },
+  {
+   "source": "fernanda",
+   "target": "jack-brown",
+   "value": 3
+  },
+  {
+   "source": "fernanda",
+   "target": "jose-arcadio-buendia",
+   "value": 3
+  },
+  {
+   "source": "fernanda",
+   "target": "jose-arcadio-segundo",
+   "value": 12
+  },
+  {
+   "source": "fernanda",
+   "target": "jose-arcadio-seminarian",
+   "value": 3
+  },
+  {
+   "source": "fernanda",
+   "target": "mauricio-babilonia",
+   "value": 4
+  },
+  {
+   "source": "fernanda",
+   "target": "melchor-escalona",
+   "value": 1
+  },
+  {
+   "source": "fernanda",
+   "target": "melquiades",
+   "value": 1
+  },
+  {
+   "source": "fernanda",
+   "target": "meme",
+   "value": 19
+  },
+  {
+   "source": "fernanda",
+   "target": "patricia-brown",
+   "value": 1
+  },
+  {
+   "source": "fernanda",
+   "target": "petra-cotes",
+   "value": 10
+  },
+  {
+   "source": "fernanda",
+   "target": "pilar-ternera",
+   "value": 3
+  },
+  {
+   "source": "fernanda",
+   "target": "remedios-the-beauty",
+   "value": 5
+  },
+  {
+   "source": "fernanda",
+   "target": "renata-argote",
+   "value": 1
+  },
+  {
+   "source": "fernanda",
+   "target": "santa-sofia",
+   "value": 13
+  },
+  {
+   "source": "fernanda",
+   "target": "ursula",
+   "value": 28
+  },
+  {
+   "source": "fernanda-father",
+   "target": "jose-arcadio-seminarian",
+   "value": 1
+  },
+  {
+   "source": "fernanda-father",
+   "target": "meme",
+   "value": 2
+  },
+  {
+   "source": "fernanda-father",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "francisco-the-man",
+   "target": "mulatto-girl",
+   "value": 1
+  },
+  {
+   "source": "francisco-the-man",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "gabriel",
+   "target": "gaston",
+   "value": 2
+  },
+  {
+   "source": "gabriel",
+   "target": "german",
+   "value": 7
+  },
+  {
+   "source": "gabriel",
+   "target": "last-priest",
+   "value": 1
+  },
+  {
+   "source": "gabriel",
+   "target": "mercedes",
+   "value": 1
+  },
+  {
+   "source": "gabriel",
+   "target": "nigromanta",
+   "value": 2
+  },
+  {
+   "source": "gabriel",
+   "target": "pilar-ternera",
+   "value": 2
+  },
+  {
+   "source": "gabriel",
+   "target": "smiling-madam",
+   "value": 2
+  },
+  {
+   "source": "gaston",
+   "target": "german",
+   "value": 2
+  },
+  {
+   "source": "gaston",
+   "target": "nigromanta",
+   "value": 2
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "jose-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "jose-arcadio-segundo",
+   "value": 2
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "magnifico-visbal",
+   "value": 3
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "pilar-ternera",
+   "value": 2
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "rebeca",
+   "value": 1
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "remedios-moscote",
+   "value": 1
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "remedios-the-beauty",
+   "value": 2
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "roque-carnicero",
+   "value": 1
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "teofilo-vargas",
+   "value": 1
+  },
+  {
+   "source": "gerineldo-marquez",
+   "target": "ursula",
+   "value": 15
+  },
+  {
+   "source": "german",
+   "target": "last-priest",
+   "value": 1
+  },
+  {
+   "source": "german",
+   "target": "mercedes",
+   "value": 1
+  },
+  {
+   "source": "german",
+   "target": "nigromanta",
+   "value": 2
+  },
+  {
+   "source": "german",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "german",
+   "target": "smiling-madam",
+   "value": 2
+  },
+  {
+   "source": "gregorio-stevenson",
+   "target": "jose-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "gregorio-stevenson",
+   "target": "ursula",
+   "value": 3
+  },
+  {
+   "source": "gypsy-girl",
+   "target": "jose-arcadio",
+   "value": 5
+  },
+  {
+   "source": "gypsy-girl",
+   "target": "jose-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "gypsy-girl",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "jack-brown",
+   "target": "jose-arcadio-buendia",
+   "value": 1
+  },
+  {
+   "source": "jack-brown",
+   "target": "jose-arcadio-segundo",
+   "value": 2
+  },
+  {
+   "source": "jack-brown",
+   "target": "lorenzo-gavilan",
+   "value": 1
+  },
+  {
+   "source": "jack-brown",
+   "target": "meme",
+   "value": 1
+  },
+  {
+   "source": "jack-brown",
+   "target": "mr-herbert",
+   "value": 1
+  },
+  {
+   "source": "jack-brown",
+   "target": "patricia-brown",
+   "value": 1
+  },
+  {
+   "source": "jack-brown",
+   "target": "petra-cotes",
+   "value": 2
+  },
+  {
+   "source": "jack-brown",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "jack-brown",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "jose-arcadio-buendia",
+   "value": 16
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "melquiades",
+   "value": 3
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "petronila-iguaran",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "pietro-crespi",
+   "value": 2
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "pig-tail-cousin",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "pilar-ternera",
+   "value": 7
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "rebeca",
+   "value": 12
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "roque-carnicero",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio",
+   "target": "ursula",
+   "value": 20
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "melquiades",
+   "value": 13
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "meme",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "mr-herbert",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "patricia-brown",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "petronila-iguaran",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "pietro-crespi",
+   "value": 5
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "pig-tail-cousin",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "pilar-ternera",
+   "value": 7
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "prudencio-aguilar",
+   "value": 6
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "rebeca",
+   "value": 14
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "remedios-moscote",
+   "value": 6
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "santa-sofia",
+   "value": 2
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "senora-moscote",
+   "value": 4
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "ursula",
+   "value": 51
+  },
+  {
+   "source": "jose-arcadio-buendia",
+   "target": "visitacion",
+   "value": 10
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "jose-raquel-moncada",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "lorenzo-gavilan",
+   "value": 4
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "melchor-escalona",
+   "value": 2
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "melquiades",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "meme",
+   "value": 2
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "petra-cotes",
+   "value": 6
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "petronio",
+   "value": 2
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "remedios-the-beauty",
+   "value": 5
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "santa-sofia",
+   "value": 14
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "station-child",
+   "value": 5
+  },
+  {
+   "source": "jose-arcadio-segundo",
+   "target": "ursula",
+   "value": 21
+  },
+  {
+   "source": "jose-arcadio-seminarian",
+   "target": "meme",
+   "value": 2
+  },
+  {
+   "source": "jose-arcadio-seminarian",
+   "target": "mercedes",
+   "value": 1
+  },
+  {
+   "source": "jose-arcadio-seminarian",
+   "target": "ursula",
+   "value": 7
+  },
+  {
+   "source": "jose-raquel-moncada",
+   "target": "melchor-escalona",
+   "value": 1
+  },
+  {
+   "source": "jose-raquel-moncada",
+   "target": "rebeca",
+   "value": 1
+  },
+  {
+   "source": "jose-raquel-moncada",
+   "target": "remedios-the-beauty",
+   "value": 1
+  },
+  {
+   "source": "jose-raquel-moncada",
+   "target": "roque-carnicero",
+   "value": 1
+  },
+  {
+   "source": "jose-raquel-moncada",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "jose-raquel-moncada",
+   "target": "ursula",
+   "value": 7
+  },
+  {
+   "source": "last-priest",
+   "target": "mercedes",
+   "value": 1
+  },
+  {
+   "source": "lorenzo-gavilan",
+   "target": "station-child",
+   "value": 2
+  },
+  {
+   "source": "magnifico-visbal",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "magnifico-visbal",
+   "target": "rebeca",
+   "value": 1
+  },
+  {
+   "source": "magnifico-visbal",
+   "target": "remedios-moscote",
+   "value": 1
+  },
+  {
+   "source": "magnifico-visbal",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "mauricio-babilonia",
+   "target": "meme",
+   "value": 6
+  },
+  {
+   "source": "mauricio-babilonia",
+   "target": "patricia-brown",
+   "value": 1
+  },
+  {
+   "source": "mauricio-babilonia",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "mauricio-babilonia",
+   "target": "ursula",
+   "value": 2
+  },
+  {
+   "source": "melchor-escalona",
+   "target": "remedios-the-beauty",
+   "value": 1
+  },
+  {
+   "source": "melchor-escalona",
+   "target": "santa-sofia",
+   "value": 2
+  },
+  {
+   "source": "melchor-escalona",
+   "target": "ursula",
+   "value": 2
+  },
+  {
+   "source": "melquiades",
+   "target": "pietro-crespi",
+   "value": 2
+  },
+  {
+   "source": "melquiades",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "melquiades",
+   "target": "rebeca",
+   "value": 6
+  },
+  {
+   "source": "melquiades",
+   "target": "remedios-moscote",
+   "value": 2
+  },
+  {
+   "source": "melquiades",
+   "target": "santa-sofia",
+   "value": 3
+  },
+  {
+   "source": "melquiades",
+   "target": "ursula",
+   "value": 13
+  },
+  {
+   "source": "melquiades",
+   "target": "visitacion",
+   "value": 4
+  },
+  {
+   "source": "meme",
+   "target": "patricia-brown",
+   "value": 2
+  },
+  {
+   "source": "meme",
+   "target": "petra-cotes",
+   "value": 3
+  },
+  {
+   "source": "meme",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "meme",
+   "target": "santa-sofia",
+   "value": 2
+  },
+  {
+   "source": "meme",
+   "target": "ursula",
+   "value": 10
+  },
+  {
+   "source": "mulatto-girl",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "nigromanta",
+   "target": "smiling-madam",
+   "value": 1
+  },
+  {
+   "source": "patricia-brown",
+   "target": "petra-cotes",
+   "value": 1
+  },
+  {
+   "source": "patricia-brown",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "petra-cotes",
+   "target": "petronio",
+   "value": 1
+  },
+  {
+   "source": "petra-cotes",
+   "target": "pilar-ternera",
+   "value": 2
+  },
+  {
+   "source": "petra-cotes",
+   "target": "ursula",
+   "value": 7
+  },
+  {
+   "source": "petronila-iguaran",
+   "target": "pig-tail-cousin",
+   "value": 1
+  },
+  {
+   "source": "petronila-iguaran",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "petronila-iguaran",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "petronila-iguaran",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "petronio",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "petronio",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "pietro-crespi",
+   "target": "pilar-ternera",
+   "value": 1
+  },
+  {
+   "source": "pietro-crespi",
+   "target": "prudencio-aguilar",
+   "value": 1
+  },
+  {
+   "source": "pietro-crespi",
+   "target": "rebeca",
+   "value": 10
+  },
+  {
+   "source": "pietro-crespi",
+   "target": "remedios-moscote",
+   "value": 2
+  },
+  {
+   "source": "pietro-crespi",
+   "target": "senora-moscote",
+   "value": 1
+  },
+  {
+   "source": "pietro-crespi",
+   "target": "ursula",
+   "value": 12
+  },
+  {
+   "source": "pietro-crespi",
+   "target": "visitacion",
+   "value": 2
+  },
+  {
+   "source": "pig-tail-cousin",
+   "target": "santa-sofia",
+   "value": 1
+  },
+  {
+   "source": "pig-tail-cousin",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "pig-tail-cousin",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "pilar-ternera",
+   "target": "rebeca",
+   "value": 5
+  },
+  {
+   "source": "pilar-ternera",
+   "target": "santa-sofia",
+   "value": 2
+  },
+  {
+   "source": "pilar-ternera",
+   "target": "ursula",
+   "value": 9
+  },
+  {
+   "source": "prudencio-aguilar",
+   "target": "rebeca",
+   "value": 1
+  },
+  {
+   "source": "prudencio-aguilar",
+   "target": "ursula",
+   "value": 5
+  },
+  {
+   "source": "prudencio-aguilar",
+   "target": "visitacion",
+   "value": 1
+  },
+  {
+   "source": "rebeca",
+   "target": "remedios-moscote",
+   "value": 4
+  },
+  {
+   "source": "rebeca",
+   "target": "roque-carnicero",
+   "value": 3
+  },
+  {
+   "source": "rebeca",
+   "target": "senora-moscote",
+   "value": 2
+  },
+  {
+   "source": "rebeca",
+   "target": "ursula",
+   "value": 27
+  },
+  {
+   "source": "rebeca",
+   "target": "visitacion",
+   "value": 6
+  },
+  {
+   "source": "remedios-moscote",
+   "target": "senora-moscote",
+   "value": 3
+  },
+  {
+   "source": "remedios-moscote",
+   "target": "ursula",
+   "value": 3
+  },
+  {
+   "source": "remedios-moscote",
+   "target": "visitacion",
+   "value": 1
+  },
+  {
+   "source": "remedios-the-beauty",
+   "target": "santa-sofia",
+   "value": 3
+  },
+  {
+   "source": "remedios-the-beauty",
+   "target": "ursula",
+   "value": 13
+  },
+  {
+   "source": "remedios-the-beauty",
+   "target": "yellow-rose-gentleman",
+   "value": 3
+  },
+  {
+   "source": "roque-carnicero",
+   "target": "ursula",
+   "value": 2
+  },
+  {
+   "source": "santa-sofia",
+   "target": "tranquilina-maria-miniata-alacoque-buendia",
+   "value": 1
+  },
+  {
+   "source": "santa-sofia",
+   "target": "ursula",
+   "value": 17
+  },
+  {
+   "source": "senora-moscote",
+   "target": "ursula",
+   "value": 3
+  },
+  {
+   "source": "tranquilina-maria-miniata-alacoque-buendia",
+   "target": "ursula",
+   "value": 1
+  },
+  {
+   "source": "ursula",
+   "target": "visitacion",
+   "value": 10
+  },
+  {
+   "source": "ursula",
+   "target": "yellow-rose-gentleman",
+   "value": 1
+  }
+ ],
+ "couples": [
+  {
+   "a": "amaranta-ursula",
+   "b": "aureliano-babilonia"
+  },
+  {
+   "a": "amaranta-ursula",
+   "b": "gaston"
+  },
+  {
+   "a": "arcadio",
+   "b": "santa-sofia"
+  },
+  {
+   "a": "aureliano-segundo",
+   "b": "fernanda"
+  },
+  {
+   "a": "aureliano-segundo",
+   "b": "petra-cotes"
+  },
+  {
+   "a": "colonel-aureliano",
+   "b": "pilar-ternera"
+  },
+  {
+   "a": "colonel-aureliano",
+   "b": "remedios-moscote"
+  },
+  {
+   "a": "jose-arcadio",
+   "b": "pilar-ternera"
+  },
+  {
+   "a": "jose-arcadio",
+   "b": "rebeca"
+  },
+  {
+   "a": "jose-arcadio-buendia",
+   "b": "ursula"
+  },
+  {
+   "a": "mauricio-babilonia",
+   "b": "meme"
+  }
+ ]
+}
